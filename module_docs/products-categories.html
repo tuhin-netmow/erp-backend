@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Categories Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #667eea;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateX(-5px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #764ba2;
+        }
+
+        .ui-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ui-action-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .ui-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+            border-color: #667eea;
+        }
+
+        .ui-action-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .ui-action-title {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .ui-action-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-ui {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-api {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .code-section {
+            margin-top: 15px;
+        }
+
+        .code-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 0; border-radius: 12px; overflow: hidden; margin: 12px 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .code-block-header { background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%); padding: 12px 18px; border-bottom: 1px solid #454545; display: flex; align-items: center; gap: 10px; }
+        .code-block-header .dots { display: flex; gap: 6px; }
+        .code-block-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .code-block-header .dot.red { background: #ff5f56; }
+        .code-block-header .dot.yellow { background: #ffbd2e; }
+        .code-block-header .dot.green { background: #27c93f; }
+        .code-block-header .file-path { color: #9cdcfe; font-size: 0.85em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; margin-left: auto; }
+        .code-block-content { padding: 18px; overflow-x: auto; white-space: pre; }
+        .code-block-content .comment { color: #6a9955; }
+        .code-block-content .keyword { color: #569cd6; }
+        .code-block-content .string { color: #ce9178; }
+        .code-block-content .function { color: #dcdcaa; }
+        .code-block-content .number { color: #b5cea8; }
+        .code-block-content .operator { color: #d4d4d4; }
+        .code-block-content .variable { color: #9cdcfe; }
+        .code-block-content .property { color: #9cdcfe; }
+        .code-block-content .tag { color: #569cd6; }
+        .code-block-content .punctuation { color: #d4d4d4; }
+        .code-block-content .jsx-tag { color: #569cd6; }
+        .code-block-content .jsx-attr { color: #9cdcfe; }
+        .code-block-content .class-name { color: #4ec9b0; }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-right: 8px;
+        }
+
+        .method.get { background: #e3f2fd; color: #1976d2; }
+        .method.post { background: #e8f5e9; color: #388e3c; }
+        .method.put { background: #fff3e0; color: #f57c00; }
+        .method.delete { background: #ffebee; color: #d32f2f; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>🏷️ Product Categories Module</h1>
+            <p>UI Actions and API Integration for Category Management</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>The Product Categories module manages product categorization, allowing products to be organized into hierarchical groups for better organization and filtering.</p>
+
+            <div class="info-box">
+                <strong>📌 Base URL:</strong> <code>/api/products/categories</code>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">UI Actions & API Integration</h2>
+
+            <div class="ui-actions-grid">
+                <!-- View Categories List -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">📋 View Categories List</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">CategoriesList.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span><span class="punctuation">,</span> <span class="variable">useEffect</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">Folder</span><span class="punctuation">,</span> <span class="variable">FolderOpen</span><span class="punctuation">,</span> <span class="variable">Plus</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">interface</span> <span class="class-name">Category</span> <span class="punctuation">{</span>
+  <span class="property">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">name</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">parentId</span><span class="operator">:</span> <span class="class-name">number</span> <span class="operator">|</span> <span class="keyword">null</span><span class="punctuation">;</span>
+  <span class="property">children</span><span class="operator">?</span><span class="operator">:</span> <span class="class-name">Category</span><span class="punctuation">[];</span>
+  <span class="property">expanded</span><span class="operator">?</span><span class="operator">:</span> <span class="class-name">boolean</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">export const</span> <span class="function">CategoriesList</span> <span class="operator">=</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">categories</span><span class="punctuation">,</span> <span class="variable">setCategories</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">Category</span><span class="punctuation">[]</span><span class="operator">></span><span class="punctuation">(</span><span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">);</span>
+
+  <span class="keyword">const</span> <span class="function">toggleExpand</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="variable">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+    <span class="keyword">const</span> <span class="function">toggle</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="variable">cats</span><span class="operator">:</span> <span class="class-name">Category</span><span class="punctuation">[])</span><span class="operator">:</span> <span class="class-name">Category</span><span class="punctuation">[]</span> <span class="operator">=></span> <span class="punctuation">{</span>
+      <span class="keyword">return</span> <span class="variable">cats</span><span class="punctuation">.</span><span class="function">map</span><span class="punctuation">(</span><span class="variable">cat</span> <span class="operator">=></span> <span class="punctuation">{</span>
+        <span class="keyword">if</span> <span class="punctuation">(</span><span class="variable">cat</span><span class="punctuation">.</span><span class="variable">id</span> <span class="operator">===</span> <span class="variable">id</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+          <span class="keyword">return</span> <span class="punctuation">{</span> <span class="punctuation">...</span><span class="variable">cat</span><span class="punctuation">,</span> <span class="property">expanded</span><span class="operator">:</span> <span class="operator">!</span><span class="variable">cat</span><span class="punctuation">.</span><span class="variable">expanded</span> <span class="punctuation">};</span>
+        <span class="punctuation">}</span>
+        <span class="keyword">if</span> <span class="punctuation">(</span><span class="variable">cat</span><span class="punctuation">.</span><span class="variable">children</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+          <span class="keyword">return</span> <span class="punctuation">{</span> <span class="punctuation">...</span><span class="variable">cat</span><span class="punctuation">,</span> <span class="property">children</span><span class="operator">:</span> <span class="function">toggle</span><span class="punctuation">(</span><span class="variable">cat</span><span class="punctuation">.</span><span class="variable">children</span><span class="punctuation">)</span> <span class="punctuation">};</span>
+        <span class="punctuation">}</span>
+        <span class="keyword">return</span> <span class="variable">cat</span><span class="punctuation">;</span>
+      <span class="punctuation">});</span>
+    <span class="punctuation">};</span>
+    <span class="function">setCategories</span><span class="punctuation">(</span><span class="function">toggle</span><span class="punctuation">(</span><span class="variable">categories</span><span class="punctuation">));</span>
+  <span class="punctuation">};</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"p-6 bg-white rounded-lg shadow"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex justify-between items-center mb-6"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">h1</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-2xl font-bold"</span><span class="operator">></span>Categories<span class="operator">&lt;/</span><span class="jsx-tag">h1</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">Plus</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+          Add Category
+        <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"space-y-2"</span><span class="operator">></span>
+        <span class="punctuation">{</span><span class="variable">categories</span><span class="punctuation">.</span><span class="function">map</span><span class="punctuation">(</span><span class="variable">category</span> <span class="operator">=></span> <span class="punctuation">(</span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">key</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"border rounded-lg"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center justify-between p-3 hover:bg-gray-50 cursor-pointer"</span>
+                 <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=></span> <span class="function">toggleExpand</span><span class="punctuation">(</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">)}</span><span class="punctuation">}</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-2"</span><span class="operator">></span>
+                <span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">expanded</span> <span class="operator">?</span> <span class="operator">&lt;</span><span class="jsx-tag">FolderOpen</span> <span class="operator">/</span><span class="operator">></span> <span class="operator">:</span> <span class="operator">&lt;</span><span class="jsx-tag">Folder</span> <span class="operator">/</span><span class="operator">></span><span class="punctuation">}</span>
+                <span class="operator">&lt;</span><span class="jsx-tag">span</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"font-medium"</span><span class="operator">></span><span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">name</span><span class="punctuation">}</span><span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+                <span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">children</span> <span class="operator">&&</span> <span class="punctuation">(</span>
+                  <span class="operator">&lt;</span><span class="jsx-tag">span</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-xs text-gray-500"</span><span class="operator">></span>
+                    <span class="punctuation">(</span><span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">children</span><span class="punctuation">.</span><span class="variable">length</span><span class="punctuation">}</span> subcategories<span class="punctuation">)</span>
+                  <span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+                <span class="punctuation">)}</span><span class="punctuation">}</span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex gap-2"</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-blue-600 hover:text-blue-800"</span><span class="operator">></span>Edit<span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-red-600 hover:text-red-800"</span><span class="operator">></span>Delete<span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+            <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+            <span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">expanded</span> <span class="operator">&&</span> <span class="variable">category</span><span class="punctuation">.</span><span class="variable">children</span> <span class="operator">&&</span> <span class="punctuation">(</span>
+              <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"ml-6 space-y-2 mt-2"</span><span class="operator">></span>
+                <span class="punctuation">{</span><span class="variable">category</span><span class="punctuation">.</span><span class="variable">children</span><span class="punctuation">.</span><span class="function">map</span><span class="punctuation">(</span><span class="variable">child</span> <span class="operator">=></span> <span class="punctuation">(</span>
+                  <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">key</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">child</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center justify-between p-3 border-l-2 border-purple-200 hover:bg-gray-50"</span><span class="operator">></span>
+                    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-2"</span><span class="operator">></span>
+                      <span class="operator">&lt;</span><span class="jsx-tag">Folder</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-purple-400"</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+                      <span class="operator">&lt;</span><span class="jsx-tag">span</span><span class="operator">></span><span class="punctuation">{</span><span class="variable">child</span><span class="punctuation">.</span><span class="variable">name</span><span class="punctuation">}</span><span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+                    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+                    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex gap-2"</span><span class="operator">></span>
+                      <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-blue-600 hover:text-blue-800 text-sm"</span><span class="operator">></span>Edit<span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+                      <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-red-600 hover:text-red-800 text-sm"</span><span class="operator">></span>Delete<span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+                    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+                  <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+                <span class="punctuation">))}</span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+            <span class="punctuation">))}</span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+        <span class="punctuation">))}</span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method get">GET</span> /api/products/categories
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">fetchCategories.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">fetchCategories</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span><span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/products/categories`</span><span class="punctuation">,</span> <span class="punctuation">{</span>
+    <span class="property">method</span><span class="operator">:</span> <span class="string">'GET'</span><span class="punctuation">,</span>
+    <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+      <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+      <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">});</span>
+
+  <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">data</span><span class="punctuation">.</span><span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Create Category -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">➕ Create Category</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method post">POST</span> /api/products/categories
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">createCategory.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">createCategory</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">categoryData</span><span class="operator">:</span> <span class="punctuation">{</span>
+  <span class="property">name</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">parentId</span><span class="operator">:</span> <span class="class-name">number</span> <span class="operator">|</span> <span class="keyword">null</span><span class="punctuation">;</span>
+  <span class="property">description</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">})</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span><span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/products/categories`</span><span class="punctuation">,</span> <span class="punctuation">{</span>
+    <span class="property">method</span><span class="operator">:</span> <span class="string">'POST'</span><span class="punctuation">,</span>
+    <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+      <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+      <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+    <span class="punctuation">},</span>
+    <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">(</span><span class="variable">categoryData</span><span class="punctuation">)</span>
+  <span class="punctuation">});</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">const</span> <span class="variable">error</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="variable">error</span><span class="punctuation">.</span><span class="variable">message</span> <span class="operator">||</span> <span class="string">'Failed to create category'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Update Category -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">✏️ Update Category</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method put">PUT</span> /api/products/categories/:id
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">updateCategory.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">updateCategory</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>
+  <span class="variable">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">,</span>
+  <span class="variable">updates</span><span class="operator">:</span> <span class="punctuation">{</span> <span class="property">name</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span> <span class="property">description</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span> <span class="punctuation">}</span>
+<span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/products/categories/</span><span class="sub">${</span><span class="variable">id</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'PUT'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">},</span>
+      <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">(</span><span class="variable">updates</span><span class="punctuation">)</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Category -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">🗑️ Delete Category</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method delete">DELETE</span> /api/products/categories/:id
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">deleteCategory.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">deleteCategory</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/products/categories/</span><span class="sub">${</span><span class="variable">id</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'DELETE'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">status</span> <span class="operator">===</span> <span class="number">409</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Cannot delete category with products assigned'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Error Responses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status Code</th>
+                        <th>Error Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>400</code></td>
+                        <td>Bad Request</td>
+                        <td>Invalid category data or circular reference</td>
+                    </tr>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td>Unauthorized</td>
+                        <td>Invalid or expired token</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td>Forbidden</td>
+                        <td>Missing required permission</td>
+                    </tr>
+                    <tr>
+                        <td><code>409</code></td>
+                        <td>Conflict</td>
+                        <td>Cannot delete: has products or subcategories</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Permissions</h2>
+            <div class="success-box">
+                <strong>✅ Required Permissions:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><code>products.categories.view</code> - View categories</li>
+                    <li><code>products.categories.create</code> - Create categories</li>
+                    <li><code>products.categories.update</code> - Update categories</li>
+                    <li><code>products.categories.delete</code> - Delete categories</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Category Hierarchy Rules</h2>
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Categories can have unlimited nested subcategories</li>
+                    <li>Circular references are not allowed (a category cannot be its own parent)</li>
+                    <li>A category with products assigned cannot be deleted</li>
+                    <li>A category with subcategories cannot be deleted until children are removed</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

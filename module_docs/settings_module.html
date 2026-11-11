@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #868f96 0%, #596164 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #868f96; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #868f96; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #868f96; border-bottom: 3px solid #596164; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #eceff1 0%, #cfd8dc 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #596164; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(89, 98, 100, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #596164 0%, #868f96 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #868f96; }
+        .endpoint-detail h3 { color: #868f96; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #596164; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #596164 0%, #868f96 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>⚙️ Settings Module</h1>
+            <p class="subtitle">Complete system configuration management including company profile, layout, numbering sequences, and integrations</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/settings/company/profile</div><div class="route-desc">Get company profile</div></div>
+                <div class="route-item"><span class="route-method method-put">PUT</span><div class="route-path">/api/settings/company/profile</div><div class="route-desc">Update company profile</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/settings/layout</div><div class="route-desc">Get layout settings</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/settings/layout</div><div class="route-desc">Update layout settings</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/settings/einvoice</div><div class="route-desc">Get E-invoice settings</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/settings/einvoice</div><div class="route-desc">Update E-invoice</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/settings/google-maps</div><div class="route-desc">Get Google Maps</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/settings/google-maps</div><div class="route-desc">Update Google Maps</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/settings/numbering-sequences</div><div class="route-desc">Get numbering</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/settings/numbering-sequences</div><div class="route-desc">Update numbering</div></div>
+            </div>
+        </div>
+
+        <!-- COMPANY PROFILE -->
+        <div class="section-title">📌 COMPANY PROFILE</div>
+
+        <!-- GET COMPANY PROFILE -->
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/settings/company/profile</h3>
+                <p>Retrieves company profile information (Public endpoint - no authentication required).</p>
+
+                <div class="code-block">GET /api/settings/company/profile</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Company profile retrieved successfully",
+    "data": {
+        "company_name": "ABC Corporation",
+        "email": "info@abccorp.com",
+        "phone": "+1234567890",
+        "address": "123 Business Street",
+        "city": "New York",
+        "country": "USA",
+        "tax_id": "TAX123456",
+        "logo_url": "/uploads/logo.png",
+        "website": "https://abccorp.com",
+        "description": "A leading ERP solutions provider",
+        "currency": "USD",
+        "qr_code": "/uploads/qr-code.png"
+    }
+}</json></div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Public Endpoint:</strong> No authentication required. Used for displaying company information on invoices, quotes, and public pages.
+                </div>
+            </div>
+        </div>
+
+        <!-- UPDATE COMPANY PROFILE -->
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>PUT /api/settings/company/profile</h3>
+                <p>Updates company profile information.</p>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>company_name</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Company legal name</td></tr>
+                    <tr><td>email</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Company email address</td></tr>
+                    <tr><td>phone</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Contact phone number</td></tr>
+                    <tr><td>address</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Street address</td></tr>
+                    <tr><td>city</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>City</td></tr>
+                    <tr><td>country</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Country</td></tr>
+                    <tr><td>tax_id</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Tax registration ID</td></tr>
+                    <tr><td>logo_url</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Company logo URL</td></tr>
+                    <tr><td>website</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Company website</td></tr>
+                    <tr><td>description</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Company description</td></tr>
+                    <tr><td>currency</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Default currency code (USD, EUR, GBP)</td></tr>
+                    <tr><td>qr_code</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>QR code image URL</td></tr>
+                </table>
+
+                <div class="code-block">PUT /api/settings/company/profile
+
+{
+    "company_name": "ABC Corporation Ltd",
+    "email": "contact@abccorp.com",
+    "phone": "+1234567891",
+    "website": "https://www.abccorp.com",
+    "address": "456 Global Ave",
+    "city": "London",
+    "country": "UK",
+    "currency": "GBP",
+    "logo_url": "https://example.com/logo.png",
+    "qr_code": "https://example.com/qr-code.png"
+}</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Company profile updated successfully",
+    "data": {
+        "id": 1,
+        "company_name": "ABC Corporation Ltd",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</json></div>
+
+                <div class="success-box">
+                    <strong>✓ Updates:</strong> Changes affect all documents (invoices, quotes, receipts) that display company information.
+                </div>
+            </div>
+        </div>
+
+        <!-- LAYOUT SETTINGS -->
+        <div class="section-title">📌 LAYOUT SETTINGS</div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/settings/layout</h3>
+                <p>Retrieves UI layout configuration for different modules.</p>
+
+                <div class="code-block">GET /api/settings/layout</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Settings retrieved successfully",
+    "data": {
+        "pos": {
+            "columns": { "mobile": 2, "sm": 3, "md": 4, "lg": 2, "xl": 3, "xxl": 4 },
+            "gap": 4,
+            "showImages": true,
+            "cardStyle": "standard"
+        }
+    }
+}</json></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/settings/layout</h3>
+                <p>Updates UI layout configuration.</p>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>pos.columns</td><td>object</td><td><span class="badge badge-optional">No</span></td><td>Bootstrap grid columns configuration</td></tr>
+                    <tr><td>pos.gap</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Grid gap spacing</td></tr>
+                    <tr><td>pos.showImages</td><td>boolean</td><td><span class="badge badge-optional">No</span></td><td>Show product images in POS</td></tr>
+                    <tr><td>pos.cardStyle</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Card display style</td></tr>
+                </table>
+
+                <div class="code-block">POST /api/settings/layout
+
+{
+    "pos": {
+        "columns": { "mobile": 2, "sm": 3, "md": 4, "lg": 2, "xl": 3, "xxl": 4 },
+        "gap": 4,
+        "showImages": true,
+        "cardStyle": "standard"
+    }
+}</div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Use Case:</strong> Customize the POS interface layout for different screen sizes and user preferences.
+                </div>
+            </div>
+        </div>
+
+        <!-- E-INVOICE SETTINGS -->
+        <div class="section-title">📌 E-INVOICE SETTINGS</div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/settings/einvoice</h3>
+                <p>Retrieves electronic invoice configuration.</p>
+
+                <div class="code-block">GET /api/settings/einvoice</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "E-invoice settings retrieved",
+    "data": {
+        "enabled": true,
+        "provider": "default",
+        "api_endpoint": "",
+        "api_key": "",
+        "auto_send": false
+    }
+}</json></div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Configuration:</strong> Enable/disable electronic invoice integration for automated invoice submission to tax authorities.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/settings/einvoice</h3>
+                <p>Updates electronic invoice configuration.</p>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>enabled</td><td>boolean</td><td><span class="badge badge-optional">No</span></td><td>Enable E-invoicing</td></tr>
+                    <tr><td>provider</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>E-invoice service provider</td></tr>
+                    <tr><td>api_endpoint</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>API endpoint URL</td></tr>
+                    <tr><td>api_key</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>API authentication key</td></tr>
+                    <tr><td>auto_send</td><td>boolean</td><td><span class="badge badge-optional">No</span></td><td>Auto-send invoices on approval</td></tr>
+                </table>
+
+                <div class="code-block">POST /api/settings/einvoice
+
+{
+    "enabled": true,
+    "provider": "custom",
+    "api_endpoint": "https://api.taxauthority.gov/v1/invoices",
+    "api_key": "sk_live_xxxxx",
+    "auto_send": true
+}</div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Security:</strong> API keys should be stored securely. Never log or expose API keys in client-side code.
+                </div>
+            </div>
+        </div>
+
+        <!-- GOOGLE MAPS SETTINGS -->
+        <div class="section-title">📌 GOOGLE MAPS SETTINGS</div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/settings/google-maps</h3>
+                <p>Retrieves Google Maps API configuration.</p>
+
+                <div class="code-block">GET /api/settings/google-maps</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Google Maps settings retrieved",
+    "data": {
+        "enabled": true,
+        "api_key": "AIzaSyxxxxxxxxxxxxx",
+        "default_center": { "lat": 3.1390, "lng": 101.6869 },
+        "default_zoom": 12,
+        "map_type": "roadmap"
+    }
+}</json></div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Use Case:</strong> Used for customer location mapping, delivery route optimization, and sales territory visualization.
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/settings/google-maps</h3>
+                <p>Updates Google Maps API configuration.</p>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>enabled</td><td>boolean</td><td><span class="badge badge-optional">No</span></td><td>Enable Google Maps integration</td></tr>
+                    <tr><td>api_key</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Google Maps API Key</td></tr>
+                    <tr><td>default_center</td><td>object</td><td><span class="badge badge-optional">No</span></td><td>Default map center {lat, lng}</td></tr>
+                    <tr><td>default_zoom</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Default zoom level (1-20)</td></tr>
+                    <tr><td>map_type</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Map type (roadmap, satellite, hybrid)</td></tr>
+                </table>
+
+                <div class="code-block">POST /api/settings/google-maps
+
+{
+    "enabled": true,
+    "api_key": "AIzaSyxxxxxxxxxxxxx",
+    "default_center": { "lat": 3.1390, "lng": 101.6869 },
+    "default_zoom": 12,
+    "map_type": "roadmap"
+}</div>
+
+                <div class="warning-box">
+                    <strong>⚠️ API Key Security:</strong> Google Maps API keys should be restricted by domain and usage quotas to prevent abuse.
+                </div>
+            </div>
+        </div>
+
+        <!-- NUMBERING SEQUENCES -->
+        <div class="section-title">📌 NUMBERING SEQUENCES</div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/settings/numbering-sequences</h3>
+                <p>Retrieves document numbering sequences and prefixes configuration.</p>
+
+                <div class="code-block">GET /api/settings/numbering-sequences</div>
+
+                <h4>Sample Response</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Numbering sequences retrieved",
+    "data": {
+        "sales_invoices": {
+            "prefix": "INV-",
+            "suffix": "",
+            "padding": 6,
+            "separator": "-",
+            "example": "INV-20251212-D72F5C"
+        },
+        "purchase_orders": {
+            "prefix": "PO-",
+            "suffix": "",
+            "padding": 6,
+            "separator": "-",
+            "example": "PO-20251212-ABC123"
+        },
+        "orders": {
+            "prefix": "ORD-",
+            "suffix": "",
+            "padding": 6,
+            "separator": "-",
+            "example": "ORD-20251212-XYZ789"
+        },
+        "quotations": {
+            "prefix": "QUOT-",
+            "suffix": "",
+            "padding": 6,
+            "separator": "-",
+            "example": "QUOT-20251212-DEF456"
+        },
+        "deliveries": {
+            "prefix": "DLV-",
+            "suffix": "",
+            "padding": 6,
+            "separator": "-",
+            "example": "DLV-20251212-GHI789"
+        }
+    }
+}</json></div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Number Format:</strong> <code>{prefix}{date}{separator}{random}</code><br>
+                    • <strong>prefix:</strong> Document type identifier<br>
+                    • <strong>date:</strong> Current date (YYYYMMDD)<br>
+                    • <strong>separator:</strong> Dash or custom separator<br>
+                    • <strong>random:</strong> Random alphanumeric string
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/settings/numbering-sequences</h3>
+                <p>Updates document numbering sequences and prefixes.</p>
+
+                <h4>Request Body</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>sales_invoices.prefix</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Invoice prefix</td></tr>
+                    <tr><td>sales_invoices.padding</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Random string length</td></tr>
+                    <tr><td>sales_invoices.separator</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Separator character</td></tr>
+                    <tr><td>purchase_orders.*</td><td>varies</td><td><span class="badge badge-optional">No</span></td><td>Purchase order settings</td></tr>
+                    <tr><td>orders.*</td><td>varies</td><td><span class="badge badge-optional">No</span></td><td>Order settings</td></tr>
+                    <tr><td>quotations.*</td><td>varies</td><td><span class="badge badge-optional">No</span></td><td>Quotation settings</td></tr>
+                    <tr><td>deliveries.*</td><td>varies</td><td><span class="badge badge-optional">No</span></td><td>Delivery settings</td></tr>
+                </table>
+
+                <div class="code-block">POST /api/settings/numbering-sequences
+
+{
+    "sales_invoices": {
+        "prefix": "INV-",
+        "suffix": "",
+        "padding": 6,
+        "separator": "-"
+    },
+    "purchase_orders": {
+        "prefix": "PO-",
+        "suffix": "",
+        "padding": 6,
+        "separator": "-"
+    },
+    "orders": {
+        "prefix": "ORD-",
+        "padding": 6
+    }
+}</div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> Changing numbering sequences will affect new documents only. Existing documents retain their original numbers.
+                </div>
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+            <p><strong>Note:</strong> Settings are stored as JSON strings in the <code>description</code> column of the <code>settings</code> table.</p>
+
+            <div class="flow-diagram">
+                <pre class="mermaid">erDiagram
+    SETTINGS ||--o{ SALES_INVOICES : "numbers"
+    SETTINGS ||--o{ PURCHASE_ORDERS : "numbers"
+    SETTINGS ||--o{ ORDERS : "numbers"
+    SETTINGS ||--o{ QUOTATIONS : "numbers"
+    SETTINGS ||--o{ DELIVERIES : "numbers"
+
+    SETTINGS {
+        number id PK
+        string name UK
+        text description
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+
+    SALES_INVOICES {
+        number id PK
+        string invoice_number UK
+        number customer_id FK
+        number total_amount
+        date invoice_date
+        string status
+    }
+
+    PURCHASE_ORDERS {
+        number id PK
+        string po_number UK
+        number supplier_id FK
+        number total_amount
+        date order_date
+        string status
+    }
+
+    ORDERS {
+        number id PK
+        string order_number UK
+        number customer_id FK
+        number total_amount
+        date order_date
+        string status
+    }
+
+    QUOTATIONS {
+        number id PK
+        string quote_number UK
+        number customer_id FK
+        number total_amount
+        date quote_date
+        string status
+    }
+
+    DELIVERIES {
+        number id PK
+        string delivery_number UK
+        number order_id FK
+        date delivery_date
+        string status
+    }</pre>
+            </div>
+
+            <h3 style="color: #868f96; margin: 30px 0 15px 0;">Table Descriptions</h3>
+
+            <h4>SETTINGS</h4>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+                <tr><td>id</td><td>number (PK)</td><td>Unique identifier</td></tr>
+                <tr><td>name</td><td>string (UK)</td><td>Setting name (company_profile, layout_settings, numbering_sequences, etc.)</td></tr>
+                <tr><td>description</td><td>text/json</td><td>Setting value stored as JSON string</td></tr>
+                <tr><td>status</td><td>string</td><td>active/inactive</td></tr>
+                <tr><td>created_at</td><td>datetime</td><td>Creation timestamp</td></tr>
+                <tr><td>updated_at</td><td>datetime</td><td>Last update timestamp</td></tr>
+            </table>
+
+            <h3 style="color: #868f96; margin: 30px 0 15px 0;">Setting Names & Data Structure</h3>
+            <table>
+                <tr><th>Setting Name</th><th>Description</th><th>Data Type</th></tr>
+                <tr><td><code>company_profile</code></td><td>Company contact information, logo, tax ID</td><td>JSON object</td></tr>
+                <tr><td><code>layout_settings</code></td><td>UI layout configuration (POS grid, columns)</td><td>JSON object</td></tr>
+                <tr><td><code>einvoice_settings</code></td><td>E-invoice API configuration</td><td>JSON object</td></tr>
+                <tr><td><code>google_maps_settings</code></td><td>Maps API key and default coordinates</td><td>JSON object</td></tr>
+                <tr><td><code>numbering_sequences</code></td><td>Document numbering prefixes and formats</td><td>JSON object</td></tr>
+                <tr><td><code>currency_settings</code></td><td>Default currency, exchange rates</td><td>JSON object</td></tr>
+                <tr><td><code>email_settings</code></td><td>SMTP configuration, email templates</td><td>JSON object</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Storage Pattern:</strong><br>
+                • Each setting type is stored as a separate row with unique <code>name</code><br>
+                • Configuration data is serialized as JSON in <code>description</code> column<br>
+                • Settings are cached in memory for quick access<br>
+                • Changes to settings take effect immediately (no restart needed)
+            </div>
+        </div>
+
+        <!-- VALIDATION RULES -->
+        <div class="section-title">📌 VALIDATION RULES</div>
+        <div class="card">
+            <h2>API Validation</h2>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Update Company Profile</h3>
+            <div class="code-block">{
+    "company_name": {
+        "type": "string",
+        "required": true,
+        "minLength": 2,
+        "maxLength": 255
+    },
+    "email": {
+        "type": "email",
+        "required": true
+    },
+    "phone": {
+        "type": "string",
+        "optional": true,
+        "pattern": "^[+0-9]{10,15}$"
+    },
+    "currency": {
+        "type": "string",
+        "optional": true,
+        "length": 3,
+        "uppercase": true
+    },
+    "logo_url": {
+        "type": "url",
+        "optional": true
+    },
+    "website": {
+        "type": "url",
+        "optional": true
+    },
+    "qr_code": {
+        "type": "string",
+        "optional": true
+    }
+}</div>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Update Layout Settings</h3>
+            <div class="code-block">{
+    "pos": {
+        "type": "object",
+        "optional": true,
+        "properties": {
+            "columns": { "type": "object" },
+            "gap": { "type": "number", "min": 0, "max": 12 },
+            "showImages": { "type": "boolean" },
+            "cardStyle": { "type": "enum", "values": ["standard", "compact", "detailed"] }
+        }
+    }
+}</div>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Update Numbering Sequences</h3>
+            <div class="code-block">{
+    "sales_invoices": {
+        "type": "object",
+        "optional": true,
+        "properties": {
+            "prefix": { "type": "string", "maxLength": 10 },
+            "suffix": { "type": "string", "maxLength": 10 },
+            "padding": { "type": "number", "min": 4, "max": 10 },
+            "separator": { "type": "string", "maxLength": 5 }
+        }
+    },
+    "purchase_orders": {
+        "type": "object",
+        "optional": true
+    },
+    "orders": {
+        "type": "object",
+        "optional": true
+    }
+}</div>
+
+            <div class="info-box">
+                <strong>ℹ️ Common Validation Rules:</strong><br>
+                • Company name must be unique (single profile per system)<br>
+                • Email must be valid format<br>
+                • Currency code must be 3-letter ISO 4217 code (USD, EUR, GBP, etc.)<br>
+                • URLs must be valid and accessible<br>
+                • API keys are validated for format (not existence)<br>
+                • Padding must be between 4-10 characters
+            </div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Updating Company Profile</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates all future documents (invoices, quotes, orders)</li>
+                <li>✓ Changes reflected in email templates</li>
+                <li>✓ Logo and QR code updates affect printed documents</li>
+                <li>✅ Currency changes affect all financial calculations</li>
+                <li>✅ Does NOT modify existing documents (they retain original values)</li>
+            </ul>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Updating Layout Settings</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Affects POS interface immediately</li>
+                <li>✓ All users see updated layout on next refresh</li>
+                <li>✅ Changes stored per user device in localStorage</li>
+            </ul>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Updating Numbering Sequences</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Affects only NEW documents created after update</li>
+                <li>✓ Existing documents keep their original numbers</li>
+                <li>✅ Cannot be undone (sequences are not versioned)</li>
+                <li>⚠️ Changing prefixes may cause confusion in document continuity</li>
+            </ul>
+
+            <h3 style="color: #868f96; margin: 20px 0 10px 0;">Updating API Keys</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Changes take effect immediately</li>
+                <li>⚠️ Invalid API keys will cause integration failures</li>
+                <li>⚠️ Google Maps requires valid API key for map functionality</li>
+                <li>⚠️ E-invoice API keys provide access to tax submission systems</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Settings changes are NOT versioned - backup before major changes</li>
+                    <li>API keys should be rotated periodically for security</li>
+                    <li>Test numbering sequences with sample documents before applying</li>
+                    <li>Company profile changes affect all customer-facing documents</li>
+                    <li>Keep API keys secure and never expose in client-side code</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SETTINGS FLOW DIAGRAM -->
+        <div class="section-title">📌 SETTINGS FLOW DIAGRAM</div>
+        <div class="card">
+            <h2>System Configuration Flow</h2>
+
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[User Updates Settings] --> B{Settings Type}
+    B -->|Company Profile| C[Update Database]
+    B -->|Layout| D[Update Cache]
+    B -->|Numbering| E[Update Sequences]
+    B -->|API Keys| F[Update Integration]
+
+    C --> G[All Future Documents]
+    D --> H[User Interface]
+    E --> I[New Documents Only]
+    F --> J[Third-party APIs]
+
+    C --> K[Invoices, Quotes, Orders]
+    F --> L[E-invoice, Maps]
+
+    style A fill:#e3f2fd
+    style K fill:#c8e6c9
+    style L fill:#fff3e0</pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+    </script>
+</body>
+</html>

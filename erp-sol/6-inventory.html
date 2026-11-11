@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inventory & Stock Management</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .badge-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+    .badge-dot-green { background: #22c55e; }
+    .badge-dot-red   { background: #ef4444; }
+    .badge-dot-yellow{ background: #eab308; }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#" class="active">Inventory</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Inventory & Stock Management</h1>
+    <div class="subtitle">
+      Manage warehouses, stock balances, item movements, transfers, adjustments, stocktakes, batches, expiry and alerts.
+    </div>
+
+    <!-- QUICK SUMMARY -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Stock Summary (Snapshot)</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">By Product</div>
+          <div class="pill-filter">By Category</div>
+          <div class="pill-filter">By Warehouse</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Warehouse</label>
+          <select>
+            <option value="">All Warehouses</option>
+            <option>WH-01 Main Warehouse</option>
+            <option>WH-02 Finished Goods</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select>
+            <option value="">All Categories</option>
+            <option>PPE</option>
+            <option>Chemicals</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Search Product</label>
+          <input type="text" placeholder="Name / SKU / Barcode" />
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th>Product</th>
+          <th style="width:100px;">SKU</th>
+          <th style="width:120px;">Warehouse</th>
+          <th style="width:80px;">UOM</th>
+          <th style="width:90px;">On Hand</th>
+          <th style="width:90px;">Reserved</th>
+          <th style="width:90px;">Available</th>
+          <th style="width:100px;">Reorder Level</th>
+          <th style="width:90px;">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Nitrile Safety Gloves</td>
+          <td>PPE-GLV-001</td>
+          <td>WH-01 Main</td>
+          <td>PAIR</td>
+          <td>480</td>
+          <td>60</td>
+          <td>420</td>
+          <td>100</td>
+          <td><span class="tag-success tag"><span class="badge-dot badge-dot-green"></span>OK</span></td>
+        </tr>
+        <tr>
+          <td>Industrial Cleaner 5L</td>
+          <td>CHEM-CLN-010</td>
+          <td>WH-01 Main</td>
+          <td>CAN</td>
+          <td>40</td>
+          <td>10</td>
+          <td>30</td>
+          <td>50</td>
+          <td><span class="tag-danger tag"><span class="badge-dot badge-dot-red"></span>Low</span></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="hint">
+        This view uses <code>stock_balances</code> (summarised by product, warehouse and unit) + <code>products</code> reorder levels.
+      </div>
+    </div>
+
+    <!-- WAREHOUSES & LOCATIONS + STOCK LEDGER -->
+    <div class="two-column">
+      <!-- Warehouses / Locations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Warehouses / Locations</h3>
+          <button class="btn btn-outline btn-sm">+ New Warehouse</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warehouse Code</label>
+            <input type="text" placeholder="e.g. WH-01" />
+          </div>
+          <div class="form-group">
+            <label>Warehouse Name</label>
+            <input type="text" placeholder="e.g. Main Warehouse" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Address</label>
+            <textarea placeholder="Warehouse address"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-sm btn-outline">Save Warehouse</button>
+
+        <h4 style="font-size:14px;margin-top:12px;margin-bottom:6px;">Locations / Bins</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Location Code</label>
+            <input type="text" placeholder="e.g. R01-A1" />
+          </div>
+          <div class="form-group">
+            <label>Location Name</label>
+            <input type="text" placeholder="e.g. Rack 1 - Level A1" />
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline">Save Location</button>
+
+        <table style="margin-top:10px;">
+          <thead>
+          <tr>
+            <th>WH Code</th>
+            <th>Warehouse</th>
+            <th>Location</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>WH-01</td>
+            <td>Main Warehouse</td>
+            <td>R01-A1</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>WH-01</td>
+            <td>Main Warehouse</td>
+            <td>R02-B3</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Maps to <code>warehouses</code> and <code>warehouse_locations</code>.
+        </div>
+      </div>
+
+      <!-- Stock Ledger -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Stock Ledger (Item-wise Movement)</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product</label>
+            <input type="text" placeholder="Search product (name / SKU / barcode)" />
+          </div>
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option value="">All</option>
+              <option>WH-01 Main</option>
+              <option>WH-02 Finished Goods</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Range</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Movement Type</label>
+            <select>
+              <option>All</option>
+              <option>Receipt / Purchase</option>
+              <option>Issue / Sale</option>
+              <option>Transfer</option>
+              <option>Adjustment</option>
+              <option>Stocktake</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Date</th>
+            <th style="width:90px;">Ref No.</th>
+            <th>Warehouse</th>
+            <th style="width:80px;">Type</th>
+            <th style="width:80px;">In Qty</th>
+            <th style="width:80px;">Out Qty</th>
+            <th style="width:90px;">Balance</th>
+            <th style="width:120px;">Batch / Serial</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-02</td>
+            <td>GRN-1001</td>
+            <td>WH-01 Main</td>
+            <td><span class="tag-success tag">IN</span></td>
+            <td>200</td>
+            <td></td>
+            <td>200</td>
+            <td>Batch B-2401</td>
+          </tr>
+          <tr>
+            <td>2025-01-05</td>
+            <td>SO-3001</td>
+            <td>WH-01 Main</td>
+            <td><span class="tag-danger tag">OUT</span></td>
+            <td></td>
+            <td>50</td>
+            <td>150</td>
+            <td>Batch B-2401</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Maps to <code>stock_transactions</code> (core stock ledger),  
+          including batch / lot / serial & expiry info.
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK TRANSFER & ADJUSTMENTS -->
+    <div class="two-column">
+      <!-- Stock Transfers -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Stock Transfers (Warehouse to Warehouse)</h3>
+          <button class="btn btn-outline btn-sm">+ New Transfer</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>From Warehouse</label>
+            <select>
+              <option>WH-01 Main</option>
+              <option>WH-02 Finished Goods</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>To Warehouse</label>
+            <select>
+              <option>WH-02 Finished Goods</option>
+              <option>WH-03 Regional</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Reference / Remark</label>
+            <input type="text" placeholder="e.g. Transfer to FG store" />
+          </div>
+          <div class="form-group">
+            <label>Transfer Date</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:90px;">SKU</th>
+            <th style="width:80px;">Qty</th>
+            <th style="width:80px;">UOM</th>
+            <th style="width:120px;">Batch / Serial</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Nitrile Safety Gloves</td>
+            <td>PPE-GLV-001</td>
+            <td>100</td>
+            <td>PAIR</td>
+            <td>Batch B-2401</td>
+            <td><button class="btn btn-sm btn-outline">Remove</button></td>
+          </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-sm btn-outline" style="margin-top:6px;">+ Add Line</button>
+
+        <div style="margin-top:10px;">
+          <button class="btn btn-primary btn-sm">Submit Transfer</button>
+        </div>
+
+        <div class="hint">
+          Transfer header maps to <code>stock_transfers</code>; lines to <code>stock_transfer_items</code>.  
+          Both generate <code>stock_transactions</code> (OUT from source, IN to destination).
+        </div>
+      </div>
+
+      <!-- Stock Adjustments -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Stock Adjustments (Gain / Loss)</h3>
+          <button class="btn btn-outline btn-sm">+ New Adjustment</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option>WH-01 Main</option>
+              <option>WH-02 Finished Goods</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Reason</label>
+            <select>
+              <option>Breakage / Damage</option>
+              <option>Expiry</option>
+              <option>Count Difference</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:90px;">SKU</th>
+            <th style="width:80px;">Adj Qty</th>
+            <th style="width:80px;">UOM</th>
+            <th style="width:90px;">Type</th>
+            <th style="width:120px;">Batch / Expiry</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>CHEM-CLN-010</td>
+            <td>-5</td>
+            <td>CAN</td>
+            <td><span class="tag-danger tag">LOSS</span></td>
+            <td>Batch C-2401 / Exp: 2025-03-31</td>
+            <td><button class="btn btn-sm btn-outline">Remove</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <button class="btn btn-sm btn-outline" style="margin-top:6px;">+ Add Line</button>
+
+        <div style="margin-top:10px;">
+          <button class="btn btn-primary btn-sm">Post Adjustment</button>
+        </div>
+
+        <div class="hint">
+          Adjustment header maps to <code>stock_adjustments</code>; lines to <code>stock_adjustment_items</code>.  
+          Each line posts to <code>stock_transactions</code> (gain or loss).
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCKTAKE & BATCH/EXPIRY -->
+    <div class="two-column">
+      <!-- Stocktakes / Physical Count -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Stocktakes / Physical Inventory</h3>
+          <button class="btn btn-outline btn-sm">+ New Count Session</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option>WH-01 Main</option>
+              <option>WH-02 Finished Goods</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Session Name</label>
+            <input type="text" placeholder="e.g. FY25 Q1 Cycle Count" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Count Start Date</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>DRAFT</option>
+              <option>IN_PROGRESS</option>
+              <option>CLOSED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:90px;">SKU</th>
+            <th style="width:80px;">System Qty</th>
+            <th style="width:80px;">Counted Qty</th>
+            <th style="width:80px;">Diff</th>
+            <th style="width:120px;">Batch / Serial</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Nitrile Safety Gloves</td>
+            <td>PPE-GLV-001</td>
+            <td>480</td>
+            <td>478</td>
+            <td>-2</td>
+            <td>Batch B-2401</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div style="margin-top:10px;">
+          <button class="btn btn-outline btn-sm">Generate Adjustments</button>
+          <button class="btn btn-primary btn-sm">Close Session</button>
+        </div>
+
+        <div class="hint">
+          Sessions map to <code>stocktake_sessions</code>; lines to <code>stocktake_lines</code>.  
+          Differences are optionally converted into <code>stock_adjustments</code> + <code>stock_transactions</code>.
+        </div>
+      </div>
+
+      <!-- Batch / Lot / Serial + Expiry -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Batch / Lot / Serial & Expiry Management</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product</label>
+            <input type="text" placeholder="Search product" />
+          </div>
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option value="">All</option>
+              <option>WH-01 Main</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:90px;">Batch No.</th>
+            <th style="width:100px;">Lot / Serial</th>
+            <th style="width:90px;">Expiry</th>
+            <th style="width:80px;">Qty</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>C-2401</td>
+            <td>-</td>
+            <td>2025-03-31</td>
+            <td>40</td>
+            <td><span class="tag-warning tag"><span class="badge-dot badge-dot-yellow"></span>Near Expiry</span></td>
+          </tr>
+          <tr>
+            <td>Medical Mask N95</td>
+            <td>-</td>
+            <td>SN-00012345</td>
+            <td>2026-12-31</td>
+            <td>1</td>
+            <td><span class="tag-success tag">OK</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Batches & expiry map to <code>stock_batches</code>.  
+          Serialised items can map to <code>stock_serial_numbers</code>.  
+          Alert statuses are computed from expiry and quantity.
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK VALUATION & LOW STOCK ALERTS -->
+    <div class="two-column">
+      <!-- Stock Valuation -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Stock Valuation (FIFO / Weighted Average)</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Valuation Method</label>
+            <select>
+              <option>FIFO</option>
+              <option>Weighted Average</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>As of Date</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:100px;">SKU</th>
+            <th style="width:80px;">Qty</th>
+            <th style="width:90px;">Unit Cost</th>
+            <th style="width:110px;">Total Value</th>
+            <th style="width:120px;">Method</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Nitrile Safety Gloves</td>
+            <td>PPE-GLV-001</td>
+            <td>480</td>
+            <td>$3.25</td>
+            <td>$1,560.00</td>
+            <td>Weighted Average</td>
+          </tr>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>CHEM-CLN-010</td>
+            <td>40</td>
+            <td>$12.90</td>
+            <td>$516.00</td>
+            <td>FIFO</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Valuation method per product/company can be stored in <code>stock_valuation_policies</code>.  
+          Values are calculated based on <code>stock_transactions</code>.
+        </div>
+      </div>
+
+      <!-- Low Stock / Reorder Alerts -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Low Stock / Reorder Alerts</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:100px;">SKU</th>
+            <th style="width:120px;">Warehouse</th>
+            <th style="width:80px;">On Hand</th>
+            <th style="width:100px;">Reorder Level</th>
+            <th style="width:80px;">Status</th>
+            <th style="width:120px;">Last Alert</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>CHEM-CLN-010</td>
+            <td>WH-01 Main</td>
+            <td>30</td>
+            <td>50</td>
+            <td><span class="tag-danger tag"><span class="badge-dot badge-dot-red"></span>Reorder</span></td>
+            <td>2025-01-06 10:15</td>
+          </tr>
+          <tr>
+            <td>Disposable Mask Box 50s</td>
+            <td>PPE-MSK-020</td>
+            <td>WH-02 FG</td>
+            <td>120</td>
+            <td>100</td>
+            <td><span class="tag-warning tag"><span class="badge-dot badge-dot-yellow"></span>Warning</span></td>
+            <td>2025-01-05 09:02</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Alerts can be computed in real time from <code>stock_balances</code> & <code>products</code>,  
+          and optionally logged into <code>stock_alerts</code>.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

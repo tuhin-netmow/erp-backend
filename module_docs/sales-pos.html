@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS Order Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #1976d2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #1976d2;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateX(-5px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #1976d2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1565c0;
+        }
+
+        .ui-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ui-action-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .ui-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(25, 118, 210, 0.15);
+            border-color: #1976d2;
+        }
+
+        .ui-action-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .ui-action-title {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .ui-action-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-ui {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-api {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .code-section {
+            margin-top: 15px;
+        }
+
+        .code-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 0; border-radius: 12px; overflow: hidden; margin: 12px 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .code-block-header { background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%); padding: 12px 18px; border-bottom: 1px solid #454545; display: flex; align-items: center; gap: 10px; }
+        .code-block-header .dots { display: flex; gap: 6px; }
+        .code-block-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .code-block-header .dot.red { background: #ff5f56; }
+        .code-block-header .dot.yellow { background: #ffbd2e; }
+        .code-block-header .dot.green { background: #27c93f; }
+        .code-block-header .file-path { color: #9cdcfe; font-size: 0.85em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; margin-left: auto; }
+        .code-block-content { padding: 18px; overflow-x: auto; white-space: pre; }
+        .code-block-content .comment { color: #6a9955; }
+        .code-block-content .keyword { color: #569cd6; }
+        .code-block-content .string { color: #ce9178; }
+        .code-block-content .function { color: #dcdcaa; }
+        .code-block-content .number { color: #b5cea8; }
+        .code-block-content .operator { color: #d4d4d4; }
+        .code-block-content .variable { color: #9cdcfe; }
+        .code-block-content .property { color: #9cdcfe; }
+        .code-block-content .tag { color: #569cd6; }
+        .code-block-content .punctuation { color: #d4d4d4; }
+        .code-block-content .jsx-tag { color: #569cd6; }
+        .code-block-content .jsx-attr { color: #9cdcfe; }
+        .code-block-content .class-name { color: #4ec9b0; }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-right: 8px;
+        }
+
+        .method.get { background: #e3f2fd; color: #1976d2; }
+        .method.post { background: #e8f5e9; color: #388e3c; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>🖥️ POS Order Module</h1>
+            <p>Point of Sale Interface for Quick Order Processing</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>The POS (Point of Sale) module provides a fast, intuitive interface for processing sales orders in retail environments. Designed for quick checkout and real-time inventory management.</p>
+
+            <div class="info-box">
+                <strong>📌 Base URL:</strong> <code>/api/sales</code>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">UI Actions & API Integration</h2>
+
+            <div class="ui-actions-grid">
+                <!-- POS Interface -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">🛒 POS Interface</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">POSInterface.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">Search</span><span class="punctuation">,</span> <span class="variable">ShoppingCart</span><span class="punctuation">,</span> <span class="variable">CreditCard</span><span class="punctuation">,</span> <span class="variable">User</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">interface</span> <span class="class-name">CartItem</span> <span class="punctuation">{</span>
+  <span class="property">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">name</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">price</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">quantity</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">export const</span> <span class="function">POSInterface</span> <span class="operator">=</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">cart</span><span class="punctuation">,</span> <span class="variable">setCart</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">CartItem</span><span class="operator">[]></span><span class="punctuation">([]);</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">searchTerm</span><span class="punctuation">,</span> <span class="variable">setSearchTerm</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">string</span><span class="operator">></span><span class="punctuation">(</span><span class="string">''</span><span class="punctuation">);</span>
+
+  <span class="keyword">const</span> <span class="variable">total</span> <span class="operator">=</span> <span class="variable">cart</span><span class="punctuation">.</span><span class="function">reduce</span><span class="punctuation">((</span><span class="variable">sum</span><span class="punctuation">,</span> <span class="variable">item</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="variable">sum</span> <span class="operator">+</span> <span class="punctuation">(</span><span class="variable">item</span><span class="punctuation">.</span><span class="variable">price</span> <span class="operator">*</span> <span class="variable">item</span><span class="punctuation">.</span><span class="variable">quantity</span><span class="punctuation">),</span> <span class="number">0</span><span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex h-screen"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex-1 p-6"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"mb-6"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"relative"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">Search</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"absolute left-3 top-3 text-gray-400"</span> <span class="operator">/</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">input</span>
+              <span class="jsx-attr">type</span><span class="operator">=</span><span class="string">"text"</span>
+              <span class="jsx-attr">placeholder</span><span class="operator">=</span><span class="string">"Search products or scan barcode..."</span>
+              <span class="jsx-attr">value</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">searchTerm</span><span class="punctuation">}</span>
+              <span class="jsx-attr">onChange</span><span class="operator">=</span><span class="punctuation">{(</span><span class="variable">e</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="function">setSearchTerm</span><span class="punctuation">(</span><span class="variable">e</span><span class="punctuation">.</span><span class="variable">target</span><span class="punctuation">.</span><span class="variable">value</span><span class="punctuation">)}</span><span class="punctuation">}</span>
+              <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"</span>
+            <span class="operator">/</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="comment">{/* Product grid */}</span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"grid grid-cols-4 gap-4"</span><span class="operator">></span>
+          <span class="comment">{/* Products display */}</span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+      <span class="comment">{/* Cart sidebar */}</span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"w-96 bg-white border-l p-6"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-2 mb-6"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">ShoppingCart</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-blue-600"</span> <span class="operator">/</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">h2</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-xl font-bold"</span><span class="operator">></span>Cart<span class="operator">&lt;/</span><span class="jsx-tag">h2</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"space-y-4 mb-6"</span><span class="operator">></span>
+          <span class="comment">{/* Cart items */}</span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"border-t pt-4"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex justify-between text-xl font-bold mb-4"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">span</span><span class="operator">></span>Total:<span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">span</span><span class="operator">></span>${<span class="variable">total</span><span class="punctuation">.</span><span class="function">toFixed</span><span class="punctuation">(</span><span class="number">2</span><span class="punctuation">)}</span><span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+            <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">handleCheckout</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 flex items-center justify-center gap-2"</span>
+          <span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">CreditCard</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{20}</span> <span class="operator">/</span><span class="operator">></span>
+            Complete Sale
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.post">POST</span> /api/sales/pos
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">createPOSOrder.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">createPOSOrder</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderData</span><span class="operator">:</span> <span class="punctuation">{</span>
+  <span class="property">items</span><span class="operator">:</span> <span class="class-name">CartItem</span><span class="punctuation">[];</span>
+  <span class="property">customerId</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">paymentMethod</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">})</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span><span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/pos`</span><span class="punctuation">,</span> <span class="punctuation">{</span>
+    <span class="property">method</span><span class="operator">:</span> <span class="string">'POST'</span><span class="punctuation">,</span>
+    <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+      <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+      <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+    <span class="punctuation">},</span>
+    <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">(</span><span class="variable">orderData</span><span class="punctuation">)</span>
+  <span class="punctuation">});</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to create POS order'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Search -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">🔍 Product Search & Scan</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.get">GET</span> /api/products/search?query=
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">searchProducts.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">searchProducts</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">query</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/products/search?query=</span><span class="sub">${</span><span class="variable">query</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Key Features</h2>
+            <ul style="list-style: none; padding: 0;">
+                <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">✓ Quick product search and barcode scanning</li>
+                <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">✓ Real-time inventory updates</li>
+                <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">✓ Multiple payment methods support</li>
+                <li style="padding: 10px 0; border-bottom: 1px solid #e0e0e0;">✓ Automatic tax calculations</li>
+                <li style="padding: 10px 0;">✓ Receipt generation</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Permissions</h2>
+            <div class="success-box">
+                <strong>✅ Required Permissions:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><code>sales.pos.access</code> - Access POS interface</li>
+                    <li><code>sales.pos.create</code> - Create POS orders</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

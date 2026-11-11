@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roles Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #5568d3;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🔑 Roles Module</h1>
+            <p>Complete role-based access control (RBAC) system with permissions, menu management, and dashboard widgets</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <h3 style="color: #667eea; margin-top: 0;">📌 Roles CRUD</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/roles/list</span>
+                </h3>
+                <p class="route-desc">Get paginated list of all roles with settings.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/roles/get/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed role information by ID with settings.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/roles/add</span>
+                </h3>
+                <p class="route-desc">Create a new role with permissions, menu, and dashboard settings.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/roles/update/:id</span>
+                </h3>
+                <p class="route-desc">Update role information and settings.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/roles/delete/:id</span>
+                </h3>
+                <p class="route-desc">Delete a role by ID (Superadmin protected).</p>
+            </div>
+
+            <h3 style="color: #667eea; margin-top: 25px;">📌 Role Menus</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/roles/menus</span>
+                </h3>
+                <p class="route-desc">Get all available menu items (hierarchical structure).</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/roles/menus</span>
+                </h3>
+                <p class="route-desc">Create a new menu item.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/roles/menus/:id</span>
+                </h3>
+                <p class="route-desc">Update menu item by ID.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/roles/menus/:id</span>
+                </h3>
+                <p class="route-desc">Delete menu item by ID.</p>
+            </div>
+
+            <h3 style="color: #667eea; margin-top: 25px;">📌 Role Dashboards</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/roles/dashboards</span>
+                </h3>
+                <p class="route-desc">Get all available dashboard widgets.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/roles/dashboards</span>
+                </h3>
+                <p class="route-desc">Create a new dashboard widget definition.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/roles/dashboards/:id</span>
+                </h3>
+                <p class="route-desc">Update dashboard widget by ID.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/roles/dashboards/:id</span>
+                </h3>
+                <p class="route-desc">Delete dashboard widget by ID.</p>
+            </div>
+        </div>
+
+        <!-- ==================== 1. LIST ROLES ==================== -->
+        <div class="section-header">📌 ROLES CRUD ENDPOINTS</div>
+
+        <div class="card">
+            <h2>1. GET /api/roles/list - Get All Roles <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/roles/list
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: list(page, limit)
+    Service->>Service: Parse pagination params
+    Service->>Repository: findAll(page, limit)
+    Repository->>Database: SELECT with include
+    Database->>Repository: Result rows count
+    Repository->>Service: Roles with settings
+    Service->>Service: Parse settings JSON
+    Service->>Service: Transform to response format
+    Service->>Controller: Result with total
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access OK| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Roles Flow
+                subgraph "Get All Roles Process"
+                GetAll[GET /api/roles/list] --> Parse[Service: Parse Pagination]
+                Parse -->|page, limit| FindAll[Repository: findAll]
+                FindAll -->|SELECT + include| RolesDB[(roles + role_settings tables)]
+                RolesDB --> RolesData[Repository: Roles + Settings]
+                RolesData --> ParseSettings[Service: Parse Settings JSON]
+                ParseSettings --> Transform[Service: Transform Response]
+                Transform --> Response[Controller: Send Paginated Response]
+                end
+            </div>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>page</td>
+                    <td>integer</td>
+                    <td>1</td>
+                    <td>Page number</td>
+                </tr>
+                <tr>
+                    <td>limit</td>
+                    <td>integer</td>
+                    <td>10</td>
+                    <td>Items per page</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.controller.js</code> <span class="file-badge">list</span></p>
+            <pre class="code-block"><code>exports.list = async (req, res, next) => {
+  try {
+    const page = parseInt(req.query.page) || parseInt(req.body.page) || 1;
+    const limit = parseInt(req.query.limit) || parseInt(req.body.limit) || 10;
+    const { rows, total } = await service.list(page, limit);
+    return successWithPagination(res, 'Roles retrieved successfully', rows, {
+      total,
+      page,
+      limit
+    });
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.service.js</code> <span class="file-badge">list</span></p>
+            <pre class="code-block"><code>exports.list = (page, limit) => repo.findAll(page, limit);</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.repository.js</code> <span class="file-badge">findAll</span></p>
+            <pre class="code-block"><code>exports.findAll = async (page, limit) => {
+  if (page && limit) {
+    const offset = (page - 1) * limit;
+    const { rows, count } = await Role.findAndCountAll({
+      include: [RoleSettings],
+      order: [['id', 'DESC']],
+      limit: parseInt(limit, 10),
+      offset: parseInt(offset, 10),
+      distinct: true
+    });
+
+    const mapped = rows.map(r => {
+      const p = r.get({ plain: true });
+      const settingsRow = p.RoleSetting || p.RoleSettings;
+      return {
+        id: p.id,
+        role: p.name,
+        display_name: p.display_name,
+        description: p.description,
+        status: p.status,
+        permissions: r.permissions,
+        settings: parseSettings(settingsRow)
+      };
+    });
+    return { rows: mapped, total: count };
+  }
+
+  // Return all if no pagination
+  const rows = await Role.findAll({
+    include: [RoleSettings],
+    order: [['id', 'DESC']]
+  });
+  const mapped = rows.map(r => {
+    const p = r.get({ plain: true });
+    const settingsRow = p.RoleSetting || p.RoleSettings;
+    return {
+      id: p.id,
+      role: p.name,
+      display_name: p.display_name,
+      description: p.description,
+      status: p.status,
+      permissions: r.permissions,
+      settings: parseSettings(settingsRow)
+    };
+  });
+  return { rows: mapped, total: mapped.length };
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Query roles with settings
+SELECT
+  r.id, r.name, r.display_name, r.description,
+  r.status, r.permissions,
+  rs.menu, rs.dashboard, rs.custom
+FROM roles r
+LEFT JOIN role_settings rs ON r.id = rs.role_id
+ORDER BY r.id DESC
+LIMIT 10 OFFSET 0;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "success": true,
+  "message": "Roles retrieved successfully",
+  "pagination": {
+    "total": 5,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "role": "Admin",
+      "display_name": "System Administrator",
+      "description": "Full system access",
+      "status": "active",
+      "permissions": ["*"],
+      "settings": {
+        "menu": ["all"],
+        "dashboard": ["main"],
+        "custom": {}
+      }
+    },
+    {
+      "id": 2,
+      "role": "Manager",
+      "display_name": "Department Manager",
+      "description": "Department level access",
+      "status": "active",
+      "permissions": ["sales.view", "sales.create"],
+      "settings": {
+        "menu": ["sales", "dashboard"],
+        "dashboard": ["overview"],
+        "custom": {}
+      }
+    }
+  ]
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 2. GET ROLE BY ID ==================== -->
+        <div class="card">
+            <h2>2. GET /api/roles/get/:id - Get Role by ID <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/roles/get/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request with role ID
+    Controller->>Service: get(id)
+    Service->>Repository: findById(id)
+    Repository->>Database: SELECT * FROM roles WITH settings
+    Database->>Repository: Role data with settings
+    Repository->>Service: Role object parsed
+    Service->>Controller: Role details
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Role by ID Flow
+                subgraph "Get Role by ID Process"
+                GetRole[GET /api/roles/get/:id] --> Auth[Router: Verify JWT]
+                Auth -->|Extract role_id| GetSvc[Service: get]
+                GetSvc --> FindById[Repository: findById]
+                FindById -->|findByPk with include| RolesDB[(roles + role_settings)]
+                RolesDB --> RoleData[Repository: Role Object]
+                RoleData --> Parse[Service: Parse Settings]
+                Parse --> Transform[Service: Transform Response]
+                Transform --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.controller.js</code> <span class="file-badge">get</span></p>
+            <pre class="code-block"><code>exports.get = async (req, res, next) => {
+  try {
+    const row = await service.get(req.params.id);
+    return success(res, 'Role retrieved successfully', row);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.service.js</code> <span class="file-badge">get</span></p>
+            <pre class="code-block"><code>exports.get = (id) => repo.findById(id);</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.repository.js</code> <span class="file-badge">findById</span></p>
+            <pre class="code-block"><code>exports.findById = async (id) => {
+  const role = await Role.findByPk(id, { include: [RoleSettings] });
+  if (!role) return null;
+
+  const plain = role.get({ plain: true });
+  const settingsRow = plain.RoleSetting || plain.RoleSettings;
+  return {
+    id: plain.id,
+    role: plain.name,
+    display_name: plain.display_name,
+    description: plain.description,
+    status: plain.status,
+    permissions: role.permissions,
+    settings: parseSettings(settingsRow)
+  };
+};</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Role retrieved successfully",
+  "data": {
+    "id": 1,
+    "role": "Admin",
+    "display_name": "System Administrator",
+    "description": "Full system access",
+    "status": "active",
+    "permissions": ["*"],
+    "settings": {
+      "menu": ["dashboard", "sales", "users", "reports"],
+      "dashboard": ["overview", "analytics", "stats"],
+      "custom": { "theme": "dark", "layout": "expanded" }
+    }
+  }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 3. CREATE ROLE ==================== -->
+        <div class="card">
+            <h2>3. POST /api/roles/add - Create Role <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/roles/add
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Router: Access Granted
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: create(data, userId)
+    Service->>Repository: create(roleData)
+    Repository->>Database: INSERT INTO roles
+    Database->>Repository: Role created
+    Repository->>Service: Role object
+    Service->>Repository: create(settingsData)
+    Repository->>Database: INSERT INTO role_settings
+    Database->>Repository: Settings created
+    Repository->>Service: Settings object
+    Service->>Controller: Complete role with settings
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Role Flow
+                subgraph "Create Role Process"
+                CreateRole[POST /api/roles/add] --> CreateSvc[Service: create]
+                CreateSvc --> Create[Repository: create role]
+                Create -->|INSERT| RoleDB[(roles table)]
+                RoleDB --> RoleData[Repository: Role Object]
+                RoleData --> CreateSettings[Service: Create Settings]
+                CreateSettings --> InsertSettings[Repository: create settings]
+                InsertSettings -->|INSERT| SettingsDB[(role_settings table)]
+                SettingsDB --> SettingsObj[Repository: Settings Object]
+                SettingsObj --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "role": "Regional Sales Manager",
+  "display_name": "Regional Sales Department Manager",
+  "description": "Manages regional sales team and operations",
+  "status": "active",
+  "permissions": ["sales.view", "sales.create", "reports.view"],
+  "menu": ["sales", "dashboard", "reports"],
+  "dashboard": ["overview", "revenue", "regional_stats"],
+  "custom": {
+    "theme": "dark",
+    "region": "North"
+  }
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>role OR name</td>
+                    <td>required (one or the other)</td>
+                </tr>
+                <tr>
+                    <td>display_name</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>optional, enum: active, inactive</td>
+                </tr>
+                <tr>
+                    <td>permissions</td>
+                    <td>optional, array of strings</td>
+                </tr>
+                <tr>
+                    <td>menu</td>
+                    <td>optional, array of strings (JSON)</td>
+                </tr>
+                <tr>
+                    <td>dashboard</td>
+                    <td>optional, array of strings (JSON)</td>
+                </tr>
+                <tr>
+                    <td>custom</td>
+                    <td>optional, object (JSON)</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.controller.js</code> <span class="file-badge">create</span></p>
+            <pre class="code-block"><code>exports.create = async (req, res, next) => {
+  try {
+    const row = await service.create(req.body, req.user.id);
+    return success(res, 'Role created successfully', row, 201);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.service.js</code> <span class="file-badge">create</span></p>
+            <pre class="code-block"><code>exports.create = (data, userId) => repo.create({ ...data, created_by: userId });</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.repository.js</code> <span class="file-badge">create</span></p>
+            <pre class="code-block"><code>exports.create = async (data) => {
+  // 1. Create role
+  const createdRole = await Role.create({
+    name: data.role || data.name,
+    display_name: data.display_name,
+    description: data.description,
+    status: data.status || 'active',
+    permissions: data.permissions || []
+  });
+
+  // 2. Create role settings
+  await RoleSettings.create({
+    role_id: createdRole.id,
+    menu: JSON.stringify(data.menu || []),
+    dashboard: JSON.stringify(data.dashboard || []),
+    custom: JSON.stringify(data.custom || {}),
+  });
+
+  // 3. Fetch and return complete role
+  const settings = await RoleSettings.findOne({
+    where: { role_id: createdRole.id }
+  });
+  return {
+    id: createdRole.id,
+    role: createdRole.name,
+    display_name: createdRole.display_name,
+    description: createdRole.description,
+    status: createdRole.status,
+    permissions: createdRole.permissions,
+    settings: parseSettings(settings)
+  };
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert into roles
+INSERT INTO roles (name, display_name, description, status, permissions)
+VALUES ('Regional Manager', 'Regional Sales Manager',
+        'Manages regional operations', 'active', '["sales.view","sales.create"]');
+
+-- Insert into role_settings
+INSERT INTO role_settings (role_id, menu, dashboard, custom)
+VALUES (LAST_INSERT_ID(),
+        '["sales","dashboard","reports"]',
+        '["overview","revenue"]',
+        '{"theme":"dark"}');</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Role created successfully",
+  "data": {
+    "id": 10,
+    "role": "Regional Sales Manager",
+    "display_name": "Regional Sales Department Manager",
+    "description": "Manages regional sales team and operations",
+    "status": "active",
+    "permissions": ["sales.view", "sales.create", "reports.view"],
+    "settings": {
+      "menu": ["sales", "dashboard", "reports"],
+      "dashboard": ["overview", "revenue", "regional_stats"],
+      "custom": { "theme": "dark", "region": "North" }
+    }
+  },
+  "code": 201
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 4. UPDATE ROLE ==================== -->
+        <div class="card">
+            <h2>4. PUT /api/roles/update/:id - Update Role <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /api/roles/update/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Router: Access Granted
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: update(id, data)
+    Service->>Repository: update(id, data)
+    Repository->>Database: SELECT role by id
+    Database->>Repository: Role data
+    Repository->>Repository: Check if role exists
+    Repository->>Database: UPDATE roles fields
+    Database->>Repository: Role updated
+    Repository->>Database: UPDATE role_settings JSON
+    Database->>Repository: Settings updated
+    Repository->>Service: Updated role with settings
+    Service->>Controller: Role details
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Update Role Flow
+                subgraph "Update Role Process"
+                Update[PUT /api/roles/update/:id] --> UpdateSvc[Service: update]
+                UpdateSvc --> FindRole[Repository: findById]
+                FindRole -->|SELECT| RoleDB[(roles table)]
+                RoleDB -->|Not found| Error[Service: Throw Error]
+                RoleDB -->|Exists| UpdateRole[Repository: update]
+                UpdateRole -->|UPDATE| Updated[(Updated role)]
+                Updated --> UpdateSettings[Service: Update Settings]
+                UpdateSettings --> UpdateSettingsDB[Repository: update settings]
+                UpdateSettingsDB -->|UPDATE| SettingsUpdated[(Updated settings)]
+                SettingsUpdated --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "display_name": "Senior Regional Manager",
+  "description": "Senior manager with additional permissions",
+  "status": "active",
+  "permissions": ["sales.view", "sales.create", "reports.view", "reports.export"],
+  "menu": ["sales", "dashboard", "reports", "analytics"],
+  "dashboard": ["overview", "revenue", "performance"],
+  "custom": {
+    "theme": "light",
+    "region": "North"
+  }
+}</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.controller.js</code> <span class="file-badge">update</span></p>
+            <pre class="code-block"><code>exports.update = async (req, res, next) => {
+  try {
+    const row = await service.update(req.params.id, req.body);
+    return success(res, 'Role updated successfully', row);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.service.js</code> <span class="file-badge">update</span></p>
+            <pre class="code-block"><code>exports.update = (id, data) => repo.update(id, data);</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.repository.js</code> <span class="file-badge">update</span></p>
+            <pre class="code-block"><code>exports.update = async (id, data) => {
+  const role = await Role.findByPk(id);
+  if (!role) return null;
+
+  // 1. Update role fields
+  const roleUpdatePayload = {};
+  if (data.role || data.name) roleUpdatePayload.name = data.role || data.name;
+  if (data.display_name !== undefined) roleUpdatePayload.display_name = data.display_name;
+  if (data.description !== undefined) roleUpdatePayload.description = data.description;
+  if (data.status !== undefined) roleUpdatePayload.status = data.status;
+  if (data.permissions !== undefined) roleUpdatePayload.permissions = data.permissions;
+
+  if (Object.keys(roleUpdatePayload).length > 0) {
+    await role.update(roleUpdatePayload);
+  }
+
+  // 2. Update role settings
+  if (data.menu || data.dashboard || data.custom) {
+    const settings = await RoleSettings.findOne({ where: { role_id: id } });
+    const payload = {};
+    if (data.menu !== undefined) payload.menu = JSON.stringify(data.menu || []);
+    if (data.dashboard !== undefined) payload.dashboard = JSON.stringify(data.dashboard || []);
+    if (data.custom !== undefined) payload.custom = JSON.stringify(data.custom || {});
+
+    if (settings) {
+      await settings.update(payload);
+    } else {
+      await RoleSettings.create({ role_id: id, ...payload });
+    }
+  }
+
+  return exports.findById(id);
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Update role
+UPDATE roles
+SET display_name = ?,
+    description = ?,
+    status = ?,
+    permissions = ?,
+    updated_at = NOW()
+WHERE id = ?;
+
+-- Update role_settings
+UPDATE role_settings
+SET menu = ?,
+    dashboard = ?,
+    custom = ?
+WHERE role_id = ?;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Role updated successfully",
+  "data": {
+    "id": 10,
+    "role": "Regional Sales Manager",
+    "display_name": "Senior Regional Manager",
+    "description": "Senior manager with additional permissions",
+    "status": "active",
+    "permissions": ["sales.view", "sales.create", "reports.view", "reports.export"],
+    "settings": {
+      "menu": ["sales", "dashboard", "reports", "analytics"],
+      "dashboard": ["overview", "revenue", "performance"],
+      "custom": { "theme": "light", "region": "North" }
+    }
+  }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 5. DELETE ROLE ==================== -->
+        <div class="card">
+            <h2>5. DELETE /api/roles/delete/:id - Delete Role <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: DELETE /api/roles/delete/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request with role ID
+    Controller->>Service: remove(id)
+    Service->>Repository: delete(id)
+    Repository->>Database: SELECT role by id
+    Database->>Repository: Role data
+    Repository->>Repository: Check Superadmin safeguard
+    alt Superadmin Role
+        Repository-->>Service: Error: Cannot delete
+        Service-->>Controller: Error response
+        Controller-->>Client: 400 Error
+    else Normal Role
+        Repository->>Database: DELETE FROM roles
+        Database->>Repository: Role deleted
+        Repository->>Service: Success
+        Service->>Controller: Success
+        Controller->>Client: 200 Success Response
+    end
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP DELETE + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Delete Role Flow
+                subgraph "Delete Role Process"
+                Delete[DELETE /api/roles/delete/:id] --> Auth[Router: Verify JWT]
+                Auth -->|Extract role_id| RemoveSvc[Service: remove]
+                RemoveSvc --> FindRole[Repository: findByPk]
+                FindRole -->|SELECT| RoleDB[(roles table)]
+                RoleDB -->|Not found| NotFound[Service: Throw Error]
+                RoleDB -->|Exists| CheckSuperadmin{Superadmin?}
+                CheckSuperadmin -->|Yes| Safeguard[Service: Throw Error]
+                CheckSuperadmin -->|No| DeleteDB[Repository: destroy]
+                DeleteDB -->|DELETE| Deleted[(Role deleted)]
+                Deleted --> Success[Service: Success]
+                Success --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.controller.js</code> <span class="file-badge">remove</span></p>
+            <pre class="code-block"><code>exports.remove = async (req, res, next) => {
+  try {
+    await service.remove(req.params.id);
+    return success(res, 'Role deleted successfully', null);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.service.js</code> <span class="file-badge">remove</span></p>
+            <pre class="code-block"><code>exports.remove = (id) => repo.delete(id);</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/roles/role.repository.js</code> <span class="file-badge">delete</span></p>
+            <pre class="code-block"><code>exports.delete = async (id) => {
+  const role = await Role.findByPk(id);
+  if (!role) return null;
+
+  // SYSTEM SAFEGUARD: Prevent deleting Superadmin role
+  if (role.name.toLowerCase() === 'superadmin' ||
+      role.name.toLowerCase() === 'super admin') {
+    throw new Error('System safeguarded: Cannot delete Superadmin role');
+  }
+
+  await Role.destroy({ where: { id } });
+};</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Role deleted successfully",
+  "data": null
+}</code>
+            </div>
+
+            <h4>Error Response (400) - Superadmin Protected</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "System safeguarded: Cannot delete Superadmin role"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== ROLE MENUS ==================== -->
+        <div class="section-header">📌 ROLE MENUS ENDPOINTS</div>
+
+        <div class="card">
+            <h2>6. GET /api/roles/menus - Get All Menu Items <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/roles/menus
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'roles' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request
+    Controller->>Service: getAllMenus()
+    Service->>Repository: findAllMenus()
+    Repository->>Database: SELECT * FROM role_menus
+    Database->>Repository: Menu items data
+    Repository->>Service: Raw menu list
+    Service->>Service: Build hierarchical tree
+    Service->>Controller: Menu tree structure
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Menus Flow
+                subgraph "Get All Menus Process"
+                GetMenus[GET /api/roles/menus] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| GetAllMenus[Service: getAllMenus]
+                GetAllMenus --> FindAll[Repository: findAllMenus]
+                FindAll -->|SELECT| MenusDB[(role_menus table)]
+                MenusDB --> MenusData[Repository: Raw Menu List]
+                MenusData --> BuildTree[Service: Build Hierarchical Tree]
+                BuildTree --> Tree[Service: Menu Tree Structure]
+                Tree --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "title": "Dashboard",
+      "path": "/dashboard",
+      "icon": "home",
+      "parent_id": null,
+      "sort_order": 1,
+      "is_active": true,
+      "children": []
+    },
+    {
+      "id": 2,
+      "title": "Sales",
+      "path": "/sales",
+      "icon": "shopping-cart",
+      "parent_id": null,
+      "sort_order": 2,
+      "is_active": true,
+      "children": [
+        {
+          "id": 5,
+          "title": "Orders",
+          "path": "/sales/orders",
+          "icon": "file-text",
+          "parent_id": 2,
+          "sort_order": 1,
+          "is_active": true,
+          "children": []
+        }
+      ]
+    }
+  ]
+}</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>7. POST /api/roles/menus - Create Menu Item <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Menu Item Flow
+                subgraph "Create Menu Item Process"
+                CreateMenu[POST /api/roles/menus] --> CreateSvc[Service: createMenu]
+                CreateSvc --> Create[Repository: create]
+                Create -->|INSERT| MenuDB[(role_menus table)]
+                MenuDB --> MenuData[Repository: Menu Object]
+                MenuData --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "title": "Reports",
+  "path": "/reports",
+  "icon": "bar-chart",
+  "parent_id": null,
+  "sort_order": 3,
+  "is_active": true
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert into role_menus
+INSERT INTO role_menus (title, path, icon, parent_id, sort_order, is_active)
+VALUES ('Reports', '/reports', 'bar-chart', NULL, 3, true);</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Menu item created successfully",
+  "data": {
+    "id": 6,
+    "title": "Reports",
+    "path": "/reports",
+    "icon": "bar-chart"
+  }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== ROLE DASHBOARDS ==================== -->
+        <div class="section-header">📌 ROLE DASHBOARDS ENDPOINTS</div>
+
+        <div class="card">
+            <h2>8. GET /api/roles/dashboards - Get All Dashboard Widgets <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Dashboards Flow
+                subgraph "Get All Dashboards Process"
+                GetDash[GET /api/roles/dashboards] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| GetAllDash[Service: getAllDashboards]
+                GetAllDash --> FindAll[Repository: findAllDashboards]
+                FindAll -->|SELECT| DashDB[(role_dashboards table)]
+                DashDB --> DashData[Repository: Dashboard Widgets]
+                DashData --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "name": "Total Revenue",
+      "slug": "total-revenue",
+      "type": "stat",
+      "size": "1x1",
+      "is_active": true
+    },
+    {
+      "id": 2,
+      "name": "Sales Overview Chart",
+      "slug": "sales-overview-chart",
+      "type": "chart",
+      "size": "2x1",
+      "is_active": true
+    }
+  ]
+}</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>9. POST /api/roles/dashboards - Create Dashboard Widget <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Roles"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'roles' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Role Controller]
+                Controller -->|Business Logic| Service[Role Service]
+                Service -->|Data Access| Repository[Role Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Dashboard Widget Flow
+                subgraph "Create Dashboard Widget Process"
+                CreateDash[POST /api/roles/dashboards] --> CreateSvc[Service: createDashboard]
+                CreateSvc --> Create[Repository: create]
+                Create -->|INSERT| DashDB[(role_dashboards table)]
+                DashDB --> DashData[Repository: Dashboard Object]
+                DashData --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "name": "Monthly Sales Chart",
+  "slug": "monthly-sales-chart",
+  "type": "chart",
+  "size": "2x1",
+  "is_active": true
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert into role_dashboards
+INSERT INTO role_dashboards (name, slug, type, size, is_active)
+VALUES ('Monthly Sales Chart', 'monthly-sales-chart', 'chart', '2x1', true);</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Dashboard widget created successfully",
+  "data": {
+    "id": 5,
+    "name": "Monthly Sales Chart",
+    "slug": "monthly-sales-chart",
+    "type": "chart",
+    "size": "2x1"
+  }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="card">
+            <h2>🗄️ Database Schema (ER Diagram)</h2>
+            <div class="mermaid">
+                erDiagram
+                ROLES {
+                int id PK
+                string name UK
+                string display_name
+                string description
+                enum status
+                json permissions
+                datetime created_at
+                datetime updated_at
+                }
+                ROLE_SETTINGS {
+                int id PK
+                int role_id FK
+                text menu
+                text dashboard
+                text custom
+                datetime created_at
+                datetime updated_at
+                }
+                ROLE_MENUS {
+                int id PK
+                int role_id FK
+                string title
+                string path
+                string icon
+                int parent_id FK
+                int sort_order
+                boolean is_active
+                }
+                ROLE_DASHBOARDS {
+                int id PK
+                int role_id FK
+                string name
+                string slug UK
+                string type
+                string size
+                boolean is_active
+                }
+                USERS {
+                int id PK
+                string email UK
+                int role_id FK
+                }
+
+                ROLES ||--|| ROLE_SETTINGS : "has settings"
+                ROLES ||--o{ ROLE_MENUS : "has menus"
+                ROLES ||--o{ ROLE_DASHBOARDS : "has dashboards"
+                USERS ||--o| ROLES : "assigned to"
+                ROLE_MENUS }o--o| ROLE_MENUS : "parent-child"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tables Used</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>roles</strong></td>
+                        <td>Defines user roles with permissions</td>
+                        <td>id, name, display_name, status, permissions (JSON)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_settings</strong></td>
+                        <td>Stores role-specific settings (menus, dashboards, custom)</td>
+                        <td>id, role_id, menu (JSON), dashboard (JSON), custom (JSON)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_menus</strong></td>
+                        <td>Defines menu items accessible to each role</td>
+                        <td>id, role_id, title, icon, path, parent_id, sort_order, is_active</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_dashboards</strong></td>
+                        <td>Defines dashboard widgets accessible to each role</td>
+                        <td>id, role_id, name, slug, type, size, is_active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🔐 Role-Based Access Control (RBAC)</h2>
+
+            <h3>Permission System</h3>
+            <ul style="line-height: 2;">
+                <li>✅ <strong>Wildcard Permission</strong> - <code>"*"</code> grants full system access</li>
+                <li>✅ <strong>Scoped Permissions</strong> - Format: <code>"resource.action"</code> (e.g., "sales.create", "users.delete")</li>
+                <li>✅ <strong>JSON Storage</strong> - Permissions stored as JSON array in roles table</li>
+            </ul>
+
+            <h3>Role Status Values</h3>
+            <ul style="line-height: 2;">
+                <li>✅ <strong>active</strong> - Role is active and can be assigned to users</li>
+                <li>⚠️ <strong>inactive</strong> - Role is disabled but not deleted</li>
+            </ul>
+
+            <h3>Role Settings Structure</h3>
+            <pre class="code-block"><code>{
+  "menu": ["dashboard", "sales", "users", "reports"],
+  "dashboard": ["overview", "analytics", "stats"],
+  "custom": {
+    "theme": "dark",
+    "layout": "expanded",
+    "region": "North"
+  }
+}</code></pre>
+
+            <h3>System Safeguards</h3>
+            <ul style="line-height: 2;">
+                <li>🛡️ <strong>Superadmin Protection</strong> - Cannot delete Superadmin role</li>
+                <li>🛡️ <strong>Unique Role Names</strong> - Role names must be unique</li>
+                <li>🛡️ <strong>Settings Auto-Creation</strong> - Role settings automatically created with new roles</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Quick Testing</h2>
+
+            <h4>List All Roles</h4>
+            <pre class="code-block"><code>curl -X GET "http://localhost:5000/api/roles/list?page=1&limit=10" \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+            <h4>Create Role</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/roles/add \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "role": "Sales Manager",
+    "display_name": "Sales Department Manager",
+    "permissions": ["sales.view", "sales.create"],
+    "menu": ["sales", "dashboard"],
+    "status": "active"
+  }'</code></pre>
+
+            <h4>Update Role</h4>
+            <pre class="code-block"><code>curl -X PUT http://localhost:5000/api/roles/update/10 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "display_name": "Senior Sales Manager",
+    "permissions": ["sales.view", "sales.create", "reports.view"]
+  }'</code></pre>
+
+            <h4>Get Menu Items</h4>
+            <pre class="code-block"><code>curl -X GET http://localhost:5000/api/roles/menus \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+            <h4>Create Menu Item</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/roles/menus \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "title": "Products",
+    "path": "/products",
+    "icon": "box",
+    "sort_order": 3
+  }'</code></pre>
+
+            <h4>Delete Role</h4>
+            <pre class="code-block"><code>curl -X DELETE http://localhost:5000/api/roles/delete/10 \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+
+</html>

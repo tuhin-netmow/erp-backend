@@ -1,0 +1,1804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; width: 100%; overflow-x: hidden; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #c62828; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); width: 100%; box-sizing: border-box; }
+        .header h1 { font-size: 2.5em; color: #c62828; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; font-size: 1em; width: 100%; box-sizing: border-box; }
+        .card h2 { color: #c62828; border-bottom: 3px solid #fa709a; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #fa709a; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(250, 112, 154, 0.3); }
+        .route-method { display: inline-block; padding: 6px 14px; border-radius: 20px; font-size: 0.9em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .method-patch { background: #9C27B0; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 1em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.95em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; width: 100%; box-sizing: border-box; display: block; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #fa709a; }
+        .endpoint-detail h3 { color: #c62828; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #fa709a; margin: 20px 0 10px 0; font-size: 1.15em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.95em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; max-width: 100%; }
+        .flow-diagram svg { max-width: 100%; height: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; font-size: 1em; }
+        table th { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 1em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 1em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 10px; font-size: 0.85em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+        .expandable-section { margin: 20px 0; }
+        .expandable-header { background: linear-gradient(135deg, #ffecb3 0%, #ffe082 100%); padding: 15px 20px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; border: 2px solid #ffa000; }
+        .expandable-header:hover { background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 160, 0, 0.3); }
+        .expandable-header h4 { margin: 0; color: #e65100; font-size: 1.1em; }
+        .expandable-header .toggle-icon { font-size: 1.5em; color: #e65100; font-weight: bold; transition: transform 0.3s ease; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .expandable-content.active { max-height: 5000px; }
+        .expandable-content-inner { padding: 20px; background: #fffde7; border-radius: 0 0 8px 8px; margin-top: -8px; border: 2px solid #ffa000; border-top: none; font-size: 1em; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>💵 Payroll Module</h1>
+            <p class="subtitle">Complete payroll management with salary structures, advances, payments, and accounting integration</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Payroll Runs</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/payroll/generate</div><div class="route-desc">Generate payroll run</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/payroll</div><div class="route-desc">List payroll runs</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/payroll/:id</div><div class="route-desc">Get run details</div></div>
+                <div class="route-item"><span class="route-method method-patch">PATCH</span><div class="route-path">/api/payroll/:id/approve</div><div class="route-desc">Approve run</div></div>
+                <div class="route-item"><span class="route-method method-patch">PATCH</span><div class="route-path">/api/payroll/:id/pay</div><div class="route-desc">Mark as paid</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/payroll/:id</div><div class="route-desc">Delete run</div></div>
+            </div>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Salary Structure</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/payroll/structure/:staffId</div><div class="route-desc">Get structure</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/payroll/structure/:staffId</div><div class="route-desc">Save structure</div></div>
+            </div>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Advances Management</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/payroll/advances</div><div class="route-desc">List advances</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/payroll/advances</div><div class="route-desc">Create advance</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/payroll/advances/:id</div><div class="route-desc">Get advance</div></div>
+                <div class="route-item"><span class="route-method method-patch">PATCH</span><div class="route-path">/api/payroll/advances/:id</div><div class="route-desc">Update advance</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/payroll/advances/:id</div><div class="route-desc">Delete advance</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/payroll/advances/:id/return</div><div class="route-desc">Record return</div></div>
+            </div>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Payments</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/payroll/items/:itemId/pay</div><div class="route-desc">Record payment</div></div>
+            </div>
+        </div>
+
+        <!-- GENERATE PAYROLL RUN - POST -->
+        <div class="section-title">📌 POST /api/payroll/generate - Generate Payroll Run</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[validate Middleware]
+    C --> D[Zod Validation]
+    D --> E[Controller: generateRun]
+    E --> F[Get User ID from req.user]
+    F --> G[Service: generateRun]
+    G --> H{Run Exists for Month?}
+    H -->|Yes| I[Get Existing Run]
+    H -->|No| J[Will Create New]
+    I --> K{staffIds Provided?}
+    J --> K
+    K -->|No| L[Throw Error: Required]
+    K -->|Yes| M[Fetch Active Staff]
+    M --> N{Staff in Existing Run?}
+    N -->|Yes| O[Filter Out]
+    N -->|No| P[Include in Batch]
+    O --> Q[Get Payroll Structure]
+    P --> Q
+    Q --> R[Calculate Basic Salary]
+    R --> S[Add Allowances]
+    S --> T[Subtract Deductions]
+    T --> U{Custom Amount?}
+    U -->|Yes| V[Adjust with Manual Entry]
+    U -->|No| W[Use Calculated Net]
+    V --> X[Create/Update Run & Items]
+    W --> X
+    X --> Y[Repository: createRun]
+    Y --> Z[INSERT INTO payroll_runs, payroll_items]
+    Z --> AA[Return Created Run]
+    AA --> AB[success Response 201]
+
+    style A fill:#e8f5e9
+    style AB fill:#c8e6c9
+    style L fill:#ffebee
+    style B fill:#fff3e0</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Payroll Controller]
+    Controller -->|generateRun| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "Generate Payroll Run"
+    Generate[POST /api/payroll/generate] -->|Request Body| CheckRun[Service - Check Run Exists]
+    CheckRun -->|Month param| CheckStaff{Staff IDs Provided?}
+    CheckStaff -->|No| Error[Throw Error - Required]
+    CheckStaff -->|Yes| FetchStaff[Service - Fetch Active Staff]
+    FetchStaff -->|Filter existing run staff| FilterExisting{Staff in Existing Run?}
+    FilterExisting -->|Yes| FilterOut[Filter Out Existing Staff]
+    FilterExisting -->|No| Include[Include in Batch]
+
+    FilterOut --> GetStructure[Service - Get Payroll Structure]
+    Include --> GetStructure
+    GetStructure -->|For each staff| CalcBasic[Service - Calculate Basic Salary]
+
+    CalcBasic -->|From payroll structure| AddAllow[Service - Add Allowances]
+    AddAllow -->|Rent, Transport, etc| SubDeduct[Service - Subtract Deductions]
+    SubDeduct -->|Tax, Insurance, etc| CheckCustom{Custom Amount?}
+
+    CheckCustom -->|Yes| ManualAdj[Service - Manual Adjustment]
+    CheckCustom -->|No| UseCalc[Service - Use Calculated Net]
+    ManualAdj --> CreateRun[Service - Create/Update Run & Items]
+    UseCalc --> CreateRun
+
+    CreateRun -->|Create or Update| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> CreateRunRecord[Repository - Create Run]
+    CreateRunRecord -->|INSERT INTO payroll_runs| DB[(MySQL Database)]
+
+    DB -->|Run ID| CreateItems[Repository - Bulk Create Items]
+    CreateItems -->|BULK INSERT payroll_items| DBItems[(MySQL - payroll_items)]
+
+    DBItems --> Commit[Repository - COMMIT]
+    Commit --> Response[Controller - Send Response]
+    end
+                </pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.validation.js</code> (Zod Schema)</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>month</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Regex: ^\d{4}-\d{2}$ (YYYY-MM format)</td></tr>
+                <tr><td>staff_ids</td><td>array</td><td><span class="badge badge-optional">No</span></td><td>Array of staff IDs to process</td></tr>
+                <tr><td>staffIds</td><td>array</td><td><span class="badge badge-optional">No</span></td><td>Alternative field name (aliased)</td></tr>
+                <tr><td>custom_amounts</td><td>object</td><td><span class="badge badge-optional">No</span></td><td>Key-value pairs of staff_id: amount</td></tr>
+                <tr><td>customAmounts</td><td>object</td><td><span class="badge badge-optional">No</span></td><td>Alternative field name (aliased)</td></tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong><br>
+                • staff_ids (or staffIds) is <strong>required</strong> - specific employees must be selected<br>
+                • Prevents accidental bulk processing of all employees<br>
+                • If run exists for month, only processes staff not already included<br>
+                • Custom amounts override calculated net pay
+            </div>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.controller.js</code> (lines 5-18)</p>
+            <pre class="code-block">async generateRun(req, res) {
+    try {
+        const { month, staff_ids, custom_amounts, staffIds, customAmounts } = req.body;
+        // Robustly handle staff_ids or staffIds
+        const ids = staff_ids || staffIds;
+        const amounts = custom_amounts || customAmounts || {};
+
+        const run = await PayrollService.generateRun(month, req.user.id, ids, amounts);
+        return success(res, 'Payroll run generated successfully', run, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.service.js</code> (lines 25-149)</p>
+            <pre class="code-block">async generateRun(month, createdBy, staffIds = null, customAmounts = {}) {
+    // 1. Check if run already exists for this month
+    const existingRunResult = await PayrollRepository.findAll({ month });
+    let run = existingRunResult.count > 0 ? existingRunResult.rows[0] : null;
+
+    // 2. Require specific staffIds (prevent accidental bulk processing)
+    if (!staffIds || !Array.isArray(staffIds) || staffIds.length === 0) {
+        throw new Error(`Please select specific employees to process payroll`);
+    }
+
+    // Handle nested array case [[7]] -> [7]
+    if (Array.isArray(staffIds) && staffIds.length > 0 && Array.isArray(staffIds[0])) {
+        staffIds = staffIds.flat();
+    }
+
+    // 3. Fetch active staff
+    let staffs = await Staff.findAll({
+        where: {
+            id: staffIds,
+            status: 'active'
+        }
+    });
+
+    if (staffs.length === 0) {
+        throw new Error('No active staff found for the selected IDs');
+    }
+
+    // 4. If run exists, filter out staff already processed
+    if (run) {
+        const existingFullRun = await PayrollRepository.findById(run.id);
+        const existingStaffIds = existingFullRun.items.map(item => item.staff_id);
+        staffs = staffs.filter(s => !existingStaffIds.includes(s.id));
+
+        if (staffs.length === 0) {
+            throw new Error(`The selected staff is already included in the payroll run for ${month}`);
+        }
+    }
+
+    let runBatchGross = 0;
+    let runBatchNet = 0;
+
+    // 5. Calculate for each staff
+    const items = await Promise.all(staffs.map(async (staff) => {
+        const structure = await PayrollRepository.getStructure(staff.id);
+        const basicSalary = parseFloat(structure?.basic_salary || staff.salary || 0);
+
+        // Clone arrays for safe modification
+        const allowances = structure?.allowances ? [...structure.allowances] : [];
+        const deductions = structure?.deductions ? [...structure.deductions] : [];
+
+        let totalAllowances = allowances.reduce((sum, a) => sum + parseFloat(a.amount || 0), 0);
+        let totalDeductions = deductions.reduce((sum, d) => sum + parseFloat(d.amount || 0), 0);
+
+        let gross = basicSalary + totalAllowances;
+        let net = gross - totalDeductions;
+
+        // Handle Custom Net Amount Override
+        if (customAmounts[staff.id]) {
+            const targetNet = parseFloat(customAmounts[staff.id]);
+            const diff = net - targetNet; // Positive = Needs Deduction
+
+            if (diff > 0) {
+                deductions.push({
+                    name: "Manual Adjustment (Deduction)",
+                    amount: diff
+                });
+                totalDeductions += diff;
+            } else if (diff < 0) {
+                allowances.push({
+                    name: "Manual Adjustment (Allowance)",
+                    amount: Math.abs(diff)
+                });
+                totalAllowances += Math.abs(diff);
+            }
+
+            gross = basicSalary + totalAllowances;
+            net = gross - totalDeductions;
+        }
+
+        runBatchGross += gross;
+        runBatchNet += net;
+
+        return {
+            staff_id: staff.id,
+            basic_salary: basicSalary,
+            allowances: JSON.stringify(allowances),
+            deductions: JSON.stringify(deductions),
+            total_allowances: totalAllowances,
+            total_deductions: totalDeductions,
+            gross_salary: gross,
+            net_pay: net
+        };
+    }));
+
+    // 6. Create or update run
+    if (run) {
+        // Add new items to existing run
+        await PayrollItem.bulkCreate(items.map(i => ({ ...i, run_id: run.id })));
+        await run.update({
+            total_gross: parseFloat(run.total_gross) + runBatchGross,
+            total_net: parseFloat(run.total_net) + runBatchNet
+        });
+        return await PayrollRepository.findById(run.id);
+    } else {
+        // Create new run
+        const runData = {
+            month,
+            total_gross: runBatchGross,
+            total_net: runBatchNet,
+            status: 'pending',
+            created_by: createdBy
+        };
+        return await PayrollRepository.createRun(runData, items);
+    }
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.repository.js</code> (lines 73-91)</p>
+            <pre class="code-block">async createRun(runData, itemsData) {
+    const transaction = await sequelize.transaction();
+    try {
+        const run = await PayrollRun.create(runData, { transaction });
+
+        const items = itemsData.map(item => ({
+            ...item,
+            run_id: run.id
+        }));
+
+        await PayrollItem.bulkCreate(items, { transaction });
+
+        await transaction.commit();
+        return await this.findById(run.id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">-- Insert payroll run
+INSERT INTO payroll_runs (month, total_gross, total_net, status, created_by, created_at)
+VALUES ('2025-01', 150000.00, 125000.00, 'pending', 1, NOW());
+
+-- Insert payroll items (batch)
+INSERT INTO payroll_items (
+    run_id, staff_id, basic_salary, allowances, deductions,
+    total_allowances, total_deductions, gross_salary, net_pay
+) VALUES
+    (1, 1, 50000.00, '[{"title":"Rent","amount":1000}]', '[{"title":"Tax","amount":5000}]', 1000.00, 5000.00, 51000.00, 46000.00),
+    (1, 2, 45000.00, '[{"title":"Transport","amount":500}]', '[{"title":"Insurance","amount":2000}]', 500.00, 2000.00, 45500.00, 43500.00),
+    (1, 3, 55000.00, '[]', '[]', 0.00, 0.00, 55000.00, 55000.00);</pre>
+
+            <h3>Database Tables</h3>
+            <table>
+                <tr><th>Table</th><th>Description</th></tr>
+                <tr><td><code>payroll_runs</code></td><td>Stores payroll run headers (monthly batches)</td></tr>
+                <tr><td><code>payroll_items</code></td><td>Individual payslips for each staff member</td></tr>
+                <tr><td><code>payroll_structures</code></td><td>Salary configuration per staff</td></tr>
+                <tr><td><code>users</code></td><td>Staff information</td></tr>
+            </table>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block">POST /api/payroll/generate
+
+{
+    "month": "2025-01",
+    "staff_ids": [1, 2, 3],
+    "custom_amounts": {
+        "1": 47000,
+        "2": 44000
+    }
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll run generated successfully",
+    "data": {
+        "id": 1,
+        "month": "2025-01",
+        "total_gross": 151000.00,
+        "total_net": 135000.00,
+        "status": "pending",
+        "payment_date": null,
+        "created_at": "2025-01-15T10:00:00.000Z",
+        "items": [
+            {
+                "id": 1,
+                "staff_id": 1,
+                "basic_salary": 50000.00,
+                "allowances": [{"title": "Rent", "amount": 1000}],
+                "deductions": [{"title": "Manual Adjustment (Deduction)", "amount": 4000}],
+                "total_allowances": 1000.00,
+                "total_deductions": 4000.00,
+                "gross_salary": 51000.00,
+                "net_pay": 47000.00,
+                "paid_amount": 0.00,
+                "payment_status": "unpaid"
+            },
+            {
+                "id": 2,
+                "staff_id": 2,
+                "basic_salary": 45000.00,
+                "net_pay": 44000.00,
+                "paid_amount": 0.00
+            }
+        ]
+    }
+}</json></pre>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 201 Created<br>
+                <strong>✓ Auto-generated:</strong> id, status='pending', created_at<br>
+                <strong>✓ Calculation:</strong> Net Pay = Basic + Allowances - Deductions<br>
+                <strong>✓ Custom amounts:</strong> Override calculated net with manual adjustments
+            </div>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "success": false,
+    "message": "Please select specific employees to process payroll"
+}</json></pre>
+            <div class="warning-box">
+                <strong>⚠️ Common Errors:</strong>
+                <ul>
+                    <li>"Please select specific employees to process payroll" - staff_ids not provided</li>
+                    <li>"No active staff found for the selected IDs" - All staff are inactive</li>
+                    <li>"The selected staff is already included in the payroll run" - Staff already processed for this month</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- LIST PAYROLL RUNS - GET -->
+        <div class="section-title">📌 GET /api/payroll - List Payroll Runs</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Controller: getRuns]
+    C --> D[Extract Query Params]
+    D --> E[Service: getAllRuns]
+    E --> F[Repository: findAll]
+    F --> G[Build WHERE clause]
+    G --> H{month Filter?}
+    H -->|Yes| I[Add month condition]
+    H -->|No| J[Skip month filter]
+    I --> K{status Filter?}
+    J --> K
+    K -->|Yes| L[Add status condition]
+    K -->|No| M[Skip status filter]
+    L --> N[Include: items with payments]
+    M --> N
+    N --> O[Pagination]
+    O --> P[Execute SQL Query]
+    P --> Q[Return Paginated Results]
+    Q --> R[successWithPagination Response]
+
+    style A fill:#e3f2fd
+    style R fill:#c8e6c9
+    style B fill:#fff3e0</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Controller[Payroll Controller]
+    Controller -->|getRuns| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "Get All Payroll Runs"
+    GetRuns[GET /api/payroll] -->|Query Params| ParseQuery[Controller - Parse Pagination]
+    ParseQuery -->|page, limit, filters| CalcOffset[Service - Calculate Offset]
+    CalcOffset --> FindAll[Repository - FindAll]
+    FindAll -->|SELECT with includes| DB[(MySQL Database)]
+
+    DB -->|Runs with Items and Payments| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                </pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Page number (default: 1)</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Items per page (default: 10)</td></tr>
+                <tr><td>month</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by month (YYYY-MM)</td></tr>
+                <tr><td>status</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by status (pending/approved/paid)</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.controller.js</code> (lines 20-38)</p>
+            <pre class="code-block">async getRuns(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            month: req.query.month,
+            status: req.query.status
+        };
+
+        const result = await PayrollService.getAllRuns(filters, page, limit);
+        return successWithPagination(res, 'Payroll runs retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.service.js</code> (lines 8-15)</p>
+            <pre class="code-block">async getAllRuns(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await PayrollRepository.findAll(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.repository.js</code> (lines 93-112)</p>
+            <pre class="code-block">async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.month) where.month = filters.month;
+    if (filters.status) where.status = filters.status;
+
+    return await PayrollRun.findAndCountAll({
+        where,
+        include: [{
+            model: PayrollItem,
+            as: 'items',
+            include: [{
+                model: PayrollPayment,
+                as: 'payments'
+            }]
+        }],
+        limit,
+        offset,
+        order: [['month', 'DESC']]
+    });
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">-- List all payroll runs
+SELECT pr.id, pr.month, pr.total_gross, pr.total_net, pr.status,
+       pr.payment_date, pr.created_at
+FROM payroll_runs AS pr
+ORDER BY pr.month DESC
+LIMIT 10 OFFSET 0;
+
+-- With month filter
+SELECT ... FROM payroll_runs AS pr
+WHERE pr.month = '2025-01'
+ORDER BY pr.month DESC;
+
+-- With status filter
+SELECT ... FROM payroll_runs AS pr
+WHERE pr.status = 'pending'
+ORDER BY pr.month DESC;</pre>
+
+            <h3>Multiple Requests & Responses (Expandable)</h3>
+
+            <!-- Example 1: List All Runs -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>1️⃣ List All Payroll Runs (Default)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll runs retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 3,
+            "month": "2025-03",
+            "total_gross": 160000.00,
+            "total_net": 140000.00,
+            "status": "pending",
+            "payment_date": null,
+            "created_at": "2025-03-01T00:00:00.000Z"
+        },
+        {
+            "id": 2,
+            "month": "2025-02",
+            "total_gross": 155000.00,
+            "total_net": 135000.00,
+            "status": "paid",
+            "payment_date": "2025-02-28T00:00:00.000Z",
+            "created_at": "2025-02-01T00:00:00.000Z"
+        },
+        {
+            "id": 1,
+            "month": "2025-01",
+            "total_gross": 150000.00,
+            "total_net": 130000.00,
+            "status": "paid",
+            "payment_date": "2025-01-31T00:00:00.000Z",
+            "created_at": "2025-01-01T00:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Filter by Status -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>2️⃣ Filter by Status (Pending)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll?status=pending</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll runs retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 3,
+            "month": "2025-03",
+            "total_gross": 160000.00,
+            "total_net": 140000.00,
+            "status": "pending",
+            "payment_date": null,
+            "created_at": "2025-03-01T00:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Filter by Month -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>3️⃣ Filter by Month</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll?month=2025-01</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll runs retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "month": "2025-01",
+            "total_gross": 150000.00,
+            "total_net": 130000.00,
+            "status": "paid",
+            "payment_date": "2025-01-31T00:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4: Combined Filters -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>4️⃣ Combined Filters (Status + Month + Pagination)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll?status=paid&month=2025-01&page=1&limit=5</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll runs retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "5",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "month": "2025-01",
+            "total_gross": 150000.00,
+            "total_net": 130000.00,
+            "status": "paid",
+            "payment_date": "2025-01-31T00:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Success Response</h3>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 200 OK<br>
+                <strong>✓ Response Format:</strong> Paginated list of payroll runs<br>
+                <strong>✓ Includes:</strong> Total count, current page, page limit, total pages
+            </div>
+
+            <h3>Error Response</h3>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 500 Internal Server Error
+            </div>
+        </div>
+
+        <!-- GET PAYROLL RUN BY ID -->
+        <div class="section-title">📌 GET /api/payroll/:id - Get Payroll Run Details</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Controller: getRunById]
+    C --> D[Extract ID from params]
+    D --> E[Service: getRunById]
+    E --> F[Repository: findById]
+    F --> G{Run Found?}
+    G -->|No| H[Throw Error: Not Found]
+    G -->|Yes| I[Include: items with staff details]
+    I --> J[Return Full Run Data]
+    J --> K[success Response]
+
+    style A fill:#e3f2fd
+    style K fill:#c8e6c9
+    style H fill:#ffebee
+    style B fill:#fff3e0</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check payroll access| Controller[Payroll Controller]
+    Controller -->|getRunById| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "Get Payroll Run Details"
+    GetRun[GET /api/payroll/:id] -->|ID param| ExtractID[Controller - Extract ID]
+    ExtractID --> FindRun[Repository - findById]
+    FindRun -->|SELECT * FROM payroll_runs WHERE id| DB[(MySQL Database)]
+    DB -->|Run or null| CheckRun{Run Found?}
+    CheckRun -->|No| NotFound[Service - Throw Error - Not Found]
+    CheckRun -->|Yes| IncludeItems[Repository - Include Items]
+    IncludeItems -->|Include staff details| QueryItems[Repository - Query Items]
+    QueryItems -->|SELECT * FROM payroll_items WHERE run_id| DBItems[(MySQL - payroll_items)]
+    DBItems -->|Items Array| JoinStaff[Repository - Join Staff Details]
+    JoinStaff -->|LEFT JOIN staffs| DBStaff[(MySQL - staffs)]
+    DBStaff -->|Full Data| Response[Controller - Send Response]
+    end
+
+    style Client fill:#e3f2fd
+    style Response fill:#c8e6c9
+    style NotFound fill:#ffebee
+    style Verify fill:#fff3e0
+                </pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.controller.js</code> (lines 40-47)</p>
+            <pre class="code-block">async getRunById(req, res) {
+    try {
+        const run = await PayrollService.getRunById(req.params.id);
+        return success(res, 'Payroll run retrieved successfully', run);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.service.js</code> (lines 17-23)</p>
+            <pre class="code-block">async getRunById(id) {
+    const run = await PayrollRepository.findById(id);
+    if (!run) {
+        throw new Error('Payroll run not found');
+    }
+    return run;
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.repository.js</code> (lines 114-126)</p>
+            <pre class="code-block">async findById(id) {
+    return await PayrollRun.findByPk(id, {
+        include: [{
+            model: PayrollItem,
+            as: 'items',
+            include: [{
+                model: Staff,
+                as: 'staff',
+                attributes: ['id', 'first_name', 'last_name', 'email', 'position']
+            }]
+        }]
+    });
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">SELECT
+    pr.id, pr.month, pr.total_gross, pr.total_net, pr.status,
+    pr.payment_date, pr.created_at,
+    pi.id as item_id, pi.staff_id, pi.basic_salary, pi.net_pay,
+    s.first_name, s.last_name, s.position
+FROM payroll_runs AS pr
+LEFT JOIN payroll_items AS pi ON pr.id = pi.run_id
+LEFT JOIN users AS s ON pi.staff_id = s.id
+WHERE pr.id = 1;</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payroll run retrieved successfully",
+    "data": {
+        "id": 1,
+        "month": "2025-01",
+        "total_gross": 151000.00,
+        "total_net": 135000.00,
+        "status": "pending",
+        "payment_date": null,
+        "created_at": "2025-01-15T10:00:00.000Z",
+        "items": [
+            {
+                "id": 1,
+                "staff_id": 1,
+                "basic_salary": 50000.00,
+                "allowances": "[{\"title\":\"Rent\",\"amount\":1000}]",
+                "deductions": "[{\"title\":\"Tax\",\"amount\":5000}]",
+                "total_allowances": 1000.00,
+                "total_deductions": 5000.00,
+                "gross_salary": 51000.00,
+                "net_pay": 46000.00,
+                "paid_amount": 0.00,
+                "payment_status": "unpaid",
+                "staff": {
+                    "id": 1,
+                    "first_name": "John",
+                    "last_name": "Doe",
+                    "email": "john@example.com",
+                    "position": "Manager"
+                }
+            }
+        ]
+    }
+}</json></pre>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "success": false,
+    "message": "Payroll run not found"
+}</json></pre>
+        </div>
+
+        <!-- LIST ADVANCES - GET -->
+        <div class="section-title">📌 GET /api/payroll/advances - List Payroll Advances</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Controller: getAdvances]
+    C --> D[Extract Query Params]
+    D --> E[Service: getAllAdvances]
+    E --> F[Repository: findAdvances]
+    F --> G[Build WHERE clause]
+    G --> H[staff_id Filter]
+    H --> I[status Filter]
+    I --> J[month Filter advance_date LIKE]
+    J --> K[Include: Staff, Returns]
+    K --> L[Pagination]
+    L --> M[Execute SQL]
+    M --> N[Return Results]
+
+    style A fill:#e3f2fd
+    style N fill:#c8e6c9
+    style B fill:#fff3e0</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check payroll access| Controller[Payroll Controller]
+    Controller -->|getAdvances| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "List Payroll Advances"
+    GetAdvances[GET /api/payroll/advances] -->|Query Params| ParseParams[Controller - Parse Params]
+    ParseParams -->|page, limit, filters| BuildWhere[Repository - Build WHERE]
+    BuildWhere -->|staff_id, status, month| IncludeRelations[Repository - Include Relations]
+    IncludeRelations -->|Staff, Returns| ApplyPagination[Repository - Apply Pagination]
+    ApplyPagination -->|offset = limit * page - limit| QueryAdvances[Repository - Find All]
+    QueryAdvances -->|SELECT * FROM payroll_advances| DB[(MySQL Database)]
+    DB -->|Filtered List| CountTotal[Repository - Count Total]
+    CountTotal -->|SELECT COUNT| DBCount[(MySQL - payroll_advances)]
+    DBCount -->|Total Count| Response[Controller - Send Response]
+    end
+
+    style Client fill:#e3f2fd
+    style Response fill:#c8e6c9
+    style Verify fill:#fff3e0
+                </pre>
+            </div>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Page number (default: 1)</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Items per page (default: 10)</td></tr>
+                <tr><td>staff_id</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Filter by staff ID</td></tr>
+                <tr><td>status</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by status (pending/partial/completed)</td></tr>
+                <tr><td>month</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by month (YYYY-MM)</td></tr>
+            </table>
+
+            <h3>Multiple Requests & Responses (Expandable)</h3>
+
+            <!-- Example 1: List All Advances -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>1️⃣ List All Advances (Default)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll/advances</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Advances retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 101,
+            "staff": {
+                "id": 101,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com"
+            },
+            "amount": 2000.00,
+            "returned_amount": 500.00,
+            "balance": 1500.00,
+            "status": "partial",
+            "advance_date": "2025-01-15T00:00:00.000Z",
+            "returns": [
+                {
+                    "id": 1,
+                    "amount": 500.00,
+                    "return_date": "2025-01-20T00:00:00.000Z"
+                }
+            ]
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Filter by Staff -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>2️⃣ Filter by Staff ID</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll/advances?staff_id=101</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "pagination": {
+        "total": 2,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 101,
+            "amount": 2000.00,
+            "returned_amount": 500.00,
+            "balance": 1500.00,
+            "status": "partial"
+        },
+        {
+            "id": 2,
+            "staff_id": 101,
+            "amount": 1000.00,
+            "returned_amount": 0.00,
+            "balance": 1000.00,
+            "status": "pending"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Filter by Status -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>3️⃣ Filter by Status (Pending)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/payroll/advances?status=pending</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "pagination": {
+        "total": 5,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "staff_id": 101,
+            "amount": 1000.00,
+            "returned_amount": 0.00,
+            "balance": 1000.00,
+            "status": "pending",
+            "advance_date": "2025-01-10T00:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Success Response</h3>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 200 OK<br>
+                <strong>✓ Includes:</strong> Staff details, return history, calculated balance
+            </div>
+
+            <h3>Error Response</h3>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 500 Internal Server Error
+            </div>
+        </div>
+
+        <!-- CREATE ADVANCE - POST -->
+        <div class="section-title">📌 POST /api/payroll/advances - Create Advance</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Controller: createAdvance]
+    C --> D[Add created_by from req.user]
+    D --> E[Service: createAdvance]
+    E --> F[Repository: createAdvance]
+    F --> G[INSERT INTO payroll_advances]
+    G --> H[Return Created Advance]
+    H --> I[success Response 201]
+
+    style A fill:#e8f5e9
+    style I fill:#c8e6c9
+    style B fill:#fff3e0</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check payroll access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Payroll Controller]
+    Controller -->|createAdvance| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "Create Payroll Advance"
+    CreateAdvance[POST /api/payroll/advances] -->|Request Body| AddCreatedBy[Controller - Add created_by]
+    AddCreatedBy -->|From req.user.id| ValidateData[Service - Validate Data]
+    ValidateData -->|Check staff_id, amount, date| CreateRecord[Repository - Create]
+    CreateRecord -->|INSERT INTO payroll_advances| DB[(MySQL Database)]
+    DB -->|New Advance Record| Response[Controller - Send Response]
+    end
+
+    style Client fill:#e3f2fd
+    style Response fill:#c8e6c9
+    style Verify fill:#fff3e0
+                </pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>staff_id</td><td>number</td><td><span class="badge badge-required">Yes</span></td><td>Must exist in users table</td></tr>
+                <tr><td>amount</td><td>number</td><td><span class="badge badge-required">Yes</span></td><td>Must be positive</td></tr>
+                <tr><td>advance_date</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Date (YYYY-MM-DD)</td></tr>
+                <tr><td>notes</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Optional notes</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.controller.js</code> (lines 131-142)</p>
+            <pre class="code-block">async createAdvance(req, res) {
+    try {
+        const data = {
+            ...req.body,
+            created_by: req.user.id
+        };
+        const advance = await PayrollService.createAdvance(data);
+        return success(res, 'Advance created successfully', advance, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.service.js</code> (lines 216-218)</p>
+            <pre class="code-block">async createAdvance(data) {
+    return await PayrollRepository.createAdvance(data);
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.repository.js</code> (lines 10-12)</p>
+            <pre class="code-block">async createAdvance(data) {
+    return await PayrollAdvance.create(data);
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">INSERT INTO payroll_advances (staff_id, amount, advance_date, notes, created_by, status, returned_amount)
+VALUES (101, 2000.00, '2025-01-15', 'Emergency advance', 1, 'pending', 0);</pre>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block">POST /api/payroll/advances
+
+{
+    "staff_id": 101,
+    "amount": 2000.00,
+    "advance_date": "2025-01-15",
+    "notes": "Emergency advance for medical expenses"
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "success": true,
+    "message": "Advance created successfully",
+    "data": {
+        "id": 1,
+        "staff_id": 101,
+        "amount": 2000.00,
+        "returned_amount": 0.00,
+        "balance": 2000.00,
+        "status": "pending",
+        "advance_date": "2025-01-15T00:00:00.000Z",
+        "notes": "Emergency advance for medical expenses",
+        "created_at": "2025-01-15T10:00:00.000Z"
+    }
+}</json></pre>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "success": false,
+    "message": "Staff not found"
+}</json></pre>
+        </div>
+
+        <!-- RECORD PAYMENT - POST -->
+        <div class="section-title">📌 POST /api/payroll/items/:itemId/pay - Record Payment</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[validate Middleware]
+    C --> D[Zod Validation]
+    D --> E[Controller: addPayment]
+    E --> F[Service: addPayment]
+    F --> G{Item Exists?}
+    G -->|No| H[Throw Error: Not Found]
+    G -->|Yes| I{Payment Valid?}
+    I -->|No| J[Throw Error: Exceeds Net]
+    I -->|Yes| K[Repository: createPayment]
+    K --> L[INSERT INTO payroll_payments]
+    L --> M[Update Item paid_amount]
+    M --> N[Determine Payment Mode]
+    N --> O{Bank Transfer?}
+    O -->|Yes| P[mode = BANK]
+    O -->|No| Q[mode = CASH]
+    P --> R[AccountingService: processTransaction]
+    Q --> R
+    R --> S[Create Accounting Entry]
+    S --> T[Return Payment Record]
+    T --> U[success Response 201]
+
+    style A fill:#e8f5e9
+    style U fill:#c8e6c9
+    style H fill:#ffebee
+    style J fill:#ffebee</pre>
+            </div>
+
+            <h4>API Request Flow</h4>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Payroll"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check payroll access| Validation[Validation Middleware]
+    Validation -->|Zod Schema| Controller[Payroll Controller]
+    Controller -->|addPayment| Service[Payroll Service]
+    Service -->|Data Access| Repository[Payroll Repository]
+    end
+
+    subgraph "Record Payment"
+    AddPayment[POST /api/payroll/items/:itemId/pay] -->|itemId, Request Body| FindItem[Service - Find Item]
+    FindItem -->|Check Existence| ValidateItem{Item Exists?}
+    ValidateItem -->|No| NotFound[Service - Throw Error - Not Found]
+    ValidateItem -->|Yes| ValidateAmount[Service - Validate Payment]
+    ValidateAmount -->|Check paid + amount <= net| CheckValid{Payment Valid?}
+    CheckValid -->|No| Exceeds[Service - Throw Error - Exceeds Net]
+    CheckValid -->|Yes| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> CreatePayment[Repository - Create Payment]
+    CreatePayment -->|INSERT INTO payroll_payments| DB[(MySQL Database)]
+    DB -->|Payment ID| UpdateItem[Repository - Update paid_amount]
+    UpdateItem -->|UPDATE payroll_items| DBItem[(MySQL - payroll_items)]
+    DBItem --> DetermineMode[Service - Determine Mode]
+    DetermineMode -->|payment_method| CheckMode{Bank Transfer?}
+    CheckMode -->|Yes| ModeBank[Set mode = BANK]
+    CheckMode -->|No| ModeCash[Set mode = CASH]
+    ModeBank --> Accounting[Accounting Service - Process Transaction]
+    ModeCash --> Accounting
+    Accounting -->|Create Accounting Entry| CreateEntry[Repository - Create Entry]
+    CreateEntry -->|INSERT INTO journals| DBJournal[(MySQL - journals)]
+    DBJournal --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> Response[Controller - Send Response]
+    end
+
+    style Client fill:#e3f2fd
+    style Response fill:#c8e6c9
+    style NotFound fill:#ffebee
+    style Exceeds fill:#ffebee
+    style Verify fill:#fff3e0
+                </pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.validation.js</code> (Zod Schema)</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>amount</td><td>number</td><td><span class="badge badge-required">Yes</span></td><td>Must be positive</td></tr>
+                <tr><td>payment_date</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Regex: ^\d{4}-\d{2}-\d{2}$ (YYYY-MM-DD)</td></tr>
+                <tr><td>payment_method</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Payment method (Bank Transfer, Cash, etc.)</td></tr>
+                <tr><td>reference</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Payment reference</td></tr>
+                <tr><td>remarks</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Payment remarks</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.controller.js</code> (lines 171-178)</p>
+            <pre class="code-block">async addPayment(req, res) {
+    try {
+        const payment = await PayrollService.addPayment(req.params.itemId, req.body, req.user.id);
+        return success(res, 'Payment recorded successfully', payment, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/payroll/payroll.service.js</code> (lines 287-342)</p>
+            <pre class="code-block">async addPayment(itemId, data, userId) {
+    const item = await PayrollRepository.findItemById(itemId);
+    if (!item) throw new Error('Payroll item not found');
+
+    const amount = parseFloat(data.amount);
+    const paidAmount = parseFloat(item.paid_amount || 0);
+    const netPay = parseFloat(item.net_pay);
+
+    if (amount <= 0) throw new Error('Payment amount must be positive');
+    if (paidAmount + amount > netPay) {
+        throw new Error(`Total payment (${paidAmount + amount}) exceeds net pay (${netPay})`);
+    }
+
+    const transaction = await sequelize.transaction();
+    try {
+        const payment = await PayrollRepository.createPayment({
+            payroll_item_id: itemId,
+            amount: amount,
+            payment_date: data.payment_date,
+            payment_method: data.payment_method,
+            reference: data.reference,
+            remarks: data.remarks,
+            created_by: userId
+        }, { transaction });
+
+        const newPaidAmount = paidAmount + amount;
+        let newStatus = 'partial';
+        if (newPaidAmount >= netPay - 0.01) { // Float tolerance
+            newStatus = 'paid';
+        }
+
+        await item.update({
+            paid_amount: newPaidAmount,
+            payment_status: newStatus
+        }, { transaction });
+
+        // Determine Payment Mode for Accounting
+        const mode = (data.payment_method && data.payment_method.toLowerCase().includes('bank')) ? 'BANK' : 'CASH';
+
+        // Record Expense in Accounting
+        await AccountingService.processTransaction({
+            type: 'PAYROLL',
+            amount: amount,
+            date: data.payment_date,
+            payment_mode: mode,
+            description: `Salary Payment (Partial) for Staff ID: ${item.staff_id}, Item ID: ${item.id}`,
+            reference_id: payment.id
+        });
+
+        await transaction.commit();
+        return payment;
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="code-block">async createPayment(data) {
+    return await PayrollPayment.create(data);
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">-- Insert payment record
+INSERT INTO payroll_payments (payroll_item_id, amount, payment_date, payment_method, reference, remarks, created_by)
+VALUES (5, 2500.00, '2025-01-25', 'Bank Transfer', 'TXN12345', 'First installment', 1);
+
+-- Update payroll item
+UPDATE payroll_items
+SET paid_amount = 2500.00,
+    payment_status = 'partial'
+WHERE id = 5;</pre>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block">POST /api/payroll/items/5/pay
+
+{
+    "amount": 2500.00,
+    "payment_date": "2025-01-25",
+    "payment_method": "Bank Transfer",
+    "reference": "TXN12345",
+    "remarks": "First installment"
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "success": true,
+    "message": "Payment recorded successfully",
+    "data": {
+        "id": 1,
+        "payroll_item_id": 5,
+        "amount": 2500.00,
+        "payment_date": "2025-01-25T00:00:00.000Z",
+        "payment_method": "Bank Transfer",
+        "reference": "TXN12345",
+        "remarks": "First installment",
+        "created_at": "2025-01-25T10:00:00.000Z"
+    }
+}</json></pre>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 201 Created<br>
+                <strong>✓ Partial Payments:</strong> Supports multiple partial payments<br>
+                <strong>✓ Side Effect:</strong> Creates accounting entry automatically<br>
+                <strong>✓ Payment Mode:</strong> BANK for bank transfers, CASH otherwise
+            </div>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "success": false,
+    "message": "Total payment (5000.00) exceeds net pay (4600.00)"
+}</json></pre>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+            <div class="flow-diagram">
+                <pre class="mermaid">erDiagram
+    PAYROLL_RUNS ||--o{ PAYROLL_ITEMS : contains
+    PAYROLL_ITEMS ||--o{ PAYROLL_PAYMENTS : receives
+    PAYROLL_ITEMS }|--|| USERS : for
+    PAYROLL_RUNS ||--o| EXPENSES : generates
+    USERS ||--o{ PAYROLL_STRUCTURES : has
+    USERS ||--o{ PAYROLL_ADVANCES : receives
+    PAYROLL_ADVANCES ||--o{ PAYROLL_ADVANCE_RETURNS : has
+
+    PAYROLL_RUNS {
+        number id PK
+        string month UK
+        number total_gross
+        number total_net
+        string status
+        date payment_date
+        number created_by
+        datetime created_at
+    }
+
+    PAYROLL_ITEMS {
+        number id PK
+        number payroll_run_id FK
+        number staff_id FK
+        number basic_salary
+        text allowances
+        text deductions
+        number total_allowances
+        number total_deductions
+        number gross_salary
+        number net_pay
+        number paid_amount
+        string payment_status
+    }
+
+    PAYROLL_PAYMENTS {
+        number id PK
+        number payroll_item_id FK
+        number amount
+        date payment_date
+        string payment_method
+        string reference
+        string remarks
+        number created_by
+        datetime created_at
+    }
+
+    PAYROLL_STRUCTURES {
+        number id PK
+        number user_id UK
+        number basic_salary
+        text allowances
+        text deductions
+        object bank_details
+        datetime updated_at
+    }
+
+    PAYROLL_ADVANCES {
+        number id PK
+        number staff_id FK
+        number amount
+        number returned_amount
+        string status
+        date advance_date
+        string notes
+        number created_by
+        datetime created_at
+    }
+
+    PAYROLL_ADVANCE_RETURNS {
+        number id PK
+        number advance_id FK
+        number amount
+        date return_date
+        string remarks
+        datetime created_at
+    }
+
+    USERS {
+        number id PK
+        string first_name
+        string last_name
+        string email
+        string position
+        string status
+    }
+
+    EXPENSES {
+        number id PK
+        string type
+        number amount
+        date expense_date
+        string description
+        string payment_mode
+    }</pre>
+            </div>
+
+            <h3 style="color: #c62828; margin: 30px 0 15px 0;">Table Descriptions</h3>
+
+            <h4>PAYROLL_RUNS</h4>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+                <tr><td>id</td><td>INT</td><td>PK, AUTO_INCREMENT</td><td>Unique identifier</td></tr>
+                <tr><td>month</td><td>VARCHAR(7)</td><td>NOT NULL, UNIQUE</td><td>Month (YYYY-MM format)</td></tr>
+                <tr><td>total_gross</td><td>DECIMAL</td><td>NOT NULL</td><td>Total gross salary for all items</td></tr>
+                <tr><td>total_net</td><td>DECIMAL</td><td>NOT NULL</td><td>Total net salary for all items</td></tr>
+                <tr><td>status</td><td>ENUM</td><td>NOT NULL</td><td>pending, approved, paid</td></tr>
+                <tr><td>payment_date</td><td>DATE</td><td>NULLABLE</td><td>Date marked as paid</td></tr>
+                <tr><td>created_by</td><td>INT</td><td>NULLABLE</td><td>User who created the run</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT NOW()</td><td>Creation timestamp</td></tr>
+            </table>
+
+            <h4>PAYROLL_ITEMS</h4>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Description</th></tr>
+                <tr><td>id</td><td>INT (PK)</td><td>Unique identifier</td></tr>
+                <tr><td>payroll_run_id</td><td>INT (FK)</td><td>Parent payroll run</td></tr>
+                <tr><td>staff_id</td><td>INT (FK)</td><td>Staff reference</td></tr>
+                <tr><td>basic_salary</td><td>DECIMAL</td><td>Basic salary amount</td></tr>
+                <tr><td>allowances</td><td>JSON</td><td>Allowances array</td></tr>
+                <tr><td>deductions</td><td>JSON</td><td>Deductions array</td></tr>
+                <tr><td>total_allowances</td><td>DECIMAL</td><td>Total allowances</td></tr>
+                <tr><td>total_deductions</td><td>DECIMAL</td><td>Total deductions</td></tr>
+                <tr><td>gross_salary</td><td>DECIMAL</td><td>Gross salary (basic + allowances)</td></tr>
+                <tr><td>net_pay</td><td>DECIMAL</td><td>Net payable (gross - deductions)</td></tr>
+                <tr><td>paid_amount</td><td>DECIMAL</td><td>Amount paid so far</td></tr>
+                <tr><td>payment_status</td><td>ENUM</td><td>unpaid, partial, paid</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Payroll Status Flow:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><strong>pending:</strong> Initial status after generation</li>
+                    <li><strong>approved:</strong> Approved for payment (required before marking paid)</li>
+                    <li><strong>paid:</strong> Payment completed and expense recorded</li>
+                </ul>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Item Payment Status Flow:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><strong>unpaid:</strong> No payments made yet</li>
+                    <li><strong>partial:</strong> Partial payment made, balance remains</li>
+                    <li><strong>paid:</strong> Full amount paid</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- PAYROLL STATUS REFERENCE -->
+        <div class="section-title">📌 PAYROLL STATUS REFERENCE</div>
+        <div class="card">
+            <h2>Payroll Run Status Values</h2>
+
+            <table>
+                <tr><th>Status</th><th>Description</th><th>Allowed Actions</th></tr>
+                <tr><td><code>pending</code></td><td>Initial status after generation</td><td>Can be approved or deleted</td></tr>
+                <tr><td><code>approved</code></td><td>Reviewed and approved for payment</td><td>Can be marked as paid</td></tr>
+                <tr><td><code>paid</code></td><td>Payment completed, expense recorded</td><td>Cannot be deleted or modified</td></tr>
+            </table>
+
+            <h2>Advance Status Values</h2>
+
+            <table>
+                <tr><th>Status</th><th>Description</th><th>Use Case</th></tr>
+                <tr><td><code>pending</code></td><td>No returns made yet</td><td>Initial advance status</td></tr>
+                <tr><td><code>partial</code></td><td>Partial return made, balance remains</td><td>Some amount has been returned</td></tr>
+                <tr><td><code>returned</code></td><td>Full amount returned</td><td>Advance fully settled</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Best Practices:</strong><br>
+                • Always approve payroll runs before marking as paid<br>
+                • Cannot delete paid payroll runs - use status changes instead<br>
+                • Advances are tracked separately and deducted from future payroll<br>
+                • Recording payments automatically creates accounting entries<br>
+                • Partial payments are supported for individual payroll items
+            </div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS & WARNINGS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Generating Payroll Run</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates PAYROLL_RUNS record with status='pending'</li>
+                <li>✓ Creates PAYROLL_ITEMS for each selected staff member</li>
+                <li>✓ Calculates net pay from payroll_structures</li>
+                <li>✓ If run exists, adds new items to existing run (filters duplicates)</li>
+                <li>✓ Supports custom amount overrides with manual adjustments</li>
+                <li>✅ staff_ids REQUIRED to prevent accidental bulk processing</li>
+            </ul>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Approving Payroll Run</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates status from 'pending' to 'approved'</li>
+                <li>✓ Enables payment processing</li>
+                <li>✓ Required before marking as paid</li>
+                <li>✅ Only pending runs can be approved</li>
+            </ul>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Marking as Paid</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates status from 'approved' to 'paid'</li>
+                <li>✓ Records payment_date timestamp</li>
+                <li>✓ Creates EXPENSE record in accounting module</li>
+                <li>✅ Expense type: 'PAYROLL'</li>
+                <li>✅ Must be approved before marking as paid</li>
+            </ul>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Recording Item Payment</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates PAYROLL_PAYMENTS record</li>
+                <li>✓ Updates payroll_item.paid_amount</li>
+                <li>✓ Updates payroll_item.payment_status (unpaid→partial→paid)</li>
+                <li>✓ Creates accounting entry for the payment amount</li>
+                <li>✅ Payment mode: BANK for bank transfers, CASH otherwise</li>
+                <li>✅ Supports multiple partial payments per item</li>
+            </ul>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Recording Advance Return</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates PAYROLL_ADVANCE_RETURNS record</li>
+                <li>✓ Updates advance.returned_amount</li>
+                <li>✓ Updates advance.status (pending→partial→returned)</li>
+                <li>✅ Creates accounting entry for return amount</li>
+                <li>✅ Transaction type: 'ADVANCE_RETURN'</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important Warnings:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Payroll runs <strong>cannot be deleted</strong> once marked as "paid"</li>
+                    <li>Payroll runs <strong>must be approved</strong> before marking as paid</li>
+                    <li>staff_ids <strong>is required</strong> when generating to prevent accidental bulk processing</li>
+                    <li>Expense records are automatically created when payroll is marked paid</li>
+                    <li>Accounting entries are automatically created for item payments and advance returns</li>
+                    <li>Custom amounts override calculated net pay - use carefully</li>
+                    <li>Ensure payroll structures are configured before generating runs</li>
+                    <li>Paid amounts are validated against net_pay to prevent overpayment</li>
+                </ul>
+            </div>
+
+            <h3 style="color: #c62828; margin: 20px 0 10px 0;">Payroll Processing Flow Diagram</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Generate Payroll Run] --> B{Status: Pending}
+    B --> C[Review Items]
+    C --> D{Adjust Needed?}
+    D -->|Yes| E[Edit/Delete Items]
+    D -->|No| F[Approve Run]
+    E --> F
+    F --> G{Status: Approved}
+    G --> H[Process Payments]
+    H --> I[Record Item Payments]
+    I --> J[All Items Paid?]
+    J -->|No| K[Continue Payments]
+    J -->|Yes| L[Mark as Paid]
+    L --> M{Status: Paid}
+    M --> N[Create Accounting Expense]
+    N --> O[Accounting Module]
+
+    style A fill:#e1f5fe
+    style F fill:#fff3e0
+    style L fill:#c8e6c9
+    style M fill:#e8f5e9</pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            content.classList.toggle('active');
+            icon.textContent = content.classList.contains('active') ? '▲' : '▼';
+        }
+    </script>
+</body>
+</html>

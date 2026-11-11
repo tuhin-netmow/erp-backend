@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #f12711; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #f12711; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #f12711; border-bottom: 3px solid #f5af19; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #f5af19; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(245, 175, 25, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #f5af19; }
+        .endpoint-detail h3 { color: #f12711; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #f5af19; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+
+        /* Expandable section styles */
+        .expandable-container { border: 1px solid #e0e0e0; border-radius: 8px; margin: 15px 0; overflow: hidden; }
+        .expandable-header { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .expandable-header:hover { background: linear-gradient(135deg, #ffe0b2 0%, #ffcc80 100%); }
+        .expandable-header h4 { margin: 0; color: #e65100; font-size: 1em; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .expandable-content.expanded { max-height: 2000px; }
+        .expandable-content-inner { padding: 20px; }
+        .expand-icon { transition: transform 0.3s; font-size: 1.2em; color: #e65100; }
+        .expand-icon.rotated { transform: rotate(180deg); }
+
+        /* Mermaid diagram styles */
+        .mermaid { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>⏰ Attendance Module</h1>
+            <p class="subtitle">Complete employee time tracking with check-in/out, leave management, and attendance statistics</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/attendance/checkin-list</div><div class="route-desc">Get check-in list</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/attendance/daily</div><div class="route-desc">List attendance records</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/attendance/staff/:id</div><div class="route-desc">Record attendance</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/attendance/staff/:id/leave/full-day</div><div class="route-desc">Full day leave</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/attendance/staff/:id/leave/short</div><div class="route-desc">Short leave</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/attendance/staff/:id/stats</div><div class="route-desc">Get staff stats</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/attendance/staff/:id</div><div class="route-desc">Get staff attendance</div></div>
+                <div class="route-item"><span class="route-method method-put">PUT</span><div class="route-path">/api/attendance/:id</div><div class="route-desc">Update attendance</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/attendance/:id</div><div class="route-desc">Delete attendance</div></div>
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA</div>
+        <div class="card">
+            <h2>Database Tables</h2>
+
+            <div class="mermaid">
+erDiagram
+    USERS ||--o{ ATTENDANCE : has
+    USERS ||--o| DEPARTMENTS : belongs_to
+    USERS ||--o| ROLES : has
+
+    ATTENDANCE {
+        int id PK
+        int staff_id FK
+        date date
+        time check_in
+        time check_out
+        decimal total_hours
+        enum status
+        text notes
+        int created_by
+        datetime created_at
+        datetime updated_at
+    }
+
+    USERS {
+        int id PK
+        string first_name
+        string last_name
+        string email
+        string position
+        int department_id FK
+        int role_id FK
+        string status
+    }
+
+    DEPARTMENTS {
+        int id PK
+        string name
+        text description
+    }
+
+    ROLES {
+        int id PK
+        string name
+        string display_name
+    }
+            </div>
+
+            <h3 style="color: #f12711; margin: 20px 0 10px 0;">Attendance Module Tables</h3>
+            <table>
+                <tr><th>Table Name</th><th>Used For</th><th>Key Fields</th></tr>
+                <tr><td>attendances</td><td>Attendance records with check-in/out times</td><td>staff_id, date, check_in, check_out, total_hours, status, notes</td></tr>
+                <tr><td>users</td><td>Staff member information</td><td>id, first_name, last_name, email, position</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Database Notes:</strong><br>
+                • Multiple attendance entries allowed per date (split shifts)<br>
+                • Status enum: present, absent, late, half_day, on_leave<br>
+                • Time fields use TIME data type for HH:MM:SS format<br>
+                • Total hours stored as DECIMAL(5,2) for precision
+            </div>
+        </div>
+
+        <!-- GET CHECK-IN LIST -->
+        <div class="section-title">📌 GET CHECK-IN LIST</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/attendance/checkin-list</h3>
+                <p>Retrieves check-in records with filtering options for staff and date.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[AttendanceController.getCheckInList]
+    D --> E[Parse Query Parameters]
+    E --> F{page provided?}
+    F -->|No| G[page = 1]
+    F -->|Yes| H[page = parseInt]
+    G --> I{limit provided?}
+    H --> I
+    I -->|No| J[limit = 10]
+    I -->|Yes| K[limit = parseInt]
+    J --> L[Build Filters]
+    K --> L
+    L --> M[AttendanceService.getCheckInList]
+    M --> N[AttendanceRepository.findAll]
+    N --> O[Build WHERE Clause]
+    O --> P[Apply staff_id filter]
+    P --> Q[Apply date filter]
+    Q --> R[Attendance.findAndCountAll]
+    R --> S[Include Staff Details]
+    S --> T[Order by date DESC, check_in ASC]
+    T --> U[successWithPagination Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>page</td><td>number</td><td>No</td><td>Integer >= 1, default: 1</td></tr>
+                    <tr><td>limit</td><td>number</td><td>No</td><td>Integer >= 1, default: 10</td></tr>
+                    <tr><td>staff_id</td><td>number</td><td>No</td><td>Valid staff ID from users table</td></tr>
+                    <tr><td>date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async getCheckInList(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            staff_id: req.query.staff_id,
+            date: req.query.date
+        };
+
+        const result = await AttendanceService.getCheckInList(filters, page, limit);
+        return successWithPagination(res, 'Check-in list retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async getCheckInList(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await AttendanceRepository.findAll(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.staff_id) where.staff_id = filters.staff_id;
+    if (filters.date && typeof filters.date === 'string' && filters.date.trim() !== '') {
+        where.date = filters.date.trim();
+    }
+
+    return await Attendance.findAndCountAll({
+        where,
+        include: [{
+            model: Staff,
+            as: 'staff',
+            attributes: ['id', 'first_name', 'last_name', 'email']
+        }],
+        order: [['date', 'DESC'], ['check_in', 'ASC']],
+        limit,
+        offset
+    });
+}
+
+-- Equivalent SQL:
+SELECT
+    a.*,
+    s.id as staff_id, s.first_name, s.last_name, s.email
+FROM attendances a
+LEFT JOIN users s ON a.staff_id = s.id
+WHERE a.staff_id = ? AND a.date = ?
+ORDER BY a.date DESC, a.check_in ASC
+LIMIT ? OFFSET ?;</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in list retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 2,
+            "date": "2025-01-08",
+            "check_in": "09:00:00",
+            "status": "present",
+            "staff": {
+                "id": 2,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com"
+            }
+        }
+    ]
+}</json></div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "No token provided"
+}</json></div>
+
+                <h4>❌ Error Response (403 - Module Not Active)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Attendance module is not active"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- LIST ATTENDANCE RECORDS (GET) -->
+        <div class="section-title">📌 LIST ATTENDANCE RECORDS (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/attendance/daily</h3>
+                <p>Retrieves attendance records with comprehensive filtering options including status, date range, and month.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[AttendanceController.getAttendances]
+    D --> E[Parse Query Parameters]
+    E --> F[Build Filters]
+    F --> G{filter type?}
+    G -->|specific date| H[where.date = filters.date]
+    G -->|date range| I[where.date BETWEEN start AND end]
+    G -->|month| J[where.date BETWEEN month-01 AND month-lastDay]
+    G -->|status| K[where.status = filters.status]
+    H --> L[AttendanceService.getAllAttendances]
+    I --> L
+    J --> L
+    K --> L
+    L --> M[AttendanceRepository.findAll]
+    M --> N[Attendance.findAndCountAll]
+    N --> O[Include Staff Details]
+    O --> P[successWithPagination Response]
+                </div>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>page</td><td>number</td><td>No</td><td>Integer >= 1, default: 1</td></tr>
+                    <tr><td>limit</td><td>number</td><td>No</td><td>Integer >= 1, default: 10</td></tr>
+                    <tr><td>staff_id</td><td>number</td><td>No</td><td>Valid staff ID</td></tr>
+                    <tr><td>date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>status</td><td>string</td><td>No</td><td>Enum: present, absent, late, half_day, on_leave</td></tr>
+                    <tr><td>month</td><td>string</td><td>No</td><td>YYYY-MM format</td></tr>
+                    <tr><td>start_date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>end_date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async getAttendances(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            staff_id: req.query.staff_id,
+            date: req.query.date,
+            status: req.query.status
+        };
+
+        const result = await AttendanceService.getAllAttendances(filters, page, limit);
+        return successWithPagination(res, 'Attendance records retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.staff_id) where.staff_id = filters.staff_id;
+
+    // Date filter logic with multiple options
+    if (filters.date && typeof filters.date === 'string' && filters.date.trim() !== '') {
+        where.date = filters.date.trim();
+    } else {
+        const dateFilter = {};
+        let hasDateFilter = false;
+
+        if (filters.start_date && typeof filters.start_date === 'string' && filters.start_date.trim() !== '') {
+            dateFilter[Op.gte] = filters.start_date.trim();
+            hasDateFilter = true;
+        }
+        if (filters.end_date && typeof filters.end_date === 'string' && filters.end_date.trim() !== '') {
+            dateFilter[Op.lte] = filters.end_date.trim();
+            hasDateFilter = true;
+        }
+
+        if (hasDateFilter) {
+            where.date = dateFilter;
+        } else if (filters.month && typeof filters.month === 'string' && filters.month.trim() !== '') {
+            const [year, month] = filters.month.split('-');
+            const lastDay = new Date(year, month, 0).getDate();
+            const startDateStr = `${filters.month}-01`;
+            const endDateStr = `${filters.month}-${lastDay}`;
+            where.date = { [Op.between]: [startDateStr, endDateStr] };
+        }
+    }
+
+    if (filters.status) where.status = filters.status;
+
+    return await Attendance.findAndCountAll({
+        where,
+        include: [{
+            model: Staff,
+            as: 'staff',
+            attributes: ['id', 'first_name', 'last_name', 'email']
+        }],
+        order: [['date', 'DESC'], ['check_in', 'ASC']],
+        limit,
+        offset
+    });
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Attendance records retrieved successfully",
+    "pagination": {
+        "total": 50,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 5
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 5,
+            "date": "2025-12-02",
+            "check_in": "09:00:00",
+            "check_out": "18:00:00",
+            "status": "present",
+            "notes": null,
+            "created_at": "2025-12-02T09:00:00.000Z",
+            "updated_at": "2025-12-02T18:00:00.000Z",
+            "staff": {
+                "id": 5,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com"
+            }
+        }
+    ]
+}</json></div>
+            </div>
+        </div>
+
+        <!-- RECORD ATTENDANCE (POST) -->
+        <div class="section-title">📌 RECORD ATTENDANCE (POST)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/attendance/staff/:id</h3>
+                <p>Records staff attendance with check-in and check-out times. Multiple entries per date allowed.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[validate recordAttendance]
+    D --> E{Validation Passed?}
+    E -->|No| F[Return 400 Error]
+    E -->|Yes| G[AttendanceController.recordAttendance]
+    G --> H[Extract staff_id from params]
+    H --> I[Extract created_by from req.user]
+    I --> J[AttendanceService.recordAttendance]
+    J --> K[AttendanceRepository.create]
+    K --> L[Attendance.create]
+    L --> M[Insert into attendances]
+    M --> N[Set status = present]
+    N --> O[Return Created Record]
+    O --> P[success Response 201]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td><span style="color:#c62828;">Yes</span></td><td>Request body format</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>date</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>YYYY-MM-DD format, regex: ^\d{4}-\d{2}-\d{2}$</td></tr>
+                    <tr><td>start_at</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>HH:MM:SS format, regex: ^([01]\d|2[0-3]):([0-5]\d)(:[0-5]\d)?$</td></tr>
+                    <tr><td>end_at</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>HH:MM:SS format, must be after start_at</td></tr>
+                    <tr><td>total_hour</td><td>number/string</td><td>No</td><td>Transformed to number, >= 0</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async recordAttendance(req, res) {
+    try {
+        const staffId = req.params.id;
+        const createdBy = req.user ? req.user.id : null;
+        const attendance = await AttendanceService.recordAttendance(staffId, req.body, createdBy);
+        return success(res, 'Attendance recorded successfully', attendance, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async recordAttendance(staffId, data, createdBy) {
+    return await AttendanceRepository.create({
+        staff_id: staffId,
+        date: data.date,
+        check_in: data.start_at,
+        check_out: data.end_at,
+        total_hours: data.total_hour,
+        status: 'present',
+        created_by: createdBy
+    });
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async create(data) {
+    return await Attendance.create(data);
+}
+
+-- Equivalent SQL:
+INSERT INTO attendances (
+    staff_id,
+    date,
+    check_in,
+    check_out,
+    total_hours,
+    status,
+    created_by,
+    created_at,
+    updated_at
+) VALUES (
+    5,
+    '2025-12-02',
+    '09:00:00',
+    '18:00:00',
+    9.00,
+    'present',
+    1,
+    NOW(),
+    NOW()
+);</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">POST /api/attendance/staff/5
+
+{
+    "date": "2025-12-02",
+    "start_at": "09:00:00",
+    "end_at": "18:00:00",
+    "total_hour": 9
+}</div>
+
+                <h4>✅ Success Response (201)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance recorded successfully",
+    "data": {
+        "id": 10,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "09:00:00",
+        "check_out": "18:00:00",
+        "total_hours": 9.00,
+        "status": "present",
+        "created_at": "2025-12-02T09:00:00.000Z",
+        "updated_at": "2025-12-02T09:00:00.000Z"
+    }
+}</json></div>
+
+                <h4>❌ Error Response (400 - Validation Error)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "field": "date",
+            "message": "Invalid date format (YYYY-MM-DD)"
+        },
+        {
+            "field": "start_at",
+            "message": "Invalid time format (HH:mm:ss)"
+        }
+    ]
+}</json></div>
+            </div>
+        </div>
+
+        <!-- RECORD FULL DAY LEAVE (POST) -->
+        <div class="section-title">📌 RECORD FULL DAY LEAVE (POST)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/attendance/staff/:id/leave/full-day</h3>
+                <p>Records a full day leave for a staff member with status set to 'on_leave'.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[validate recordFullLeave]
+    D --> E{Validation Passed?}
+    E -->|No| F[Return 400 Error]
+    E -->|Yes| G[AttendanceController.recordFullDayLeave]
+    G --> H[Extract staff_id from params]
+    H --> I[Extract created_by from req.user]
+    I --> J[AttendanceService.recordFullDayLeave]
+    J --> K[AttendanceRepository.create]
+    K --> L[Create with status = on_leave]
+    L --> M[Set check_in = null]
+    M --> N[Set check_out = null]
+    N --> O[Set total_hours = 0]
+    O --> P[Store reason in notes]
+    P --> Q[success Response 201]
+                </div>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>date</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>reason</td><td>string</td><td>No</td><td>Leave reason (max 500 chars)</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async recordFullDayLeave(req, res) {
+    try {
+        const staffId = req.params.id;
+        const createdBy = req.user ? req.user.id : null;
+        const leave = await AttendanceService.recordFullDayLeave(staffId, req.body, createdBy);
+        return success(res, 'Full day leave recorded successfully', leave, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async recordFullDayLeave(staffId, data, createdBy) {
+    return await AttendanceRepository.create({
+        staff_id: staffId,
+        date: data.date,
+        check_in: null,
+        check_out: null,
+        total_hours: 0,
+        status: 'on_leave',
+        notes: data.reason,
+        created_by: createdBy
+    });
+}</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">POST /api/attendance/staff/5/leave/full-day
+
+{
+    "date": "2025-12-05",
+    "reason": "Annual Leave"
+}</div>
+
+                <h4>✅ Success Response (201)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Full day leave recorded successfully",
+    "data": {
+        "id": 11,
+        "staff_id": 5,
+        "date": "2025-12-05",
+        "check_in": null,
+        "check_out": null,
+        "total_hours": 0,
+        "status": "on_leave",
+        "notes": "Annual Leave",
+        "created_at": "2025-12-05T08:00:00.000Z",
+        "updated_at": "2025-12-05T08:00:00.000Z"
+    }
+}</json></div>
+            </div>
+        </div>
+
+        <!-- RECORD SHORT LEAVE (POST) -->
+        <div class="section-title">📌 RECORD SHORT LEAVE (POST)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/attendance/staff/:id/leave/short</h3>
+                <p>Records a short leave duration for a staff member with status set to 'half_day'.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[validate recordShortLeave]
+    D --> E{Validation Passed?}
+    E -->|No| F[Return 400 Error]
+    E -->|Yes| G[AttendanceController.recordShortLeave]
+    G --> H[Extract staff_id from params]
+    H --> I[Extract created_by from req.user]
+    I --> J[AttendanceService.recordShortLeave]
+    J --> K[AttendanceRepository.create]
+    K --> L[Create with status = half_day]
+    L --> M[Set check_in = start_time]
+    M --> N[Set check_out = end_time]
+    N --> O[Store reason in notes]
+    O --> P[success Response 201]
+                </div>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>date</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>start_time</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>HH:MM:SS format</td></tr>
+                    <tr><td>end_time</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>HH:MM:SS format, must be after start_time</td></tr>
+                    <tr><td>reason</td><td>string</td><td>No</td><td>Leave reason</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async recordShortLeave(req, res) {
+    try {
+        const staffId = req.params.id;
+        const createdBy = req.user ? req.user.id : null;
+        const leave = await AttendanceService.recordShortLeave(staffId, req.body, createdBy);
+        return success(res, 'Short leave recorded successfully', leave, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async recordShortLeave(staffId, data, createdBy) {
+    return await AttendanceRepository.create({
+        staff_id: staffId,
+        date: data.date,
+        check_in: data.start_time,
+        check_out: data.end_time,
+        status: 'half_day',
+        notes: data.reason,
+        created_by: createdBy
+    });
+}</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">POST /api/attendance/staff/5/leave/short
+
+{
+    "date": "2025-12-02",
+    "start_time": "14:00:00",
+    "end_time": "16:00:00",
+    "reason": "Doctor appointment"
+}</div>
+
+                <h4>✅ Success Response (201)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Short leave recorded successfully",
+    "data": {
+        "id": 12,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "14:00:00",
+        "check_out": "16:00:00",
+        "status": "half_day",
+        "notes": "Doctor appointment",
+        "created_at": "2025-12-02T14:00:00.000Z",
+        "updated_at": "2025-12-02T14:00:00.000Z"
+    }
+}</json></div>
+            </div>
+        </div>
+
+        <!-- GET STAFF STATS (GET) -->
+        <div class="section-title">📌 GET STAFF ATTENDANCE STATS (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/attendance/staff/:id/stats</h3>
+                <p>Retrieves aggregated attendance statistics for a specific staff member.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[AttendanceController.getStaffAttendanceStats]
+    D --> E[Extract staff_id from params]
+    E --> F[Build filters from query]
+    F --> G[AttendanceService.getStaffAttendanceStats]
+    G --> H[AttendanceRepository.getStatsByStaffId]
+    H --> I[Build WHERE clause]
+    I --> J{Apply date/month filter?}
+    J -->|Yes| K[Apply date range filter]
+    J -->|No| L[All records]
+    K --> M[COUNT present]
+    K --> N[COUNT late]
+    K --> O[COUNT absent]
+    K --> P[COUNT on_leave]
+    L --> M
+    L --> N
+    L --> O
+    L --> P
+    M --> Q[Calculate total]
+    N --> Q
+    O --> Q
+    P --> Q
+    Q --> R[success Response]
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async getStaffAttendanceStats(req, res) {
+    try {
+        const filters = {
+            month: req.query.month
+        };
+        const stats = await AttendanceService.getStaffAttendanceStats(req.params.id, filters);
+        return success(res, 'Attendance stats retrieved successfully', stats);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async getStaffAttendanceStats(staffId, filters = {}) {
+    return await AttendanceRepository.getStatsByStaffId(staffId, filters);
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async getStatsByStaffId(staffId, filters = {}) {
+    const where = { staff_id: staffId };
+
+    // Apply date/month filters
+    const dateFilter = {};
+    let hasDateFilter = false;
+
+    if (filters.start_date && typeof filters.start_date === 'string' && filters.start_date.trim() !== '') {
+        dateFilter[Op.gte] = filters.start_date.trim();
+        hasDateFilter = true;
+    }
+    if (filters.end_date && typeof filters.end_date === 'string' && filters.end_date.trim() !== '') {
+        dateFilter[Op.lte] = filters.end_date.trim();
+        hasDateFilter = true;
+    }
+
+    if (hasDateFilter) {
+        where.date = dateFilter;
+    } else if (filters.month && typeof filters.month === 'string' && filters.month.trim() !== '') {
+        const [year, month] = filters.month.split('-');
+        const lastDay = new Date(year, month, 0).getDate();
+        const startDateStr = `${filters.month}-01`;
+        const endDateStr = `${filters.month}-${lastDay}`;
+        where.date = { [Op.between]: [startDateStr, endDateStr] };
+    }
+
+    // Parallel count queries
+    const present = await Attendance.count({ where: { ...where, status: 'present' } });
+    const late = await Attendance.count({ where: { ...where, status: 'late' } });
+    const absent = await Attendance.count({ where: { ...where, status: 'absent' } });
+    const on_leave = await Attendance.count({ where: { ...where, status: 'on_leave' } });
+
+    return {
+        total: present + late + absent + on_leave,
+        present,
+        late,
+        absent,
+        on_leave
+    };
+}
+
+-- Equivalent SQL:
+SELECT
+    COUNT(CASE WHEN status = 'present' THEN 1 END) as present,
+    COUNT(CASE WHEN status = 'late' THEN 1 END) as late,
+    COUNT(CASE WHEN status = 'absent' THEN 1 END) as absent,
+    COUNT(CASE WHEN status = 'on_leave' THEN 1 END) as on_leave
+FROM attendances
+WHERE staff_id = ?
+  AND date BETWEEN '2025-12-01' AND '2025-12-31';</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance stats retrieved successfully",
+    "data": {
+        "total": 211,
+        "present": 180,
+        "late": 10,
+        "absent": 5,
+        "on_leave": 16
+    }
+}</json></div>
+
+                <div class="info-box">
+                    <strong>ℹ️ Statistics Include:</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li><strong>total:</strong> Total attendance records</li>
+                        <li><strong>present:</strong> Days marked as present</li>
+                        <li><strong>late:</strong> Days marked as late</li>
+                        <li><strong>absent:</strong> Days marked as absent</li>
+                        <li><strong>on_leave:</strong> Days on leave</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- GET STAFF ATTENDANCE (GET) -->
+        <div class="section-title">📌 GET STAFF ATTENDANCE (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/attendance/staff/:id</h3>
+                <p>Retrieves attendance history for a specific staff member with pagination and advanced filtering.</p>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>page</td><td>number</td><td>No</td><td>Integer >= 1, default: 1</td></tr>
+                    <tr><td>limit</td><td>number</td><td>No</td><td>Integer >= 1, default: 10</td></tr>
+                    <tr><td>date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>status</td><td>string</td><td>No</td><td>Enum: present, absent, late, half_day, on_leave</td></tr>
+                    <tr><td>month</td><td>string</td><td>No</td><td>YYYY-MM format</td></tr>
+                    <tr><td>start_date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>end_date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async getStaffAttendance(req, res) {
+    try {
+        const staffId = req.params.id;
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            staff_id: staffId,
+            date: req.query.date,
+            status: req.query.status,
+            month: req.query.month,
+            start_date: req.query.start_date,
+            end_date: req.query.end_date
+        };
+
+        const result = await AttendanceService.getAllAttendances(filters, page, limit);
+        return successWithPagination(res, 'Attendance records retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance records retrieved successfully",
+    "pagination": {
+        "total": 50,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 5
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 5,
+            "date": "2025-12-02",
+            "check_in": "09:00:00",
+            "check_out": "18:00:00",
+            "total_hours": 9.00,
+            "status": "present",
+            "notes": null,
+            "created_at": "2025-12-02T09:00:00.000Z",
+            "updated_at": "2025-12-02T18:00:00.000Z"
+        }
+    ]
+}</json></div>
+            </div>
+        </div>
+
+        <!-- UPDATE ATTENDANCE (PUT) -->
+        <div class="section-title">📌 UPDATE ATTENDANCE (PUT)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>PUT /api/attendance/:id</h3>
+                <p>Updates an existing attendance record. Only editable fields can be modified.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[validate updateAttendance]
+    D --> E{Validation Passed?}
+    E -->|No| F[Return 400 Error]
+    E -->|Yes| G[AttendanceController.updateAttendance]
+    G --> H[Extract id from params]
+    H --> I[AttendanceService.updateAttendance]
+    I --> J[AttendanceRepository.update]
+    J --> K[Attendance.findByPk]
+    K --> L{Record Found?}
+    L -->|No| M[Throw Error]
+    L -->|Yes| N[attendance.update]
+    N --> O[Apply updates]
+    O --> P[Auto-update updated_at]
+    P --> Q[Return updated record]
+    Q --> R[success Response]
+    M --> S[error Response 400]
+                </div>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>check_in</td><td>string</td><td>No</td><td>HH:MM:SS format</td></tr>
+                    <tr><td>check_out</td><td>string</td><td>No</td><td>HH:MM:SS format</td></tr>
+                    <tr><td>status</td><td>string</td><td>No</td><td>Enum: present, absent, late, half_day, on_leave</td></tr>
+                    <tr><td>notes</td><td>string</td><td>No</td><td>Text field for notes</td></tr>
+                    <tr><td>total_hours</td><td>number/string</td><td>No</td><td>Transformed to number, >= 0</td></tr>
+                </table>
+
+                <div class="info-box">
+                    <strong>ℹ️ Read-only Fields:</strong><br>
+                    The following fields cannot be modified: id, staff_id, date, created_at
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async updateAttendance(req, res) {
+    try {
+        const attendance = await AttendanceService.updateAttendance(req.params.id, req.body);
+        return success(res, 'Attendance updated successfully', attendance);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async updateAttendance(id, data) {
+    const attendance = await AttendanceRepository.update(id, data);
+    if (!attendance) {
+        throw new Error('Attendance record not found');
+    }
+    return attendance;
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async update(id, data) {
+    const attendance = await Attendance.findByPk(id);
+    if (!attendance) return null;
+    await attendance.update(data);
+    return await this.findById(id);
+}
+
+-- Equivalent SQL:
+UPDATE attendances
+SET
+    check_in = '09:30:00',
+    status = 'late',
+    notes = 'Traffic delay',
+    updated_at = NOW()
+WHERE id = ?;
+
+SELECT
+    a.*, s.first_name, s.last_name, s.email
+FROM attendances a
+LEFT JOIN users s ON a.staff_id = s.id
+WHERE a.id = ?;</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">PUT /api/attendance/10
+
+{
+    "status": "late",
+    "notes": "Traffic delay"
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance updated successfully",
+    "data": {
+        "id": 10,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "09:30:00",
+        "check_out": "18:00:00",
+        "status": "late",
+        "notes": "Traffic delay",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</json></div>
+
+                <h4>❌ Error Response (400 - Not Found)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Attendance record not found"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- DELETE ATTENDANCE (DELETE) -->
+        <div class="section-title">📌 DELETE ATTENDANCE (DELETE)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>DELETE /api/attendance/:id</h3>
+                <p>Permanently removes an attendance record.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck attendance]
+    C --> D[AttendanceController.deleteAttendance]
+    D --> E[Extract id from params]
+    E --> F[AttendanceService.deleteAttendance]
+    F --> G[AttendanceRepository.delete]
+    G --> H[Attendance.findByPk]
+    H --> I{Record Found?}
+    I -->|No| J[Throw Error]
+    I -->|Yes| K[attendance.destroy]
+    K --> L[DELETE from attendances]
+    L --> M[Return deleted record]
+    M --> N[success Response]
+    J --> O[error Response 404]
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.controller.js
+
+async deleteAttendance(req, res) {
+    try {
+        await AttendanceService.deleteAttendance(req.params.id);
+        return success(res, 'Attendance deleted successfully');
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.service.js
+
+async deleteAttendance(id) {
+    const attendance = await AttendanceRepository.delete(id);
+    if (!attendance) {
+        throw new Error('Attendance record not found');
+    }
+    return attendance;
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/attendance.repository.js
+
+async delete(id) {
+    const attendance = await Attendance.findByPk(id);
+    if (!attendance) return null;
+    await attendance.destroy();
+    return attendance;
+}
+
+-- Equivalent SQL:
+DELETE FROM attendances
+WHERE id = ?;</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance deleted successfully"
+}</json></div>
+
+                <h4>❌ Error Response (404 - Not Found)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Attendance record not found"
+}</json></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Warning:</strong> Deletion is permanent and cannot be undone. Consider updating status instead of deleting for record-keeping purposes. This may affect payroll calculations.
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPANDABLE EXAMPLES -->
+        <div class="section-title">📌 MULTIPLE REQUEST EXAMPLES</div>
+        <div class="card">
+            <h2>Request & Response Examples</h2>
+
+            <!-- Check-in List - Basic -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📋 Get Check-in List - Basic Request</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/checkin-list?page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in list retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "staff_id": 2,
+            "date": "2025-01-08",
+            "check_in": "09:00:00",
+            "status": "present",
+            "staff": {
+                "id": 2,
+                "first_name": "John",
+                "last_name": "Doe"
+            }
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Check-in List - Filter by Staff -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>👤 Filter Check-in List by Staff ID</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/checkin-list?staff_id=5&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Staff Attendance History:</strong><br>
+                            View all check-in records for a specific staff member.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Check-in List - Filter by Date -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📅 Filter Check-in List by Date</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/checkin-list?date=2025-12-02 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Daily Attendance Report:</strong><br>
+                            View all check-ins for a specific date across all staff.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily List - Filter by Status -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📊 Filter Attendance List by Status</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/daily?status=present&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Status-Based Filtering:</strong><br>
+                            Filter attendance by status: present, absent, late, half_day, on_leave
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily List - Month Filter -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📆 Filter Attendance List by Month</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/daily?month=2025-12&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Monthly Attendance Report:</strong><br>
+                            View all attendance records for a specific month (YYYY-MM format).
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Record Attendance -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>✅ Record Staff Attendance</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">POST /api/attendance/staff/5 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "date": "2025-12-02",
+    "start_at": "09:00:00",
+    "end_at": "18:00:00",
+    "total_hour": 9
+}</div>
+
+                        <h4 style="color:#f12711;">Response (201 Created)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance recorded successfully",
+    "data": {
+        "id": 10,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "09:00:00",
+        "check_out": "18:00:00",
+        "total_hours": 9.00,
+        "status": "present"
+    }
+}</json></div>
+
+                        <div class="success-box">
+                            <strong>✓ Multiple Entries:</strong> Multiple attendance records can be recorded for the same date (e.g., split shifts)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Record Full Day Leave -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>🏖️ Record Full Day Leave</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">POST /api/attendance/staff/5/leave/full-day HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "date": "2025-12-05",
+    "reason": "Annual Leave"
+}</div>
+
+                        <h4 style="color:#f12711;">Response (201 Created)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Full day leave recorded successfully",
+    "data": {
+        "id": 11,
+        "staff_id": 5,
+        "date": "2025-12-05",
+        "status": "on_leave",
+        "notes": "Annual Leave"
+    }
+}</json></div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Leave Types:</strong> Common reasons include Sick Leave, Annual Leave, Personal Leave, Maternity Leave, etc.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Record Short Leave -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>⏰ Record Short Leave</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">POST /api/attendance/staff/5/leave/short HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "date": "2025-12-02",
+    "start_time": "14:00:00",
+    "end_time": "16:00:00",
+    "reason": "Doctor appointment"
+}</div>
+
+                        <h4 style="color:#f12711;">Response (201 Created)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Short leave recorded successfully",
+    "data": {
+        "id": 12,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "14:00:00",
+        "check_out": "16:00:00",
+        "status": "half_day",
+        "notes": "Doctor appointment"
+    }
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Get Staff Stats -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📊 Get Staff Attendance Statistics</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/staff/5/stats HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance stats retrieved successfully",
+    "data": {
+        "total": 211,
+        "present": 180,
+        "late": 10,
+        "absent": 5,
+        "on_leave": 16
+    }
+}</json></div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Statistics Include:</strong>
+                            <ul style="margin-top: 10px; padding-left: 20px;">
+                                <li><strong>total:</strong> Total attendance records</li>
+                                <li><strong>present:</strong> Days marked as present</li>
+                                <li><strong>late:</strong> Days marked as late</li>
+                                <li><strong>absent:</strong> Days marked as absent</li>
+                                <li><strong>on_leave:</strong> Days on leave</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Get Staff Stats with Month Filter -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📊 Get Staff Stats for Specific Month</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/staff/5/stats?month=2025-12 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Monthly Statistics:</strong><br>
+                            Get attendance statistics for a specific month using YYYY-MM format.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Attendance -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>✏️ Update Attendance Record</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">PUT /api/attendance/10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "status": "late",
+    "notes": "Traffic delay"
+}</div>
+
+                        <h4 style="color:#f12711;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance updated successfully",
+    "data": {
+        "id": 10,
+        "staff_id": 5,
+        "date": "2025-12-02",
+        "check_in": "09:00:00",
+        "check_out": "18:00:00",
+        "status": "late",
+        "notes": "Traffic delay",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Attendance -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>🗑️ Delete Attendance Record</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">DELETE /api/attendance/12 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#f12711;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "status": true,
+    "message": "Attendance deleted successfully"
+}</json></div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Warning:</strong> Deletion is permanent and cannot be undone. Consider updating status instead of deleting for record-keeping purposes. This may affect payroll calculations.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error - Missing Token -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Missing Authentication Token</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">GET /api/attendance/daily HTTP/1.1
+Host: localhost:5000</div>
+
+                        <h4 style="color:#f12711;">Response (401 Unauthorized)</h4>
+                        <div class="code-block"><json>{
+    "success": false,
+    "message": "No token provided"
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error - Validation -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Validation Error (Record Attendance)</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#f12711;">Request</h4>
+                        <div class="code-block">POST /api/attendance/staff/5 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "date": "invalid-date",
+    "start_at": "25:00:00"
+}</div>
+
+                        <h4 style="color:#f12711;">Response (400 Bad Request)</h4>
+                        <div class="code-block"><json>{
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "field": "date",
+            "message": "Invalid date format (YYYY-MM-DD)"
+        },
+        {
+            "field": "start_at",
+            "message": "Invalid time format (HH:mm:ss)"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE STATUSES -->
+        <div class="section-title">📌 ATTENDANCE STATUS REFERENCE</div>
+        <div class="card">
+            <h2>Status Values</h2>
+
+            <table>
+                <tr><th>Status</th><th>Description</th><th>Use Case</th></tr>
+                <tr><td><code>present</code></td><td>Staff present for full day</td><td>Normal attendance with regular hours</td></tr>
+                <tr><td><code>absent</code></td><td>Staff absent without leave</td><td>No-show without approval</td></tr>
+                <tr><td><code>late</code></td><td>Staff arrived late</td><td>Check-in after approved time</td></tr>
+                <tr><td><code>half_day</code></td><td>Partial day attendance</td><td>Short leave or half-day work</td></tr>
+                <tr><td><code>on_leave</code></td><td>Staff on approved leave</td><td>Full day leave (sick, annual, etc.)</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Payroll Impact:</strong><br>
+                • <code>present</code> - Full day pay<br>
+                • <code>absent</code> - No pay (or deduction based on policy)<br>
+                • <code>late</code> - May affect hourly calculation or incur penalty<br>
+                • <code>half_day</code> - Half day pay<br>
+                • <code>on_leave</code> - Based on leave policy (paid/unpaid leave)
+            </div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #f12711; margin: 20px 0 10px 0;">Recording Attendance</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates new ATTENDANCE record</li>
+                <li>✓ Calculates total_hours if not provided</li>
+                <li>✓ Sets status to 'present' by default</li>
+                <li>✓ Auto-generates created_at and updated_at timestamps</li>
+                <li>✅ May affect payroll calculations</li>
+                <li>✅ Updates staff attendance statistics</li>
+            </ul>
+
+            <h3 style="color: #f12711; margin: 20px 0 10px 0;">Recording Leave</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates ATTENDANCE record with leave status</li>
+                <li>✓ Sets status to 'on_leave' (full day) or 'half_day' (short leave)</li>
+                <li>✓ Stores reason in notes field</li>
+                <li>✅ May affect payroll calculations (leave deductions)</li>
+                <li>✅ Updates leave balance if tracked</li>
+                <li>✅ Updates staff attendance statistics</li>
+            </ul>
+
+            <h3 style="color: #f12711; margin: 20px 0 10px 0;">Updating Attendance</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates specified fields only</li>
+                <li>✓ Auto-updates updated_at timestamp</li>
+                <li>✅ May affect payroll if changes impact hours worked</li>
+                <li>✅ Does NOT create new records</li>
+            </ul>
+
+            <h3 style="color: #f12711; margin: 20px 0 10px 0;">Deleting Attendance</h3>
+            <ul style="line-height: 2;">
+                <li>⚠️ Permanently removes attendance record</li>
+                <li>⚠️ May affect payroll calculations</li>
+                <li>⚠️ Cannot be undone</li>
+                <li>✅ Updates staff attendance statistics</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Attendance records link to the users table (staff)</li>
+                    <li>Multiple attendance entries are allowed per date</li>
+                    <li>Payroll calculations may be affected by attendance changes</li>
+                    <li>Consider archiving instead of deleting for audit purposes</li>
+                    <li>Status changes (present → late) affect performance metrics</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.expand-icon');
+
+            content.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>

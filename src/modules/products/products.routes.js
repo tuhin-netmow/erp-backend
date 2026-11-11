@@ -1,0 +1,2125 @@
+const express = require('express');
+const router = express.Router();
+const productsController = require('./products.controller');
+const { verifyToken } = require('../../core/middleware/auth');
+const { moduleCheck } = require('../../core/middleware/moduleCheck');
+const { handlerWithFields } = require('../../core/utils/zodTypeView');
+const validate = require('../../core/middleware/validate');
+const { createProduct, updateProduct, createCategory, updateCategory, createUnit, updateUnit } = require('./products.validation');
+const { updateStock } = require('./stock.validation');
+
+// Module name for routes-tree grouping
+router.moduleName = 'Products';
+
+router.use(verifyToken);
+router.use(moduleCheck('products'));
+
+// Define routes metadata with comprehensive documentation
+router.routesMeta = [
+    {
+        path: '/',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getAllProducts(req, res),
+        description: 'List all products',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            category_id: 'Filter by category ID',
+            is_active: 'Filter by active status (true/false)',
+            search: 'Search by name, SKU, or barcode',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Products retrieved successfully',
+            pagination: {
+                total: 50,
+                page: '1',
+                limit: '10',
+                totalPage: 5
+            },
+            data: [
+                {
+                    id: 1,
+                    name: 'Wireless Mouse',
+                    sku: 'MOU-001',
+                    description: 'Ergonomic wireless mouse',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 29.99,
+                    cost: 15.00,
+                    stock_quantity: 100,
+                    initial_stock: 100,
+                    min_stock_level: 20,
+                    max_stock_level: 200,
+                    barcode: '9876543210987',
+                    thumb_url: 'http://example.com/thumb.jpg',
+                    is_active: true,
+                    category: {
+                        id: 1,
+                        name: 'Electronics'
+                    },
+                    unit: {
+                        id: 1,
+                        name: 'Piece',
+                        symbol: 'pcs'
+                    },
+                    gallery_items: [
+                        "http://example.com/img1.jpg",
+                        "http://example.com/img2.jpg"
+                    ]
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'List Products',
+                description: 'Retrieve a paginated list of products with optional filters',
+                url: '/api/products?page=1&limit=10&category_id=1',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Products retrieved successfully',
+                    pagination: { total: 50, page: '1', limit: '10', totalPage: 5 },
+                    data: [{ id: 1, name: 'Wireless Mouse', sku: 'MOU-001', price: 29.99, stock_quantity: 100 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/',
+        method: 'POST',
+        middlewares: [validate(createProduct)],
+        handler: handlerWithFields((req, res) => productsController.createProduct(req, res), createProduct),
+        description: 'Add a new product',
+        database: {
+            tables: ['products', 'product_images'],
+            mainTable: 'products',
+            requiredFields: ['name', 'price', 'category_id', 'unit_id'],
+            optionalFields: ['sku', 'description', 'specification', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'weight', 'length', 'width', 'height', 'is_active'],
+            autoGeneratedFields: ['id', 'created_at', 'updated_at'],
+            relationships: [
+                'products.category_id -> categories.id (FK)',
+                'products.unit_id -> units.id (FK)',
+                'product_images.product_id -> products.id (FK)'
+            ]
+        },
+        sampleRequest: {
+            name: 'Wireless Mouse',
+
+            sku: 'MOU-001', // Optional, will be auto-generated if not provided
+            description: 'Ergonomic wireless mouse',
+            specification: 'Color: Black, DPI: 1600',
+            category_id: 1,
+            unit_id: 1,
+            price: 29.99,
+            cost: 15.00,
+            purchase_tax: 5.00,
+            sales_tax: 10.00,
+            stock_quantity: 100,
+            initial_stock: 100,
+            min_stock_level: 20,
+            max_stock_level: 200,
+            barcode: '9876543210987',
+            weight: 0.15,
+            length: 12.5,
+            width: 7.0,
+            height: 4.0,
+            is_active: true,
+            thumb_url: "http://example.com/thumb.jpg",
+            gallery_items: [
+                "http://example.com/img1.jpg",
+                "http://example.com/img2.jpg"
+            ]
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product created successfully',
+            data: {
+                id: 2,
+                name: 'Wireless Mouse',
+                sku: 'MOU-001',
+                price: 29.99,
+                created_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Create Product',
+                description: 'Add a new product to the catalog',
+                url: '/api/products',
+                method: 'POST',
+                request: {
+                    name: 'Gaming Keyboard',
+                    sku: 'KEY-002',
+                    description: 'Mechanical RGB keyboard',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 89.99,
+                    cost: 50.00,
+                    stock_quantity: 50,
+                    initial_stock: 50,
+                    min_stock_level: 10,
+                    image_url: 'http://example.com/keyboard.jpg'
+                },
+                response: {
+                    status: true,
+                    message: 'Product created successfully',
+                    data: { id: 2, name: 'Gaming Keyboard', sku: 'KEY-002', price: 89.99 }
+                }
+            }
+        ]
+    },
+    {
+        path: '/stats',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getProductStats(req, res),
+        description: 'Get product statistics (Total, Active, Low Stock, Total Stock Quantity)',
+        database: {
+            tables: ['products'],
+            mainTable: 'products',
+            fields: {
+                calculated: ['totalProducts', 'activeProducts', 'lowStock', 'totalStock']
+            }
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product stats retrieved successfully',
+            data: [
+                {
+                    label: "Total Products",
+                    value: 150,
+                    color: "bg-blue-600"
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Product Stats',
+                description: 'Retrieve statistical overview of products',
+                url: '/api/products/stats',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Product stats retrieved successfully',
+                    data: [{ label: "Total Products", value: 150, color: "bg-blue-600" }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/stock',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getStockDetails(req, res),
+        description: 'Get stock management details',
+        database: {
+            tables: ['products'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'stock_quantity', 'initial_stock', 'min_stock_level', 'price']
+            }
+        },
+        sampleResponse: {
+            status: true,
+            data: {
+                total_products: 150,
+                low_stock_count: 5,
+                total_stock_value: "45000.00",
+                low_stock_products: [
+                    {
+                        id: 10,
+                        name: "USB Cable",
+                        sku: "USB-001",
+                        stock_quantity: 5,
+                        initial_stock: 50,
+                        min_stock_level: 20,
+                        price: 5.99
+                    }
+                ]
+            }
+        },
+        examples: [
+            {
+                title: 'Get Stock Details',
+                description: 'Get comprehensive stock details including low stock alerts',
+                url: '/api/products/stock',
+                method: 'GET',
+                response: {
+                    status: true,
+                    data: {
+                        total_products: 150,
+                        low_stock_count: 5,
+                        low_stock_products: [{ id: 10, name: "USB Cable", stock_quantity: 5, min_stock_level: 20 }]
+                    }
+                }
+            }
+        ]
+    },
+
+  {
+        path: '/out-of-stock',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getOutOfStockProducts(req, res),
+        description: 'Get all out of stock products',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            category_id: 'Filter by category ID',
+            search: 'Search by name, SKU, or barcode',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Out of stock products retrieved successfully',
+            pagination: {
+                total: 5,
+                page: '1',
+                limit: '10',
+                totalPage: 1
+            },
+            data: [
+                {
+                    id: 5,
+                    name: 'USB Cable',
+                    sku: 'USB-001',
+                    description: 'High-quality USB 3.0 cable',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 9.99,
+                    cost: 5.00,
+                    stock_quantity: 0,
+                    initial_stock: 100,
+                    min_stock_level: 20,
+                    max_stock_level: 200,
+                    is_active: true,
+                    category: { id: 1, name: 'Electronics' },
+                    unit: { id: 1, name: 'Piece', symbol: 'pcs' }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Out Of Stock Products',
+                description: 'Retrieve all products with zero stock quantity',
+                url: '/api/products/out-of-stock?page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Out of stock products retrieved successfully',
+                    pagination: { total: 5, page: '1', limit: '10', totalPage: 1 },
+                    data: [{ id: 5, name: 'USB Cable', sku: 'USB-001', stock_quantity: 0, price: 9.99 }]
+                }
+            },
+            {
+                title: 'Filter Out Of Stock by Category',
+                description: 'Get out of stock products from a specific category',
+                url: '/api/products/out-of-stock?category_id=1&page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Out of stock products retrieved successfully',
+                    pagination: { total: 2, page: '1', limit: '10', totalPage: 1 },
+                    data: [{ id: 5, name: 'USB Cable', sku: 'USB-001', stock_quantity: 0, category_id: 1 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/active-with-stock',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getActiveProductsWithStock(req, res),
+        description: 'Get all active products with available stock',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            category_id: 'Filter by category ID',
+            search: 'Search by name, SKU, or barcode',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Active products with stock retrieved successfully',
+            pagination: {
+                total: 25,
+                page: '1',
+                limit: '10',
+                totalPage: 3
+            },
+            data: [
+                {
+                    id: 1,
+                    name: 'Wireless Mouse',
+                    sku: 'MOU-001',
+                    description: 'Ergonomic wireless mouse',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 29.99,
+                    cost: 15.00,
+                    stock_quantity: 100,
+                    initial_stock: 100,
+                    min_stock_level: 20,
+                    max_stock_level: 200,
+                    is_active: true,
+                    category: { id: 1, name: 'Electronics' },
+                    unit: { id: 1, name: 'Piece', symbol: 'pcs' }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Active Products With Stock',
+                description: 'Retrieve all active products that have stock available (stock_quantity > 0)',
+                url: '/api/products/active-with-stock?page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Active products with stock retrieved successfully',
+                    pagination: { total: 25, page: '1', limit: '10', totalPage: 3 },
+                    data: [{ id: 1, name: 'Wireless Mouse', sku: 'MOU-001', stock_quantity: 100, is_active: true }]
+                }
+            },
+            {
+                title: 'Filter Active With Stock by Category',
+                description: 'Get active products with stock from a specific category',
+                url: '/api/products/active-with-stock?category_id=1&page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Active products with stock retrieved successfully',
+                    pagination: { total: 12, page: '1', limit: '10', totalPage: 2 },
+                    data: [{ id: 1, name: 'Wireless Mouse', sku: 'MOU-001', stock_quantity: 100, category_id: 1 }]
+                }
+            }
+        ]
+    },
+
+
+
+
+
+
+
+
+
+
+
+    {
+        path: '/out-of-stock',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getOutOfStockProducts(req, res),
+        description: 'Get all out of stock products',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            category_id: 'Filter by category ID',
+            search: 'Search by name, SKU, or barcode',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Out of stock products retrieved successfully',
+            pagination: {
+                total: 5,
+                page: '1',
+                limit: '10',
+                totalPage: 1
+            },
+            data: [
+                {
+                    id: 5,
+                    name: 'USB Cable',
+                    sku: 'USB-001',
+                    description: 'High-quality USB 3.0 cable',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 9.99,
+                    cost: 5.00,
+                    stock_quantity: 0,
+                    initial_stock: 100,
+                    min_stock_level: 20,
+                    max_stock_level: 200,
+                    is_active: true,
+                    category: { id: 1, name: 'Electronics' },
+                    unit: { id: 1, name: 'Piece', symbol: 'pcs' }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Out Of Stock Products',
+                description: 'Retrieve all products with zero stock quantity',
+                url: '/api/products/out-of-stock?page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Out of stock products retrieved successfully',
+                    pagination: { total: 5, page: '1', limit: '10', totalPage: 1 },
+                    data: [{ id: 5, name: 'USB Cable', sku: 'USB-001', stock_quantity: 0, price: 9.99 }]
+                }
+            },
+            {
+                title: 'Filter Out Of Stock by Category',
+                description: 'Get out of stock products from a specific category',
+                url: '/api/products/out-of-stock?category_id=1&page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Out of stock products retrieved successfully',
+                    pagination: { total: 2, page: '1', limit: '10', totalPage: 1 },
+                    data: [{ id: 5, name: 'USB Cable', sku: 'USB-001', stock_quantity: 0, category_id: 1 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/active-with-stock',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getActiveProductsWithStock(req, res),
+        description: 'Get all active products with available stock',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            category_id: 'Filter by category ID',
+            search: 'Search by name, SKU, or barcode',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Active products with stock retrieved successfully',
+            pagination: {
+                total: 25,
+                page: '1',
+                limit: '10',
+                totalPage: 3
+            },
+            data: [
+                {
+                    id: 1,
+                    name: 'Wireless Mouse',
+                    sku: 'MOU-001',
+                    description: 'Ergonomic wireless mouse',
+                    category_id: 1,
+                    unit_id: 1,
+                    price: 29.99,
+                    cost: 15.00,
+                    stock_quantity: 100,
+                    initial_stock: 100,
+                    min_stock_level: 20,
+                    max_stock_level: 200,
+                    is_active: true,
+                    category: { id: 1, name: 'Electronics' },
+                    unit: { id: 1, name: 'Piece', symbol: 'pcs' }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Active Products With Stock',
+                description: 'Retrieve all active products that have stock available (stock_quantity > 0)',
+                url: '/api/products/active-with-stock?page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Active products with stock retrieved successfully',
+                    pagination: { total: 25, page: '1', limit: '10', totalPage: 3 },
+                    data: [{ id: 1, name: 'Wireless Mouse', sku: 'MOU-001', stock_quantity: 100, is_active: true }]
+                }
+            },
+            {
+                title: 'Filter Active With Stock by Category',
+                description: 'Get active products with stock from a specific category',
+                url: '/api/products/active-with-stock?category_id=1&page=1&limit=10',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Active products with stock retrieved successfully',
+                    pagination: { total: 12, page: '1', limit: '10', totalPage: 2 },
+                    data: [{ id: 1, name: 'Wireless Mouse', sku: 'MOU-001', stock_quantity: 100, category_id: 1 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getAllCategories(req, res),
+        description: 'List all categories',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            fields: {
+                categories: ['id', 'name', 'description', 'parent_id', 'is_active', 'created_at', 'updated_at']
+            },
+            relationships: ['categories.parent_id -> categories.id (self-referencing)']
+        },
+        queryParams: {
+            search: 'Search by category name or description',
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Categories retrieved successfully',
+            pagination: {
+                total: 2,
+                page: '1',
+                limit: '10',
+                totalPage: 1
+            },
+            data: [
+                {
+                    id: 1,
+                    name: 'Electronics',
+                    description: 'Electronic devices and accessories',
+                    parent_id: null,
+                    is_active: true
+                },
+                {
+                    id: 2,
+                    name: 'Office Supplies',
+                    description: 'Office and stationery items',
+                    parent_id: null,
+                    is_active: true
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'List Categories',
+                description: 'Get all product categories',
+                url: '/api/products/categories',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Categories retrieved successfully',
+                    data: [{ id: 1, name: 'Electronics', parent_id: null }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/with-products',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getCategoriesWithProducts(req, res),
+        description: 'Get all categories with their products grouped together',
+        database: {
+            tables: ['categories', 'products', 'units', 'product_images'],
+            mainTable: 'categories',
+            fields: {
+                categories: ['id', 'name', 'description', 'parent_id', 'is_active', 'created_at', 'updated_at'],
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'weight', 'length', 'width', 'height', 'is_active', 'created_at', 'updated_at'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'categories.id <- products.category_id',
+                'products.unit_id -> units.id',
+                'product_images.product_id -> products.id'
+            ]
+        },
+        queryParams: {
+            is_active: 'Filter by active status (true/false)',
+            search: 'Search products by name, SKU, or barcode',
+            only_with_products: 'Return only categories that have products (true/false)'
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Products grouped by category retrieved successfully',
+            data: [
+                {
+                    id: 1,
+                    name: 'Electronics',
+                    description: 'Electronic devices and accessories',
+                    parent_id: null,
+                    is_active: true,
+                    created_at: '2025-12-02T10:00:00.000Z',
+                    updated_at: '2025-12-02T10:00:00.000Z',
+                    products: [
+                        {
+                            id: 1,
+                            name: 'Wireless Mouse',
+                            sku: 'MOU-001',
+                            description: 'Ergonomic wireless mouse',
+                            category_id: 1,
+                            unit_id: 1,
+                            price: 29.99,
+                            cost: 15.00,
+                            stock_quantity: 100,
+                            initial_stock: 100,
+                            min_stock_level: 20,
+                            max_stock_level: 200,
+                            barcode: '9876543210987',
+                            thumb_url: 'http://example.com/mouse.jpg',
+                            is_active: true,
+                            created_at: '2025-12-02T10:00:00.000Z',
+                            updated_at: '2025-12-02T10:00:00.000Z',
+                            unit: {
+                                id: 1,
+                                name: 'Piece',
+                                symbol: 'pcs'
+                            },
+                            gallery_items: [
+                                'http://example.com/mouse1.jpg',
+                                'http://example.com/mouse2.jpg'
+                            ]
+                        },
+                        {
+                            id: 2,
+                            name: 'Gaming Keyboard',
+                            sku: 'KEY-002',
+                            description: 'Mechanical RGB keyboard',
+                            category_id: 1,
+                            unit_id: 1,
+                            price: 89.99,
+                            cost: 50.00,
+                            stock_quantity: 50,
+                            initial_stock: 50,
+                            min_stock_level: 10,
+                            max_stock_level: 100,
+                            barcode: '1234567890123',
+                            thumb_url: 'http://example.com/keyboard.jpg',
+                            is_active: true,
+                            created_at: '2025-12-02T10:00:00.000Z',
+                            updated_at: '2025-12-02T10:00:00.000Z',
+                            unit: {
+                                id: 1,
+                                name: 'Piece',
+                                symbol: 'pcs'
+                            },
+                            gallery_items: []
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: 'Office Supplies',
+                    description: 'Office and stationery items',
+                    parent_id: null,
+                    is_active: true,
+                    created_at: '2025-12-02T10:00:00.000Z',
+                    updated_at: '2025-12-02T10:00:00.000Z',
+                    products: [
+                        {
+                            id: 3,
+                            name: 'Notebook A4',
+                            sku: 'NB-001',
+                            description: 'A4 size notebook',
+                            category_id: 2,
+                            unit_id: 1,
+                            price: 5.99,
+                            cost: 3.00,
+                            stock_quantity: 200,
+                            initial_stock: 200,
+                            min_stock_level: 50,
+                            max_stock_level: 500,
+                            barcode: '4567890123456',
+                            thumb_url: 'http://example.com/notebook.jpg',
+                            is_active: true,
+                            created_at: '2025-12-02T10:00:00.000Z',
+                            updated_at: '2025-12-02T10:00:00.000Z',
+                            unit: {
+                                id: 1,
+                                name: 'Piece',
+                                symbol: 'pcs'
+                            },
+                            gallery_items: []
+                        }
+                    ]
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Categories with Products',
+                description: 'Retrieve all categories with their associated products grouped together',
+                url: '/api/products/categories/with-products',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products grouped by category retrieved successfully',
+                    data: [
+                        {
+                            id: 1,
+                            name: 'Electronics',
+                            products: [
+                                { id: 1, name: 'Wireless Mouse', price: 29.99, stock_quantity: 100 },
+                                { id: 2, name: 'Gaming Keyboard', price: 89.99, stock_quantity: 50 }
+                            ]
+                        },
+                        {
+                            id: 2,
+                            name: 'Office Supplies',
+                            products: [
+                                { id: 3, name: 'Notebook A4', price: 5.99, stock_quantity: 200 }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                title: 'Get Categories with Active Products Only',
+                description: 'Retrieve categories with only active products',
+                url: '/api/products/categories/with-products?is_active=true',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products grouped by category retrieved successfully',
+                    data: [
+                        {
+                            id: 1,
+                            name: 'Electronics',
+                            products: [
+                                { id: 1, name: 'Wireless Mouse', is_active: true, price: 29.99 }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                title: 'Search Products Within Categories',
+                description: 'Search for products across all categories',
+                url: '/api/products/categories/with-products?search=mouse',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products grouped by category retrieved successfully',
+                    data: [
+                        {
+                            id: 1,
+                            name: 'Electronics',
+                            products: [
+                                { id: 1, name: 'Wireless Mouse', price: 29.99 }
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                title: 'Get Only Categories with Products',
+                description: 'Return only categories that have at least one product',
+                url: '/api/products/categories/with-products?only_with_products=true',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products grouped by category retrieved successfully',
+                    data: [
+                        {
+                            id: 1,
+                            name: 'Electronics',
+                            products: [{ id: 1, name: 'Wireless Mouse' }]
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        path: '/units',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getAllUnits(req, res),
+        description: 'List all units',
+        database: {
+            tables: ['units'],
+            mainTable: 'units',
+            fields: {
+                units: ['id', 'name', 'symbol', 'description', 'is_active', 'created_at', 'updated_at']
+            }
+        },
+        queryParams: {
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Units retrieved successfully',
+            pagination: {
+                total: 3,
+                page: '1',
+                limit: '10',
+                totalPage: 1
+            },
+            data: [
+                {
+                    id: 1,
+                    name: 'Piece',
+                    symbol: 'pcs',
+                    is_active: true
+                },
+                {
+                    id: 2,
+                    name: 'Kilogram',
+                    symbol: 'kg',
+                    is_active: true
+                },
+                {
+                    id: 3,
+                    name: 'Liter',
+                    symbol: 'L',
+                    is_active: true
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'List Units',
+                description: 'Get all measurement units',
+                url: '/api/products/units',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Units retrieved successfully',
+                    data: [{ id: 1, name: 'Piece', symbol: 'pcs' }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getProductById(req, res),
+        description: 'Get a single product by ID',
+        database: {
+            tables: ['products', 'categories', 'units', 'product_images'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'weight', 'length', 'width', 'height', 'is_active', 'created_at', 'updated_at'],
+                categories: ['id', 'name', 'description'],
+                units: ['id', 'name', 'symbol'],
+                product_images: ['id', 'product_id', 'image_url', 'sort_order']
+            },
+            relationships: [
+                'products.category_id -> categories.id (FK)',
+                'products.unit_id -> units.id (FK)',
+                'product_images.product_id -> products.id (FK)'
+            ]
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product retrieved successfully',
+            data: {
+                id: 1,
+                name: 'Laptop Computer',
+                sku: 'LAP-001',
+                description: 'High-performance laptop',
+                category_id: 1,
+                unit_id: 1,
+                price: 999.99,
+                cost: 750.00,
+                purchase_tax: 5.00,
+                sales_tax: 10.00,
+                stock_quantity: 50,
+                initial_stock: 100,
+                min_stock_level: 10,
+                max_stock_level: 100,
+                barcode: '1234567890123',
+                image_url: '/uploads/laptop.jpg',
+                is_active: true,
+                created_at: '2025-12-02T10:00:00.000Z',
+                updated_at: '2025-12-02T10:00:00.000Z',
+                category: {
+                    id: 1,
+                    name: 'Electronics',
+                    description: 'Electronic devices and accessories'
+                },
+                unit: {
+                    id: 1,
+                    name: 'Piece',
+                    symbol: 'pcs'
+                }
+            }
+        },
+        examples: [
+            {
+                title: 'Get Product',
+                description: 'Get detailed information for a single product',
+                url: '/api/products/1',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Product retrieved successfully',
+                    data: { id: 1, name: 'Wireless Mouse', sku: 'MOU-001' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id',
+        method: 'PUT',
+        middlewares: [validate(updateProduct)],
+        handler: handlerWithFields((req, res) => productsController.updateProduct(req, res), updateProduct),
+        description: 'Update a product',
+        database: {
+            tables: ['products', 'product_images'],
+            mainTable: 'products',
+            updatableFields: ['name', 'sku', 'description', 'specification', 'category_id', 'unit_id', 'price', 'cost', 'purchase_tax', 'sales_tax', 'stock_quantity', 'initial_stock', 'min_stock_level', 'max_stock_level', 'barcode', 'image_url', 'weight', 'is_active'],
+            readOnlyFields: ['id', 'created_at'],
+            autoUpdatedFields: ['updated_at']
+        },
+        sampleRequest: {
+            name: 'Wireless Mouse Pro',
+            price: 34.99,
+            stock_quantity: 150
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product updated successfully',
+            data: {
+                id: 2,
+                name: 'Wireless Mouse Pro',
+                price: 34.99,
+                updated_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Update Product',
+                description: 'Update product details',
+                url: '/api/products/2',
+                method: 'PUT',
+                request: { name: 'Wireless Mouse Pro', price: 34.99 },
+                response: {
+                    status: true,
+                    message: 'Product updated successfully',
+                    data: { id: 2, name: 'Wireless Mouse Pro', price: 34.99 }
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id/stock',
+        method: 'PUT',
+        middlewares: [validate(updateStock)],
+        handler: handlerWithFields((req, res) => productsController.updateStock(req, res), updateStock),
+        description: 'Update product stock quantity. Supports add, subtract, or set operations.',
+        database: {
+            tables: ['products', 'stock_movements'],
+            mainTable: 'products',
+            updatedFields: ['stock_quantity'],
+            sideEffects: [
+                'Creates stock_movements record',
+                'Records movement_type (purchase/sale/adjustment)',
+                'Stores quantity change (positive or negative)',
+                'Links to reference (order, purchase_order, or manual)'
+            ]
+        },
+        sampleRequest: {
+            operation: 'add',
+            quantity: 50
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Stock updated successfully',
+            data: {
+                id: 1,
+                name: 'Wireless Mouse',
+                sku: 'MOU-001',
+                stock_quantity: 150,
+                initial_stock: 100,
+                thumb_url: 'http://example.com/thumb.jpg',
+                updated_at: '2025-12-08T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Update Stock',
+                description: 'Add, subtract or set stock quantity',
+                url: '/api/products/1/stock',
+                method: 'PUT',
+                request: { operation: 'add', quantity: 50, notes: 'New shipment' },
+                response: {
+                    status: true,
+                    message: 'Stock updated successfully',
+                    data: { id: 1, stock_quantity: 150 }
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id/stock/movements',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getStockMovements(req, res),
+        description: 'Get stock movement history for a product',
+        database: {
+            tables: ['stock_movements', 'products'],
+            mainTable: 'stock_movements',
+            fields: {
+                stock_movements: ['id', 'product_id', 'movement_type', 'quantity', 'reference_type', 'reference_id', 'notes', 'created_by', 'created_at']
+            },
+            relationships: ['stock_movements.product_id -> products.id (FK)']
+        },
+        queryParams: {
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Stock movements retrieved successfully',
+            pagination: {
+                total: 15,
+                page: '1',
+                limit: '10',
+                totalPage: 2,
+                product: {
+                    id: 1,
+                    name: 'Wireless Mouse',
+                    sku: 'MOU-001',
+                    current_stock: 150,
+                    initial_stock: 100
+                }
+            },
+            data: [
+                {
+                    id: 1,
+                    product_id: 1,
+                    movement_type: 'sale',
+                    quantity: -2,
+                    reference_type: 'order',
+                    reference_id: 1,
+                    notes: 'Stock deducted for order ORD-1733130000000-123',
+                    created_by: 1,
+                    created_at: '2025-12-08T10:00:00.000Z'
+                },
+                {
+                    id: 2,
+                    product_id: 1,
+                    movement_type: 'purchase',
+                    quantity: 100,
+                    reference_type: 'manual_adjustment',
+                    reference_id: null,
+                    notes: 'Stock add operation',
+                    created_by: 1,
+                    created_at: '2025-12-08T09:00:00.000Z'
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Stock Movements',
+                description: 'Retrieve stock history for a product',
+                url: '/api/products/1/stock/movements',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Stock movements retrieved successfully',
+                    data: [{ id: 1, movement_type: 'sale', quantity: -2 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id/orders',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getProductOrders(req, res),
+        description: 'Get all orders containing a specific product',
+        database: {
+            tables: ['orders', 'order_items', 'customers', 'products'],
+            mainTable: 'orders',
+            fields: {
+                orders: ['id', 'order_number', 'customer_id', 'order_date', 'status', 'total_amount', 'tax_amount', 'discount_amount', 'payment_status', 'created_at'],
+                order_items: ['id', 'order_id', 'product_id', 'quantity', 'unit_price', 'discount', 'line_total', 'total_price'],
+                customers: ['id', 'name', 'email', 'phone', 'company'],
+                products: ['id', 'name', 'sku', 'image_url']
+            },
+            relationships: [
+                'orders.customer_id -> customers.id (FK)',
+                'order_items.order_id -> orders.id (FK)',
+                'order_items.product_id -> products.id (FK)'
+            ]
+        },
+        queryParams: {
+            page: 'Page number (default: 1)',
+            limit: 'Items per page (default: 10)',
+            status: 'Filter by order status (pending, confirmed, processing, shipped, in_transit, delivered, cancelled)',
+            start_date: 'Filter orders from this date (YYYY-MM-DD)',
+            end_date: 'Filter orders until this date (YYYY-MM-DD)'
+        },
+        sampleResponse: {
+            success: true,
+            message: 'Product orders retrieved successfully',
+            pagination: {
+                total: 25,
+                page: '1',
+                limit: '10',
+                totalPage: 3
+            },
+            data: [
+                {
+                    id: 1,
+                    order_number: 'ORD-1733130000000',
+                    customer_id: 1,
+                    order_date: '2025-12-08T10:00:00.000Z',
+                    status: 'delivered',
+                    total_amount: 150.00,
+                    tax_amount: 15.00,
+                    discount_amount: 0.00,
+                    payment_status: 'paid',
+                    created_at: '2025-12-08T10:00:00.000Z',
+                    customer: {
+                        id: 1,
+                        name: 'John Doe',
+                        email: 'john@example.com',
+                        phone: '555-1234',
+                        company: 'Acme Corp'
+                    },
+                    items: [
+                        {
+                            id: 1,
+                            order_id: 1,
+                            product_id: 1,
+                            quantity: 2,
+                            unit_price: 29.99,
+                            discount: 0.00,
+                            line_total: 59.98,
+                            total_price: 59.98,
+                            product: {
+                                id: 1,
+                                name: 'Wireless Mouse',
+                                sku: 'MOU-001',
+                                image_url: 'http://example.com/mouse.jpg'
+                            }
+                        }
+                    ]
+                },
+                {
+                    id: 2,
+                    order_number: 'ORD-1733140000000',
+                    customer_id: 2,
+                    order_date: '2025-12-09T14:30:00.000Z',
+                    status: 'pending',
+                    total_amount: 89.97,
+                    tax_amount: 8.99,
+                    discount_amount: 5.00,
+                    payment_status: 'unpaid',
+                    created_at: '2025-12-09T14:30:00.000Z',
+                    customer: {
+                        id: 2,
+                        name: 'Jane Smith',
+                        email: 'jane@example.com',
+                        phone: '555-5678',
+                        company: 'Tech Solutions'
+                    },
+                    items: [
+                        {
+                            id: 3,
+                            order_id: 2,
+                            product_id: 1,
+                            quantity: 3,
+                            unit_price: 29.99,
+                            discount: 5.00,
+                            line_total: 84.97,
+                            total_price: 89.97,
+                            product: {
+                                id: 1,
+                                name: 'Wireless Mouse',
+                                sku: 'MOU-001',
+                                image_url: 'http://example.com/mouse.jpg'
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get All Orders for Product',
+                description: 'Retrieve all orders containing a specific product',
+                url: '/api/products/1/orders',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Product orders retrieved successfully',
+                    pagination: { total: 25, page: '1', limit: '10', totalPage: 3 },
+                    data: [
+                        {
+                            id: 1,
+                            order_number: 'ORD-1733130000000',
+                            status: 'delivered',
+                            customer: { id: 1, name: 'John Doe' }
+                        }
+                    ]
+                }
+            },
+            {
+                title: 'Filter Orders by Status',
+                description: 'Get only delivered orders containing the product',
+                url: '/api/products/1/orders?status=delivered',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Product orders retrieved successfully',
+                    pagination: { total: 10, page: '1', limit: '10', totalPage: 1 },
+                    data: [
+                        {
+                            id: 1,
+                            order_number: 'ORD-1733130000000',
+                            status: 'delivered'
+                        }
+                    ]
+                }
+            },
+            {
+                title: 'Filter Orders by Date Range',
+                description: 'Get orders containing the product within a specific date range',
+                url: '/api/products/1/orders?start_date=2025-12-01&end_date=2025-12-31',
+                method: 'GET',
+                response: {
+                    success: true,
+                    message: 'Product orders retrieved successfully',
+                    pagination: { total: 15, page: '1', limit: '10', totalPage: 2 },
+                    data: [
+                        {
+                            id: 1,
+                            order_number: 'ORD-1733130000000',
+                            order_date: '2025-12-08T10:00:00.000Z'
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id',
+        method: 'DELETE',
+        middlewares: [],
+        handler: (req, res) => productsController.deleteProduct(req, res),
+        description: 'Delete a product',
+        database: {
+            tables: ['products', 'stock_movements', 'product_images'],
+            mainTable: 'products',
+            sideEffects: ['Deletes associated product_images', 'Prevents deletion if stock_movements exist (usually)']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product deleted successfully'
+        },
+        examples: [
+            {
+                title: 'Delete Product',
+                description: 'Delete a product from inventory',
+                url: '/api/products/5',
+                method: 'DELETE',
+                response: {
+                    status: true,
+                    message: 'Product deleted successfully'
+                }
+            }
+        ]
+    },
+
+    // Product Expiry Tracking routes
+    {
+        path: '/expiring-soon',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getExpiringProducts(req, res),
+        description: 'Get products expiring within specified months (default: 6 months)',
+        database: {
+            tables: ['products', 'categories', 'units'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'expiry_date', 'stock_quantity', 'min_stock_level', 'price', 'cost'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol']
+            },
+            relationships: [
+                'products.category_id -> categories.id (FK)',
+                'products.unit_id -> units.id (FK)'
+            ],
+            calculatedFields: ['days_until_expiry', 'expiry_status']
+        },
+        queryParams: {
+            months: 'Number of months to look ahead (default: 6, max: 24)'
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Products expiring within 6 months retrieved successfully',
+            data: [
+                {
+                    id: 5,
+                    name: 'Food Supplement',
+                    sku: 'SUP-001',
+                    expiry_date: '2025-12-01',
+                    stock_quantity: 50,
+                    price: 29.99,
+                    thumb_url: 'http://example.com/supplement.jpg',
+                    days_until_expiry: 45,
+                    expiry_status: 'notice',
+                    category: {
+                        id: 3,
+                        name: 'Health Supplements'
+                    },
+                    unit: {
+                        id: 1,
+                        name: 'Bottle',
+                        symbol: 'btl'
+                    }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Products Expiring Soon',
+                description: 'Retrieve all products that will expire within the next 6 months',
+                url: '/api/products/expiring-soon',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products expiring within 6 months retrieved successfully',
+                    data: [{ id: 5, name: 'Food Supplement', expiry_date: '2025-12-01', days_until_expiry: 45, expiry_status: 'notice' }]
+                }
+            },
+            {
+                title: 'Get Products Expiring Within 3 Months',
+                description: 'Retrieve products expiring within the next 3 months',
+                url: '/api/products/expiring-soon?months=3',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products expiring within 3 months retrieved successfully',
+                    data: [{ id: 5, name: 'Food Supplement', days_until_expiry: 45, expiry_status: 'warning' }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/expiring/period',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getExpiringProductsInPeriod(req, res),
+        description: 'Get products expiring within a specific date range',
+        database: {
+            tables: ['products', 'categories', 'units'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'expiry_date', 'stock_quantity', 'price', 'cost'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol']
+            },
+            calculatedFields: ['days_until_expiry', 'expiry_status']
+        },
+        queryParams: {
+            start_date: 'Start date in YYYY-MM-DD format (required)',
+            end_date: 'End date in YYYY-MM-DD format (required)'
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Products expiring in specified period retrieved successfully',
+            data: [
+                {
+                    id: 10,
+                    name: 'Vitamin C Tablets',
+                    sku: 'VIT-002',
+                    expiry_date: '2026-01-15',
+                    stock_quantity: 100,
+                    price: 15.99,
+                    thumb_url: 'http://example.com/vitamin.jpg',
+                    days_until_expiry: 90,
+                    expiry_status: 'warning',
+                    category: {
+                        id: 3,
+                        name: 'Health Supplements'
+                    },
+                    unit: {
+                        id: 1,
+                        name: 'Bottle',
+                        symbol: 'btl'
+                    }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Products Expiring in Specific Period',
+                description: 'Find products expiring between two specific dates',
+                url: '/api/products/expiring/period?start_date=2026-01-01&end_date=2026-03-31',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Products expiring in specified period retrieved successfully',
+                    data: [{ id: 10, name: 'Vitamin C Tablets', expiry_date: '2026-01-15', days_until_expiry: 90 }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/expired',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getExpiredProducts(req, res),
+        description: 'Get all products that have already expired',
+        database: {
+            tables: ['products', 'categories', 'units'],
+            mainTable: 'products',
+            fields: {
+                products: ['id', 'name', 'sku', 'expiry_date', 'stock_quantity', 'price', 'cost'],
+                categories: ['id', 'name'],
+                units: ['id', 'name', 'symbol']
+            },
+            calculatedFields: ['days_expired', 'expiry_status']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Expired products retrieved successfully',
+            data: [
+                {
+                    id: 15,
+                    name: 'Old Stock Item',
+                    sku: 'OLD-001',
+                    expiry_date: '2025-05-01',
+                    stock_quantity: 25,
+                    price: 10.99,
+                    thumb_url: 'http://example.com/old.jpg',
+                    days_expired: 41,
+                    expiry_status: 'expired',
+                    category: {
+                        id: 4,
+                        name: 'Clearance Items'
+                    },
+                    unit: {
+                        id: 1,
+                        name: 'Piece',
+                        symbol: 'pcs'
+                    }
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Expired Products',
+                description: 'Retrieve all products that have already expired',
+                url: '/api/products/expired',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Expired products retrieved successfully',
+                    data: [{ id: 15, name: 'Old Stock Item', expiry_date: '2025-05-01', days_expired: 41, expiry_status: 'expired' }]
+                }
+            }
+        ]
+    },
+    {
+        path: '/expiry-stats',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getExpiryStats(req, res),
+        description: 'Get product expiry statistics',
+        database: {
+            tables: ['products'],
+            mainTable: 'products',
+            fields: {
+                calculated: ['expiringIn6Months', 'expiringIn3Months', 'expiringIn1Month', 'expiredProducts']
+            }
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Product expiry statistics retrieved successfully',
+            data: [
+                {
+                    label: "Expiring Within 6 Months",
+                    value: 25,
+                    color: "bg-yellow-500"
+                },
+                {
+                    label: "Expiring Within 3 Months",
+                    value: 12,
+                    color: "bg-orange-500"
+                },
+                {
+                    label: "Expiring Within 1 Month",
+                    value: 5,
+                    color: "bg-red-500"
+                },
+                {
+                    label: "Already Expired",
+                    value: 3,
+                    color: "bg-gray-700"
+                }
+            ]
+        },
+        examples: [
+            {
+                title: 'Get Expiry Statistics',
+                description: 'Retrieve comprehensive expiry statistics',
+                url: '/api/products/expiry-stats',
+                method: 'GET',
+                response: {
+                    status: true,
+                    message: 'Product expiry statistics retrieved successfully',
+                    data: [
+                        { label: "Expiring Within 6 Months", value: 25, color: "bg-yellow-500" },
+                        { label: "Expiring Within 3 Months", value: 12, color: "bg-orange-500" }
+                    ]
+                }
+            }
+        ]
+    },
+    {
+        path: '/:id/expiry-notification',
+        method: 'POST',
+        middlewares: [],
+        handler: (req, res) => productsController.createExpiryNotification(req, res),
+        description: 'Create an expiry notification for a specific product',
+        database: {
+            tables: ['products', 'notifications'],
+            mainTable: 'notifications',
+            sideEffects: ['Creates notification record', 'Sends alert to specified user or all users']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Expiry notification created successfully',
+            data: {
+                success: true,
+                message: 'Expiry notification created successfully',
+                notification: {
+                    title: 'Product Expiring Within 6 Months',
+                    message: 'Product "Food Supplement" (SKU: SUP-001) will expire in 180 days on 2025-12-01. Current stock: 50',
+                    priority: 'medium',
+                    days_until_expiry: 180
+                }
+            }
+        },
+        examples: [
+            {
+                title: 'Create Expiry Notification',
+                description: 'Create a notification for a product that is about to expire',
+                url: '/api/products/5/expiry-notification',
+                method: 'POST',
+                response: {
+                    status: true,
+                    message: 'Expiry notification created successfully',
+                    data: {
+                        success: true,
+                        notification: {
+                            title: 'Product Expiring Within 6 Months',
+                            priority: 'medium'
+                        }
+                    }
+                }
+            }
+        ]
+    },
+    {
+        path: '/expiry-notifications/bulk',
+        method: 'POST',
+        middlewares: [],
+        handler: (req, res) => productsController.createBulkExpiryNotifications(req, res),
+        description: 'Create expiry notifications for all products expiring within specified months',
+        database: {
+            tables: ['products', 'notifications'],
+            mainTable: 'notifications',
+            sideEffects: ['Creates multiple notification records', 'Sends alerts for all expiring products']
+        },
+        queryParams: {
+            months: 'Number of months to look ahead (default: 6)'
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Bulk expiry notifications created successfully',
+            data: {
+                success: true,
+                message: 'Created 25 expiry notifications',
+                notifications_created: 25,
+                products: [
+                    {
+                        id: 5,
+                        name: 'Food Supplement',
+                        expiry_date: '2025-12-01'
+                    },
+                    {
+                        id: 10,
+                        name: 'Vitamin C Tablets',
+                        expiry_date: '2026-01-15'
+                    }
+                ]
+            }
+        },
+        examples: [
+            {
+                title: 'Create Bulk Expiry Notifications',
+                description: 'Create notifications for all products expiring within 6 months',
+                url: '/api/products/expiry-notifications/bulk',
+                method: 'POST',
+                response: {
+                    status: true,
+                    message: 'Bulk expiry notifications created successfully',
+                    data: {
+                        success: true,
+                        message: 'Created 25 expiry notifications',
+                        notifications_created: 25
+                    }
+                }
+            },
+            {
+                title: 'Create Bulk Notifications for 3 Months',
+                description: 'Create notifications for products expiring within 3 months only',
+                url: '/api/products/expiry-notifications/bulk?months=3',
+                method: 'POST',
+                response: {
+                    status: true,
+                    message: 'Created 12 expiry notifications',
+                    data: {
+                        success: true,
+                        notifications_created: 12
+                    }
+                }
+            }
+        ]
+    },
+
+    // Product Image Gallery routes
+
+
+
+
+
+    // Category CRUD routes
+    {
+        path: '/categories',
+        method: 'POST',
+        middlewares: [validate(createCategory)],
+        handler: handlerWithFields((req, res) => productsController.createCategory(req, res), createCategory),
+        description: 'Create a new category',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            requiredFields: ['name'],
+            optionalFields: ['description', 'parent_id', 'is_active'],
+            autoGeneratedFields: ['id', 'created_at', 'updated_at'],
+            relationships: ['categories.parent_id -> categories.id (self-referencing)']
+        },
+        sampleRequest: {
+            name: 'Furniture',
+            description: 'Office and home furniture',
+            parent_id: null,
+            is_active: true
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Category created successfully',
+            data: {
+                id: 3,
+                name: 'Furniture',
+                created_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Create Category',
+                description: 'Add a new product category',
+                url: '/api/products/categories',
+                method: 'POST',
+                request: { name: 'Furniture', description: 'Office furniture' },
+                response: {
+                    status: true,
+                    message: 'Category created successfully',
+                    data: { id: 3, name: 'Furniture' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/reorder',
+        method: 'PUT',
+        middlewares: [],
+        handler: (req, res) => productsController.reorderCategories(req, res),
+        description: 'Reorder product categories',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            updatableFields: ['sort_order']
+        },
+        sampleRequest: {
+            order: [3, 1, 2]
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Categories reordered successfully'
+        },
+        examples: [
+            {
+                title: 'Reorder Categories',
+                description: 'Update sort order of product categories',
+                url: '/api/products/categories/reorder',
+                method: 'PUT',
+                request: { order: [3, 1, 2] },
+                response: {
+                    status: true,
+                    message: 'Categories reordered successfully'
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/reset-order',
+        method: 'PUT',
+        middlewares: [],
+        handler: (req, res) => productsController.resetCategoriesOrder(req, res),
+        description: 'Reset categories sort order',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            updatableFields: ['sort_order']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Categories sort order reset successfully'
+        },
+        examples: [
+            {
+                title: 'Reset Categories Order',
+                description: 'Reset sort order of product categories to default',
+                url: '/api/products/categories/reset-order',
+                method: 'PUT',
+                response: {
+                    status: true,
+                    message: 'Categories sort order reset successfully'
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/:id',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getCategoryById(req, res),
+        description: 'Get a specific category by ID',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            fields: {
+                categories: ['id', 'name', 'description', 'parent_id', 'is_active', 'created_at', 'updated_at']
+            },
+            relationships: ['categories.parent_id -> categories.id (self-referencing)']
+        },
+        sampleResponse: {
+            status: true,
+            data: {
+                id: 1,
+                name: 'Electronics',
+                description: 'Electronic devices and accessories',
+                parent_id: null,
+                is_active: true
+            }
+        },
+        examples: [
+            {
+                title: 'Get Category',
+                description: 'Get category details by ID',
+                url: '/api/products/categories/1',
+                method: 'GET',
+                response: {
+                    status: true,
+                    data: { id: 1, name: 'Electronics' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/:id',
+        method: 'PUT',
+        middlewares: [validate(updateCategory)],
+        handler: handlerWithFields((req, res) => productsController.updateCategory(req, res), updateCategory),
+        description: 'Update a category',
+        database: {
+            tables: ['categories'],
+            mainTable: 'categories',
+            updatableFields: ['name', 'description', 'parent_id', 'is_active'],
+            readOnlyFields: ['id', 'created_at'],
+            autoUpdatedFields: ['updated_at']
+        },
+        sampleRequest: {
+            name: 'Electronics & Gadgets',
+            description: 'Updated description',
+            is_active: true
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Category updated successfully',
+            data: {
+                id: 1,
+                name: 'Electronics & Gadgets',
+                updated_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Update Category',
+                description: 'Update existing category',
+                url: '/api/products/categories/1',
+                method: 'PUT',
+                request: { name: 'Electronics & Gadgets' },
+                response: {
+                    status: true,
+                    message: 'Category updated successfully'
+                }
+            }
+        ]
+    },
+    {
+        path: '/categories/:id',
+        method: 'DELETE',
+        middlewares: [],
+        handler: (req, res) => productsController.deleteCategory(req, res),
+        description: 'Delete a category',
+        database: {
+            tables: ['categories', 'products'],
+            mainTable: 'categories',
+            sideEffects: ['Check for associated products before deletion']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Category deleted successfully'
+        },
+        examples: [
+            {
+                title: 'Delete Category',
+                description: 'Remove a category',
+                url: '/api/products/categories/3',
+                method: 'DELETE',
+                response: {
+                    status: true,
+                    message: 'Category deleted successfully'
+                }
+            }
+        ]
+    },
+    // Unit CRUD routes
+    {
+        path: '/units',
+        method: 'POST',
+        middlewares: [validate(createUnit)],
+        handler: handlerWithFields((req, res) => productsController.createUnit(req, res), createUnit),
+        description: 'Create a new unit',
+        database: {
+            tables: ['units'],
+            mainTable: 'units',
+            requiredFields: ['name', 'symbol'],
+            optionalFields: ['description', 'is_active'],
+            autoGeneratedFields: ['id', 'created_at', 'updated_at']
+        },
+        sampleRequest: {
+            name: 'Dozen',
+            symbol: 'dz',
+            is_active: true
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Unit created successfully',
+            data: {
+                id: 6,
+                name: 'Dozen',
+                symbol: 'dz',
+                created_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Create Unit',
+                description: 'Add a new measurement unit',
+                url: '/api/products/units',
+                method: 'POST',
+                request: { name: 'Dozen', symbol: 'dz' },
+                response: {
+                    status: true,
+                    message: 'Unit created successfully',
+                    data: { id: 6, name: 'Dozen', symbol: 'dz' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/units/:id',
+        method: 'GET',
+        middlewares: [],
+        handler: (req, res) => productsController.getUnitById(req, res),
+        description: 'Get a specific unit by ID',
+        database: {
+            tables: ['units'],
+            mainTable: 'units',
+            fields: {
+                units: ['id', 'name', 'symbol', 'is_active', 'created_at', 'updated_at']
+            }
+        },
+        sampleResponse: {
+            status: true,
+            data: {
+                id: 1,
+                name: 'Piece',
+                symbol: 'pcs',
+                is_active: true
+            }
+        },
+        examples: [
+            {
+                title: 'Get Unit',
+                description: 'Get unit details by ID',
+                url: '/api/products/units/1',
+                method: 'GET',
+                response: {
+                    status: true,
+                    data: { id: 1, name: 'Piece', symbol: 'pcs' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/units/:id',
+        method: 'PUT',
+        middlewares: [validate(updateUnit)],
+        handler: handlerWithFields((req, res) => productsController.updateUnit(req, res), updateUnit),
+        description: 'Update a unit',
+        database: {
+            tables: ['units'],
+            mainTable: 'units',
+            updatableFields: ['name', 'symbol', 'is_active'],
+            readOnlyFields: ['id', 'created_at'],
+            autoUpdatedFields: ['updated_at']
+        },
+        sampleRequest: {
+            name: 'Pieces',
+            symbol: 'pcs',
+            is_active: true
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Unit updated successfully',
+            data: {
+                id: 1,
+                name: 'Pieces',
+                updated_at: '2025-12-02T10:00:00.000Z'
+            }
+        },
+        examples: [
+            {
+                title: 'Update Unit',
+                description: 'Update existing unit',
+                url: '/api/products/units/1',
+                method: 'PUT',
+                request: { name: 'Pieces' },
+                response: {
+                    status: true,
+                    message: 'Unit updated successfully',
+                    data: { id: 1, name: 'Pieces' }
+                }
+            }
+        ]
+    },
+    {
+        path: '/units/:id',
+        method: 'DELETE',
+        middlewares: [],
+        handler: (req, res) => productsController.deleteUnit(req, res),
+        description: 'Delete a unit',
+        database: {
+            tables: ['units', 'products'],
+            mainTable: 'units',
+            sideEffects: ['Check for associated products before deletion']
+        },
+        sampleResponse: {
+            status: true,
+            message: 'Unit deleted successfully'
+        },
+        examples: [
+            {
+                title: 'Delete Unit',
+                description: 'Remove a unit',
+                url: '/api/products/units/6',
+                method: 'DELETE',
+                response: {
+                    status: true,
+                    message: 'Unit deleted successfully'
+                }
+            }
+        ]
+    }
+];
+
+// Register routes from metadata
+router.routesMeta.forEach(r => {
+    router[r.method.toLowerCase()](r.path, ...r.middlewares, r.handler);
+});
+
+module.exports = router;

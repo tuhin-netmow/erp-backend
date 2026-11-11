@@ -1,0 +1,2896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Production Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            color: #00695c;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #00695c;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #004d40;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .section h2 {
+            color: #00695c;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #30cfd0;
+        }
+
+        .section h3 {
+            color: #00695c;
+            font-size: 1.4em;
+            margin: 25px 0 15px 0;
+            font-weight: 600;
+        }
+
+        .endpoint {
+            background: #e8f5f3;
+            border-left: 5px solid #00695c;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .endpoint h3 {
+            color: #00695c;
+            margin-top: 0;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-right: 10px;
+        }
+
+        .method.get {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .method.post {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .method.put {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .method.delete {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            background: #263238;
+            color: #80cbc4;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 1em;
+            display: inline-block;
+            margin: 10px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(135deg, #00695c 0%, #004d40 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e8f5f3;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #f0f9f8;
+        }
+
+        pre {
+            background: #263238;
+            color: #80cbc4;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        code {
+            background: #263238;
+            color: #80cbc4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px 5px 5px 0;
+        }
+
+        .badge.success {
+            background: #c8e6c9;
+            color: #2e7d32;
+        }
+
+        .badge.info {
+            background: #b3e5fc;
+            color: #0277bd;
+        }
+
+        .badge.warning {
+            background: #ffe0b2;
+            color: #ef6c00;
+        }
+
+        .request-item {
+            background: #f0f9f8;
+            border-left: 4px solid #30cfd0;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+        }
+
+        .expandable-header {
+            background: linear-gradient(135deg, #00695c 0%, #004d40 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 105, 92, 0.3);
+        }
+
+        .expandable-content {
+            display: none;
+            background: #e8f5f3;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #30cfd0;
+        }
+
+        .expandable-content.active {
+            display: block;
+        }
+
+        .expandable-toggle {
+            font-size: 1.5em;
+            transition: transform 0.3s ease;
+        }
+
+        .expandable-toggle.active {
+            transform: rotate(180deg);
+        }
+
+        .flow-diagram {
+            background: #e8f5f3;
+            padding: 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .reference-card {
+            background: linear-gradient(135deg, #e8f5f3 0%, #f0f9f8 100%);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #00695c;
+        }
+
+        .reference-card h4 {
+            color: #00695c;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .reference-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .reference-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid #b2dfdb;
+        }
+
+        .reference-card li:last-child {
+            border-bottom: none;
+        }
+
+        a {
+            color: #00695c;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        a:hover {
+            color: #30cfd0;
+            text-decoration: underline;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🏭 Production Module Documentation</h1>
+            <p>Complete API documentation for Production Batches, Production Runs, Bill of Materials (BOM), and Finished Goods management</p>
+        </div>
+
+        <!-- Database Schema Section -->
+        <div class="section">
+            <h2>📊 Database Schema</h2>
+            <div class="flow-diagram">
+                <pre class="mermaid">
+erDiagram
+    BOM ||--o{ BOMItem : contains
+    BOM }o--|| Product : "produces"
+    BOMItem }o--|| Product : "uses (raw material)"
+    ProductionRun }o--|| Product : "produces"
+    ProductionRun }o--|| BOM : "uses"
+
+    BOM {
+        int id PK
+        int product_id FK
+        string name
+        text description
+        boolean is_active
+        int created_by
+        datetime created_at
+        datetime updated_at
+    }
+
+    BOMItem {
+        int id PK
+        int bom_id FK
+        int product_id FK
+        decimal quantity
+        decimal wastage_percent
+        string notes
+        datetime created_at
+        datetime updated_at
+    }
+
+    ProductionRun {
+        int id PK
+        string run_number UK
+        int product_id FK
+        int bom_id FK
+        int quantity
+        date start_date
+        date end_date
+        enum status
+        text notes
+        int created_by
+        datetime created_at
+        datetime updated_at
+    }
+
+    Product {
+        int id PK
+        string name
+        string sku
+        enum product_type
+    }
+                </pre>
+            </div>
+
+            <h3>Database Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Description</th>
+                        <th>Primary Key</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>boms</code></td>
+                        <td>Bill of Materials headers defining recipes for finished goods</td>
+                        <td><code>id</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bom_items</code></td>
+                        <td>BOM line items containing raw materials and quantities</td>
+                        <td><code>id</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>production_runs</code></td>
+                        <td>Production batch/run records for manufacturing</td>
+                        <td><code>id</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>products</code></td>
+                        <td>Product catalog (raw materials and finished goods)</td>
+                        <td><code>id</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Relationships</h3>
+            <ul>
+                <li><strong>BOM → Product:</strong> Many-to-One (A BOM belongs to one finished good product)</li>
+                <li><strong>BOM → BOMItem:</strong> One-to-Many (A BOM contains many items with CASCADE delete)</li>
+                <li><strong>BOMItem → Product:</strong> Many-to-One (An item references one raw material product)</li>
+                <li><strong>ProductionRun → Product:</strong> Many-to-One (A run produces one finished good)</li>
+                <li><strong>ProductionRun → BOM:</strong> Many-to-One (Optional - A run can reference a BOM)</li>
+            </ul>
+        </div>
+
+        <!-- Production Batches/Runs Section -->
+        <div class="section">
+            <h2>🔄 Production Batches / Runs</h2>
+
+            <!-- POST Create Production Run -->
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> Create Production Run</h3>
+                <div class="route-path">POST /api/production/runs</div>
+                <p>Initiate a new production run for manufacturing finished goods.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/production/runs
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createRun(req, res)
+    Controller->>Service: createRun(data, userId)
+    Service->>Service: Generate run_number (RUN-timestamp)
+    Service->>Service: Find default BOM if not provided
+    Service->>Repository: createRun(runData)
+    Repository->>Database: INSERT INTO production_runs
+    Database->>Repository: Production run created
+    Repository->>Service: Run object
+    Service->>Controller: Run result
+    Controller->>Client: 201 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|createRun| Service[Production Service]
+    Service -->|Data Access| Repository[Production Run Repository]
+    end
+
+    subgraph "Create Production Run"
+    CreateRun[POST /api/production/runs] -->|Request Body| GenRunNumber[Service - Generate Run Number]
+    GenRunNumber -->|RUN-timestamp| FindBOM[Service - Find Default BOM]
+    FindBOM -->|If not provided| CreateRecord[Repository - Create]
+    CreateRecord -->|INSERT INTO production_runs| DB[(MySQL Database)]
+
+    DB -->|New Run| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>product_id</code></td>
+                            <td>Integer</td>
+                            <td>✅ Yes</td>
+                            <td>Must exist in products table</td>
+                        </tr>
+                        <tr>
+                            <td><code>quantity</code></td>
+                            <td>Integer</td>
+                            <td>✅ Yes</td>
+                            <td>Must be positive</td>
+                        </tr>
+                        <tr>
+                            <td><code>bom_id</code></td>
+                            <td>Integer</td>
+                            <td>❌ No</td>
+                            <td>If not provided, auto-finds default BOM</td>
+                        </tr>
+                        <tr>
+                            <td><code>start_date</code></td>
+                            <td>Date</td>
+                            <td>❌ No</td>
+                            <td>YYYY-MM-DD format</td>
+                        </tr>
+                        <tr>
+                            <td><code>notes</code></td>
+                            <td>String</td>
+                            <td>❌ No</td>
+                            <td>Max length: Text</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:34-41</code></p>
+                <pre>
+async createRun(req, res) {
+    try {
+        const run = await ProductionService.createRun(req.body, req.user?.id);
+        return success(res, 'Production run created successfully', run, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:57-77</code></p>
+                <pre>
+async createRun(data, userId) {
+    // Auto-generate run number
+    const run_number = `RUN-${Date.now()}`;
+
+    // Populate BOM id if not provided but product has one
+    if (!data.bom_id) {
+        const defaultBOM = await ProductionRepository.findOneBOMByProductId(data.product_id);
+        if (defaultBOM) {
+            data = { ...data, bom_id: defaultBOM.id };
+        }
+    }
+
+    const runData = {
+        ...data,
+        run_number,
+        created_by: userId,
+        status: 'scheduled' // Default status
+    };
+
+    return await ProductionRepository.createRun(runData);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:151-153</code></p>
+                <pre>
+async createRun(data) {
+    return await ProductionRun.create(data);
+}
+                </pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><strong>Primary:</strong> <code>production_runs</code> - INSERT new record</li>
+                    <li><strong>Related:</strong> <code>boms</code> - READ for default BOM lookup</li>
+                    <li><strong>Related:</strong> <code>products</code> - READ for product validation</li>
+                </ul>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "product_id": 15,
+    "quantity": 100,
+    "start_date": "2026-02-01",
+    "notes": "Urgent batch for client X",
+    "bom_id": 2
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 201 Created
+{
+    "success": true,
+    "message": "Production run created successfully",
+    "data": {
+        "id": 5,
+        "run_number": "RUN-1738401000000",
+        "product_id": 15,
+        "bom_id": 2,
+        "quantity": 100,
+        "status": "scheduled",
+        "start_date": "2026-02-01T00:00:00.000Z",
+        "notes": "Urgent batch for client X",
+        "created_by": 1,
+        "updated_at": "2026-03-11T10:00:00.000Z",
+        "created_at": "2026-03-11T10:00:00.000Z"
+    }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 400 Bad Request
+{
+    "success": false,
+    "message": "Product not found"
+}
+                </pre>
+            </div>
+
+            <!-- GET List Production Runs -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> List Production Runs</h3>
+                <div class="route-path">GET /api/production/runs</div>
+                <p>Retrieve a paginated list of production runs with optional filtering.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/production/runs
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getRuns(req, res)
+    Controller->>Controller: Parse page, limit, filters
+    Controller->>Service: getAllRuns(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAllRuns(filters, limit, offset)
+    Repository->>Database: SELECT with includes (product, bom)
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with pagination
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|getRuns| Service[Production Service]
+    Service -->|Data Access| Repository[Production Run Repository]
+    end
+
+    subgraph "Get All Production Runs"
+    GetRuns[GET /api/production/runs] -->|Query Params| ParseQuery[Controller - Parse Query]
+    ParseQuery -->|page, limit, status, search| CalcOffset[Service - Calculate Offset]
+    CalcOffset --> FindAll[Repository - FindAll]
+    FindAll -->|SELECT with includes| DB[(MySQL Database)]
+
+    DB -->|Runs Array| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Request Headers</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Value</th>
+                            <th>Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Authorization</code></td>
+                            <td><code>Bearer &lt;token&gt;</code></td>
+                            <td>✅ Yes</td>
+                        </tr>
+                        <tr>
+                            <td><code>Content-Type</code></td>
+                            <td><code>application/json</code></td>
+                            <td>❌ No</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:6-23</code></p>
+                <pre>
+async getRuns(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            status: req.query.status,
+            search: req.query.search
+        };
+        const result = await ProductionService.getAllRuns(filters, page, limit);
+        return successWithPagination(res, 'Production runs retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:42-49</code></p>
+                <pre>
+async getAllRuns(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await ProductionRepository.findAllRuns(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:103-130</code></p>
+                <pre>
+async findAllRuns(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.status) where.status = filters.status;
+    if (filters.search) {
+        where[Op.or] = [
+            { run_number: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    return await ProductionRun.findAndCountAll({
+        where,
+        limit,
+        offset,
+        include: [
+            {
+                model: Product,
+                as: 'product',
+                attributes: ['id', 'name', 'sku']
+            },
+            {
+                model: BOM,
+                as: 'bom',
+                attributes: ['id', 'name']
+            }
+        ],
+        order: [['created_at', 'DESC']]
+    });
+}
+                </pre>
+
+                <h4>Multiple Request Examples</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1️⃣ List All Runs (Paginated)</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/runs?page=1&limit=10</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "run_number": "RUN-1738401000000",
+            "product_id": 15,
+            "bom_id": 2,
+            "quantity": 100,
+            "status": "in_progress",
+            "start_date": "2026-02-01T00:00:00.000Z",
+            "end_date": null,
+            "notes": "Urgent batch for client X",
+            "created_at": "2026-03-11T10:00:00.000Z",
+            "product": {
+                "id": 15,
+                "name": "Widget X",
+                "sku": "FG-WIDGET-X"
+            },
+            "bom": {
+                "id": 2,
+                "name": "BOM for Widget X v1"
+            }
+        }
+    ],
+    "pagination": {
+        "total": 15,
+        "page": 1,
+        "limit": 10
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2️⃣ Filter by Status</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/runs?status=in_progress&page=1&limit=10</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "run_number": "RUN-1738401000000",
+            "status": "in_progress",
+            "quantity": 100,
+            "product": { "id": 15, "name": "Widget X", "sku": "FG-WIDGET-X" }
+        }
+    ],
+    "pagination": { "total": 3, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3️⃣ Search by Run Number</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/runs?search=RUN-1738401</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "run_number": "RUN-1738401000000",
+            "status": "scheduled",
+            "product": { "id": 15, "name": "Widget X" }
+        }
+    ],
+    "pagination": { "total": 1, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4️⃣ Filter Completed Runs</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/runs?status=completed&page=1&limit=20</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "run_number": "RUN-1738300000000",
+            "status": "completed",
+            "quantity": 50,
+            "start_date": "2026-01-15T00:00:00.000Z",
+            "end_date": "2026-01-20T00:00:00.000Z",
+            "product": { "id": 10, "name": "Widget A" }
+        }
+    ],
+    "pagination": { "total": 25, "page": 1, "limit": 20 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>5️⃣ Filter Scheduled Runs</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/runs?status=scheduled</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [
+        {
+            "id": 6,
+            "run_number": "RUN-1738500000000",
+            "status": "scheduled",
+            "quantity": 200,
+            "start_date": "2026-03-15T00:00:00.000Z",
+            "product": { "id": 20, "name": "Widget Y" }
+        }
+    ],
+    "pagination": { "total": 8, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production runs retrieved successfully",
+    "data": [...],
+    "pagination": { "total": 15, "page": 1, "limit": 10 }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 500 Internal Server Error
+{
+    "success": false,
+    "message": "Database connection error"
+}
+                </pre>
+            </div>
+
+            <!-- GET Production Run by ID -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> Get Production Run by ID</h3>
+                <div class="route-path">GET /api/production/runs/:id</div>
+                <p>Retrieve detailed information about a specific production run including full BOM details.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/production/runs/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getRunById(req, res)
+    Controller->>Service: getRunById(id)
+    Service->>Repository: findRunById(id)
+    Repository->>Database: SELECT with nested includes
+    Repository->>Database: Include product, bom, bom.items, raw_materials
+    Database->>Repository: Run with full BOM details
+    Repository->>Service: Run object
+    Service->>Service: Check if run exists
+    Service->>Controller: Run result or error
+    Controller->>Client: 200 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|getRunById| Service[Production Service]
+    Service -->|Data Access| Repository[Production Run Repository]
+    end
+
+    subgraph "Get Production Run By ID"
+    GetByID[GET /api/production/runs/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindRun[Repository - FindRunById]
+    FindRun -->|SELECT with nested includes| DB[(MySQL Database)]
+
+    DB -->|Run with BOM Details| CheckExists[Service - Check Exists]
+    CheckExists -->|Run found| Response[Controller - Send Response]
+    CheckExists -->|Not found| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:25-32</code></p>
+                <pre>
+async getRunById(req, res) {
+    try {
+        const run = await ProductionService.getRunById(req.params.id);
+        return success(res, 'Production run retrieved successfully', run);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:51-55</code></p>
+                <pre>
+async getRunById(id) {
+    const run = await ProductionRepository.findRunById(id);
+    if (!run) throw new Error('Production run not found');
+    return run;
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:132-149</code></p>
+                <pre>
+async findRunById(id) {
+    return await ProductionRun.findByPk(id, {
+        include: [
+            {
+                model: Product,
+                as: 'product',
+                attributes: ['id', 'name', 'sku']
+            },
+            {
+                model: BOM,
+                as: 'bom',
+                include: [
+                    {
+                        model: BOMItem,
+                        as: 'items',
+                        include: [
+                            {
+                                model: Product,
+                                as: 'raw_material',
+                                attributes: ['id', 'name']
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    });
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production run retrieved successfully",
+    "data": {
+        "id": 5,
+        "run_number": "RUN-1738401000000",
+        "product_id": 15,
+        "bom_id": 2,
+        "quantity": 100,
+        "status": "in_progress",
+        "start_date": "2026-02-01T00:00:00.000Z",
+        "notes": "Urgent batch",
+        "created_at": "2026-03-11T10:00:00.000Z",
+        "product": {
+            "id": 15,
+            "name": "Widget X",
+            "sku": "FG-WIDGET-X"
+        },
+        "bom": {
+            "id": 2,
+            "name": "BOM for Widget X v1",
+            "items": [
+                {
+                    "id": 1,
+                    "quantity": 2.5000,
+                    "wastage_percent": 5.00,
+                    "raw_material": {
+                        "id": 10,
+                        "name": "Steel Sheet"
+                    }
+                }
+            ]
+        }
+    }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 404 Not Found
+{
+    "success": false,
+    "message": "Production run not found"
+}
+                </pre>
+            </div>
+
+            <!-- PUT Update Production Run -->
+            <div class="endpoint">
+                <h3><span class="method put">PUT</span> Update Production Run</h3>
+                <div class="route-path">PUT /api/production/runs/:id</div>
+                <p>Update production run details, typically used to change status (Scheduled → In Progress → Completed).</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /api/production/runs/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: updateRun(req, res)
+    Controller->>Service: updateRun(id, data)
+    Service->>Service: Handle status transitions
+    Service->>Repository: updateRun(id, data)
+    Repository->>Database: SELECT * FROM production_runs WHERE id = ?
+    Database->>Repository: Run or null
+    Repository->>Database: UPDATE production_runs SET ...
+    Database->>Repository: Updated run
+    Repository->>Service: Run object
+    Service->>Controller: Run result
+    Controller->>Client: 200 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|updateRun| Service[Production Service]
+    Service -->|Data Access| Repository[Production Run Repository]
+    end
+
+    subgraph "Update Production Run"
+    UpdateRun[PUT /api/production/runs/:id] -->|Extract id and body| HandleStatus[Service - Handle Status Transitions]
+    HandleStatus -->|Scheduled to In Progress to Completed| UpdateRecord[Repository - Update]
+    UpdateRecord -->|SELECT and UPDATE| DB[(MySQL Database)]
+
+    DB -->|Updated Run| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:43-50</code></p>
+                <pre>
+async updateRun(req, res) {
+    try {
+        const run = await ProductionService.updateRun(req.params.id, req.body);
+        return success(res, 'Production run updated successfully', run);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:79-82</code></p>
+                <pre>
+async updateRun(id, data) {
+    // Logic to handle status transitions could go here
+    return await ProductionRepository.updateRun(id, data);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:155-159</code></p>
+                <pre>
+async updateRun(id, data) {
+    const run = await ProductionRun.findByPk(id);
+    if (!run) return null;
+    return await run.update(data);
+}
+                </pre>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "status": "in_progress",
+    "notes": "Started production line 1"
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production run updated successfully",
+    "data": {
+        "id": 5,
+        "run_number": "RUN-1738401000000",
+        "status": "in_progress",
+        "notes": "Started production line 1"
+    }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 400 Bad Request
+{
+    "success": false,
+    "message": "Invalid status value"
+}
+                </pre>
+            </div>
+
+            <!-- DELETE Production Run -->
+            <div class="endpoint">
+                <h3><span class="method delete">DELETE</span> Delete Production Run</h3>
+                <div class="route-path">DELETE /api/production/runs/:id</div>
+                <p>Cancel/delete a production run. Only possible for runs that haven't started production.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: DELETE /api/production/runs/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: deleteRun(req, res)
+    Controller->>Service: deleteRun(id)
+    Service->>Repository: deleteRun(id)
+    Repository->>Database: SELECT * FROM production_runs WHERE id = ?
+    Database->>Repository: Run or null
+    Repository->>Database: DELETE FROM production_runs WHERE id = ?
+    Database->>Repository: Deleted run
+    Repository->>Service: Run object
+    Service->>Controller: Success result
+    Controller->>Client: 200 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|deleteRun| Service[Production Service]
+    Service -->|Data Access| Repository[Production Run Repository]
+    end
+
+    subgraph "Delete Production Run"
+    DeleteRun[DELETE /api/production/runs/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> DeleteRecord[Repository - Delete]
+    DeleteRecord -->|SELECT and DELETE| DB[(MySQL Database)]
+
+    DB -->|Delete Result| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:52-59</code></p>
+                <pre>
+async deleteRun(req, res) {
+    try {
+        await ProductionService.deleteRun(req.params.id);
+        return success(res, 'Production run deleted successfully', null);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:84-86</code></p>
+                <pre>
+async deleteRun(id) {
+    return await ProductionRepository.deleteRun(id);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:161-165</code></p>
+                <pre>
+async deleteRun(id) {
+    const run = await ProductionRun.findByPk(id);
+    if (!run) return null;
+    return await run.destroy();
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Production run deleted successfully"
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 404 Not Found
+{
+    "success": false,
+    "message": "Production run not found"
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- BOM Section -->
+        <div class="section">
+            <h2>📋 Bill of Materials (BOM)</h2>
+
+            <!-- POST Create BOM -->
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> Create BOM</h3>
+                <div class="route-path">POST /api/production/boms</div>
+                <p>Create a new Bill of Materials defining the recipe/ingredients for a finished good.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/production/boms
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createBOM(req, res)
+    Controller->>Service: createBOM(data, userId)
+    Service->>Service: Validate product exists
+    Service->>Service: Check if product is finished_good
+    Service->>Repository: createBOM(bomData, items)
+    Repository->>Database: BEGIN TRANSACTION
+    Repository->>Database: INSERT INTO boms
+    Repository->>Database: BULK INSERT INTO bom_items
+    Repository->>Database: COMMIT
+    Repository->>Database: SELECT with full includes
+    Database->>Repository: BOM with items and products
+    Repository->>Service: BOM object
+    Service->>Controller: BOM result
+    Controller->>Client: 201 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|createBOM| Service[BOM Service]
+    Service -->|Data Access| Repository[BOM Repository]
+    end
+
+    subgraph "Create BOM"
+    CreateBOM[POST /api/production/boms] -->|Request Body| ValidateProduct[Service - Validate Product]
+    ValidateProduct -->|Check finished_good| ValidateItems[Service - Validate Items]
+    ValidateItems -->|items array required| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> CreateBOMRecord[Repository - Create BOM]
+    CreateBOMRecord -->|INSERT INTO boms| DB[(MySQL Database)]
+
+    DB -->|BOM ID| CreateItems[Repository - Create BOM Items]
+    CreateItems -->|BULK INSERT bom_items| DBItems[(MySQL - bom_items)]
+
+    DBItems --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> FetchFull[Repository - Fetch Full BOM]
+    FetchFull -->|SELECT with includes| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>product_id</code></td>
+                            <td>Integer</td>
+                            <td>✅ Yes</td>
+                            <td>Must exist in products table</td>
+                        </tr>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td>String</td>
+                            <td>✅ Yes</td>
+                            <td>Max 255 characters</td>
+                        </tr>
+                        <tr>
+                            <td><code>description</code></td>
+                            <td>Text</td>
+                            <td>❌ No</td>
+                            <td>BOM description</td>
+                        </tr>
+                        <tr>
+                            <td><code>items</code></td>
+                            <td>Array</td>
+                            <td>✅ Yes</td>
+                            <td>Array of BOM items (min 1)</td>
+                        </tr>
+                        <tr>
+                            <td><code>items[].product_id</code></td>
+                            <td>Integer</td>
+                            <td>✅ Yes</td>
+                            <td>Raw material product ID</td>
+                        </tr>
+                        <tr>
+                            <td><code>items[].quantity</code></td>
+                            <td>Decimal</td>
+                            <td>✅ Yes</td>
+                            <td>Quantity per unit (10,4)</td>
+                        </tr>
+                        <tr>
+                            <td><code>items[].wastage_percent</code></td>
+                            <td>Decimal</td>
+                            <td>❌ No</td>
+                            <td>Default: 0.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:90-97</code></p>
+                <pre>
+async createBOM(req, res) {
+    try {
+        const bom = await ProductionService.createBOM(req.body, req.user.id);
+        return success(res, 'BOM created successfully', bom, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:21-31</code></p>
+                <pre>
+async createBOM(data, userId) {
+    // Validation: verify product exists and is finished good
+    const product = await ProductRepository.findById(data.product_id);
+    if (!product) throw new Error('Product not found');
+    if (product.product_type !== 'finished_good') {
+        // Relaxing checking for now as we just introduced the field
+    }
+
+    return await ProductionRepository.createBOM({ ...data, created_by: userId }, data.items);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:58-72</code></p>
+                <pre>
+async createBOM(data, items) {
+    const transaction = await sequelize.transaction();
+    try {
+        const bom = await BOM.create(data, { transaction });
+        if (items && items.length > 0) {
+            const bomItems = items.map(item => ({ ...item, bom_id: bom.id }));
+            await BOMItem.bulkCreate(bomItems, { transaction });
+        }
+        await transaction.commit();
+        return await this.findBOMById(bom.id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+                </pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><strong>Primary:</strong> <code>boms</code> - INSERT new record</li>
+                    <li><strong>Primary:</strong> <code>bom_items</code> - BULK INSERT items</li>
+                    <li><strong>Related:</strong> <code>products</code> - READ for validation</li>
+                </ul>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "product_id": 15,
+    "name": "BOM for Widget X v1",
+    "description": "Standard recipe for Widget X production",
+    "items": [
+        {
+            "product_id": 10,
+            "quantity": 2.5,
+            "wastage_percent": 5,
+            "notes": "Steel sheet requirement"
+        },
+        {
+            "product_id": 11,
+            "quantity": 1,
+            "wastage_percent": 0
+        }
+    ]
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 201 Created
+{
+    "success": true,
+    "message": "BOM created successfully",
+    "data": {
+        "id": 5,
+        "product_id": 15,
+        "name": "BOM for Widget X v1",
+        "description": "Standard recipe for Widget X production",
+        "is_active": true,
+        "created_by": 1,
+        "created_at": "2026-03-11T10:00:00.000Z",
+        "updated_at": "2026-03-11T10:00:00.000Z",
+        "product": {
+            "id": 15,
+            "name": "Widget X",
+            "sku": "FG-WIDGET-X"
+        },
+        "items": [
+            {
+                "id": 10,
+                "bom_id": 5,
+                "product_id": 10,
+                "quantity": 2.5000,
+                "wastage_percent": 5.00,
+                "notes": "Steel sheet requirement",
+                "raw_material": {
+                    "id": 10,
+                    "name": "Steel Sheet",
+                    "sku": "RM-STEEL-001",
+                    "cost": 25.50,
+                    "unit_id": 1
+                }
+            }
+        ]
+    }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 400 Bad Request
+{
+    "success": false,
+    "message": "Product not found"
+}
+                </pre>
+            </div>
+
+            <!-- GET List BOMs -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> List BOMs</h3>
+                <div class="route-path">GET /api/production/boms</div>
+                <p>Retrieve a paginated list of Bills of Materials with filtering options.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/production/boms
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getBOMs(req, res)
+    Controller->>Controller: Parse page, limit, filters
+    Controller->>Service: getAllBOMs(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAllBOMs(filters, limit, offset)
+    Repository->>Database: SELECT with includes (product)
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with pagination
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|getBOMs| Service[BOM Service]
+    Service -->|Data Access| Repository[BOM Repository]
+    end
+
+    subgraph "Get All BOMs"
+    GetBOMs[GET /api/production/boms] -->|Query Params| ParseQuery[Controller - Parse Query]
+    ParseQuery -->|page, limit, filters| CalcOffset[Service - Calculate Offset]
+    CalcOffset --> FindAll[Repository - FindAll]
+    FindAll -->|SELECT with includes| DB[(MySQL Database)]
+
+    DB -->|BOMs Array| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Request Headers</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Header</th>
+                            <th>Value</th>
+                            <th>Required</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Authorization</code></td>
+                            <td><code>Bearer &lt;token&gt;</code></td>
+                            <td>✅ Yes</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:62-79</code></p>
+                <pre>
+async getBOMs(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            product_id: req.query.product_id,
+            search: req.query.search
+        };
+        const result = await ProductionService.getAllBOMs(filters, page, limit);
+        return successWithPagination(res, 'BOMs retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:6-13</code></p>
+                <pre>
+async getAllBOMs(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await ProductionRepository.findAllBOMs(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:11-33</code></p>
+                <pre>
+async findAllBOMs(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.product_id) where.product_id = filters.product_id;
+    if (filters.search) {
+        where[Op.or] = [
+            { name: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    return await BOM.findAndCountAll({
+        where,
+        limit,
+        offset,
+        include: [
+            {
+                model: Product,
+                as: 'product',
+                attributes: ['id', 'name', 'sku']
+            }
+        ],
+        order: [['created_at', 'DESC']]
+    });
+}
+                </pre>
+
+                <h4>Multiple Request Examples</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1️⃣ List All BOMs (Paginated)</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/boms?page=1&limit=10</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOMs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "product_id": 15,
+            "name": "BOM for Widget X v1",
+            "is_active": true,
+            "created_at": "2026-03-11T10:00:00.000Z",
+            "product": {
+                "id": 15,
+                "name": "Widget X",
+                "sku": "FG-WIDGET-X"
+            }
+        }
+    ],
+    "pagination": {
+        "total": 8,
+        "page": 1,
+        "limit": 10
+    }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2️⃣ Filter by Product ID</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/boms?product_id=15</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOMs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "product_id": 15,
+            "name": "BOM for Widget X v1",
+            "product": { "id": 15, "name": "Widget X", "sku": "FG-WIDGET-X" }
+        }
+    ],
+    "pagination": { "total": 2, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3️⃣ Search BOMs by Name</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/boms?search=Widget</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOMs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "name": "BOM for Widget X v1",
+            "product": { "id": 15, "name": "Widget X" }
+        }
+    ],
+    "pagination": { "total": 5, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4️⃣ Combined Filters</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/boms?product_id=15&page=1&limit=5</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOMs retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "name": "BOM for Widget X v1",
+            "product": { "id": 15, "name": "Widget X" }
+        }
+    ],
+    "pagination": { "total": 2, "page": 1, "limit": 5 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOMs retrieved successfully",
+    "data": [...],
+    "pagination": { "total": 8, "page": 1, "limit": 10 }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 500 Internal Server Error
+{
+    "success": false,
+    "message": "Database error"
+}
+                </pre>
+            </div>
+
+            <!-- GET BOM by ID -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> Get BOM by ID</h3>
+                <div class="route-path">GET /api/production/boms/:id</div>
+                <p>Retrieve detailed BOM information including all raw material items with costs.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/production/boms/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getBOMById(req, res)
+    Controller->>Service: getBOMById(id)
+    Service->>Repository: findBOMById(id)
+    Repository->>Database: SELECT with nested includes
+    Repository->>Database: Include product, items, raw_materials
+    Database->>Repository: BOM with full details
+    Repository->>Service: BOM object
+    Service->>Service: Check if BOM exists
+    Service->>Controller: BOM result or error
+    Controller->>Client: 200 Success Response
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:81-88</code></p>
+                <pre>
+async getBOMById(req, res) {
+    try {
+        const bom = await ProductionService.getBOMById(req.params.id);
+        return success(res, 'BOM retrieved successfully', bom);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:15-19</code></p>
+                <pre>
+async getBOMById(id) {
+    const bom = await ProductionRepository.findBOMById(id);
+    if (!bom) throw new Error('BOM not found');
+    return bom;
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:35-56</code></p>
+                <pre>
+async findBOMById(id) {
+    return await BOM.findByPk(id, {
+        include: [
+            {
+                model: Product,
+                as: 'product',
+                attributes: ['id', 'name', 'sku']
+            },
+            {
+                model: BOMItem,
+                as: 'items',
+                include: [
+                    {
+                        model: Product,
+                        as: 'raw_material',
+                        attributes: ['id', 'name', 'sku', 'cost', 'unit_id']
+                    }
+                ]
+            }
+        ]
+    });
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOM retrieved successfully",
+    "data": {
+        "id": 5,
+        "product_id": 15,
+        "name": "BOM for Widget X v1",
+        "description": "Standard recipe",
+        "is_active": true,
+        "created_at": "2026-03-11T10:00:00.000Z",
+        "product": {
+            "id": 15,
+            "name": "Widget X",
+            "sku": "FG-WIDGET-X"
+        },
+        "items": [
+            {
+                "id": 10,
+                "quantity": 2.5000,
+                "wastage_percent": 5.00,
+                "raw_material": {
+                    "id": 10,
+                    "name": "Steel Sheet",
+                    "sku": "RM-STEEL-001",
+                    "cost": 25.50,
+                    "unit_id": 1
+                }
+            }
+        ]
+    }
+}
+                </pre>
+
+                <h4>Error Response</h4>
+                <pre>
+HTTP 404 Not Found
+{
+    "success": false,
+    "message": "BOM not found"
+}
+                </pre>
+            </div>
+
+            <!-- PUT Update BOM -->
+            <div class="endpoint">
+                <h3><span class="method put">PUT</span> Update BOM</h3>
+                <div class="route-path">PUT /api/production/boms/:id</div>
+                <p>Update BOM details. Items are replaced entirely if provided.</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|updateBOM| Service[BOM Service]
+    Service -->|Data Access| Repository[BOM Repository]
+    end
+
+    subgraph "Update BOM"
+    UpdateBOM[PUT /api/production/boms/:id] -->|Extract id and body| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> FindBOM[Repository - Find BOM by ID]
+    FindBOM -->|SELECT FROM boms| DB[(MySQL Database)]
+
+    DB -->|BOM or Null| CheckBOM[Service - Check BOM Exists]
+    CheckBOM -->|Update BOM Data| UpdateRecord[Repository - Update BOM]
+    UpdateRecord -->|UPDATE boms| DBUpdate[(MySQL Database)]
+
+    DBUpdate -->|If items provided| DeleteItems[Repository - Delete All Items]
+    DeleteItems -->|DELETE FROM bom_items| DBDelete[(MySQL Database)]
+
+    DBDelete --> CreateItems[Repository - Create New Items]
+    CreateItems -->|BULK INSERT bom_items| DBItems[(MySQL Database)]
+
+    DBItems --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> FetchFull[Repository - Fetch Full BOM]
+    FetchFull --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:99-106</code></p>
+                <pre>
+async updateBOM(req, res) {
+    try {
+        const bom = await ProductionService.updateBOM(req.params.id, req.body);
+        return success(res, 'BOM updated successfully', bom);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:33-35</code></p>
+                <pre>
+async updateBOM(id, data) {
+    return await ProductionRepository.updateBOM(id, data, data.items);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:74-96</code></p>
+                <pre>
+async updateBOM(id, data, items) {
+    const transaction = await sequelize.transaction();
+    try {
+        const bom = await BOM.findByPk(id);
+        if (!bom) throw new Error('BOM not found');
+
+        await bom.update(data, { transaction });
+
+        if (items) {
+            // Delete all items and re-add
+            await BOMItem.destroy({ where: { bom_id: id }, transaction });
+            const bomItems = items.map(item => ({ ...item, bom_id: bom.id }));
+            await BOMItem.bulkCreate(bomItems, { transaction });
+        }
+
+        await transaction.commit();
+        return await this.findBOMById(id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+                </pre>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "name": "BOM for Widget X v2",
+    "items": [
+        { "product_id": 10, "quantity": 3.0, "wastage_percent": 5 },
+        { "product_id": 12, "quantity": 2, "wastage_percent": 0 }
+    ]
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOM updated successfully",
+    "data": {
+        "id": 5,
+        "name": "BOM for Widget X v2",
+        "items": [...]
+    }
+}
+                </pre>
+            </div>
+
+            <!-- DELETE BOM -->
+            <div class="endpoint">
+                <h3><span class="method delete">DELETE</span> Delete BOM</h3>
+                <div class="route-path">DELETE /api/production/boms/:id</div>
+                <p>Delete a BOM and all its items (CASCADE delete).</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|deleteBOM| Service[BOM Service]
+    Service -->|Data Access| Repository[BOM Repository]
+    end
+
+    subgraph "Delete BOM"
+    DeleteBOM[DELETE /api/production/boms/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> DeleteRecord[Repository - Delete]
+    DeleteRecord -->|DELETE FROM boms| DB[(MySQL Database)]
+
+    DB -->|CASCADE DELETE bom_items| DeleteResult[Repository - Return Result]
+    DeleteResult --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:108-115</code></p>
+                <pre>
+async deleteBOM(req, res) {
+    try {
+        await ProductionService.deleteBOM(req.params.id);
+        return success(res, 'BOM deleted successfully', null);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:37-39</code></p>
+                <pre>
+async deleteBOM(id) {
+    return await ProductionRepository.deleteBOM(id);
+}
+                </pre>
+
+                <h4>Repository Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.repository.js:98-100</code></p>
+                <pre>
+async deleteBOM(id) {
+    return await BOM.destroy({ where: { id } });
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "BOM deleted successfully"
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Finished Goods Section -->
+        <div class="section">
+            <h2>📦 Finished Goods</h2>
+
+            <!-- POST Create Finished Good -->
+            <div class="endpoint">
+                <h3><span class="method post">POST</span> Create Finished Good</h3>
+                <div class="route-path">POST /api/production/finished-goods</div>
+                <p>Add a new finished good product. Product type is automatically set to 'finished_good'.</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/production/finished-goods
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createFinishedGood(req, res)
+    Controller->>Controller: Force product_type = 'finished_good'
+    Controller->>Service: createFinishedGood(data, userId)
+    Service->>Service: Set product_type to finished_good
+    Service->>Repository: create(productData)
+    Repository->>Database: INSERT INTO products
+    Database->>Repository: Product created
+    Repository->>Service: Product object
+    Service->>Controller: Product result
+    Controller->>Client: 201 Success Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|createFinishedGood| Service[Finished Good Service]
+    Service -->|Data Access| Repository[Product Repository]
+    end
+
+    subgraph "Create Finished Good"
+    CreateFG[POST /api/production/finished-goods] -->|Request Body| SetType[Controller - Force product_type]
+    SetType -->|product_type = finished_good| CreateRecord[Repository - Create]
+    CreateRecord -->|INSERT INTO products| DB[(MySQL Database)]
+
+    DB -->|New Product| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Validation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td>String</td>
+                            <td>✅ Yes</td>
+                            <td>Max 255 characters</td>
+                        </tr>
+                        <tr>
+                            <td><code>sku</code></td>
+                            <td>String</td>
+                            <td>❌ No</td>
+                            <td>Unique product code</td>
+                        </tr>
+                        <tr>
+                            <td><code>price</code></td>
+                            <td>Decimal</td>
+                            <td>❌ No</td>
+                            <td>Selling price</td>
+                        </tr>
+                        <tr>
+                            <td><code>cost</code></td>
+                            <td>Decimal</td>
+                            <td>❌ No</td>
+                            <td>Production cost</td>
+                        </tr>
+                        <tr>
+                            <td><code>stock_quantity</code></td>
+                            <td>Integer</td>
+                            <td>❌ No</td>
+                            <td>Default: 0</td>
+                        </tr>
+                        <tr>
+                            <td><code>unit_id</code></td>
+                            <td>Integer</td>
+                            <td>❌ No</td>
+                            <td>Measurement unit</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:136-145</code></p>
+                <pre>
+async createFinishedGood(req, res) {
+    try {
+        // Force type to finished_good
+        const data = { ...req.body, product_type: 'finished_good' };
+        const product = await ProductionService.createFinishedGood(data, req.user.id);
+        return success(res, 'Finished good created successfully', product, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:99-102</code></p>
+                <pre>
+async createFinishedGood(data, userId) {
+    data.product_type = 'finished_good';
+    return await ProductRepository.create({ ...data, created_by: userId });
+}
+                </pre>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "name": "Widget X",
+    "sku": "FG-WIDGET-X",
+    "price": 150.00,
+    "cost": 85.00,
+    "stock_quantity": 0,
+    "unit_id": 1
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 201 Created
+{
+    "success": true,
+    "message": "Finished good created successfully",
+    "data": {
+        "id": 20,
+        "name": "Widget X",
+        "sku": "FG-WIDGET-X",
+        "product_type": "finished_good",
+        "price": 150.00,
+        "cost": 85.00,
+        "stock_quantity": 0
+    }
+}
+                </pre>
+            </div>
+
+            <!-- GET List Finished Goods -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> List Finished Goods</h3>
+                <div class="route-path">GET /api/production/finished-goods</div>
+                <p>Retrieve paginated list of finished goods (products with type 'finished_good').</p>
+
+                <h4>Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/production/finished-goods
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getFinishedGoods(req, res)
+    Controller->>Controller: Parse page, limit, filters
+    Controller->>Service: getAllFinishedGoods(filters, page, limit)
+    Service->>Service: Add product_type = 'finished_good' filter
+    Service->>Service: Calculate offset
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT * FROM products WHERE product_type = 'finished_good'
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with pagination
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+                    </pre>
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|getFinishedGoods| Service[Finished Good Service]
+    Service -->|Data Access| Repository[Product Repository]
+    end
+
+    subgraph "Get All Finished Goods"
+    GetFGs[GET /api/production/finished-goods] -->|Query Params| ParseQuery[Controller - Parse Query]
+    ParseQuery -->|page, limit, search| SetFilter[Service - Set Filter]
+    SetFilter -->|product_type = finished_good| CalcOffset[Service - Calculate Offset]
+    CalcOffset --> FindAll[Repository - FindAll]
+    FindAll -->|SELECT FROM products| DB[(MySQL Database)]
+
+    DB -->|Finished Goods Array| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:118-134</code></p>
+                <pre>
+async getFinishedGoods(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            search: req.query.search
+        };
+        const result = await ProductionService.getAllFinishedGoods(filters, page, limit);
+        return successWithPagination(res, 'Finished goods retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:89-97</code></p>
+                <pre>
+async getAllFinishedGoods(filters = {}, page = 1, limit = 10) {
+    filters.product_type = 'finished_good';
+    const offset = (page - 1) * limit;
+    const result = await ProductRepository.findAll(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}
+                </pre>
+
+                <h4>Multiple Request Examples</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1️⃣ List All Finished Goods</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/finished-goods?page=1&limit=10</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Finished goods retrieved successfully",
+    "data": [
+        {
+            "id": 15,
+            "name": "Widget X",
+            "sku": "FG-WIDGET-X",
+            "product_type": "finished_good",
+            "price": 150.00,
+            "cost": 85.00,
+            "stock_quantity": 50
+        }
+    ],
+    "pagination": { "total": 12, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2️⃣ Search Finished Goods</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <strong>Request:</strong>
+                        <pre>GET /api/production/finished-goods?search=Widget</pre>
+                        <strong>Response:</strong>
+                        <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Finished goods retrieved successfully",
+    "data": [
+        {
+            "id": 15,
+            "name": "Widget X",
+            "sku": "FG-WIDGET-X"
+        }
+    ],
+    "pagination": { "total": 5, "page": 1, "limit": 10 }
+}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET Finished Good by ID -->
+            <div class="endpoint">
+                <h3><span class="method get">GET</span> Get Finished Good by ID</h3>
+                <div class="route-path">GET /api/production/finished-goods/:id</div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|getFinishedGoodById| Service[Finished Good Service]
+    Service -->|Data Access| Repository[Product Repository]
+    end
+
+    subgraph "Get Finished Good By ID"
+    GetByID[GET /api/production/finished-goods/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindProduct[Repository - FindById]
+    FindProduct -->|SELECT FROM products| DB[(MySQL Database)]
+
+    DB -->|Product or Null| CheckType[Service - Check product_type]
+    CheckType -->|product_type = finished_good| Response[Controller - Send Response]
+    CheckType -->|Not Found or Wrong Type| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:147-154</code></p>
+                <pre>
+async getFinishedGoodById(req, res) {
+    try {
+        const product = await ProductionService.getFinishedGoodById(req.params.id);
+        return success(res, 'Finished good retrieved successfully', product);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:104-110</code></p>
+                <pre>
+async getFinishedGoodById(id) {
+    const product = await ProductRepository.findById(id);
+    if (!product || product.product_type !== 'finished_good') {
+        // throw new Error('Finished good not found');
+    }
+    return product;
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Finished good retrieved successfully",
+    "data": {
+        "id": 15,
+        "name": "Widget X",
+        "sku": "FG-WIDGET-X",
+        "product_type": "finished_good"
+    }
+}
+                </pre>
+            </div>
+
+            <!-- PUT Update Finished Good -->
+            <div class="endpoint">
+                <h3><span class="method put">PUT</span> Update Finished Good</h3>
+                <div class="route-path">PUT /api/production/finished-goods/:id</div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|updateFinishedGood| Service[Finished Good Service]
+    Service -->|Data Access| Repository[Product Repository]
+    end
+
+    subgraph "Update Finished Good"
+    UpdateFG[PUT /api/production/finished-goods/:id] -->|Extract id and body| ParamID[Controller - Extract Data]
+    ParamID --> UpdateRecord[Repository - Update]
+    UpdateRecord -->|SELECT and UPDATE| DB[(MySQL Database)]
+
+    DB -->|Updated Product| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:156-163</code></p>
+                <pre>
+async updateFinishedGood(req, res) {
+    try {
+        const product = await ProductionService.updateFinishedGood(req.params.id, req.body);
+        return success(res, 'Finished good updated successfully', product);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:112-114</code></p>
+                <pre>
+async updateFinishedGood(id, data) {
+    return await ProductRepository.update(id, data);
+}
+                </pre>
+
+                <h4>Sample Payload</h4>
+                <pre>
+{
+    "name": "Widget X Updated",
+    "price": 175.00
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Finished good updated successfully",
+    "data": {
+        "id": 15,
+        "name": "Widget X Updated",
+        "price": 175.00
+    }
+}
+                </pre>
+            </div>
+
+            <!-- DELETE Finished Good -->
+            <div class="endpoint">
+                <h3><span class="method delete">DELETE</span> Delete Finished Good</h3>
+                <div class="route-path">DELETE /api/production/finished-goods/:id</div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+    subgraph "Module Layer - Production"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check Module| Controller[Production Controller]
+    Controller -->|deleteFinishedGood| Service[Finished Good Service]
+    Service -->|Data Access| Repository[Product Repository]
+    end
+
+    subgraph "Delete Finished Good"
+    DeleteFG[DELETE /api/production/finished-goods/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> DeleteRecord[Repository - Delete]
+    DeleteRecord -->|SELECT and DELETE| DB[(MySQL Database)]
+
+    DB -->|Delete Result| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.controller.js:165-172</code></p>
+                <pre>
+async deleteFinishedGood(req, res) {
+    try {
+        await ProductionService.deleteFinishedGood(req.params.id);
+        return success(res, 'Finished good deleted successfully', null);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}
+                </pre>
+
+                <h4>Service Logic</h4>
+                <p><strong>File:</strong> <code>src/modules/production/production.service.js:116-118</code></p>
+                <pre>
+async deleteFinishedGood(id) {
+    return await ProductRepository.delete(id);
+}
+                </pre>
+
+                <h4>Success Response</h4>
+                <pre>
+HTTP 200 OK
+{
+    "success": true,
+    "message": "Finished good deleted successfully"
+}
+                </pre>
+            </div>
+        </div>
+
+        <!-- Production Batches (Alias) Section -->
+        <div class="section">
+            <h2>🏷️ Production Batches (Alias)</h2>
+            <p><strong>Note:</strong> All <code>/batches</code> endpoints are aliases to the corresponding <code>/runs</code> endpoints. The API, behavior, and responses are identical.</p>
+
+            <div class="request-item">
+                <h3>Available Batch Endpoints</h3>
+                <ul>
+                    <li><code>GET /api/production/batches</code> → Alias for <code>GET /api/production/runs</code></li>
+                    <li><code>POST /api/production/batches</code> → Alias for <code>POST /api/production/runs</code></li>
+                    <li><code>GET /api/production/batches/:id</code> → Alias for <code>GET /api/production/runs/:id</code></li>
+                    <li><code>PUT /api/production/batches/:id</code> → Alias for <code>PUT /api/production/runs/:id</code></li>
+                    <li><code>DELETE /api/production/batches/:id</code> → Alias for <code>DELETE /api/production/runs/:id</code></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- References Section -->
+        <div class="section">
+            <h2>📖 References</h2>
+
+            <h3>Production Run Status Values</h3>
+            <div class="reference-grid">
+                <div class="reference-card">
+                    <h4>Status Types</h4>
+                    <ul>
+                        <li><span class="badge info">scheduled</span> - Run is scheduled but not started</li>
+                        <li><span class="badge warning">in_progress</span> - Production is active</li>
+                        <li><span class="badge success">completed</span> - Production finished</li>
+                        <li><span class="badge">cancelled</span> - Run was cancelled</li>
+                    </ul>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Status Transitions</h4>
+                    <ul>
+                        <li>scheduled → in_progress</li>
+                        <li>in_progress → completed</li>
+                        <li>any → cancelled (if not completed)</li>
+                    </ul>
+                </div>
+
+                <div class="reference-card">
+                    <h4>Product Types</h4>
+                    <ul>
+                        <li><code>finished_good</code> - Manufactured products</li>
+                        <li><code>raw_material</code> - Input materials for BOMs</li>
+                    </ul>
+                </div>
+
+                <div class="reference-card">
+                    <h4>BOM Item Calculations</h4>
+                    <ul>
+                        <li>Base Quantity: <code>quantity</code></li>
+                        <li>With Wastage: <code>quantity × (1 + wastage_percent/100)</code></li>
+                        <li>Total for Run: <code>per_unit × run_quantity</code></li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Auto-Generated Fields</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Generator</th>
+                        <th>Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>run_number</code></td>
+                        <td><code>RUN-{timestamp}</code></td>
+                        <td><code>RUN-1738401000000</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>bom_id</code></td>
+                        <td>Auto-finds default BOM for product if not provided</td>
+                        <td>Finds first BOM where <code>bom.product_id = run.product_id</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#00695c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#004d40',
+                lineColor: '#00695c',
+                secondaryColor: '#30cfd0',
+                tertiaryColor: '#e8f5f3',
+                background: '#e8f5f3',
+                mainBkg: '#00695c',
+                nodeBorder: '#004d40',
+                clusterBkg: '#e8f5f3',
+                clusterBorder: '#30cfd0',
+                titleColor: '#fff',
+                edgeLabelBackground: '#e8f5f3',
+                actorBkg: '#30cfd0',
+                actorBorder: '#00695c',
+                actorTextColor: '#fff',
+                actorLineColor: '#00695c',
+                signalColor: '#00695c',
+                signalTextColor: '#fff',
+                labelBoxBkgColor: '#00695c',
+                labelBoxBorderColor: '#004d40',
+                labelTextColor: '#fff',
+                loopTextColor: '#00695c',
+                borderColor: '#004d40',
+                pi2bkg: '#30cfd0',
+                pi2border: '#00695c'
+            }
+        });
+
+        // Toggle expandable sections
+        function toggleExpandable(element) {
+            const content = element.nextElementSibling;
+            const toggle = element.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>

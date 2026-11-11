@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+head>
+  <meta charset="UTF-8" />
+  <title>Users & Roles (Security)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .perm-matrix {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 12px;
+    }
+    .perm-matrix th,
+    .perm-matrix td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: center;
+    }
+    .perm-matrix th:first-child,
+    .perm-matrix td:first-child {
+      text-align: left;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">HR & Payroll</a>
+    <a href="#" class="active">Users & Roles</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Users & Roles (Security)</h1>
+    <div class="subtitle">
+      Manage users, roles, permissions, login history, password policies and 2FA settings.
+    </div>
+
+    <!-- SNAPSHOT -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Security Snapshot</h3>
+      </div>
+      <div class="three-column">
+        <div>
+          <label>Active Users</label>
+          <div style="font-size:20px;font-weight:600;">32</div>
+          <div class="hint">Users with <code>status = 'ACTIVE'</code> in <code>users</code></div>
+        </div>
+        <div>
+          <label>Roles</label>
+          <div style="font-size:20px;font-weight:600;">8</div>
+          <div class="hint">Defined in <code>roles</code></div>
+        </div>
+        <div>
+          <label>Last 24h Logins</label>
+          <div style="font-size:20px;font-weight:600;">67</div>
+          <div class="hint">From <code>user_login_sessions</code></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- USERS + INVITE / CREATE -->
+    <div class="two-column">
+      <!-- Users List -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Users</h3>
+          <button class="btn btn-primary btn-sm">+ Invite User</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Search</label>
+            <input type="text" placeholder="Name / email / username" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>ACTIVE</option>
+              <option>INACTIVE</option>
+              <option>PENDING_INVITE</option>
+              <option>LOCKED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select>
+              <option>All</option>
+              <option>Admin</option>
+              <option>Finance</option>
+              <option>Sales</option>
+              <option>Store</option>
+              <option>HR</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:110px;">Name</th>
+            <th>Email</th>
+            <th style="width:90px;">Username</th>
+            <th style="width:120px;">Roles</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Last Login</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Abdullah</td>
+            <td>abdullah@example.com</td>
+            <td>abdullah</td>
+            <td>Admin, Finance</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+            <td>2025-01-15 10:24</td>
+          </tr>
+          <tr>
+            <td>Sales User</td>
+            <td>sales@example.com</td>
+            <td>sales01</td>
+            <td>Sales</td>
+            <td><span class="tag-warning tag">PENDING_INVITE</span></td>
+            <td>—</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Users stored in <code>users</code> with roles mapped in <code>user_roles</code>.
+        </div>
+      </div>
+
+      <!-- Invite / Create User -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Invite / Create User</h3>
+          <button class="btn btn-outline btn-sm">Send Invite</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="User full name" />
+          </div>
+          <div class="form-group">
+            <label>Email (Login ID)</label>
+            <input type="email" placeholder="user@example.com" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" placeholder="username" />
+          </div>
+          <div class="form-group">
+            <label>Primary Role</label>
+            <select>
+              <option>Admin</option>
+              <option>Finance</option>
+              <option>Sales</option>
+              <option>Store</option>
+              <option>HR</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>ACTIVE</option>
+              <option>INACTIVE</option>
+              <option>PENDING_INVITE</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Invite Method</label>
+            <select>
+              <option>Send Email with Invite Link</option>
+              <option>Create Password Manually</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Temporary Password (optional)</label>
+            <input type="password" placeholder="Leave blank to auto-generate" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Invitations stored via status <code>PENDING_INVITE</code> and invite token in <code>users</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- ROLES & PERMISSIONS + ROLE TEMPLATES -->
+    <div class="two-column">
+      <!-- Roles & Permissions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Roles & Permissions</h3>
+          <button class="btn btn-outline btn-sm">+ New Role</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Role</label>
+            <select>
+              <option>Admin</option>
+              <option>Finance</option>
+              <option>Sales</option>
+              <option>Store</option>
+              <option>HR</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Module View</label>
+            <select>
+              <option>All Modules</option>
+              <option>Customers</option>
+              <option>Suppliers</option>
+              <option>Products</option>
+              <option>Inventory</option>
+              <option>Sales</option>
+              <option>Purchases</option>
+              <option>Accounting</option>
+              <option>HR & Payroll</option>
+              <option>Settings</option>
+            </select>
+          </div>
+        </div>
+
+        <table class="perm-matrix">
+          <thead>
+          <tr>
+            <th>Module</th>
+            <th style="width:70px;">View</th>
+            <th style="width:70px;">Create</th>
+            <th style="width:70px;">Edit</th>
+            <th style="width:70px;">Delete</th>
+            <th style="width:80px;">Approve</th>
+            <th style="width:80px;">Export</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Customers</td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" checked /></td>
+          </tr>
+          <tr>
+            <td>Sales Invoices</td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" checked /></td>
+          </tr>
+          <tr>
+            <td>Accounting</td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" /></td>
+            <td><input type="checkbox" checked /></td>
+            <td><input type="checkbox" /></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Fine-grained permissions in <code>permissions</code>. Role mappings in <code>role_permissions</code>.
+        </div>
+      </div>
+
+      <!-- Role Templates -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Role Templates</h3>
+          <button class="btn btn-outline btn-sm">Apply Template to User</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Template</th>
+            <th style="width:180px;">Description</th>
+            <th style="width:120px;">Modules Access</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Admin</td>
+            <td>Full access to all modules and settings.</td>
+            <td>All</td>
+          </tr>
+          <tr>
+            <td>Finance</td>
+            <td>Accounting, invoices, payments, reports.</td>
+            <td>Accounting, Sales, Purchases</td>
+          </tr>
+          <tr>
+            <td>Sales</td>
+            <td>Customers, leads, quotations, sales.</td>
+            <td>CRM, Sales</td>
+          </tr>
+          <tr>
+            <td>Store</td>
+            <td>Stock, warehouses, stock movements.</td>
+            <td>Inventory, Products</td>
+          </tr>
+          <tr>
+            <td>HR</td>
+            <td>Employees, payroll, attendance.</td>
+            <td>HR & Payroll</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Role templates stored in <code>role_templates</code> and linked to <code>roles</code> & <code>permissions</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- USER STATUS + LOGIN HISTORY -->
+    <div class="two-column">
+      <!-- User Status Management -->
+      <div class="card">
+        <div class="card-header">
+          <h3>User Status & Security</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>User</th>
+            <th style="width:80px;">Status</th>
+            <th style="width:90px;">Failed Logins</th>
+            <th style="width:120px;">Locked Until</th>
+            <th style="width:100px;">2FA</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Abdullah</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+            <td>0</td>
+            <td>—</td>
+            <td><span class="tag-success tag">Enabled</span></td>
+          </tr>
+          <tr>
+            <td>Store User</td>
+            <td><span class="tag-danger tag">LOCKED</span></td>
+            <td>7</td>
+            <td>2025-01-15 11:15</td>
+            <td><span class="tag-warning tag">Not Set</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Status & lockout stored in <code>users</code> and security details in <code>user_security_settings</code>.
+        </div>
+      </div>
+
+      <!-- Login History -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Login History / Sessions</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>User</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Sales User</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:150px;">User</th>
+            <th style="width:150px;">Login Time</th>
+            <th style="width:90px;">Result</th>
+            <th>IP Address</th>
+            <th style="width:120px;">Device / Agent</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Abdullah</td>
+            <td>2025-01-15 10:24</td>
+            <td><span class="tag-success tag">SUCCESS</span></td>
+            <td>192.168.1.10</td>
+            <td>Chrome / Mac</td>
+          </tr>
+          <tr>
+            <td>Store User</td>
+            <td>2025-01-15 10:20</td>
+            <td><span class="tag-danger tag">FAILED</span></td>
+            <td>192.168.1.30</td>
+            <td>Chrome / Windows</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Sessions logged in <code>user_login_sessions</code> with status SUCCESS/FAILED.
+        </div>
+      </div>
+    </div>
+
+    <!-- PASSWORD POLICIES + 2FA SETTINGS -->
+    <div class="two-column">
+      <!-- Password Policies -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Password Policies</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Minimum Length</label>
+            <input type="number" value="10" />
+          </div>
+          <div class="form-group">
+            <label>Require Uppercase</label>
+            <select>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Require Number</label>
+            <select>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Require Special Character</label>
+            <select>
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Password Expiry (days)</label>
+            <input type="number" value="90" />
+          </div>
+          <div class="form-group">
+            <label>Reuse / History (last N passwords)</label>
+            <input type="number" value="5" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Stored in <code>password_policies</code>. Enforcement done in auth service.
+        </div>
+      </div>
+
+      <!-- 2FA Settings -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Two-Factor Authentication (2FA)</h3>
+        </div>
+
+        <p style="font-size:13px;margin-top:0;margin-bottom:10px;">
+          You can globally enable 2FA or allow users to opt-in. Future: email / authenticator app / SMS.
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>2FA Mode</label>
+            <select>
+              <option>Disabled</option>
+              <option>Optional (User can enable)</option>
+              <option>Required for Admins</option>
+              <option>Required for All Users</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Default 2FA Method</label>
+            <select>
+              <option>Authenticator App (TOTP)</option>
+              <option>Email OTP</option>
+              <option>SMS OTP (Future)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hint">
+          Global settings in <code>password_policies</code> or a dedicated <code>security_settings</code> table.  
+          Per-user 2FA details in <code>user_two_factor</code>.
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

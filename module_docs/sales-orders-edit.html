@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Sales Order Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #1976d2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #1976d2;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateX(-5px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #1976d2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1565c0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: #f8f9fa;
+            border-left: 4px solid #1976d2;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .info-card h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .status-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .status-table th {
+            background: #1976d2;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .status-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .status-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge-error {
+            background: #f44336;
+            color: white;
+        }
+
+        .badge-api {
+            background: #9c27b0;
+            color: white;
+        }
+
+        .badge-ui {
+            background: #2196f3;
+            color: white;
+        }
+
+        .badge-feature {
+            background: #00bcd4;
+            color: white;
+        }
+
+        .endpoint {
+            background: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .endpoint-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: 700;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #2196f3;
+            color: white;
+        }
+
+        .method-put {
+            background: #ff9800;
+            color: white;
+        }
+
+        .endpoint-url {
+            color: #333;
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: start;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #4caf50;
+            font-size: 1.5em;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .ui-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ui-action-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .ui-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(25, 118, 210, 0.15);
+            border-color: #1976d2;
+        }
+
+        .ui-action-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ui-action-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #1976d2;
+        }
+
+        .ui-action-badges {
+            display: flex;
+            gap: 8px;
+        }
+
+        .code-section {
+            margin-top: 15px;
+        }
+
+        .code-section-title {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .macos-code-block {
+            background: #1e1e1e;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .macos-header {
+            background: #2d2d2d;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #404040;
+        }
+
+        .macos-dots {
+            display: flex;
+            gap: 8px;
+            margin-right: 15px;
+        }
+
+        .macos-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .macos-dot.red {
+            background: #ff5f56;
+        }
+
+        .macos-dot.yellow {
+            background: #ffbd2e;
+        }
+
+        .macos-dot.green {
+            background: #27c93f;
+        }
+
+        .macos-filename {
+            color: #999;
+            font-size: 0.9em;
+            font-family: 'Courier New', monospace;
+        }
+
+        .macos-content {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .macos-content pre {
+            margin: 0;
+        }
+
+        .macos-content code {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #d4d4d4;
+        }
+
+        .keyword {
+            color: #569cd6;
+        }
+
+        .string {
+            color: #ce9178;
+        }
+
+        .number {
+            color: #b5cea8;
+        }
+
+        .comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+
+        .function {
+            color: #dcdcaa;
+        }
+
+        .tag {
+            color: #569cd6;
+        }
+
+        .attr-name {
+            color: #9cdcfe;
+        }
+
+        .attr-value {
+            color: #ce9178;
+        }
+
+        .update-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-left: 5px solid #ff9800;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .update-highlight h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        .update-highlight ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .update-highlight li {
+            padding: 5px 0;
+            color: #333;
+        }
+
+        .screenshot-placeholder {
+            background: #f5f5f5;
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .screenshot-placeholder p {
+            color: #999;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <a href="/modules" class="back-link">← Back to Modules</a>
+            <h1>✏️ Edit Sales Order Module</h1>
+            <p>Complete documentation for editing pending sales orders with line-item editing capabilities</p>
+        </div>
+
+        <!-- Overview Section -->
+        <div class="section">
+            <h2 class="section-title">📋 Module Overview</h2>
+
+            <div class="update-highlight">
+                <h3>🔄 Latest Updates (March 2026)</h3>
+                <ul>
+                    <li><strong>Read-Only Order Items Table</strong> - Items display as text with Edit/Delete buttons</li>
+                    <li><strong>Per-Item Edit Modal</strong> - Click Edit button to modify individual line items</li>
+                    <li><strong>Read-Only Customer Field</strong> - Customer cannot be changed on edit page</li>
+                    <li><strong>Enhanced Product Display</strong> - Shows Product Name, Unit, Stock, Specification</li>
+                    <li><strong>Real-time Calculations</strong> - Modal shows live totals as you edit</li>
+                    <li><strong>Specification Read-Only</strong> - Specification displays but cannot be edited in modal</li>
+                </ul>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>📍 Module Location</h3>
+                    <p><strong>Frontend Route:</strong> <code>/dashboard/sales/orders/:id/edit</code></p>
+                    <p><strong>Documentation:</strong> <code>/module-docs/sales-orders-edit</code></p>
+                </div>
+
+                <div class="info-card">
+                    <h3>🎯 Purpose</h3>
+                    <p>Allow users to edit pending sales orders before confirmation. Users can modify quantities, prices, discounts, taxes, and remarks for each line item.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>🔒 Status Restriction</h3>
+                    <p>Only <strong>pending</strong> orders can be edited. Confirmed, shipped, or completed orders cannot be modified.</p>
+                </div>
+
+                <div class="info-card">
+                    <h3>✨ Key Features</h3>
+                    <ul class="feature-list">
+                        <li>Read-only customer display</li>
+                        <li>Per-item edit modal</li>
+                        <li>Real-time calculations</li>
+                        <li>Unit & stock display</li>
+                        <li>Product specification view</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Editable Fields:</h3>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>Section</th>
+                        <th>Field</th>
+                        <th>Editable</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Customer</td>
+                        <td><span class="badge badge-warning">Read-Only</span></td>
+                        <td>Cannot be changed</td>
+                    </tr>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Order Date</td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>Date when order was created</td>
+                    </tr>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Due Date</td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>Expected payment/delivery date</td>
+                    </tr>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Delivery Date</td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>Actual delivery date (optional)</td>
+                    </tr>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Shipping Address</td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>Delivery address</td>
+                    </tr>
+                    <tr>
+                        <td>Order Info</td>
+                        <td>Notes</td>
+                        <td><span class="badge badge-success">Yes</span></td>
+                        <td>Order notes</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Quantity</td>
+                        <td><span class="badge badge-success">Yes (Modal)</span></td>
+                        <td>Item quantity</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Unit Price</td>
+                        <td><span class="badge badge-success">Yes (Modal)</span></td>
+                        <td>Price per unit</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Discount</td>
+                        <td><span class="badge badge-success">Yes (Modal)</span></td>
+                        <td>Line item discount</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Sales Tax %</td>
+                        <td><span class="badge badge-success">Yes (Modal)</span></td>
+                        <td>Tax percentage</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Specification</td>
+                        <td><span class="badge badge-warning">Read-Only</span></td>
+                        <td>Product specification (view only)</td>
+                    </tr>
+                    <tr>
+                        <td>Line Items</td>
+                        <td>Remark</td>
+                        <td><span class="badge badge-success">Yes (Modal)</span></td>
+                        <td>Line item remarks</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- API Section -->
+        <div class="section">
+            <h2 class="section-title">🔌 API Endpoints</h2>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-url">/api/sales/orders/:id</span>
+                <p style="margin-top: 10px; color: #666;">Fetch sales order details by ID</p>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-put">PUT</span>
+                <span class="endpoint-url">/api/sales/orders/:id</span>
+                <p style="margin-top: 10px; color: #666;">Update sales order details</p>
+            </div>
+
+            <div class="endpoint" style="margin-top: 20px;">
+                <span class="endpoint-method method-post">POST</span>
+                <span class="endpoint-url">/api/sales/orders/:orderId/items</span>
+                <p style="margin-top: 10px; color: #666;">
+                    <strong>Add New Item to Order</strong> - Add a new product to an existing order.<br>
+                    <span style="color: #e53e3e; font-size: 13px;">⚠️ Only works for <strong>pending</strong> orders</span><br>
+                    <span style="color: #38a169; font-size: 13px;">✓ Automatically deducts stock and creates stock movement</span>
+                </p>
+            </div>
+
+            <div class="endpoint" style="margin-top: 20px;">
+                <span class="endpoint-method method-put">PUT</span>
+                <span class="endpoint-url">/api/sales/orders/:orderId/items/:itemId</span>
+                <p style="margin-top: 10px; color: #666;">
+                    <strong>Update Single Order Item</strong> - Edit quantity, price, discount, tax, or remark for a specific item.<br>
+                    <span style="color: #e53e3e; font-size: 13px;">⚠️ Only works for <strong>pending</strong> orders</span><br>
+                    <span style="color: #38a169; font-size: 13px;">✓ Automatically adjusts stock when quantity changes</span>
+                </p>
+            </div>
+
+            <h4 style="margin-top: 20px; margin-bottom: 10px; color: #555;">Add New Item Request:</h4>
+            <div class="macos-code-block">
+                <div class="macos-header">
+                    <div class="macos-dots">
+                        <div class="macos-dot red"></div>
+                        <div class="macos-dot yellow"></div>
+                        <div class="macos-dot green"></div>
+                    </div>
+                    <div class="macos-filename">Add Item Example</div>
+                </div>
+                <div class="macos-content">
+                    <pre><code><span class="comment">// POST /api/sales/orders/22/items</span>
+{
+  <span class="string">"product_id"</span>: <span class="number">102</span>,
+  <span class="string">"quantity"</span>: <span class="number">10</span>,
+  <span class="string">"unit_price"</span>: <span class="number">0.68</span>,
+  <span class="string">"discount"</span>: <span class="number">2.00</span>,
+  <span class="string">"sales_tax"</span>: <span class="number">10</span>,
+  <span class="string">"remark"</span>: <span class="string">"Customer requested this item"</span>
+}
+
+<span class="comment">// Response:</span>
+{
+  <span class="string">"status"</span>: <span class="keyword">true</span>,
+  <span class="string">"message"</span>: <span class="string">"Order item added successfully"</span>,
+  <span class="string">"data"</span>: {
+    <span class="string">"id"</span>: <span class="number">46</span>,
+    <span class="string">"order_id"</span>: <span class="number">22</span>,
+    <span class="string">"product_id"</span>: <span class="number">102</span>,
+    <span class="string">"quantity"</span>: <span class="number">10</span>,
+    <span class="string">"unit_price"</span>: <span class="string">"0.68"</span>,
+    <span class="string">"discount"</span>: <span class="number">2.00</span>,
+    <span class="string">"sales_tax"</span>: <span class="number">10</span>,
+    <span class="string">"line_total"</span>: <span class="number">5.62</span>,
+    <span class="string">"product"</span>: {
+      <span class="string">"id"</span>: <span class="number">102</span>,
+      <span class="string">"name"</span>: <span class="string">"ISPAHANI POTATO CRACKERS"</span>,
+      <span class="string">"sku"</span>: <span class="string">"FZ-0178"</span>,
+      <span class="string">"stock_quantity"</span>: <span class="number">27</span>,
+      <span class="string">"unit"</span>: {
+        <span class="string">"name"</span>: <span class="string">"Pieces"</span>
+      }
+    }
+  }
+}
+
+<span class="comment">// Stock Movement Created:</span>
+<span class="comment">// - movement_type: "sale"</span>
+<span class="comment">// - quantity: -10 (stock decreased by 10)</span>
+<span class="comment">// - notes: "Stock deducted for order SO-2026-001"</span></code></pre>
+                </div>
+            </div>
+
+            <h4 style="margin-top: 20px; margin-bottom: 10px; color: #555;">Update Existing Item Request:</h4>
+            <div class="macos-code-block">
+                <div class="macos-header">
+                    <div class="macos-dots">
+                        <div class="macos-dot red"></div>
+                        <div class="macos-dot yellow"></div>
+                        <div class="macos-dot green"></div>
+                    </div>
+                    <div class="macos-filename">Stock Movement Example</div>
+                </div>
+                <div class="macos-content">
+                    <pre><code><span class="comment">// PUT /api/sales/orders/22/items/45</span>
+<span class="comment">// Changing quantity from 10 to 15 (increase by 5)</span>
+{
+  <span class="string">"quantity"</span>: <span class="number">15</span>,
+  <span class="string">"unit_price"</span>: <span class="number">0.68</span>,
+  <span class="string">"discount"</span>: <span class="number">2.00</span>,
+  <span class="string">"sales_tax"</span>: <span class="number">10</span>,
+  <span class="string">"remark"</span>: <span class="string">"Updated quantity"</span>
+}
+
+<span class="comment">// Stock Movement Created:</span>
+<span class="comment">// - movement_type: "sale"</span>
+<span class="comment">// - quantity: -5 (stock decreases by 5)</span>
+<span class="comment">// - notes: "Stock adjusted for order SO-2026-001 (quantity increased from 10 to 15)"</span>
+
+<span class="comment">// If quantity changed from 15 to 10 (decrease by 5):</span>
+<span class="comment">// - movement_type: "return"</span>
+<span class="comment">// - quantity: +5 (stock increases by 5)</span>
+<span class="comment">// - notes: "Stock restored for order SO-2026-001 (quantity decreased from 15 to 10)"</span></code></pre>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Response Structure:</h3>
+            <div class="macos-code-block">
+                <div class="macos-header">
+                    <div class="macos-dots">
+                        <div class="macos-dot red"></div>
+                        <div class="macos-dot yellow"></div>
+                        <div class="macos-dot green"></div>
+                    </div>
+                    <div class="macos-filename">API Response</div>
+                </div>
+                <div class="macos-content">
+                    <pre><code><span class="comment">// GET /api/sales/orders/22</span>
+{
+  <span class="string">"status"</span>: <span class="keyword">true</span>,
+  <span class="string">"message"</span>: <span class="string">"Order retrieved successfully"</span>,
+  <span class="string">"data"</span>: {
+    <span class="string">"id"</span>: <span class="number">22</span>,
+    <span class="string">"order_number"</span>: <span class="string">"SO-2026-001"</span>,
+    <span class="string">"status"</span>: <span class="string">"pending"</span>,
+    <span class="string">"customer_id"</span>: <span class="number">15</span>,
+    <span class="string">"customer"</span>: {
+      <span class="string">"id"</span>: <span class="number">15</span>,
+      <span class="string">"name"</span>: <span class="string">"Acme Corporation"</span>,
+      <span class="string">"email"</span>: <span class="string">"contact@acme.com"</span>,
+      <span class="string">"company"</span>: <span class="string">"Acme Corporation"</span>
+    },
+    <span class="string">"order_date"</span>: <span class="string">"2026-03-13T00:00:00.000Z"</span>,
+    <span class="string">"due_date"</span>: <span class="string">"2026-03-20T00:00:00.000Z"</span>,
+    <span class="string">"delivery_date"</span>: <span class="keyword">null</span>,
+    <span class="string">"shipping_address"</span>: <span class="string">"123 Main St, City, Country"</span>,
+    <span class="string">"notes"</span>: <span class="keyword">null</span>,
+    <span class="string">"total_amount"</span>: <span class="string">"171.48"</span>,
+    <span class="string">"tax_amount"</span>: <span class="string">"0.00"</span>,
+    <span class="string">"discount_amount"</span>: <span class="string">"0.00"</span>,
+    <span class="string">"items"</span>: [
+      {
+        <span class="string">"id"</span>: <span class="number">45</span>,
+        <span class="string">"product_id"</span>: <span class="number">102</span>,
+        <span class="string">"product"</span>: {
+          <span class="string">"id"</span>: <span class="number">102</span>,
+          <span class="string">"name"</span>: <span class="string">"ISPAHANI POTATO CRACKERS"</span>,
+          <span class="string">"sku"</span>: <span class="string">"FZ-0178"</span>,
+          <span class="string">"price"</span>: <span class="string">"0.68"</span>,
+          <span class="string">"specification"</span>: <span class="string">"200g pack"</span>,
+          <span class="string">"stock_quantity"</span>: <span class="number">37</span>,
+          <span class="string">"unit"</span>: {
+            <span class="string">"id"</span>: <span class="number">1</span>,
+            <span class="string">"name"</span>: <span class="string">"Pieces"</span>,
+            <span class="string">"symbol"</span>: <span class="string">"PCS"</span>
+          }
+        },
+        <span class="string">"quantity"</span>: <span class="number">11</span>,
+        <span class="string">"unit_price"</span>: <span class="string">"0.68"</span>,
+        <span class="string">"discount"</span>: <span class="number">0</span>,
+        <span class="string">"sales_tax"</span>: <span class="number">0</span>,
+        <span class="string">"sales_tax_percent"</span>: <span class="number">0</span>,
+        <span class="string">"specification"</span>: <span class="string">"200g pack"</span>,
+        <span class="string">"line_total"</span>: <span class="number">7.48</span>
+      }
+    ]
+  }
+}</code></pre>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; margin-bottom: 15px; color: #333;">Request Body (PUT):</h3>
+            <div class="macos-code-block">
+                <div class="macos-header">
+                    <div class="macos-dots">
+                        <div class="macos-dot red"></div>
+                        <div class="macos-dot yellow"></div>
+                        <div class="macos-dot green"></div>
+                    </div>
+                    <div class="macos-filename">Update Payload</div>
+                </div>
+                <div class="macos-content">
+                    <pre><code><span class="comment">// PUT /api/sales/orders/22</span>
+{
+  <span class="string">"customer_id"</span>: <span class="number">15</span>,
+  <span class="string">"order_date"</span>: <span class="string">"2026-03-13"</span>,
+  <span class="string">"due_date"</span>: <span class="string">"2026-03-20"</span>,
+  <span class="string">"delivery_date"</span>: <span class="string">"2026-03-25"</span>,
+  <span class="string">"shipping_address"</span>: <span class="string">"123 Main St, City, Country"</span>,
+  <span class="string">"notes"</span>: <span class="string">"Urgent delivery requested"</span>,
+  <span class="string">"items"</span>: [
+    {
+      <span class="string">"product_id"</span>: <span class="number">102</span>,
+      <span class="string">"quantity"</span>: <span class="number">15</span>,
+      <span class="string">"unit_price"</span>: <span class="number">0.68</span>,
+      <span class="string">"discount"</span>: <span class="number">2.00</span>,
+      <span class="string">"sales_tax"</span>: <span class="number">10</span>,
+      <span class="string">"specification"</span>: <span class="string">"200g pack"</span>,
+      <span class="string">"remark"</span>: <span class="string">"Customer requested extra packaging"</span>
+    }
+  ]
+}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- UI Actions Section -->
+        <div class="section">
+            <h2 class="section-title">🎯 UI Implementation</h2>
+
+            <div class="ui-actions-grid">
+                <!-- Action 1: Read-Only Customer Display -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">1. Read-Only Customer Display</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-feature">Feature</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">
+                            <span>📱</span> Customer Display Component (Read-Only)
+                        </div>
+                        <div class="macos-code-block">
+                            <div class="macos-header">
+                                <div class="macos-dots">
+                                    <div class="macos-dot red"></div>
+                                    <div class="macos-dot yellow"></div>
+                                    <div class="macos-dot green"></div>
+                                </div>
+                                <div class="macos-filename">editOrder.tsx</div>
+                            </div>
+                            <div class="macos-content">
+                                <pre><code><span class="keyword">import</span> { Avatar, AvatarImage, AvatarFallback } <span class="keyword">from</span> <span class="string">"@/components/ui/avatar"</span>;
+<span class="keyword">import</span> { User } <span class="keyword">from</span> <span class="string">"lucide-react"</span>;
+
+<span class="comment">// Customer field is READ-ONLY - cannot be changed</span>
+<span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"space-y-2"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;Label</span> <span class="attr-name">className</span>=<span class="attr-value">"text-sm font-medium"</span><span class="tag">&gt;</span>Customer<span class="tag">&lt;/Label&gt;</span>
+  {order?.customer ? (
+    <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex items-center gap-3 p-3 bg-gray-50 rounded-lg border"</span><span class="tag">&gt;</span>
+      <span class="tag">&lt;Avatar</span> <span class="attr-name">className</span>=<span class="attr-value">"h-10 w-10"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;AvatarImage</span> <span class="attr-name">src</span>=<span class="tag">{order.customer.thumb_url}</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;AvatarFallback&gt;</span>
+          <span class="tag">&lt;User</span> <span class="attr-name">className</span>=<span class="attr-value">"h-5 w-5"</span> <span class="tag">/&gt;</span>
+        <span class="tag">&lt;/AvatarFallback&gt;</span>
+      <span class="tag">&lt;/Avatar&gt;</span>
+      <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex-1"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"font-medium"</span><span class="tag">&gt;</span>{order.customer.name}<span class="tag">&lt;/div&gt;</span>
+        {order.customer.company && (
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-xs text-muted-foreground"</span><span class="tag">&gt;</span>
+            {order.customer.company}
+          <span class="tag">&lt;/div&gt;</span>
+        )}
+        {order.customer.email && (
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-xs text-muted-foreground"</span><span class="tag">&gt;</span>
+            {order.customer.email}
+          <span class="tag">&lt;/div&gt;</span>
+        )}
+      <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+  ) : (
+    <span class="tag">&lt;div&gt;</span>Loading customer...<span class="tag">&lt;/div&gt;</span>
+  )}
+<span class="tag">&lt;/div&gt;</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action 2: Read-Only Items Table with Edit Button -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">2. Order Items Table (Read-Only)</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">
+                            <span>📱</span> Items Table with Edit/Delete Actions
+                        </div>
+                        <div class="macos-code-block">
+                            <div class="macos-header">
+                                <div class="macos-dots">
+                                    <div class="macos-dot red"></div>
+                                    <div class="macos-dot yellow"></div>
+                                    <div class="macos-dot green"></div>
+                                </div>
+                                <div class="macos-filename">editOrder.tsx</div>
+                            </div>
+                            <div class="macos-content">
+                                <pre><code><span class="keyword">import</span> { Edit, X } <span class="keyword">from</span> <span class="string">"lucide-react"</span>;
+<span class="keyword">import</span> { Button } <span class="keyword">from</span> <span class="string">"@/components/ui/button"</span>;
+
+<span class="comment">// Items are displayed as READ-ONLY text with Edit/Delete buttons</span>
+<span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"space-y-4"</span><span class="tag">&gt;</span>
+  {fields.<span class="function">map</span>((item, index) => {
+    <span class="keyword">return</span> (
+      <span class="tag">&lt;div</span> <span class="attr-name">key</span>=<span class="tag">{item.id}</span> <span class="attr-name">className</span>=<span class="attr-value">"flex gap-4 items-center bg-gray-50 p-4 rounded-xl"</span><span class="tag">&gt;</span>
+        {/* SKU */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-32"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"font-mono text-xs text-gray-600"</span><span class="tag">&gt;</span>
+            {<span class="function">watch</span>(<span class="string">`items.${index}.sku`</span>) || <span class="string">'-'</span>}
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Product Name */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-[350px]"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"font-medium text-sm"</span><span class="tag">&gt;</span>
+            {<span class="function">watch</span>(<span class="string">`items.${index}.product_name`</span>) || <span class="string">'-'</span>}
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Specification */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-36"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-sm text-gray-700"</span><span class="tag">&gt;</span>
+            {<span class="function">watch</span>(<span class="string">`items.${index}.specification`</span>) || <span class="string">'-'</span>}
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Unit */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-24 text-center"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-sm text-gray-600"</span><span class="tag">&gt;</span>
+            {<span class="function">watch</span>(<span class="string">`items.${index}.unit`</span>) || <span class="string">'-'</span>}
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Stock */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-24 text-right"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-sm text-gray-600"</span><span class="tag">&gt;</span>
+            {<span class="function">watch</span>(<span class="string">`items.${index}.stock_quantity`</span>) || <span class="number">0</span>}
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Price, Qty, Discount, Pretax, Tax%, Tax, Total... */}
+
+        {/* Actions - Edit & Delete buttons */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"w-28 flex gap-1"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;Button</span>
+            <span class="attr-name">type</span>=<span class="attr-value">"button"</span>
+            <span class="attr-name">variant</span>=<span class="attr-value">"ghost"</span>
+            <span class="attr-name">size</span>=<span class="attr-value">"icon"</span>
+            <span class="attr-name">onClick</span>=<span class="tag">{()</span> <span class="tag">=&gt;</span> {
+              <span class="function">setEditingItemIndex</span>(index);
+              <span class="function">setIsItemEditModalOpen</span>(<span class="keyword">true</span>);
+            }}
+            <span class="attr-name">className</span>=<span class="attr-value">"h-8 w-8 text-blue-500"</span>
+            <span class="attr-name">title</span>=<span class="attr-value">"Edit Item"</span>
+          <span class="tag">&gt;</span>
+            <span class="tag">&lt;Edit</span> <span class="attr-name">className</span>=<span class="attr-value">"w-4 h-4"</span> <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/Button&gt;</span>
+
+          <span class="tag">&lt;Button</span>
+            <span class="attr-name">type</span>=<span class="attr-value">"button"</span>
+            <span class="attr-name">variant</span>=<span class="attr-value">"ghost"</span>
+            <span class="attr-name">size</span>=<span class="attr-value">"icon"</span>
+            <span class="attr-name">onClick</span>=<span class="tag">{()</span> <span class="tag">=&gt;</span> <span class="function">remove</span>(index)}
+            <span class="attr-name">className</span>=<span class="attr-value">"h-8 w-8 text-rose-500"</span>
+            <span class="attr-name">title</span>=<span class="attr-value">"Delete"</span>
+          <span class="tag">&gt;</span>
+            <span class="tag">&lt;X</span> <span class="attr-name">className</span>=<span class="attr-value">"w-4 h-4"</span> <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/Button&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    );
+  })}
+<span class="tag">&lt;/div&gt;</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action 3: Edit Item Modal -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">3. Edit Item Modal</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-feature">Feature</span>
+                            <span class="badge badge-ui">Modal</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">
+                            <span>📱</span> Edit Item Modal with Real-time Calculations
+                        </div>
+                        <div class="macos-code-block">
+                            <div class="macos-header">
+                                <div class="macos-dots">
+                                    <div class="macos-dot red"></div>
+                                    <div class="macos-dot yellow"></div>
+                                    <div class="macos-dot green"></div>
+                                </div>
+                                <div class="macos-filename">editOrder.tsx</div>
+                            </div>
+                            <div class="macos-content">
+                                <pre><code><span class="keyword">import</span> { useState } <span class="keyword">from</span> <span class="string">"react"</span>;
+<span class="keyword">import</span> { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } <span class="keyword">from</span> <span class="string">"@/components/ui/dialog"</span>;
+<span class="keyword">import</span> { Input } <span class="keyword">from</span> <span class="string">"@/components/ui/input"</span>;
+<span class="keyword">import</span> { Label } <span class="keyword">from</span> <span class="string">"@/components/ui/label"</span>;
+<span class="keyword">import</span> { Textarea } <span class="keyword">from</span> <span class="string">"@/components/ui/textarea"</span>;
+
+<span class="comment">// Temporary state for modal edits</span>
+<span class="keyword">const</span> [tempItemData, setTempItemData] = <span class="function">useState</span>({
+  quantity: <span class="number">0</span>,
+  unit_price: <span class="number">0</span>,
+  discount: <span class="number">0</span>,
+  sales_tax: <span class="number">0</span>,
+  remark: <span class="string">""</span>,
+});
+
+<span class="comment">// Edit button click handler</span>
+<span class="tag">&lt;Button</span>
+  <span class="attr-name">onClick</span>=<span class="tag">{()</span> <span class="tag">=&gt;</span> {
+    <span class="function">setEditingItemIndex</span>(index);
+    <span class="comment">// Copy current values to temp state</span>
+    <span class="function">setTempItemData</span>({
+      quantity: <span class="function">Number</span>(<span class="function">watch</span>(<span class="string">`items.${index}.quantity`</span>)),
+      unit_price: <span class="function">Number</span>(<span class="function">watch</span>(<span class="string">`items.${index}.unit_price`</span>)),
+      discount: <span class="function">Number</span>(<span class="function">watch</span>(<span class="string">`items.${index}.discount`</span>)),
+      sales_tax: <span class="function">Number</span>(<span class="function">watch</span>(<span class="string">`items.${index}.sales_tax`</span>)),
+      remark: <span class="function">watch</span>(<span class="string">`items.${index}.remark`</span>) || <span class="string">""</span>,
+    });
+    <span class="function">setIsItemEditModalOpen</span>(<span class="keyword">true</span>);
+  }}
+<span class="tag">&gt;</span>
+  <span class="tag">&lt;Edit</span> <span class="tag">/&gt;</span> Edit
+<span class="tag">&lt;/Button&gt;</span>
+
+<span class="comment">// Modal Component</span>
+<span class="tag">&lt;Dialog</span> <span class="attr-name">open</span>=<span class="tag">{isItemEditModalOpen}</span> <span class="attr-name">onOpenChange</span>=<span class="tag">{setIsItemEditModalOpen}</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;DialogContent&gt;</span>
+    <span class="tag">&lt;DialogHeader&gt;</span>
+      <span class="tag">&lt;DialogTitle&gt;</span>Edit Order Item<span class="tag">&lt;/DialogTitle&gt;</span>
+    <span class="tag">&lt;/DialogHeader&gt;</span>
+
+    {editingItemIndex !== <span class="keyword">null</span> && tempItemData && (
+      <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"space-y-4"</span><span class="tag">&gt;</span>
+        {/* Read-only Product Info */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"bg-gray-50 p-4 rounded-lg"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"grid grid-cols-2 gap-4"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;div&gt;</span>
+              <span class="tag">&lt;Label&gt;</span>Product<span class="tag">&lt;/Label&gt;</span>
+              <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"font-medium"</span><span class="tag">&gt;</span>
+                {<span class="function">watch</span>(<span class="string">`items.${editingItemIndex}.product_name`</span>)}
+              <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div&gt;</span>
+              <span class="tag">&lt;Label&gt;</span>SKU<span class="tag">&lt;/Label&gt;</span>
+              <span class="tag">&lt;div&gt;</span>{<span class="function">watch</span>(<span class="string">`items.${editingItemIndex}.sku`</span>)}<span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div&gt;</span>
+              <span class="tag">&lt;Label&gt;</span>Unit<span class="tag">&lt;/Label&gt;</span>
+              <span class="tag">&lt;div&gt;</span>{<span class="function">watch</span>(<span class="string">`items.${editingItemIndex}.unit`</span>)}<span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div&gt;</span>
+              <span class="tag">&lt;Label&gt;</span>Stock<span class="tag">&lt;/Label&gt;</span>
+              <span class="tag">&lt;div&gt;</span>{<span class="function">watch</span>(<span class="string">`items.${editingItemIndex}.stock_quantity`</span>)}<span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"col-span-2"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;Label&gt;</span>Specification<span class="tag">&lt;/Label&gt;</span>
+              <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"text-sm"</span><span class="tag">&gt;</span>
+                {<span class="function">watch</span>(<span class="string">`items.${editingItemIndex}.specification`</span>) || <span class="string">'-'</span>}
+              <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Editable Fields */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"grid grid-cols-2 gap-4"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div&gt;</span>
+            <span class="tag">&lt;Label&gt;</span>Quantity<span class="tag">&lt;/Label&gt;</span>
+            <span class="tag">&lt;Input</span>
+              <span class="attr-name">type</span>=<span class="attr-value">"number"</span>
+              <span class="attr-name">min</span>=<span class="attr-value">"1"</span>
+              <span class="attr-name">value</span>=<span class="tag">{tempItemData.quantity}</span>
+              <span class="attr-name">onChange</span>=<span class="tag">{(e)</span> <span class="tag">=&gt;</span>
+                <span class="function">setTempItemData</span>({ ...tempItemData, quantity: <span class="function">Number</span>(e.target.value) })
+              }
+            <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+
+          <span class="tag">&lt;div&gt;</span>
+            <span class="tag">&lt;Label&gt;</span>Unit Price<span class="tag">&lt;/Label&gt;</span>
+            <span class="tag">&lt;Input</span>
+              <span class="attr-name">type</span>=<span class="attr-value">"number"</span>
+              <span class="attr-name">step</span>=<span class="attr-value">"0.01"</span>
+              <span class="attr-name">value</span>=<span class="tag">{tempItemData.unit_price}</span>
+              <span class="attr-name">onChange</span>=<span class="tag">{(e)</span> <span class="tag">=&gt;</span>
+                <span class="function">setTempItemData</span>({ ...tempItemData, unit_price: <span class="function">Number</span>(e.target.value) })
+              }
+            <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+
+          <span class="tag">&lt;div&gt;</span>
+            <span class="tag">&lt;Label&gt;</span>Discount<span class="tag">&lt;/Label&gt;</span>
+            <span class="tag">&lt;Input</span>
+              <span class="attr-name">type</span>=<span class="attr-value">"number"</span>
+              <span class="attr-name">value</span>=<span class="tag">{tempItemData.discount}</span>
+              <span class="attr-name">onChange</span>=<span class="tag">{(e)</span> <span class="tag">=&gt;</span>
+                <span class="function">setTempItemData</span>({ ...tempItemData, discount: <span class="function">Number</span>(e.target.value) })
+              }
+            <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+
+          <span class="tag">&lt;div&gt;</span>
+            <span class="tag">&lt;Label&gt;</span>Sales Tax %<span class="tag">&lt;/Label&gt;</span>
+            <span class="tag">&lt;Input</span>
+              <span class="attr-name">type</span>=<span class="attr-value">"number"</span>
+              <span class="attr-name">value</span>=<span class="tag">{tempItemData.sales_tax}</span>
+              <span class="attr-name">onChange</span>=<span class="tag">{(e)</span> <span class="tag">=&gt;</span>
+                <span class="function">setTempItemData</span>({ ...tempItemData, sales_tax: <span class="function">Number</span>(e.target.value) })
+              }
+            <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"col-span-2"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Label&gt;</span>Remark<span class="tag">&lt;/Label&gt;</span>
+            <span class="tag">&lt;Textarea</span>
+              <span class="attr-name">value</span>=<span class="tag">{tempItemData.remark}</span>
+              <span class="attr-name">onChange</span>=<span class="tag">{(e)</span> <span class="tag">=&gt;</span>
+                <span class="function">setTempItemData</span>({ ...tempItemData, remark: e.target.value })
+              }
+              <span class="attr-name">rows</span>=<span class="attr-value">"2"</span>
+            <span class="tag">/&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+
+        {/* Real-time Calculations */}
+        <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"bg-blue-50 p-4 rounded-lg"</span><span class="tag">&gt;</span>
+          <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"space-y-2"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex justify-between"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;span&gt;</span>Subtotal:<span class="tag">&lt;/span&gt;</span>
+              <span class="tag">&lt;span&gt;</span>
+                {currency} {(tempItemData.unit_price * tempItemData.quantity).<span class="function">toFixed</span>(<span class="number">2</span>)}
+              <span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex justify-between"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;span&gt;</span>Less Discount:<span class="tag">&lt;/span&gt;</span>
+              <span class="tag">&lt;span</span> <span class="attr-name">className</span>=<span class="attr-value">"text-rose-600"</span><span class="tag">&gt;</span>
+                -{currency} {tempItemData.discount.<span class="function">toFixed</span>(<span class="number">2</span>)}
+              <span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex justify-between"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;span&gt;</span>Tax Amount:<span class="tag">&lt;/span&gt;</span>
+              <span class="tag">&lt;span&gt;</span>
+                {currency} {(((tempItemData.unit_price * tempItemData.quantity)
+                  - tempItemData.discount) * (tempItemData.sales_tax / <span class="number">100</span>)).<span class="function">toFixed</span>(<span class="number">2</span>)}
+              <span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+            <span class="tag">&lt;div</span> <span class="attr-name">className</span>=<span class="attr-value">"flex justify-between pt-2 border-t"</span><span class="tag">&gt;</span>
+              <span class="tag">&lt;span</span> <span class="attr-name">className</span>=<span class="attr-value">"font-bold"</span><span class="tag">&gt;</span>Line Total:<span class="tag">&lt;/span&gt;</span>
+              <span class="tag">&lt;span</span> <span class="attr-name">className</span>=<span class="attr-value">"font-bold text-blue-600"</span><span class="tag">&gt;</span>
+                {currency} {(((tempItemData.unit_price * tempItemData.quantity)
+                  - tempItemData.discount) * (<span class="number">1</span> + tempItemData.sales_tax / <span class="number">100</span>)).<span class="function">toFixed</span>(<span class="number">2</span>)}
+              <span class="tag">&lt;/span&gt;</span>
+            <span class="tag">&lt;/div&gt;</span>
+          <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+      <span class="tag">&lt;/div&gt;</span>
+    )}
+
+    <span class="tag">&lt;DialogFooter&gt;</span>
+      <span class="tag">&lt;Button</span>
+        <span class="attr-name">variant</span>=<span class="attr-value">"outline"</span>
+        <span class="attr-name">onClick</span>=<span class="tag">{()</span> <span class="tag">=&gt;</span> {
+          <span class="function">setIsItemEditModalOpen</span>(<span class="keyword">false</span>);
+          <span class="function">setTempItemData</span>(<span class="keyword">null</span>);
+        }}
+      <span class="tag">&gt;</span>
+        Cancel
+      <span class="tag">&lt;/Button&gt;</span>
+
+      <span class="tag">&lt;Button</span>
+        <span class="attr-name">onClick</span>=<span class="tag">{()</span> <span class="tag">=&gt;</span> {
+          <span class="comment">// Apply changes to form</span>
+          <span class="function">setValue</span>(<span class="string">`items.${editingItemIndex}.quantity`</span>, tempItemData.quantity);
+          <span class="function">setValue</span>(<span class="string">`items.${editingItemIndex}.unit_price`</span>, tempItemData.unit_price);
+          <span class="function">setValue</span>(<span class="string">`items.${editingItemIndex}.discount`</span>, tempItemData.discount);
+          <span class="function">setValue</span>(<span class="string">`items.${editingItemIndex}.sales_tax`</span>, tempItemData.sales_tax);
+          <span class="function">setValue</span>(<span class="string">`items.${editingItemIndex}.remark`</span>, tempItemData.remark);
+
+          <span class="function">toast.success</span>(<span class="string">"Item updated successfully"</span>);
+          <span class="function">setIsItemEditModalOpen</span>(<span class="keyword">false</span>);
+          <span class="function">setTempItemData</span>(<span class="keyword">null</span>);
+        }}
+        <span class="attr-name">className</span>=<span class="attr-value">"bg-blue-600"</span>
+      <span class="tag">&gt;</span>
+        Save Changes
+      <span class="tag">&lt;/Button&gt;</span>
+    <span class="tag">&lt;/DialogFooter&gt;</span>
+  <span class="tag">&lt;/DialogContent&gt;</span>
+<span class="tag">&lt;/Dialog&gt;</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action 4: Form Submission -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">4. Save Order Changes</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">
+                            <span>📱</span> Submit Updated Order
+                        </div>
+                        <div class="macos-code-block">
+                            <div class="macos-header">
+                                <div class="macos-dots">
+                                    <div class="macos-dot red"></div>
+                                    <div class="macos-dot yellow"></div>
+                                    <div class="macos-dot green"></div>
+                                </div>
+                                <div class="macos-filename">editOrder.tsx</div>
+                            </div>
+                            <div class="macos-content">
+                                <pre><code><span class="keyword">import</span> { useUpdateSalesOrderMutation } <span class="keyword">from</span> <span class="string">"@/store/features/salesOrder/salesOrder"</span>;
+<span class="keyword">import</span> { toast } <span class="keyword">from</span> <span class="string">"sonner"</span>;
+<span class="keyword">import</span> { useNavigate } <span class="keyword">from</span> <span class="string">"react-router"</span>;
+
+<span class="keyword">const</span> [updateSalesOrder, { isLoading }] = <span class="function">useUpdateSalesOrderMutation</span>();
+<span class="keyword">const</span> navigate = <span class="function">useNavigate</span>();
+
+<span class="keyword">const</span> <span class="function">onSubmit</span> = <span class="keyword">async</span> (values) => {
+  <span class="keyword">if</span> (!orderId) <span class="keyword">return</span>;
+  <span class="keyword">if</span> (values.customer_id === <span class="number">0</span>) {
+    <span class="keyword">return</span> <span class="function">toast.error</span>(<span class="string">"Please select a customer"</span>);
+  }
+
+  <span class="keyword">try</span> {
+    <span class="keyword">const</span> payload = {
+      ...values,
+      items: values.items.<span class="function">map</span>((i) => ({
+        ...i,
+        quantity: <span class="function">Number</span>(i.quantity),
+        unit_price: <span class="function">Number</span>(i.unit_price),
+        discount: <span class="function">Number</span>(i.discount),
+        sales_tax: <span class="function">Number</span>(i.sales_tax),
+      })),
+    };
+
+    <span class="keyword">const</span> res = <span class="keyword">await</span> <span class="function">updateSalesOrder</span>({ id: orderId, data: payload }).<span class="function">unwrap</span>();
+
+    <span class="keyword">if</span> (res.status) {
+      <span class="function">toast.success</span>(<span class="string">"Sales Order Updated Successfully!"</span>);
+      <span class="function">navigate</span>(<span class="string">"/dashboard/sales/orders"</span>);
+    }
+  } <span class="keyword">catch</span> (error) {
+    <span class="function">toast.error</span>(error?.data?.message || <span class="string">"Failed to update sales order"</span>);
+  }
+};
+
+<span class="comment">// Form submission</span>
+<span class="tag">&lt;Form</span> <span class="attr-name">onSubmit</span>=<span class="tag">{form.handleSubmit(onSubmit)}</span><span class="tag">&gt;</span>
+  {/* Form fields */}
+
+  <span class="tag">&lt;Button</span>
+    <span class="attr-name">type</span>=<span class="attr-value">"submit"</span>
+    <span class="attr-name">disabled</span>=<span class="tag">{isUpdating}</span>
+    <span class="attr-name">className</span>=<span class="attr-value">"bg-blue-600 hover:bg-blue-700"</span>
+  <span class="tag">&gt;</span>
+    {isUpdating ? <span class="string">"Updating..."</span> : <span class="string">"Update Sales Order"</span>}
+  <span class="tag">&lt;/Button&gt;</span>
+<span class="tag">&lt;/Form&gt;</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calculations Section -->
+        <div class="section">
+            <h2 class="section-title">🧮 Calculations</h2>
+
+            <h3 style="margin-bottom: 15px; color: #333;">Line Item Calculations:</h3>
+            <div class="macos-code-block">
+                <div class="macos-header">
+                    <div class="macos-dots">
+                        <div class="macos-dot red"></div>
+                        <div class="macos-dot yellow"></div>
+                        <div class="macos-dot green"></div>
+                    </div>
+                    <div class="macos-filename">Calculations</div>
+                </div>
+                <div class="macos-content">
+                    <pre><code><span class="comment">// For each line item:</span>
+<span class="keyword">const</span> unitPrice = <span class="function">Number</span>(item.unit_price);
+<span class="keyword">const</span> quantity = <span class="function">Number</span>(item.quantity);
+<span class="keyword">const</span> discount = <span class="function">Number</span>(item.discount);
+<span class="keyword">const</span> taxRate = <span class="function">Number</span>(item.sales_tax);
+
+<span class="comment">// Subtotal (before discount and tax)</span>
+<span class="keyword">const</span> subtotal = unitPrice * quantity;
+
+<span class="comment">// Taxable amount (after discount)</span>
+<span class="keyword">const</span> taxableAmount = subtotal - discount;
+
+<span class="comment">// Tax amount</span>
+<span class="keyword">const</span> taxAmount = taxableAmount * (taxRate / <span class="number">100</span>);
+
+<span class="comment">// Line total (including tax)</span>
+<span class="keyword">const</span> total = taxableAmount + taxAmount;
+
+<span class="comment">// Order totals:</span>
+<span class="keyword">const</span> totalSubtotal = items.<span class="function">reduce</span>((sum, item) => sum + item.subtotal, <span class="number">0</span>);
+<span class="keyword">const</span> totalDiscount = items.<span class="function">reduce</span>((sum, item) => sum + item.discount, <span class="number">0</span>);
+<span class="keyword">const</span> totalTax = items.<span class="function">reduce</span>((sum, item) => sum + item.taxAmount, <span class="number">0</span>);
+<span class="keyword">const</span> grandTotal = items.<span class="function">reduce</span>((sum, item) => sum + item.total, <span class="number">0</span>);</code></pre>
+                </div>
+            </div>
+
+            <div class="info-grid" style="margin-top: 20px;">
+                <div class="info-card">
+                    <h3>📊 Example Calculation</h3>
+                    <p><strong>Product:</strong> ISPAHANI POTATO CRACKERS</p>
+                    <p><strong>Unit Price:</strong> RM 0.68</p>
+                    <p><strong>Quantity:</strong> 11</p>
+                    <p><strong>Discount:</strong> RM 0.00</p>
+                    <p><strong>Tax %:</strong> 0%</p>
+                    <hr style="margin: 10px 0; border: none; border-top: 1px solid #ddd;">
+                    <p><strong>Subtotal:</strong> 0.68 × 11 = <strong>RM 7.48</strong></p>
+                    <p><strong>Less Discount:</strong> - RM 0.00</p>
+                    <p><strong>Pretax Amount:</strong> RM 7.48</p>
+                    <p><strong>Tax Amount (0%):</strong> + RM 0.00</p>
+                    <p><strong>Line Total:</strong> = <strong style="color: #1976d2;">RM 7.48</strong></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Handling Section -->
+        <div class="section">
+            <h2 class="section-title">⚠️ Error Handling</h2>
+
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>Error</th>
+                        <th>Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="badge badge-error">Order not found</span></td>
+                        <td>Invalid order ID</td>
+                        <td>Verify order ID exists</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-error">Order not pending</span></td>
+                        <td>Order status is not "pending"</td>
+                        <td>Only pending orders can be edited</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-error">Invalid customer</span></td>
+                        <td>Customer ID doesn't exist</td>
+                        <td>Select valid customer</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-error">Invalid product</span></td>
+                        <td>Product ID doesn't exist</td>
+                        <td>Select valid products</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-error">Quantity too low</span></td>
+                        <td>Quantity < 1</td>
+                        <td>Set minimum quantity of 1</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-error">Invalid dates</span></td>
+                        <td>Due date before order date</td>
+                        <td>Set due date after order date</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="section" style="text-align: center; color: #666;">
+            <p style="margin-bottom: 10px;">
+                <strong>Edit Sales Order Module Documentation</strong>
+            </p>
+            <p style="font-size: 0.9em;">Last Updated: March 13, 2026</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">
+                <a href="/modules" style="color: #1976d2; text-decoration: none;">← Back to Modules</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

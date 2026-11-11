@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Reports & Analytics</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .kpi-label {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">HR & Payroll</a>
+    <a href="#" class="active">Reports & Analytics</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Reports & Analytics</h1>
+    <div class="subtitle">
+      Analyze sales, purchases, inventory, accounting, HR & payroll, CRM and projects with flexible filters and export options.
+    </div>
+
+    <!-- KPI SNAPSHOT -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Business Snapshot</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">This Quarter</div>
+          <div class="pill-filter">This Year</div>
+        </div>
+      </div>
+      <div class="three-column">
+        <div>
+          <div class="kpi-label">Total Sales</div>
+          <div class="kpi-value">245,320.00</div>
+          <div class="hint">From sales invoices within selected period.</div>
+        </div>
+        <div>
+          <div class="kpi-label">Gross Profit</div>
+          <div class="kpi-value">72,480.00</div>
+          <div class="hint">Sales − cost of goods sold.</div>
+        </div>
+        <div>
+          <div class="kpi-label">Total Purchases</div>
+          <div class="kpi-value">158,900.00</div>
+          <div class="hint">From purchase invoices within selected period.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES REPORTS + PURCHASE REPORTS -->
+    <div class="two-column">
+      <!-- Sales Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Range</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Group By</label>
+            <select>
+              <option>By Date</option>
+              <option>By Customer</option>
+              <option>By Product / Category</option>
+              <option>By Salesperson</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Branch</label>
+            <select>
+              <option>All Branches</option>
+              <option>Head Office</option>
+              <option>Warehouse – Port Klang</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Key</th>
+            <th style="width:100px;">Invoices</th>
+            <th style="width:110px;">Sales Amount</th>
+            <th style="width:110px;">Returns</th>
+            <th style="width:110px;">Net Sales</th>
+            <th style="width:90px;">Margin %</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-01</td>
+            <td>12</td>
+            <td>18,500.00</td>
+            <td>1,200.00</td>
+            <td>17,300.00</td>
+            <td>32.4%</td>
+          </tr>
+          <tr>
+            <td>2025-01-02</td>
+            <td>9</td>
+            <td>12,900.00</td>
+            <td>0.00</td>
+            <td>12,900.00</td>
+            <td>29.1%</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Supports: Sales by Date / Period, Sales by Customer, Product, Category, Salesperson, Sales Return Summary, Profitability.
+        </div>
+      </div>
+
+      <!-- Purchase Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Range</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Group By</label>
+            <select>
+              <option>By Date</option>
+              <option>By Supplier</option>
+              <option>By Product / Category</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Branch</label>
+            <select>
+              <option>All Branches</option>
+              <option>Head Office</option>
+              <option>Warehouse – Port Klang</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Key</th>
+            <th style="width:100px;">Bills</th>
+            <th style="width:110px;">Purchase Amount</th>
+            <th style="width:110px;">Returns</th>
+            <th style="width:110px;">Net Purchases</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>ABC Supplier</td>
+            <td>8</td>
+            <td>28,000.00</td>
+            <td>1,500.00</td>
+            <td>26,500.00</td>
+          </tr>
+          <tr>
+            <td>XYZ Trading</td>
+            <td>5</td>
+            <td>14,750.00</td>
+            <td>0.00</td>
+            <td>14,750.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Supports: Purchase by Date / Period, Supplier, Product / Category, Purchase Returns.
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY REPORTS + ACCOUNTING REPORTS -->
+    <div class="two-column">
+      <!-- Inventory Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Inventory Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>As Of Date</label>
+            <input type="date" />
+          </div>
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option>All Warehouses</option>
+              <option>WH-PK – Port Klang</option>
+              <option>WH-PG – Penang</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Report Type</label>
+            <select>
+              <option>Stock Summary</option>
+              <option>Stock Movement (In / Out)</option>
+              <option>Aging Stock</option>
+              <option>Low Stock / Out-of-Stock</option>
+              <option>Stock Valuation (FIFO / WA)</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Item / Category</th>
+            <th style="width:80px;">On Hand</th>
+            <th style="width:80px;">Reserved</th>
+            <th style="width:80px;">Available</th>
+            <th style="width:110px;">Avg Cost</th>
+            <th style="width:110px;">Valuation</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Cleanroom Gloves – Size M</td>
+            <td>3,200</td>
+            <td>200</td>
+            <td>3,000</td>
+            <td>1.80</td>
+            <td>5,760.00</td>
+            <td><span class="tag-success tag">OK</span></td>
+          </tr>
+          <tr>
+            <td>Safety Helmet – White</td>
+            <td>45</td>
+            <td>10</td>
+            <td>35</td>
+            <td>12.50</td>
+            <td>562.50</td>
+            <td><span class="tag-warning tag">Low</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Uses stock transactions from inventory tables for stock summary, movement, aging, low stock and valuation.
+        </div>
+      </div>
+
+      <!-- Accounting Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Accounting Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Report</label>
+            <select>
+              <option>Trial Balance</option>
+              <option>Ledger Reports</option>
+              <option>Profit & Loss (P&L)</option>
+              <option>Balance Sheet</option>
+              <option>Tax / GST / VAT Reports</option>
+              <option>Expense Reports</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Branch</label>
+            <select>
+              <option>All Branches</option>
+              <option>Head Office</option>
+              <option>Warehouse – Port Klang</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Account</th>
+            <th style="width:110px;">Debit</th>
+            <th style="width:110px;">Credit</th>
+            <th style="width:110px;">Balance</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>4000 – Sales</td>
+            <td>0.00</td>
+            <td>245,320.00</td>
+            <td>-245,320.00</td>
+          </tr>
+          <tr>
+            <td>5000 – Cost of Sales</td>
+            <td>172,840.00</td>
+            <td>0.00</td>
+            <td>172,840.00</td>
+          </tr>
+          <tr>
+            <td>6100 – Operating Expenses</td>
+            <td>32,000.00</td>
+            <td>0.00</td>
+            <td>32,000.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Built from general ledger, journal entries, tax and expense tables for Trial Balance, Ledger, P&L, Balance Sheet, Tax and Expense reports.
+        </div>
+      </div>
+    </div>
+
+    <!-- HR & PAYROLL REPORTS + CRM / PROJECT REPORTS -->
+    <div class="two-column">
+      <!-- HR & Payroll Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>HR & Payroll Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Report</label>
+            <select>
+              <option>Attendance Reports</option>
+              <option>Leave Reports</option>
+              <option>Payroll Summary</option>
+              <option>Payslip Summary</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="Month / From - To" />
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select>
+              <option>All</option>
+              <option>Sales</option>
+              <option>Accounts</option>
+              <option>Warehouse</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Employee / Group</th>
+            <th style="width:80px;">Days Present</th>
+            <th style="width:80px;">Days Leave</th>
+            <th style="width:110px;">Gross Salary</th>
+            <th style="width:110px;">Net Pay</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>EMP-001 – Abdullah</td>
+            <td>22</td>
+            <td>2</td>
+            <td>8,500.00</td>
+            <td>7,900.00</td>
+          </tr>
+          <tr>
+            <td>EMP-010 – Store Staff</td>
+            <td>20</td>
+            <td>1</td>
+            <td>3,200.00</td>
+            <td>3,000.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Uses HR & payroll tables: employees, attendance, leave, payroll runs and payslips.
+        </div>
+      </div>
+
+      <!-- CRM / Project Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>CRM / Project Reports</h3>
+          <button class="btn btn-outline btn-sm">Export</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Report</label>
+            <select>
+              <option>Lead / Opportunity Conversion</option>
+              <option>Pipeline Status</option>
+              <option>Project Cost vs Budget</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Owner / Project Manager</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Sales Team A</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Key / Project</th>
+            <th style="width:110px;">Leads / Budget</th>
+            <th style="width:110px;">Converted / Cost</th>
+            <th style="width:110px;">Conversion % / Variance</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>CRM – Jan 2025</td>
+            <td>48 Leads</td>
+            <td>19 Won</td>
+            <td>39.6%</td>
+          </tr>
+          <tr>
+            <td>PRJ-001 – TimeWhip SaaS Implementation</td>
+            <td>Budget 50,000.00</td>
+            <td>Cost 29,750.00</td>
+            <td>Under by 20,250.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          CRM: from leads & opportunities;  
+          Projects: budget vs timesheets & cost allocations from project module.
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVED & SCHEDULED REPORTS -->
+    <div class="two-column">
+      <!-- Saved Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Saved Reports</h3>
+          <button class="btn btn-outline btn-sm">+ Save Current Filter</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th style="width:140px;">Type</th>
+            <th style="width:90px;">Scope</th>
+            <th style="width:120px;">Last Run</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Monthly Sales by Customer</td>
+            <td>Sales – By Customer</td>
+            <td>This Month</td>
+            <td>2025-01-15 08:30</td>
+          </tr>
+          <tr>
+            <td>Inventory – Low Stock Items</td>
+            <td>Inventory – Low Stock</td>
+            <td>All Warehouses</td>
+            <td>2025-01-15 09:10</td>
+          </tr>
+          <tr>
+            <td>Payroll Summary – Warehouse Staff</td>
+            <td>HR – Payroll Summary</td>
+            <td>Dept: Warehouse</td>
+            <td>2025-01-10 17:05</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Saved report filters/layouts stored in <code>saved_reports</code>.
+        </div>
+      </div>
+
+      <!-- Scheduled Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Scheduled Reports</h3>
+          <button class="btn btn-outline btn-sm">+ Schedule Report</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Schedule</th>
+            <th style="width:140px;">Report</th>
+            <th style="width:100px;">Frequency</th>
+            <th style="width:100px;">Channel</th>
+            <th style="width:120px;">Last Run</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Daily Sales Summary</td>
+            <td>Sales by Date</td>
+            <td>Daily</td>
+            <td>Email</td>
+            <td>2025-01-15 23:59</td>
+          </tr>
+          <tr>
+            <td>Month-End P&L</td>
+            <td>P&L by Period</td>
+            <td>Monthly</td>
+            <td>Email, WhatsApp</td>
+            <td>2024-12-31 22:00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Scheduled jobs stored in <code>scheduled_reports</code> and executed by background worker / cron.
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

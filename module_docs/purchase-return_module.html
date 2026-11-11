@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Returns Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #4facfe;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #4facfe;
+            border-bottom: 3px solid #4facfe;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #4facfe;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #e8f5f3;
+            border-left: 4px solid #4facfe;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4facfe;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #3a8bcc;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #4facfe;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #4facfe;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-patch {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #17a2b8;
+            color: white;
+        }
+
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #4facfe;
+        }
+
+        .request-item {
+            background: #f0f9f8;
+            padding: 15px;
+            border-left: 3px solid #4facfe;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #e8f5f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #4facfe;
+            font-size: 13px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #4facfe;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-patch {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #4facfe;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🔄 Purchase Returns Module</h1>
+            <p>Complete supplier return management system with credits, refunds, and inventory adjustments</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <h3 style="color: #4facfe; margin-top: 0;">📌 Purchase Returns Management</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns</span>
+                </h3>
+                <p class="route-desc">Get all purchase returns with pagination and filtering</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/approved</span>
+                </h3>
+                <p class="route-desc">Get all approved purchase returns</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed purchase return information</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/purchase/returns</span>
+                </h3>
+                <p class="route-desc">Create a new purchase return with items</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/purchase/returns/:id</span>
+                </h3>
+                <p class="route-desc">Update purchase return status and details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/purchase/returns/:id</span>
+                </h3>
+                <p class="route-desc">Delete a purchase return</p>
+            </div>
+
+            <h3 style="color: #4facfe; margin-top: 25px;">📌 Purchase Return Invoices (Debit Notes)</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/invoices</span>
+                </h3>
+                <p class="route-desc">Get all purchase return invoices (debit notes)</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/invoices/:id</span>
+                </h3>
+                <p class="route-desc">Get purchase return invoice details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/purchase/returns/invoices</span>
+                </h3>
+                <p class="route-desc">Create a debit note for a purchase return</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-patch">PATCH</span>
+                    <span class="route-path">/api/purchase/returns/invoices/:id</span>
+                </h3>
+                <p class="route-desc">Update purchase return invoice status</p>
+            </div>
+
+            <h3 style="color: #4facfe; margin-top: 25px;">📌 Refunds & Credits</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/payments</span>
+                </h3>
+                <p class="route-desc">Get all refund payments from suppliers</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/purchase/returns/payments/:id</span>
+                </h3>
+                <p class="route-desc">Get refund payment details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/purchase/returns/payments</span>
+                </h3>
+                <p class="route-desc">Record a refund received from supplier</p>
+            </div>
+        </div>
+
+        <!-- ==================== POST CREATE PURCHASE RETURN ==================== -->
+        <div class="section-header">📌 CREATE PURCHASE RETURN (POST)</div>
+
+        <div class="card">
+            <h2>POST /api/purchase/returns <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Create a new purchase return record with items and process inventory adjustments</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/purchase/returns
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createPurchaseReturn(req, res)
+    Controller->>Service: createPurchaseReturn(data, userId)
+    Service->>Service: Validate items array
+    Service->>Service: Generate return number
+    Service->>Service: Calculate totals & validate products
+    Service->>Repository: create(data, items)
+    Repository->>Database: INSERT purchase_returns & items
+    Database->>Repository: Return created
+    Repository->>Service: Purchase return object
+    Service->>Service: Update product stock quantities
+    Service->>Service: Create stock movements
+    Service->>Controller: Return result
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|createPurchaseReturn| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Create Purchase Return"
+                CreateReturn[POST /api/purchase/returns] -->|Extract userId| UserID[Controller - Get User ID]
+                UserID --> ValidateReq[Service - Validate Items]
+                ValidateReq -->|items array| GenNumber[Service - Generate Return Number]
+                GenNumber -->|PRRTN-timestamp-random| FetchProducts[Service - Fetch Products]
+
+                FetchProducts -->|productIds| RepoFind[Repository - FindByIds]
+                RepoFind -->|SELECT products| DB[(MySQL Database)]
+
+                DB -->|Products Array| ProductMap[Service - Build Product Map]
+                ProductMap --> CalcTotals[Service - Calculate Totals]
+
+                CalcTotals -->|For Each Item| CalcLine[Service - Calculate Line Totals]
+                CalcLine -->|quantity * unit_cost| LineSubtotal[Line Subtotal]
+                CalcLine -->|line_total * tax_percent| LineTax[Item Tax Amount]
+
+                LineSubtotal --> Accumulate[Service - Accumulate Totals]
+                LineTax --> Accumulate
+
+                Accumulate --> StartTrans[Service - START TRANSACTION]
+                StartTrans --> CreateReturnRecord[Service - Create Return Record]
+
+                CreateReturnRecord -->|INSERT| RepoCreate[Repository - Create]
+                RepoCreate --> DBInsert[(MySQL - purchase_returns)]
+
+                DBInsert -->|Return ID| CreateItems[Service - Create Return Items]
+                CreateItems -->|BulkCreate Items| RepoItems[Repository - BulkCreate]
+                RepoItems --> DBItems[(MySQL - purchase_return_items)]
+
+                DBItems --> UpdateStock[Service - Update Stock]
+                UpdateStock -->|For Each Item| DecreaseStock[Service - Decrease Product Stock]
+                DecreaseStock -->|UPDATE products| RepoStock[Repository - Update]
+                RepoStock --> DBStock[(MySQL - products table)]
+
+                DBStock --> CreateMovements[Service - Create Stock Movements]
+                CreateMovements -->|INSERT| RepoMoves[Repository - BulkCreate]
+                RepoMoves --> DBMoves[(MySQL - stock_movements)]
+
+                DBMoves --> CommitTrans[Service - COMMIT]
+                CommitTrans --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Rules</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>supplier_id</td>
+                        <td>integer</td>
+                        <td>Required, Must exist in suppliers table</td>
+                    </tr>
+                    <tr>
+                        <td>purchase_order_id</td>
+                        <td>integer</td>
+                        <td>Optional, Must exist in purchase_orders if provided</td>
+                    </tr>
+                    <tr>
+                        <td>return_date</td>
+                        <td>date</td>
+                        <td>Optional, Default: today</td>
+                    </tr>
+                    <tr>
+                        <td>items</td>
+                        <td>array</td>
+                        <td>Required, Min: 1 item</td>
+                    </tr>
+                    <tr>
+                        <td>items[].product_id</td>
+                        <td>integer</td>
+                        <td>Required, Must exist in products table</td>
+                    </tr>
+                    <tr>
+                        <td>items[].quantity</td>
+                        <td>integer</td>
+                        <td>Required, Min: 1</td>
+                    </tr>
+                    <tr>
+                        <td>items[].unit_cost</td>
+                        <td>decimal</td>
+                        <td>Required, Min: 0</td>
+                    </tr>
+                    <tr>
+                        <td>items[].discount</td>
+                        <td>decimal</td>
+                        <td>Optional, Min: 0</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td>text</td>
+                        <td>Optional</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>Automatic Calculations:</strong> The system automatically calculates <code>total_amount</code>, <code>tax_amount</code> (based on product purchase tax), <code>discount_amount</code>, and <code>grand_total</code> from the items provided.
+            </div>
+
+            <div class="warning-box">
+                <strong>Inventory Side Effects:</strong> Creating a purchase return automatically:
+                <ul style="margin: 5px 0 0 20px;">
+                    <li>Decreases <code>products.stock_quantity</code> for returned items</li>
+                    <li>Creates <code>stock_movements</code> records for inventory tracking</li>
+                    <li>Associates return with original PO if <code>purchase_order_id</code> provided</li>
+                </ul>
+            </div>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: purchase-return.controller.js:81
+async createPurchaseReturn(req, res) {
+    try {
+        const userId = req.user.id;
+        const result = await purchaseReturnService.createPurchaseReturn(req.body, userId);
+        res.status(201).json({
+            status: true,
+            message: 'Purchase return created successfully',
+            data: result
+        });
+    } catch (error) {
+        res.status(400).json({ status: false, message: error.message });
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: purchase-return.service.js:63
+async createPurchaseReturn(data, userId) {
+    let { items } = data;
+    let returnInfo = { ...data };
+
+    // Validate items
+    if (!Array.isArray(items) || items.length === 0) {
+        throw new Error('Purchase return must contain at least one item');
+    }
+
+    // Generate return number
+    const return_number = `PRRTN-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+    // Fetch products and validate
+    const productIds = items.map(i => i.product_id);
+    const products = await ProductRepository.findByIds(productIds);
+    const productMap = new Map(products.map(p => [String(p.id), p]));
+
+    // Calculate totals
+    let total_amount = 0;
+    let discount_amount = 0;
+    let tax_amount = 0;
+
+    const processedItems = items.map(item => {
+        const quantity = Number(item.quantity) || 0;
+        const unit_cost = Number(item.unit_cost) || 0;
+        const discount = Number(item.discount) || 0;
+
+        if (quantity <= 0 || unit_cost < 0) {
+            throw new Error('Invalid quantity or unit cost');
+        }
+
+        const product = productMap.get(String(item.product_id));
+        if (!product) {
+            throw new Error(`Product not found: ${item.product_id}`);
+        }
+
+        const tax_percent = Number(product.purchase_tax) || 0;
+        const line_subtotal = quantity * unit_cost;
+        const line_total = Math.max(line_subtotal - discount, 0);
+        const item_tax_amount = (line_total * tax_percent) / 100;
+
+        discount_amount += discount;
+        total_amount += line_total;
+        tax_amount += item_tax_amount;
+
+        return {
+            ...item,
+            quantity,
+            unit_cost,
+            discount,
+            line_total,
+            tax_amount: item_tax_amount
+        };
+    });
+
+    const grand_total = total_amount - discount_amount + tax_amount;
+
+    // Create purchase return
+    const returnData = {
+        ...returnInfo,
+        return_number,
+        total_amount,
+        discount_amount,
+        tax_amount,
+        grand_total,
+        created_by: userId
+    };
+
+    const purchaseReturn = await PurchaseReturnRepository.create(returnData, processedItems);
+
+    // Update stock quantities
+    for (const item of processedItems) {
+        await ProductRepository.decreaseStock(item.product_id, item.quantity);
+    }
+
+    // Create stock movements
+    for (const item of processedItems) {
+        await StockMovementRepository.create({
+            product_id: item.product_id,
+            quantity: -item.quantity,
+            movement_type: 'purchase_return',
+            reference_id: purchaseReturn.id,
+            reference_number: return_number
+        });
+    }
+
+    return purchaseReturn;
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: purchase-return.repository.js
+async create(data, items) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        // Create purchase return
+        const purchaseReturn = await PurchaseReturn.create(data, { transaction });
+
+        // Create return items
+        const itemsWithReturnId = items.map(item => ({
+            ...item,
+            purchase_return_id: purchaseReturn.id
+        }));
+
+        await PurchaseReturnItem.bulkCreate(itemsWithReturnId, { transaction });
+
+        await transaction.commit();
+        return purchaseReturn;
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
+SQL Equivalent:
+BEGIN TRANSACTION;
+
+INSERT INTO purchase_returns (
+    return_number, supplier_id, purchase_order_id, return_date,
+    status, total_amount, tax_amount, discount_amount, grand_total,
+    payment_status, notes, created_by
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO purchase_return_items (
+    purchase_return_id, product_id, quantity, unit_cost, discount,
+    line_total, tax_amount
+)
+VALUES
+    (?, ?, ?, ?, ?, ?, ?),
+    (?, ?, ?, ?, ?, ?, ?);
+
+COMMIT;</code></pre>
+
+            <h3>Database Tables</h3>
+            <ul>
+                <li><code>purchase_returns</code> - Main purchase returns table</li>
+                <li><code>purchase_return_items</code> - Line items for purchase returns</li>
+                <li><code>products</code> - Stock quantity updates</li>
+                <li><code>stock_movements</code> - Inventory movement records</li>
+            </ul>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block"><code>{
+    "supplier_id": 1,
+    "purchase_order_id": 100,
+    "return_date": "2025-01-28",
+    "items": [
+        {
+            "product_id": 1,
+            "quantity": 5,
+            "unit_cost": 20.00,
+            "discount": 0
+        },
+        {
+            "product_id": 3,
+            "quantity": 2,
+            "unit_cost": 50.00,
+            "discount": 5.00
+        }
+    ],
+    "notes": "Defective products returned to supplier"
+}</code></pre>
+
+            <h3>Success Response</h3>
+            <div class="response-box">
+                <strong>201 Created</strong>
+                <code>{
+    "status": true,
+    "message": "Purchase return created successfully",
+    "data": {
+        "id": 1,
+        "return_number": "PRRTN-1738150000000-ABC",
+        "supplier_id": 1,
+        "purchase_order_id": 100,
+        "status": "pending",
+        "return_date": "2025-01-28T00:00:00.000Z",
+        "total_amount": 200.00,
+        "tax_amount": 10.00,
+        "discount_amount": 5.00,
+        "grand_total": 205.00,
+        "payment_status": "pending",
+        "notes": "Defective products returned to supplier",
+        "created_at": "2025-01-28T10:00:00.000Z",
+        "updated_at": "2025-01-28T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>400 Bad Request - No Items</strong>
+                <code>{
+    "status": false,
+    "message": "Purchase return must contain at least one item"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Product Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Product not found: 999"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Invalid Quantity</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid quantity or unit cost"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ALL PURCHASE RETURNS ==================== -->
+        <div class="section-header">📌 GET ALL PURCHASE RETURNS (GET)</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/returns <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all purchase returns with pagination, filtering, and calculated refund totals</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/purchase/returns?filters
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getPurchaseReturns(req, res)
+    Controller->>Controller: Parse query params (page, limit, filters)
+    Controller->>Service: getAllPurchaseReturns(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with JOINs
+    Database->>Repository: { count, rows }
+    Repository->>Service: Raw returns data
+    Service->>Service: Calculate totals for each row
+    Service->>Service: Calculate refund amounts
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|getPurchaseReturns| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Get All Purchase Returns"
+                GetAll[GET /api/purchase/returns] -->|Query Params| ParseQuery[Controller - Parse Query]
+                ParseQuery -->|page, limit, filters| ExtractFilters[Service - Extract Filters]
+                ExtractFilters -->|Build WHERE| CalcOffset[Service - Calculate Offset]
+                CalcOffset --> FindAll[Service - FindAll Returns]
+                FindAll --> RepositoryQuery[Repository - FindAll]
+
+                RepositoryQuery -->|SELECT with JOINs| DB[(MySQL Database)]
+                DB -->|Returns Array| ProcessData[Service - Process Data]
+
+                ProcessData -->|For Each Return| CalcTotal[Service - Calculate Total]
+                ProcessData -->|For Each Return| CalcRefund[Service - Calculate Refund Amount]
+                ProcessData -->|For Each Return| CalcDue[Service - Calculate Due]
+
+                CalcTotal --> Pagination[Service - Build Pagination]
+                CalcRefund --> Pagination
+                CalcDue --> Pagination
+
+                Pagination --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h3>Request Headers</h3>
+            <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: purchase-return.controller.js:13
+async getPurchaseReturns(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const { status, supplier_id, search } = req.query;
+        const filters = { status, supplier_id, search };
+
+        const result = await purchaseReturnService.getAllPurchaseReturns(filters, page, limit);
+
+        res.status(200).json({
+            success: true,
+            message: 'Purchase returns retrieved successfully',
+            pagination: {
+                total: result.total,
+                page,
+                limit,
+                totalPage: Math.ceil(result.total / (limit || 10))
+            },
+            data: result.data
+        });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message });
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: purchase-return.service.js:25
+async getAllPurchaseReturns(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+
+    const result = await PurchaseReturnRepository.findAll(filters, limit, offset);
+
+    // Calculate totals for each return
+    const data = result.rows.map(row => {
+        const pr = row.get({ plain: true });
+        const totalAmount = parseFloat(pr.total_amount || 0);
+        const discountAmount = parseFloat(pr.discount_amount || 0);
+        const taxAmount = parseFloat(pr.tax_amount || 0);
+        const refunded = parseFloat(pr.total_refunded_amount || 0);
+
+        const grandTotal = totalAmount - discountAmount + taxAmount;
+        const dueRefund = grandTotal - refunded;
+
+        return {
+            ...pr,
+            grand_total: grandTotal,
+            total_refunded_amount: refunded,
+            due_refund_amount: dueRefund > 0 ? dueRefund : 0
+        };
+    });
+
+    return {
+        data,
+        total: result.count
+    };
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: purchase-return.repository.js
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    // Apply filters
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    if (filters.supplier_id) {
+        where.supplier_id = filters.supplier_id;
+    }
+
+    if (filters.search) {
+        where.return_number = {
+            [Op.like]: `%${filters.search}%`
+        };
+    }
+
+    const { count, rows } = await PurchaseReturn.findAndCountAll({
+        where,
+        include: [
+            {
+                model: Supplier,
+                as: 'supplier',
+                attributes: ['id', 'name']
+            },
+            {
+                model: PurchaseReturnItem,
+                as: 'items',
+                include: [
+                    {
+                        model: Product,
+                        as: 'product',
+                        attributes: ['id', 'name', 'sku']
+                    }
+                ]
+            }
+        ],
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(amount), 0)
+                        FROM purchase_return_payments
+                        WHERE purchase_return_id = PurchaseReturn.id
+                        AND status = 'completed'
+                    )`),
+                    'total_refunded_amount'
+                ]
+            ]
+        },
+        limit,
+        offset,
+        order: [['created_at', 'DESC']]
+    });
+
+    return { count, rows };
+}
+
+SQL Equivalent:
+SELECT
+    pr.*,
+    (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM purchase_return_payments
+        WHERE purchase_return_id = pr.id AND status = 'completed'
+    ) AS total_refunded_amount,
+    s.id AS supplier.id, s.name AS supplier.name
+FROM purchase_returns AS pr
+LEFT JOIN suppliers AS s ON s.id = pr.supplier_id
+LEFT JOIN purchase_return_items AS pri ON pri.purchase_return_id = pr.id
+WHERE pr.status = ?
+ORDER BY pr.created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+            <h3>Query Parameters</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>page</td>
+                        <td>integer</td>
+                        <td>1</td>
+                        <td>Page number</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>integer</td>
+                        <td>10</td>
+                        <td>Items per page</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Filter by status (pending, approved, returned, cancelled)</td>
+                    </tr>
+                    <tr>
+                        <td>supplier_id</td>
+                        <td>integer</td>
+                        <td>-</td>
+                        <td>Filter by supplier ID</td>
+                    </tr>
+                    <tr>
+                        <td>search</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Search by return number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Multiple Requests & Responses</h3>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>1. List All Purchase Returns (Paginated)</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/returns?page=1&limit=10</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "PRRTN-1738150000000-ABC",
+            "supplier_id": 1,
+            "status": "pending",
+            "return_date": "2025-01-28T00:00:00.000Z",
+            "total_amount": 100.00,
+            "tax_amount": 5.00,
+            "discount_amount": 0,
+            "grand_total": 105.00,
+            "payment_status": "pending",
+            "total_refunded_amount": 0,
+            "due_refund_amount": 105.00,
+            "notes": null,
+            "created_at": "2025-01-28T10:00:00.000Z",
+            "updated_at": "2025-01-28T10:00:00.000Z",
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>2. Filter by Status</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/returns?status=approved</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "return_number": "PRRTN-1738150000100-XYZ",
+            "supplier_id": 1,
+            "status": "approved",
+            "grand_total": 250.00,
+            "total_refunded_amount": 0,
+            "due_refund_amount": 250.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>3. Filter by Supplier</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/returns?supplier_id=1</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase returns retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "PRRTN-1738150000000-ABC",
+            "supplier_id": 1,
+            "status": "pending",
+            "grand_total": 105.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        },
+        {
+            "id": 2,
+            "return_number": "PRRTN-1738150000100-XYZ",
+            "supplier_id": 1,
+            "status": "approved",
+            "grand_total": 250.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>4. Search by Return Number</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/returns?search=PRRTN-1738150000000</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "PRRTN-1738150000000-ABC",
+            "supplier_id": 1,
+            "status": "pending",
+            "grand_total": 105.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>5. Combined Filters</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/returns?status=approved&supplier_id=1&page=1&limit=5</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 5,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "return_number": "PRRTN-1738150000100-XYZ",
+            "supplier_id": 1,
+            "status": "approved",
+            "grand_total": 250.00,
+            "total_refunded_amount": 100.00,
+            "due_refund_amount": 150.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>500 Internal Server Error</strong>
+                <code>{
+    "status": false,
+    "message": "Database connection failed"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET APPROVED RETURNS ==================== -->
+        <div class="section-header">📌 GET APPROVED PURCHASE RETURNS</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/returns/approved <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all purchase returns with status "approved"</p>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|getApprovedReturns| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Fetch Approved Returns"
+                GetApproved[GET /api/purchase/returns/approved] -->|Parse Query| Parse[Controller - Parse Query]
+                Parse -->|page, limit| FindApproved[Service - Find Approved Returns]
+                FindApproved -->|WHERE status = approved| RepoQuery[Repository - FindAll]
+                RepoQuery -->|SELECT with JOIN| DB[(MySQL Database)]
+
+                DB -->|Returns Array| ProcessData[Service - Process Data]
+                ProcessData -->|For Each Return| CalcTotal[Service - Calculate Totals]
+                ProcessData -->|For Each Return| CalcRefund[Service - Calculate Refund]
+                ProcessData -->|For Each Return| CalcDue[Service - Calculate Due]
+
+                CalcTotal --> Pagination[Service - Build Pagination]
+                CalcRefund --> Pagination
+                CalcDue --> Pagination
+
+                Pagination --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/purchase/returns/approved</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "success": true,
+    "message": "Approved purchase returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "PRRTN-1738150000000-ABC",
+            "status": "approved",
+            "grand_total": 105.00,
+            "total_refunded_amount": 0,
+            "due_refund_amount": 105.00,
+            "supplier": {
+                "id": 1,
+                "name": "Vendor A"
+            }
+        }
+    ]
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET RETURN BY ID ==================== -->
+        <div class="section-header">📌 GET PURCHASE RETURN BY ID</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Purchase return ID</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|getReturnById| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Fetch Return By ID"
+                GetByID[GET /api/purchase/returns/:id] -->|Extract id| ParamID[Controller - Extract ID]
+                ParamID --> ValidateID[Service - Validate ID]
+                ValidateID -->|id = req.params| FindReturn[Service - Find Return]
+                FindReturn -->|findByPk with INCLUDE| RepoQuery[Repository - FindByPk]
+                RepoQuery -->|LEFT JOINs| DB[(MySQL Database)]
+
+                DB -->|Return or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| Process[Service - Process Data]
+
+                Process -->|Include Items| Items[Service - Include Items]
+                Process -->|Include Supplier| Supplier[Service - Include Supplier]
+                Process -->|Calculate Totals| Totals[Service - Calculate Totals]
+                Process -->|Calculate Refund| Refund[Service - Calculate Refund]
+
+                Items --> Response[Controller - Send Response]
+                Supplier --> Response
+                Totals --> Response
+                Refund --> Response
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/purchase/returns/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase return retrieved successfully",
+    "data": {
+        "id": 1,
+        "return_number": "PRRTN-1738150000000-ABC",
+        "supplier_id": 1,
+        "purchase_order_id": 100,
+        "status": "approved",
+        "return_date": "2025-01-28T00:00:00.000Z",
+        "total_amount": 200.00,
+        "tax_amount": 10.00,
+        "discount_amount": 5.00,
+        "grand_total": 205.00,
+        "payment_status": "partial",
+        "total_refunded_amount": 100.00,
+        "due_refund_amount": 105.00,
+        "notes": "Defective products returned to supplier",
+        "created_at": "2025-01-28T10:00:00.000Z",
+        "updated_at": "2025-01-28T11:00:00.000Z",
+        "supplier": {
+            "id": 1,
+            "name": "Vendor A",
+            "email": "vendor@example.com",
+            "phone": "+1234567890"
+        },
+        "items": [
+            {
+                "id": 1,
+                "product_id": 1,
+                "quantity": 5,
+                "unit_cost": 20.00,
+                "discount": 0,
+                "line_total": 100.00,
+                "product": {
+                    "id": 1,
+                    "name": "Product A",
+                    "sku": "PRD-A-001"
+                }
+            }
+        ],
+        "invoices": [
+            {
+                "id": 1,
+                "invoice_number": "PRINV-1738150000000-ABC",
+                "total_amount": 205.00,
+                "status": "issued",
+                "invoice_date": "2025-01-28T00:00:00.000Z"
+            }
+        ],
+        "payments": [
+            {
+                "id": 1,
+                "amount": 100.00,
+                "payment_method": "BANK_TRANSFER",
+                "reference_number": "CREDIT-001",
+                "payment_date": "2025-01-28T11:00:00.000Z",
+                "status": "completed"
+            }
+        ],
+        "created_by": {
+            "id": 5,
+            "name": "Admin User"
+        },
+        "purchase_order": {
+            "id": 100,
+            "po_number": "PO-100"
+        }
+    }
+}</code>
+            </div>
+
+            <h4>Error Response</h4>
+            <div class="error-box">
+                <strong>404 Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Purchase return not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== UPDATE PURCHASE RETURN ==================== -->
+        <div class="section-header">📌 UPDATE PURCHASE RETURN</div>
+
+        <div class="card">
+            <h2>PUT /api/purchase/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>New status (pending, approved, returned, cancelled)</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>text</td>
+                    <td>No</td>
+                    <td>Additional notes</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|updateReturn| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Update Return"
+                UpdateReturn[PUT /api/purchase/returns/:id] -->|Extract id| ExtractID[Controller - Extract ID]
+                ExtractID -->|Extract body| BodyData[Controller - Request Body]
+
+                BodyData --> Validate[Service - Validate Request]
+                Validate --> FindReturn[Service - Find Return]
+                FindReturn -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Return or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| PrepareUpdate[Service - Prepare Update Data]
+
+                PrepareUpdate -->|Build updates object| UpdateRepo[Repository - Update]
+                UpdateRepo -->|UPDATE returns| DBUpdate[(MySQL Database)]
+
+                DBUpdate -->|Updated Return| FetchUpdated[Repository - FindByPk]
+                FetchUpdated -->|Get Updated Return| Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>PUT /api/purchase/returns/1
+
+{
+    "status": "approved",
+    "notes": "Return approved by supplier"
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase return updated successfully",
+    "data": {
+        "id": 1,
+        "return_number": "PRRTN-1738150000000-ABC",
+        "status": "approved",
+        "notes": "Return approved by supplier",
+        "updated_at": "2025-01-28T12:00:00.000Z"
+    }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DELETE PURCHASE RETURN ==================== -->
+        <div class="section-header">📌 DELETE PURCHASE RETURN</div>
+
+        <div class="card">
+            <h2>DELETE /api/purchase/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|deleteReturn| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Delete Return"
+                DeleteReturn[DELETE /api/purchase/returns/:id] -->|Extract id| ExtractID[Controller - Extract ID]
+                ExtractID --> Validate[Service - Validate ID]
+                Validate --> FindReturn[Service - Find Return]
+                FindReturn -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Return or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| DeleteRepo[Repository - Delete]
+                DeleteRepo -->|DELETE FROM returns| DBDelete[(MySQL Database)]
+
+                DBDelete -->|Delete Result| Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>DELETE /api/purchase/returns/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase return deleted successfully",
+    "data": null
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DEBIT NOTES (INVOICES) ==================== -->
+        <div class="section-header">📌 DEBIT NOTES & INVOICES</div>
+
+        <div class="card">
+            <h2>Purchase Return Invoices (Debit Notes)</h2>
+            <p>Debit notes are generated for approved purchase returns to document the credit from suppliers.</p>
+
+            <h3>POST /api/purchase/returns/invoices <span class="badge-protected">🔒 Protected</span></h3>
+            <p>Create a debit note for a purchase return.</p>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>purchase_return_id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Purchase return ID</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|createInvoice| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Create Debit Note"
+                CreateInvoice[POST /api/purchase/returns/invoices] -->|Extract returnId| ReturnID[Controller - Extract Return ID]
+                ReturnID --> Validate[Service - Validate Return ID]
+                Validate --> FindReturn[Service - Find Purchase Return]
+                FindReturn -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Return or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| CheckStatus[Service - Check Status]
+
+                CheckStatus -->|status = approved| GenInvoice[Service - Generate Invoice Number]
+                GenInvoice -->|PRINV-timestamp-random| CreateInvoiceRecord[Service - Create Invoice Record]
+
+                CreateInvoiceRecord -->|INSERT| RepoCreate[Repository - Create]
+                RepoCreate --> DBInsert[(MySQL - return_invoices)]
+
+                DBInsert --> ProcessAccounting[Service - Process Accounting]
+                ProcessAccounting -->|Create Transaction| AccTrans[Service - Create Accounting Transaction]
+                AccTrans -->|INSERT| DBAccounting[(MySQL - accounting_transactions)]
+
+                DBAccounting --> UpdateReturn[Service - Update Return Status]
+                UpdateReturn -->|UPDATE| RepoUpdate[Repository - Update]
+                RepoUpdate --> DBUpdate[(MySQL - purchase_returns)]
+
+                DBUpdate --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>POST /api/purchase/returns/invoices
+
+{
+    "purchase_return_id": 1
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase return invoice created successfully",
+    "data": {
+        "id": 1,
+        "invoice_number": "PRINV-1738150000000-ABC",
+        "purchase_return_id": 1,
+        "total_amount": 205.00,
+        "status": "issued",
+        "invoice_date": "2025-01-28T00:00:00.000Z",
+        "created_at": "2025-01-28T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h4>Database Side Effects</h4>
+            <div class="error-box" style="border-left-color: #17a2b8; background: #e8f4f8;">
+                <strong>⚠️ Side Effects:</strong>
+                <ul style="margin: 5px 0 0 20px; font-size: 13px;">
+                    <li>Processes accounting transaction (PURCHASE_RETURN)</li>
+                    <li>Records credit from supplier</li>
+                    <li>Updates accounts payable ledgers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== REFUNDS & CREDITS ==================== -->
+        <div class="section-header">📌 REFUNDS & CREDITS</div>
+
+        <div class="card">
+            <h2>Refund & Credit Payments</h2>
+            <p>Record refund payments received from suppliers for approved purchase returns.</p>
+
+            <h3>POST /api/purchase/returns/payments <span class="badge-protected">🔒 Protected</span></h3>
+            <p>Record a refund payment received from a supplier.</p>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>purchase_return_id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Purchase return ID</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>decimal</td>
+                    <td>Yes</td>
+                    <td>Refund amount received</td>
+                </tr>
+                <tr>
+                    <td>payment_method</td>
+                    <td>string</td>
+                    <td>Yes</td>
+                    <td>Payment method (CASH, BANK_TRANSFER, CHECK, etc.)</td>
+                </tr>
+                <tr>
+                    <td>invoice_id</td>
+                    <td>integer</td>
+                    <td>No</td>
+                    <td>Associated invoice ID</td>
+                </tr>
+                <tr>
+                    <td>reference_number</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>Reference/transaction number</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Purchase Return"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Return Controller]
+                Controller -->|recordPayment| Service[Purchase Return Service]
+                Service -->|Data Access| Repository[Purchase Return Repository]
+                end
+
+                subgraph "Record Refund Payment"
+                RecordPayment[POST /api/purchase/returns/payments] -->|Extract Data| PaymentData[Controller - Extract Payment Data]
+                PaymentData --> Validate[Service - Validate Request]
+                Validate --> FindReturn[Service - Find Purchase Return]
+                FindReturn -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Return or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| CheckStatus[Service - Check Status]
+
+                CheckStatus -->|status = approved| CalcDue[Service - Calculate Due Amount]
+                CalcDue --> ValidateAmount[Service - Validate Payment Amount]
+                ValidateAmount -->|Amount <= Due| StartTrans[Service - START TRANSACTION]
+
+                StartTrans --> CreatePayment[Service - Create Payment Record]
+                CreatePayment -->|INSERT| RepoCreate[Repository - Create]
+                RepoCreate --> DBPayment[(MySQL - return_payments)]
+
+                DBPayment --> CalcTotalRefund[Service - Calculate Total Refunded]
+                CalcTotalRefund --> CheckFullPayment[Service - Check Payment Status]
+                CheckFullPayment -->|total >= grand_total| UpdatePaid[Service - Update Status to Paid]
+                CheckFullPayment -->|total < grand_total| UpdatePartial[Service - Update Status to Partial]
+                CheckFullPayment -->|total = 0| UpdatePending[Service - Keep Status Pending]
+
+                UpdatePaid --> UpdateReturn[Service - Update Purchase Return]
+                UpdatePartial --> UpdateReturn
+                UpdatePending --> UpdateReturn
+
+                UpdateReturn -->|UPDATE| RepoUpdate[Repository - Update]
+                RepoUpdate --> DBUpdate[(MySQL - purchase_returns)]
+
+                DBUpdate --> ProcessAccounting[Service - Process Accounting]
+                ProcessAccounting -->|Create PAYMENT_IN| AccTrans[Service - Create Accounting Transaction]
+                AccTrans -->|INSERT| DBAccounting[(MySQL - accounting_transactions)]
+
+                DBAccounting --> CommitTrans[Service - COMMIT]
+                CommitTrans --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>POST /api/purchase/returns/payments
+
+{
+    "purchase_return_id": 1,
+    "amount": 205.00,
+    "payment_method": "BANK_TRANSFER",
+    "reference_number": "CREDIT-002",
+    "invoice_id": 1
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase return payment recorded successfully",
+    "data": {
+        "id": 1,
+        "purchase_return_id": 1,
+        "amount": 205.00,
+        "payment_method": "BANK_TRANSFER",
+        "reference_number": "CREDIT-002",
+        "payment_date": "2025-01-28T12:00:00.000Z",
+        "status": "completed"
+    }
+}</code>
+            </div>
+
+            <h4>Database Side Effects</h4>
+            <div class="error-box" style="border-left-color: #17a2b8; background: #e8f4f8;">
+                <strong>⚠️ Side Effects:</strong>
+                <ul style="margin: 5px 0 0 20px; font-size: 13px;">
+                    <li>Processes accounting transaction (PAYMENT_IN)</li>
+                    <li>Increases cash/bank balances in accounting</li>
+                    <li>Updates <code>payment_status</code> of purchase return if fully refunded</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="section-header">📌 DATABASE SCHEMA</div>
+
+        <div class="card">
+            <h2>Database Tables</h2>
+
+            <h4>purchase_returns</h4>
+            <p>Main purchase returns table.</p>
+
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>INT (PK)</td>
+                    <td>Primary key, auto-increment</td>
+                </tr>
+                <tr>
+                    <td>return_number</td>
+                    <td>VARCHAR(255)</td>
+                    <td>Unique return number (auto-generated)</td>
+                </tr>
+                <tr>
+                    <td>supplier_id</td>
+                    <td>INT (FK)</td>
+                    <td>Foreign key to suppliers</td>
+                </tr>
+                <tr>
+                    <td>purchase_order_id</td>
+                    <td>INT (FK)</td>
+                    <td>Original purchase order ID (optional)</td>
+                </tr>
+                <tr>
+                    <td>return_date</td>
+                    <td>DATE</td>
+                    <td>Return date</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>ENUM</td>
+                    <td>Return status (pending, approved, returned, cancelled)</td>
+                </tr>
+                <tr>
+                    <td>total_amount</td>
+                    <td>DECIMAL</td>
+                    <td>Subtotal before tax and discount</td>
+                </tr>
+                <tr>
+                    <td>tax_amount</td>
+                    <td>DECIMAL</td>
+                    <td>Tax amount</td>
+                </tr>
+                <tr>
+                    <td>discount_amount</td>
+                    <td>DECIMAL</td>
+                    <td>Discount amount</td>
+                </tr>
+                <tr>
+                    <td>grand_total</td>
+                    <td>DECIMAL</td>
+                    <td>Total refund amount</td>
+                </tr>
+                <tr>
+                    <td>payment_status</td>
+                    <td>ENUM</td>
+                    <td>Payment status (pending, partial, paid)</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>TEXT</td>
+                    <td>Return notes</td>
+                </tr>
+                <tr>
+                    <td>created_by</td>
+                    <td>INT (FK)</td>
+                    <td>User who created the return</td>
+                </tr>
+                <tr>
+                    <td>created_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>Creation timestamp</td>
+                </tr>
+                <tr>
+                    <td>updated_at</td>
+                    <td>TIMESTAMP</td>
+                    <td>Last update timestamp</td>
+                </tr>
+            </table>
+
+            <h4 style="margin-top: 25px;">purchase_return_items</h4>
+            <p>Line items for purchase returns.</p>
+
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>INT (PK)</td>
+                    <td>Primary key</td>
+                </tr>
+                <tr>
+                    <td>purchase_return_id</td>
+                    <td>INT (FK)</td>
+                    <td>Foreign key to purchase_returns</td>
+                </tr>
+                <tr>
+                    <td>product_id</td>
+                    <td>INT (FK)</td>
+                    <td>Foreign key to products</td>
+                </tr>
+                <tr>
+                    <td>quantity</td>
+                    <td>INT</td>
+                    <td>Quantity returned</td>
+                </tr>
+                <tr>
+                    <td>unit_cost</td>
+                    <td>DECIMAL</td>
+                    <td>Unit cost for refund</td>
+                </tr>
+                <tr>
+                    <td>discount</td>
+                    <td>DECIMAL</td>
+                    <td>Discount per item</td>
+                </tr>
+                <tr>
+                    <td>line_total</td>
+                    <td>DECIMAL</td>
+                    <td>Line total (quantity × cost - discount)</td>
+                </tr>
+            </table>
+
+            <h4 style="margin-top: 25px;">purchase_return_invoices</h4>
+            <p>Debit notes issued for purchase returns.</p>
+
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>INT (PK)</td>
+                    <td>Primary key</td>
+                </tr>
+                <tr>
+                    <td>invoice_number</td>
+                    <td>VARCHAR(255)</td>
+                    <td>Debit note number (auto-generated)</td>
+                </tr>
+                <tr>
+                    <td>purchase_return_id</td>
+                    <td>INT (FK)</td>
+                    <td>Foreign key to purchase_returns</td>
+                </tr>
+                <tr>
+                    <td>total_amount</td>
+                    <td>DECIMAL</td>
+                    <td>Debit note amount</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>ENUM</td>
+                    <td>Status (issued, credited, cancelled)</td>
+                </tr>
+                <tr>
+                    <td>invoice_date</td>
+                    <td>DATE</td>
+                    <td>Debit note date</td>
+                </tr>
+            </table>
+
+            <h4 style="margin-top: 25px;">purchase_return_payments</h4>
+            <p>Refund payments received from suppliers.</p>
+
+            <table>
+                <tr>
+                    <th>Column</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>INT (PK)</td>
+                    <td>Primary key</td>
+                </tr>
+                <tr>
+                    <td>purchase_return_id</td>
+                    <td>INT (FK)</td>
+                    <td>Foreign key to purchase_returns</td>
+                </tr>
+                <tr>
+                    <td>invoice_id</td>
+                    <td>INT (FK)</td>
+                    <td>Associated invoice (optional)</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>DECIMAL</td>
+                    <td>Refund amount received</td>
+                </tr>
+                <tr>
+                    <td>payment_method</td>
+                    <td>VARCHAR(50)</td>
+                    <td>Payment method (CASH, BANK_TRANSFER, CHECK, etc.)</td>
+                </tr>
+                <tr>
+                    <td>reference_number</td>
+                    <td>VARCHAR(255)</td>
+                    <td>Transaction reference</td>
+                </tr>
+                <tr>
+                    <td>payment_date</td>
+                    <td>DATE</td>
+                    <td>Payment date</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>ENUM</td>
+                    <td>Status (pending, completed, failed)</td>
+                </tr>
+            </table>
+
+            <h3 style="margin-top: 40px;">🗄️ Database Schema (ER Diagram)</h3>
+            <div class="mermaid">
+                erDiagram
+                PURCHASE_RETURNS {
+                int id PK
+                string return_number UK
+                int supplier_id FK
+                int purchase_order_id FK
+                date return_date
+                enum status
+                decimal total_amount
+                decimal tax_amount
+                decimal discount_amount
+                decimal grand_total
+                enum payment_status
+                text notes
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                PURCHASE_RETURN_ITEMS {
+                int id PK
+                int purchase_return_id FK
+                int product_id FK
+                int quantity
+                decimal unit_cost
+                decimal discount
+                decimal line_total
+                }
+                PURCHASE_RETURN_INVOICES {
+                int id PK
+                string invoice_number UK
+                int purchase_return_id FK
+                decimal total_amount
+                enum status
+                date invoice_date
+                datetime created_at
+                datetime updated_at
+                }
+                PURCHASE_RETURN_PAYMENTS {
+                int id PK
+                int purchase_return_id FK
+                int invoice_id FK
+                decimal amount
+                string payment_method
+                string reference_number
+                date payment_date
+                enum status
+                }
+                SUPPLIERS {
+                int id PK
+                string name
+                string email UK
+                string phone
+                string contact_person
+                string company
+                }
+                PRODUCTS {
+                int id PK
+                string name
+                string sku UK
+                decimal price
+                int stock_quantity
+                }
+                PURCHASE_ORDERS {
+                int id PK
+                string po_number UK
+                int supplier_id FK
+                datetime order_date
+                enum status
+                decimal total_amount
+                }
+
+                SUPPLIERS ||--o{ PURCHASE_RETURNS : "receives from"
+                PURCHASE_ORDERS ||--o{ PURCHASE_RETURNS : "returned to"
+                PURCHASE_RETURNS ||--|{ PURCHASE_RETURN_ITEMS : "contains"
+                PURCHASE_RETURN_ITEMS }|--|| PRODUCTS : "refers to"
+                PURCHASE_RETURNS ||--o{ PURCHASE_RETURN_INVOICES : "generates"
+                PURCHASE_RETURN_INVOICES ||--o{ PURCHASE_RETURN_PAYMENTS : "paid by"
+            </div>
+
+            <h4 style="margin-top: 25px;">Relationships</h4>
+            <ul>
+                <li><strong>purchase_returns → suppliers:</strong> Many-to-one (returns sent to suppliers)</li>
+                <li><strong>purchase_returns → purchase_orders:</strong> Many-to-one (optional, original PO)</li>
+                <li><strong>purchase_returns → purchase_return_items:</strong> One-to-many</li>
+                <li><strong>purchase_return_items → products:</strong> Many-to-one</li>
+                <li><strong>purchase_returns → purchase_return_invoices:</strong> One-to-many</li>
+                <li><strong>purchase_return_invoices → purchase_return_payments:</strong> One-to-many</li>
+            </ul>
+        </div>
+
+        <!-- ==================== VALIDATION RULES ==================== -->
+        <div class="section-header">📌 VALIDATION RULES</div>
+
+        <div class="card">
+            <h2>Request Validation</h2>
+
+            <h4>Create Purchase Return</h4>
+            <pre class="code-block"><code>{
+    "supplier_id": "integer|required",
+    "purchase_order_id": "integer|optional",
+    "return_date": "date|optional",
+    "items": "array|required|min:1",
+    "items.*.product_id": "integer|required",
+    "items.*.quantity": "integer|required|min:1",
+    "items.*.unit_cost": "decimal|required|min:0",
+    "items.*.discount": "decimal|optional|min:0",
+    "notes": "string|optional"
+}</code></pre>
+
+            <h4>Update Purchase Return</h4>
+            <pre class="code-block"><code>{
+    "status": "string|optional|in:pending,approved,returned,cancelled",
+    "notes": "string|optional"
+}</code></pre>
+
+            <h4>Payment Methods Reference</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CASH</td>
+                        <td>Cash payment</td>
+                    </tr>
+                    <tr>
+                        <td>BANK_TRANSFER</td>
+                        <td>Bank transfer</td>
+                    </tr>
+                    <tr>
+                        <td>CHECK</td>
+                        <td>Check payment</td>
+                    </tr>
+                    <tr>
+                        <td>CREDIT_NOTE</td>
+                        <td>Credit note adjustment</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Purchase Return Status Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>pending</strong></td>
+                        <td>Awaiting supplier approval</td>
+                    </tr>
+                    <tr>
+                        <td><strong>approved</strong></td>
+                        <td>Approved by supplier, ready for return</td>
+                    </tr>
+                    <tr>
+                        <td><strong>returned</strong></td>
+                        <td>Items returned to supplier</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cancelled</strong></td>
+                        <td>Return cancelled</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Payment Status Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>pending</strong></td>
+                        <td>No refund received yet</td>
+                    </tr>
+                    <tr>
+                        <td><strong>partial</strong></td>
+                        <td>Partial refund received</td>
+                    </tr>
+                    <tr>
+                        <td><strong>paid</strong></td>
+                        <td>Full refund received</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#4facfe',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#3a8bcc',
+                lineColor: '#4facfe',
+                secondaryColor: '#00f2fe',
+                tertiaryColor: '#f8f9fa',
+                background: '#f8f9fa',
+                mainBkg: '#4facfe',
+                nodeBorder: '#3a8bcc',
+                clusterBkg: '#e8f4f8',
+                clusterBorder: '#4facfe',
+                titleColor: '#4facfe',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#00f2fe',
+                actorBorder: '#4facfe',
+                actorTextColor: '#fff',
+                actorLineColor: '#4facfe',
+                signalColor: '#4facfe',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#00f2fe',
+                labelBoxBorderColor: '#4facfe',
+                labelTextColor: '#fff',
+                loopTextColor: '#333',
+                noteBkgColor: '#fff3cd',
+                noteBorderColor: '#ffc107',
+                noteTextColor: '#333'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

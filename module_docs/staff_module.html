@@ -1,0 +1,1564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #d84315; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #d84315; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #d84315; border-bottom: 3px solid #ffd89b; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #ffd89b; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 216, 155, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #ffd89b; }
+        .endpoint-detail h3 { color: #d84315; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #19547b; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+        .expandable-section { margin: 20px 0; }
+        .expandable-header { background: linear-gradient(135deg, #ffecb3 0%, #ffe082 100%); padding: 15px 20px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; border: 2px solid #ffa000; }
+        .expandable-header:hover { background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 160, 0, 0.3); }
+        .expandable-header h4 { margin: 0; color: #e65100; font-size: 1.1em; }
+        .expandable-header .toggle-icon { font-size: 1.5em; color: #e65100; font-weight: bold; transition: transform 0.3s ease; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .expandable-content.active { max-height: 5000px; }
+        .expandable-content-inner { padding: 20px; background: #fffde7; border-radius: 0 0 8px 8px; margin-top: -8px; border: 2px solid #ffa000; border-top: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>👔 Staff Module</h1>
+            <p class="subtitle">Complete employee management integrated with users, departments, roles, payroll, and route assignments</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staffs</div><div class="route-desc">List all staff</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/staffs</div><div class="route-desc">Create staff</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staffs/routes</div><div class="route-desc">Get staff routes</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staffs/:id</div><div class="route-desc">Get staff details</div></div>
+                <div class="route-item"><span class="route-method method-put">PUT</span><div class="route-path">/api/staffs/:id</div><div class="route-desc">Update staff</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/staffs/:id</div><div class="route-desc">Delete staff</div></div>
+            </div>
+        </div>
+
+        <!-- LIST ALL STAFF - GET -->
+        <div class="section-title">📌 GET /api/staffs - List All Staff</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[Controller: getAllStaffs]
+    D --> E[Extract Query Params]
+    E --> F[Service: getAllStaffs]
+    F --> G[Repository: findAll]
+    G --> H[Build WHERE clause]
+    H --> I[department_id Filter]
+    I --> J[role_id Filter]
+    J --> K[status Filter]
+    K --> L[Search: first_name, last_name, email, position]
+    L --> M[Include: Department, Role, PayrollStructure]
+    M --> N[Calculate: total_advance, total_returned]
+    N --> O[Pagination]
+    O --> P[Execute SQL Query]
+    P --> Q[Return Paginated Results]
+    Q --> R[successWithPagination Response]
+
+    style A fill:#e3f2fd
+    style R fill:#c8e6c9
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Page number (default: 1)</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Items per page (default: 10)</td></tr>
+                <tr><td>status</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by status (active/inactive/terminated/on_leave)</td></tr>
+                <tr><td>department_id</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Filter by department ID</td></tr>
+                <tr><td>role_id</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Filter by role ID</td></tr>
+                <tr><td>search</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Search by name, email, or position</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 5-25)</p>
+            <pre class="code-block">async getAllStaffs(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            department_id: req.query.department_id,
+            role_id: req.query.role_id,
+            status: req.query.status,
+            search: req.query.search
+        };
+
+        const result = await StaffService.getAllStaffs(filters, page, limit);
+        return successWithPagination(res, 'Staff members retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 4-12)</p>
+            <pre class="code-block">async getAllStaffs(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await StaffRepository.findAll(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.repository.js</code> (lines 9-78)</p>
+            <pre class="code-block">async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    // Department filter
+    if (filters.department_id) {
+        where.department_id = filters.department_id;
+    }
+
+    // Role filter
+    if (filters.role_id) {
+        where.role_id = filters.role_id;
+    }
+
+    // Status filter
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    // Search across multiple fields
+    if (filters.search) {
+        where[Op.or] = [
+            { first_name: { [Op.like]: `%${filters.search}%` } },
+            { last_name: { [Op.like]: `%${filters.search}%` } },
+            { name: { [Op.like]: `%${filters.search}%` } },
+            { email: { [Op.like]: `%${filters.search}%` } },
+            { position: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    return await Staff.findAndCountAll({
+        where,
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(amount), 0)
+                        FROM payroll_advances
+                        WHERE payroll_advances.staff_id = User.id
+                    )`),
+                    'total_advance'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(returned_amount), 0)
+                        FROM payroll_advances
+                        WHERE payroll_advances.staff_id = User.id
+                    )`),
+                    'total_returned'
+                ]
+            ]
+        },
+        limit,
+        offset,
+        order: [['created_at', 'DESC']],
+        include: [
+            {
+                model: Department,
+                as: 'department',
+                attributes: ['id', 'name', 'description']
+            },
+            {
+                model: Role,
+                as: 'role',
+                attributes: ['id', 'name', 'display_name']
+            },
+            {
+                model: PayrollStructure,
+                as: 'payrollStructure',
+                attributes: ['basic_salary', 'allowances', 'deductions', 'bank_details'],
+                required: false // LEFT JOIN
+            }
+        ]
+    });
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">-- Basic list query with subqueries for payroll advances
+SELECT
+    User.id,
+    User.first_name,
+    User.last_name,
+    User.email,
+    User.phone,
+    User.position,
+    User.department_id,
+    User.role_id,
+    User.status,
+    User.thumb_url,
+    User.gallery_items,
+    User.created_at,
+    (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM payroll_advances
+        WHERE payroll_advances.staff_id = User.id
+    ) AS total_advance,
+    (
+        SELECT COALESCE(SUM(returned_amount), 0)
+        FROM payroll_advances
+        WHERE payroll_advances.staff_id = User.id
+    ) AS total_returned
+FROM users AS User
+ORDER BY User.created_at DESC
+LIMIT 10 OFFSET 0;
+
+-- With department filter
+SELECT ... FROM users AS User
+WHERE User.department_id = 1
+ORDER BY User.created_at DESC;
+
+-- With search filter
+SELECT ... FROM users AS User
+WHERE User.first_name LIKE '%John%'
+   OR User.last_name LIKE '%John%'
+   OR User.email LIKE '%John%'
+   OR User.position LIKE '%John%'
+ORDER BY User.created_at DESC;</pre>
+
+            <h3>Multiple Requests & Responses (Expandable)</h3>
+
+            <!-- Example 1: List All Staff -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>1️⃣ List All Staff (Default)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/staffs</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff members retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "first_name": "Michael",
+            "last_name": "Johnson",
+            "email": "michael.j@company.com",
+            "phone": "+6666666666",
+            "position": "Sales Manager",
+            "department_id": 1,
+            "role_id": 2,
+            "department": {
+                "id": 1,
+                "name": "Sales",
+                "description": "Sales Department"
+            },
+            "role": {
+                "id": 2,
+                "name": "sales_manager",
+                "display_name": "Sales Manager"
+            },
+            "status": "active",
+            "thumb_url": "https://example.com/images/staff/michael.jpg",
+            "gallery_items": [
+                "https://example.com/images/gallery/img1.jpg",
+                "https://example.com/images/gallery/img2.jpg"
+            ],
+            "total_advance": "5000.00",
+            "total_returned": "2000.00",
+            "created_at": "2025-12-03T05:00:00.000Z"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Filter by Status -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>2️⃣ Filter by Status (Active)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/staffs?status=active</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff members retrieved successfully",
+    "pagination": {
+        "total": 4,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "first_name": "Michael",
+            "last_name": "Johnson",
+            "email": "michael.j@company.com",
+            "status": "active",
+            "position": "Sales Manager"
+        },
+        {
+            "id": 2,
+            "first_name": "Sarah",
+            "last_name": "Williams",
+            "email": "sarah.w@company.com",
+            "status": "active",
+            "position": "Sales Representative"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Filter by Department -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>3️⃣ Filter by Department</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/staffs?department_id=1</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff members retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "first_name": "Michael",
+            "last_name": "Johnson",
+            "email": "michael.j@company.com",
+            "department_id": 1,
+            "department": {
+                "id": 1,
+                "name": "Sales",
+                "description": "Sales Department"
+            },
+            "status": "active"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4: Search Staff -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>4️⃣ Search Staff Members</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/staffs?search=john</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff members retrieved successfully",
+    "pagination": {
+        "total": 2,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john.doe@company.com",
+            "position": "Manager",
+            "status": "active"
+        },
+        {
+            "id": 5,
+            "first_name": "Johnson",
+            "last_name": "Smith",
+            "email": "johnson.smith@company.com",
+            "position": "Developer",
+            "status": "active"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 5: Combined Filters -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>5️⃣ Combined Filters (Department + Status + Search + Pagination)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <pre class="code-block">GET /api/staffs?department_id=1<pre class="code-block">GET /api/staffs?department_id=1&status=active&search=manager&page=1&limit=10</div>status=active<pre class="code-block">GET /api/staffs?department_id=1&status=active&search=manager&page=1&limit=10</div>search=manager<pre class="code-block">GET /api/staffs?department_id=1&status=active&search=manager&page=1&limit=10</div>page=1<pre class="code-block">GET /api/staffs?department_id=1&status=active&search=manager&page=1&limit=10</div>limit=10</pre>
+
+                        <strong>Response:</strong>
+                        <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff members retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "first_name": "Michael",
+            "last_name": "Johnson",
+            "email": "michael.j@company.com",
+            "position": "Sales Manager",
+            "department_id": 1,
+            "status": "active"
+        }
+    ]
+}</json></pre>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Success Response</h3>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 200 OK<br>
+                <strong>✓ Response Format:</strong> Paginated list of staff members<br>
+                <strong>✓ Includes:</strong> Total count, current page, page limit, total pages<br>
+                <strong>✓ Additional Fields:</strong> total_advance, total_returned (payroll advance calculations)
+            </div>
+
+            <h3>Error Response</h3>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 500 Internal Server Error<br>
+                <strong>⚠️ Response:</strong>
+                <pre class="code-block"><json>{
+    "success": false,
+    "message": "Internal server error",
+    "error": "Database connection failed"
+}</json></pre>
+            </div>
+        </div>
+
+        <!-- CREATE STAFF - POST -->
+        <div class="section-title">📌 POST /api/staffs - Create Staff</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[validate Middleware]
+    D --> E[Zod Validation]
+    E --> F[Controller: createStaff]
+    F --> G[Get User ID from req.user]
+    G --> H[Service: createStaff]
+    H --> I{Email Exists?}
+    I -->|Yes| J[Throw Error: Duplicate Email]
+    I -->|No| K{Password Provided?}
+    K -->|No| L[Generate Random Password]
+    K -->|Yes| M[Use Provided Password]
+    L --> N[Hash Password with bcrypt]
+    M --> N
+    N --> O[Sanitize Empty Strings to NULL]
+    O --> P[Repository: create]
+    P --> Q[INSERT INTO users]
+    Q --> R[Return Created Record]
+    R --> S[success Response 201]
+
+    style A fill:#e8f5e9
+    style S fill:#c8e6c9
+    style J fill:#ffebee
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.validation.js</code> (Zod Schema)</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>first_name</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Min: 1 char, Max: 100 chars</td></tr>
+                <tr><td>last_name</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Min: 1 char, Max: 100 chars</td></tr>
+                <tr><td>email</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Valid email format, Max: 255 chars, Unique</td></tr>
+                <tr><td>password</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Min: 4 chars (auto-generated if not provided)</td></tr>
+                <tr><td>phone</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 50 chars</td></tr>
+                <tr><td>position</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 100 chars</td></tr>
+                <tr><td>department_id</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Must exist in departments table</td></tr>
+                <tr><td>role_id</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Must exist in roles table</td></tr>
+                <tr><td>hire_date</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Date format YYYY-MM-DD</td></tr>
+                <tr><td>salary</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Must be >= 0</td></tr>
+                <tr><td>address</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Optional text</td></tr>
+                <tr><td>city</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 100 chars</td></tr>
+                <tr><td>state</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 100 chars</td></tr>
+                <tr><td>country</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 100 chars</td></tr>
+                <tr><td>postal_code</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 20 chars</td></tr>
+                <tr><td>status</td><td>enum</td><td><span class="badge badge-optional">No</span></td><td>active, inactive, terminated, on_leave (default: active)</td></tr>
+                <tr><td>notes</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Optional text</td></tr>
+                <tr><td>thumb_url</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Valid URL or null</td></tr>
+                <tr><td>gallery_items</td><td>array</td><td><span class="badge badge-optional">No</span></td><td>Array of valid URLs</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Additional Validation:</strong><br>
+                • Email must be unique across all users (checked at service layer)<br>
+                • Password is auto-generated (8 chars) if not provided<br>
+                • Empty strings for optional fields are converted to NULL<br>
+                • Password is hashed using bcrypt (10 rounds) before storage
+            </div>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 36-43)</p>
+            <pre class="code-block">async createStaff(req, res) {
+    try {
+        const staff = await StaffService.createStaff(req.body, req.user.id);
+        return success(res, 'Staff created successfully', staff, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 22-49)</p>
+            <pre class="code-block">async createStaff(data, userId) {
+    // Check email uniqueness
+    if (data.email) {
+        const existing = await StaffRepository.findByEmail(data.email);
+        if (existing) {
+            throw new Error('Staff with this email already exists');
+        }
+    }
+
+    // Hash password if provided, or generate default
+    if (data.password) {
+        data.password = await bcrypt.hash(data.password, 10);
+    } else {
+        // Generate a random password if not provided
+        const randomPass = Math.random().toString(36).slice(-8);
+        data.password = await bcrypt.hash(randomPass, 10);
+    }
+
+    // Sanitize data: convert empty strings to null
+    const cleanData = { ...data };
+    ['hire_date', 'thumb_url', 'position', 'phone', 'address', 'city', 'state', 'country', 'postal_code', 'notes'].forEach(field => {
+        if (cleanData[field] === '') {
+            cleanData[field] = null;
+        }
+    });
+
+    return await StaffRepository.create({ ...cleanData, created_by: userId });
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="code-block">async findByEmail(email) {
+    return await Staff.findOne({ where: { email } });
+}
+
+async create(data) {
+    return await Staff.create(data);
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">-- Check for existing email
+SELECT id, first_name, last_name, email
+FROM users
+WHERE email = 'jane.smith@example.com'
+LIMIT 1;
+
+-- Insert new staff member
+INSERT INTO users (
+    first_name, last_name, email, password,
+    phone, position, department_id, role_id,
+    hire_date, salary, address, city, state,
+    country, postal_code, status, notes,
+    thumb_url, gallery_items, created_by
+) VALUES (
+    'Jane', 'Smith', 'jane.smith@example.com', '$2b$10$...',
+    '+1987654321', 'Sales Representative', 1, 2,
+    '2025-01-15', 50000.00, '123 Main St', 'New York', 'NY',
+    'USA', '10001', 'active', NULL,
+    'https://example.com/images/staff/jane.jpg', '["img1.jpg", "img2.jpg"]', 1
+);</pre>
+
+            <h3>Database Tables</h3>
+            <table>
+                <tr><th>Table</th><th>Description</th></tr>
+                <tr><td><code>users</code></td><td>Stores all staff/user records (Staff and User are unified)</td></tr>
+                <tr><td><code>departments</code></td><td>Department assignments (referenced by department_id)</td></tr>
+                <tr><td><code>roles</code></td><td>Role assignments (referenced by role_id)</td></tr>
+            </table>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block">POST /api/staffs
+
+{
+    "first_name": "Jane",
+    "last_name": "Smith",
+    "email": "jane.smith@example.com",
+    "password": "securePassword123",
+    "phone": "+1987654321",
+    "position": "Sales Representative",
+    "department_id": 1,
+    "role_id": 2,
+    "hire_date": "2025-01-15",
+    "salary": 50000.00,
+    "address": "123 Main Street",
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "postal_code": "10001",
+    "status": "active",
+    "thumb_url": "https://example.com/images/staff/jane.jpg",
+    "gallery_items": [
+        "https://example.com/images/gallery/jane1.jpg",
+        "https://example.com/images/gallery/jane2.jpg"
+    ]
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "status": true,
+    "message": "Staff created successfully",
+    "data": {
+        "id": 2,
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane.smith@example.com",
+        "phone": "+1987654321",
+        "position": "Sales Representative",
+        "department_id": 1,
+        "role_id": 2,
+        "hire_date": "2025-01-15",
+        "salary": 50000.00,
+        "status": "active",
+        "thumb_url": "https://example.com/images/staff/jane.jpg",
+        "gallery_items": [
+            "https://example.com/images/gallery/jane1.jpg",
+            "https://example.com/images/gallery/jane2.jpg"
+        ],
+        "created_at": "2025-12-03T10:30:00.000Z",
+        "updated_at": "2025-12-03T10:30:00.000Z"
+    }
+}</json></pre>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 201 Created<br>
+                <strong>✓ Auto-generated:</strong> id, created_at, updated_at<br>
+                <strong>✓ Password hashed:</strong> Password is hashed using bcrypt before storage<br>
+                <strong>✓ User account created:</strong> Staff member can now log into the system
+            </div>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "status": false,
+    "message": "Staff with this email already exists"
+}</json></pre>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 400 Bad Request<br>
+                <strong>⚠️ Common Errors:</strong>
+                <ul>
+                    <li>"Staff with this email already exists" - Duplicate email</li>
+                    <li>"first_name is required" - Missing required field</li>
+                    <li>"Invalid email format" - Email validation failed</li>
+                    <li>"Password must be at least 4 characters" - Password too short</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- GET STAFF BY ID -->
+        <div class="section-title">📌 GET /api/staffs/:id - Get Staff by ID</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[Controller: getStaffById]
+    D --> E[Extract ID from params]
+    E --> F[Service: getStaffById]
+    F --> G[Repository: findById]
+    G --> H[Include: Department, Role, PayrollStructure]
+    H --> I[Calculate: total_advance, total_returned]
+    I --> J{Staff Found?}
+    J -->|No| K[Throw Error: Not Found]
+    J -->|Yes| L[Return Staff Data]
+    L --> M[success Response]
+
+    style A fill:#e3f2fd
+    style M fill:#c8e6c9
+    style K fill:#ffebee
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 27-34)</p>
+            <pre class="code-block">async getStaffById(req, res) {
+    try {
+        const staff = await StaffService.getStaffById(req.params.id);
+        return success(res, 'Staff retrieved successfully', staff);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 14-20)</p>
+            <pre class="code-block">async getStaffById(id) {
+    const staff = await StaffRepository.findById(id);
+    if (!staff) {
+        throw new Error('Staff not found');
+    }
+    return staff;
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.repository.js</code> (lines 80-121)</p>
+            <pre class="code-block">async findById(id) {
+    return await Staff.findByPk(id, {
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(amount), 0)
+                        FROM payroll_advances
+                        WHERE payroll_advances.staff_id = User.id
+                    )`),
+                    'total_advance'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(returned_amount), 0)
+                        FROM payroll_advances
+                        WHERE payroll_advances.staff_id = User.id
+                    )`),
+                    'total_returned'
+                ]
+            ]
+        },
+        include: [
+            {
+                model: Department,
+                as: 'department',
+                attributes: ['id', 'name', 'description']
+            },
+            {
+                model: Role,
+                as: 'role',
+                attributes: ['id', 'name', 'display_name']
+            },
+            {
+                model: PayrollStructure,
+                as: 'payrollStructure',
+                attributes: ['basic_salary', 'allowances', 'deductions', 'bank_details'],
+                required: false // LEFT JOIN
+            }
+        ]
+    });
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">SELECT
+    User.id, User.first_name, User.last_name, User.email,
+    User.phone, User.position, User.department_id, User.role_id,
+    User.hire_date, User.salary, User.address, User.city, User.state,
+    User.country, User.postal_code, User.status, User.thumb_url,
+    User.gallery_items, User.created_at, User.updated_at,
+    (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM payroll_advances
+        WHERE payroll_advances.staff_id = User.id
+    ) AS total_advance,
+    (
+        SELECT COALESCE(SUM(returned_amount), 0)
+        FROM payroll_advances
+        WHERE payroll_advances.staff_id = User.id
+    ) AS total_returned
+FROM users AS User
+WHERE User.id = 1;</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "status": true,
+    "message": "Staff retrieved successfully",
+    "data": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "phone": "+1234567890",
+        "position": "Manager",
+        "department_id": 1,
+        "role_id": 2,
+        "department": {
+            "id": 1,
+            "name": "Sales",
+            "description": "Sales Department"
+        },
+        "role": {
+            "id": 2,
+            "name": "sales_manager",
+            "display_name": "Sales Manager"
+        },
+        "payrollStructure": {
+            "basic_salary": 50000.00,
+            "allowances": {"transport": 2000, "housing": 3000},
+            "deductions": {"tax": 5000, "insurance": 1000},
+            "bank_details": {"bank": "Chase", "account": "****1234"}
+        },
+        "hire_date": "2024-01-01",
+        "salary": 75000.00,
+        "address": "123 Main St",
+        "city": "New York",
+        "state": "NY",
+        "country": "USA",
+        "postal_code": "10001",
+        "status": "active",
+        "thumb_url": "https://example.com/images/staff/john.jpg",
+        "gallery_items": [
+            "https://example.com/images/gallery/john1.jpg",
+            "https://example.com/images/gallery/john2.jpg",
+            "https://example.com/images/gallery/john3.jpg"
+        ],
+        "total_advance": "5000.00",
+        "total_returned": "2000.00",
+        "created_at": "2025-12-02T10:00:00.000Z",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</json></pre>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "status": false,
+    "message": "Staff not found"
+}</json></pre>
+        </div>
+
+        <!-- GET STAFF ROUTES -->
+        <div class="section-title">📌 GET /api/staffs/routes - Get Staff Routes</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[Controller: getStaffRoutes]
+    D --> E[Service: getStaffsWithRoutes]
+    E --> F[Repository: getStaffRoutes from SalesRouteRepository]
+    F --> G[Deep Include: Routes, Customers, Orders]
+    G --> H[Calculate Order Stats per Route]
+    H --> I[Calculate Total Completed Orders]
+    I --> J[Format Response Data]
+    J --> K[successWithPagination Response]
+
+    style A fill:#e3f2fd
+    style K fill:#c8e6c9
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Page number (default: 1)</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Items per page (default: 10)</td></tr>
+                <tr><td>search</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Search by staff name</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 63-82)</p>
+            <pre class="code-block">async getStaffRoutes(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            search: req.query.search
+        };
+
+        const result = await StaffService.getStaffsWithRoutes(filters, page, limit);
+
+        // Return with standard pagination wrapper
+        return successWithPagination(res, 'Staff routes retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 87-141)</p>
+            <pre class="code-block">async getStaffsWithRoutes(filters = {}, page = 1, limit = 10) {
+    // Use SalesRouteRepository to fetch staff with deep inclusions
+    const result = await require('../sales/salesroute.repository').getStaffRoutes(filters, limit, (page - 1) * limit);
+
+    const formattedData = result.rows.map(staff => {
+        const routes = staff.assignedRoutes || [];
+
+        // Calculate aggregations
+        let completedOrdersCount = 0;
+
+        const formattedRoutes = routes.map(route => {
+            const customers = route.customers || [];
+            let routeOrderCount = 0;
+            let routeCompletedOrders = 0;
+
+            customers.forEach(customer => {
+                const orders = customer.orders || [];
+                routeOrderCount += orders.length;
+
+                const completed = orders.filter(o => ['delivered', 'completed', 'shipped'].includes(o.status)).length;
+                routeCompletedOrders += completed;
+            });
+
+            completedOrdersCount += routeCompletedOrders;
+
+            return {
+                id: route.id,
+                name: route.route_name,
+                status: route.is_active ? 'Active' : 'Pending',
+                orders: routeOrderCount
+            };
+        });
+
+        return {
+            id: staff.id,
+            name: staff.name || `${staff.first_name || ''} ${staff.last_name || ''}`.trim(),
+            role: staff.position || 'Staff',
+            email: staff.email,
+            phone: staff.phone,
+            thumb_url: staff.thumb_url || null,
+            active: staff.status === 'active',
+            routes: formattedRoutes,
+            stats: {
+                completedOrders: completedOrdersCount,
+                rating: 4.5 // Placeholder as rating system is not implemented yet
+            }
+        };
+    });
+
+    return {
+        data: formattedData,
+        total: result.count
+    };
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "success": true,
+    "message": "Staff routes retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1000,
+            "name": "Staff Member 1",
+            "role": "Sales Representative",
+            "email": "staff1@example.com",
+            "phone": "+8801700000000",
+            "thumb_url": null,
+            "active": false,
+            "routes": [
+                {
+                    "id": 1,
+                    "name": "Dhaka North - Sector 1",
+                    "status": "Active",
+                    "orders": 42
+                },
+                {
+                    "id": 2,
+                    "name": "Dhaka South - Sector 3",
+                    "status": "Pending",
+                    "orders": 28
+                }
+            ],
+            "stats": {
+                "completedOrders": 834,
+                "rating": 4.6
+            }
+        }
+    ]
+}</json></pre>
+
+            <div class="info-box">
+                <strong>ℹ️ Includes:</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li>Assigned sales routes for each staff member</li>
+                    <li>Order statistics per route</li>
+                    <li>Completed orders count (aggregated from all routes)</li>
+                    <li>Performance rating (placeholder, not fully implemented)</li>
+                    <li>Active status based on staff.status === 'active'</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- UPDATE STAFF -->
+        <div class="section-title">📌 PUT /api/staffs/:id - Update Staff</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[validate Middleware]
+    D --> E[Zod Validation]
+    E --> F[Controller: updateStaff]
+    F --> G[Service: updateStaff]
+    G --> H{Staff Exists?}
+    H -->|No| I[Throw Error: Not Found]
+    H -->|Yes| J{Email Changing?}
+    J -->|Yes| K{New Email Unique?}
+    K -->|No| L[Throw Error: Duplicate]
+    K -->|Yes| M{Password Provided?}
+    J -->|No| M
+    M -->|Yes| N[Hash New Password]
+    M -->|No| O[Skip Password]
+    N --> P[Sanitize Empty Strings]
+    O --> P
+    P --> Q[Repository: update]
+    Q --> R[UPDATE users]
+    R --> S[Return Updated Record]
+    S --> T[success Response]
+
+    style A fill:#fff3e0
+    style T fill:#c8e6c9
+    style I fill:#ffebee
+    style L fill:#ffebee</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>first_name</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Min: 1 char, Max: 100 chars</td></tr>
+                <tr><td>last_name</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Min: 1 char, Max: 100 chars</td></tr>
+                <tr><td>email</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Valid email, Unique (excluding self)</td></tr>
+                <tr><td>password</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Min: 4 chars (re-hashed if provided)</td></tr>
+                <tr><td>position</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Max: 100 chars</td></tr>
+                <tr><td>salary</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Must be >= 0</td></tr>
+                <tr><td>status</td><td>enum</td><td><span class="badge badge-optional">No</span></td><td>active, inactive, terminated, on_leave</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 45-52)</p>
+            <pre class="code-block">async updateStaff(req, res) {
+    try {
+        const staff = await StaffService.updateStaff(req.params.id, req.body);
+        return success(res, 'Staff updated successfully', staff);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 51-77)</p>
+            <pre class="code-block">async updateStaff(id, data) {
+    // Check email uniqueness if email is being updated
+    if (data.email) {
+        const existing = await StaffRepository.findByEmail(data.email);
+        if (existing && existing.id !== parseInt(id)) {
+            throw new Error('Staff with this email already exists');
+        }
+    }
+
+    // Hash password if provided
+    if (data.password) {
+        data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    // Sanitize data: convert empty strings to null
+    const cleanData = { ...data };
+    ['hire_date', 'thumb_url', 'position', 'phone', 'address', 'city', 'state', 'country', 'postal_code', 'notes'].forEach(field => {
+        if (cleanData[field] === '') {
+            cleanData[field] = null;
+        }
+    });
+
+    const staff = await StaffRepository.update(id, cleanData);
+    if (!staff) {
+        throw new Error('Staff not found');
+    }
+    return staff;
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="code-block">async update(id, data) {
+    const staff = await Staff.findByPk(id);
+    if (!staff) return null;
+    return await staff.update(data);
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">UPDATE users
+SET first_name = 'John',
+    last_name = 'Doe',
+    email = 'john.doe@example.com',
+    position = 'Senior Manager',
+    salary = 85000.00,
+    status = 'active',
+    updated_at = NOW()
+WHERE id = 1;</pre>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block">PUT /api/staffs/1
+
+{
+    "position": "Senior Manager",
+    "salary": 85000.00,
+    "password": "newSecurePassword456",
+    "status": "active"
+}</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "status": true,
+    "message": "Staff updated successfully",
+    "data": {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "john.doe@example.com",
+        "position": "Senior Manager",
+        "salary": 85000.00,
+        "status": "active",
+        "updated_at": "2025-12-03T11:00:00.000Z"
+    }
+}</json></pre>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "status": false,
+    "message": "Staff with this email already exists"
+}</json></pre>
+        </div>
+
+        <!-- DELETE STAFF -->
+        <div class="section-title">📌 DELETE /api/staffs/:id - Delete Staff</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck staffs]
+    C --> D[Controller: deleteStaff]
+    D --> E[Service: deleteStaff]
+    E --> F{Staff Exists?}
+    F -->|No| G[Throw Error: Not Found]
+    F -->|Yes| H[Repository: delete]
+    H --> I[DELETE FROM users]
+    I --> J{Has Related Records?}
+    J -->|Yes| K[May Fail: FK Constraint]
+    J -->|No| L[Return Success]
+    K --> M[Error: Cannot Delete]
+    L --> N[success Response]
+
+    style A fill:#ffebee
+    style N fill:#c8e6c9
+    style G fill:#ffebee
+    style M fill:#ffebee</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.controller.js</code> (lines 54-61)</p>
+            <pre class="code-block">async deleteStaff(req, res) {
+    try {
+        await StaffService.deleteStaff(req.params.id);
+        return success(res, 'Staff deleted successfully', null);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</pre>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/staffs/staffs.service.js</code> (lines 79-85)</p>
+            <pre class="code-block">async deleteStaff(id) {
+    const staff = await StaffRepository.delete(id);
+    if (!staff) {
+        throw new Error('Staff not found');
+    }
+    return staff;
+}</pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="code-block">async delete(id) {
+    const staff = await Staff.findByPk(id);
+    if (!staff) return null;
+    await staff.destroy();
+    return staff;
+}</pre>
+
+            <h4>SQL Query Generated</h4>
+            <pre class="code-block">DELETE FROM users
+WHERE id = 1;</pre>
+
+            <h3>Success Response</h3>
+            <pre class="code-block"><json>{
+    "status": true,
+    "message": "Staff deleted successfully"
+}</json></pre>
+
+            <h3>Error Response</h3>
+            <pre class="code-block"><json>{
+    "status": false,
+    "message": "Staff not found"
+}</json></pre>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning:</strong> Deletion may affect attendance records and other related data. Consider changing status to "inactive" instead of deleting to preserve historical data.
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+            <p><strong>Note:</strong> Staff are stored in the <code>users</code> table. Staff and Users refer to the same entities (unified model).</p>
+
+            <div class="flow-diagram">
+                <pre class="mermaid">erDiagram
+    USERS ||--o{ ATTENDANCE : has
+    USERS ||--o{ PAYROLL_ITEMS : receives
+    USERS ||--o| PAYROLL_STRUCTURES : configured_in
+    USERS ||--o{ SALES_ROUTE_STAFF : assigned_to
+    USERS ||--o| DEPARTMENTS : belongs_to
+    USERS ||--o| ROLES : has
+    USERS ||--o{ PAYROLL_ADVANCES : receives
+    SALES_ROUTE_STAFF ||--o{ SALES_ROUTES : for
+
+    USERS {
+        number id PK
+        string first_name
+        string last_name
+        string email UK
+        string password
+        string phone
+        string position
+        number department_id FK
+        number role_id FK
+        date hire_date
+        number salary
+        string address
+        string city
+        string state
+        string country
+        string postal_code
+        string status
+        string thumb_url
+        array gallery_items
+        datetime created_at
+        datetime updated_at
+    }
+
+    DEPARTMENTS {
+        number id PK
+        string name UK
+        text description
+    }
+
+    ROLES {
+        number id PK
+        string name UK
+        string display_name
+    }
+
+    ATTENDANCE {
+        number id PK
+        number staff_id FK
+        date date
+        time check_in
+        time check_out
+        string status
+        decimal total_hours
+    }
+
+    PAYROLL_ADVANCES {
+        number id PK
+        number staff_id FK
+        number amount
+        number returned_amount
+        string status
+    }</pre>
+            </div>
+
+            <h3 style="color: #d84315; margin: 30px 0 15px 0;">Table Descriptions</h3>
+
+            <h4>USERS (Staff)</h4>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+                <tr><td>id</td><td>INT</td><td>PK, AUTO_INCREMENT</td><td>Unique identifier</td></tr>
+                <tr><td>first_name</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>First name</td></tr>
+                <tr><td>last_name</td><td>VARCHAR(100)</td><td>NOT NULL</td><td>Last name</td></tr>
+                <tr><td>email</td><td>VARCHAR(255)</td><td>NOT NULL, UNIQUE</td><td>Email address (unique)</td></tr>
+                <tr><td>password</td><td>VARCHAR(255)</td><td>NOT NULL</td><td>Hashed password (bcrypt)</td></tr>
+                <tr><td>phone</td><td>VARCHAR(50)</td><td>NULLABLE</td><td>Phone number</td></tr>
+                <tr><td>position</td><td>VARCHAR(100)</td><td>NULLABLE</td><td>Job position</td></tr>
+                <tr><td>department_id</td><td>INT</td><td>FK (departments.id)</td><td>Department reference</td></tr>
+                <tr><td>role_id</td><td>INT</td><td>FK (roles.id)</td><td>Role reference</td></tr>
+                <tr><td>hire_date</td><td>DATE</td><td>NULLABLE</td><td>Hire date</td></tr>
+                <tr><td>salary</td><td>DECIMAL</td><td>NULLABLE</td><td>Annual salary</td></tr>
+                <tr><td>address</td><td>TEXT</td><td>NULLABLE</td><td>Street address</td></tr>
+                <tr><td>city</td><td>VARCHAR(100)</td><td>NULLABLE</td><td>City</td></tr>
+                <tr><td>state</td><td>VARCHAR(100)</td><td>NULLABLE</td><td>State/Province</td></tr>
+                <tr><td>country</td><td>VARCHAR(100)</td><td>NULLABLE</td><td>Country</td></tr>
+                <tr><td>postal_code</td><td>VARCHAR(20)</td><td>NULLABLE</td><td>Postal code</td></tr>
+                <tr><td>status</td><td>ENUM</td><td>NULLABLE</td><td>active, inactive, terminated, on_leave</td></tr>
+                <tr><td>thumb_url</td><td>VARCHAR(500)</td><td>NULLABLE</td><td>Profile image URL</td></tr>
+                <tr><td>gallery_items</td><td>JSON/ARRAY</td><td>NULLABLE</td><td>Gallery image URLs</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT NOW()</td><td>Creation timestamp</td></tr>
+                <tr><td>updated_at</td><td>DATETIME</td><td>ON UPDATE NOW()</td><td>Last update timestamp</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Important Notes:</strong><br>
+                • Staff and Users share the same table (unified model)<br>
+                • Email must be unique across all users<br>
+                • Password is hashed using bcrypt (10 rounds)<br>
+                • If password not provided on create, random 8-char password is generated<br>
+                • Empty strings for optional fields are converted to NULL<br>
+                • Deleting staff removes their user account and login access
+            </div>
+        </div>
+
+        <!-- STATUS REFERENCE -->
+        <div class="section-title">📌 STAFF STATUS REFERENCE</div>
+        <div class="card">
+            <h2>Status Values</h2>
+
+            <table>
+                <tr><th>Status</th><th>Description</th><th>Use Case</th></tr>
+                <tr><td><code>active</code></td><td>Currently employed and working</td><td>Default status for active employees</td></tr>
+                <tr><td><code>inactive</code></td><td>Employed but not currently working</td><td>Temporary suspension, inactive period</td></tr>
+                <tr><td><code>terminated</code></td><td>Employment ended</td><td>Resigned, fired, or contract ended</td></tr>
+                <tr><td><code>on_leave</code></td><td>Currently on leave</td><td>Sick leave, vacation, parental leave</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Best Practices:</strong><br>
+                • Use <code>status='inactive'</code> or <code>status='terminated'</code> instead of deleting to preserve historical data<br>
+                • Staff with <code>status='terminated'</code> should not be able to log in<br>
+                • <code>status='on_leave'</code> preserves employment but suspends active duties<br>
+                • Payroll calculations may be affected by staff status
+            </div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS & WARNINGS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #d84315; margin: 20px 0 10px 0;">Creating a Staff Member</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates new USERS record with staff information</li>
+                <li>✓ Validates email uniqueness across all users</li>
+                <li>✓ Hashes password using bcrypt (10 rounds) before storage</li>
+                <li>✓ Generates random password if not provided</li>
+                <li>✓ Sets status to 'active' by default</li>
+                <li>✓ Auto-generates created_at and updated_at timestamps</li>
+                <li>✅ Creates user account that can log into the system</li>
+                <li>✅ Staff can be assigned to routes, departments, and roles</li>
+            </ul>
+
+            <h3 style="color: #d84315; margin: 20px 0 10px 0;">Updating a Staff Member</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates specified fields only (partial update supported)</li>
+                <li>✓ Auto-updates updated_at timestamp</li>
+                <li>✓ Validates email uniqueness if email is being changed</li>
+                <li>✓ Re-hashes password if password field is provided</li>
+                <li>✓ Converts empty strings to NULL for optional fields</li>
+                <li>✅ May affect future payroll calculations (salary changes)</li>
+                <li>✅ Department changes affect route assignments and permissions</li>
+                <li>✅ Role changes affect system access and permissions</li>
+            </ul>
+
+            <h3 style="color: #d84315; margin: 20px 0 10px 0;">Deleting a Staff Member</h3>
+            <ul style="line-height: 2;">
+                <li>⚠️ Permanently removes user account from users table</li>
+                <li>⚠️ Staff member will no longer be able to log in</li>
+                <li>⚠️ May affect attendance records (foreign key constraints)</li>
+                <li>⚠️ May affect payroll calculations if employee has pending pay</li>
+                <li>⚠️ Cannot be undone (no soft delete)</li>
+                <li>✅ Consider using status='inactive' or status='terminated' instead</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important Warnings:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Staff and Users share the same <strong>users</strong> table</li>
+                    <li>Deleting a staff removes their user account and login access permanently</li>
+                    <li>Email must be unique across all users in the system</li>
+                    <li>Salary updates will affect future payroll calculations</li>
+                    <li>Department and role assignments affect permissions and routing</li>
+                    <li>Attendance records reference staff via user_id FK</li>
+                    <li>Payroll advances are tied to staff via staff_id FK</li>
+                    <li>Use status field for deactivation instead of deleting when possible</li>
+                </ul>
+            </div>
+
+            <h3 style="color: #d84315; margin: 20px 0 10px 0;">Staff Creation Flow Diagram</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Start: Create Staff] --> B[Validate Request Data]
+    B --> C{Email Valid?}
+    C -->|No| D[Return Validation Error]
+    C -->|Yes| E[Check Email Uniqueness]
+    E --> F{Email Already Exists?}
+    F -->|Yes| G[Return Duplicate Error]
+    F -->|No| H{Password Provided?}
+    H -->|No| I[Generate Random Password]
+    H -->|Yes| J[Use Provided Password]
+    I --> K[Hash Password with bcrypt]
+    J --> K
+    K --> L[Convert Empty Strings to NULL]
+    L --> M[Create User Record]
+    M --> N[Set created_by Field]
+    N --> O[Auto-generate Timestamps]
+    O --> P[Return Created Staff]
+    P --> Q[Staff Can Now Login]
+
+    style A fill:#e1f5fe
+    style P fill:#c8e6c9
+    style Q fill:#c8e6c9
+    style D fill:#ffebee
+    style G fill:#ffebee</pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            content.classList.toggle('active');
+            icon.textContent = content.classList.contains('active') ? '▲' : '▼';
+        }
+    </script>
+</body>
+</html>

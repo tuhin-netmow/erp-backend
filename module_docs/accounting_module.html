@@ -1,0 +1,2956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .card h3 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .endpoint-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .back-link:hover {
+            background: #5568d3;
+        }
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tr:hover {
+            background: #f8f9fa;
+        }
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .request-item {
+            background: white;
+            padding: 15px;
+            border-left: 3px solid #667eea;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #667eea;
+            font-size: 13px;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .nav-menu {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-menu li {
+            margin: 8px 0;
+        }
+        .nav-menu a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .nav-menu a:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>Accounting Module Documentation</h1>
+            <p>Comprehensive accounting system with double-entry bookkeeping, journal entries, and financial reports</p>
+            <p><strong>Base URL:</strong> /api/accounting</p>
+            <p><strong>Middleware:</strong> <span class="badge-protected">verifyToken</span> <span class="badge-admin">moduleCheck('accounting')</span></p>
+        </div>
+
+        <div class="nav-menu">
+            <h3 style="margin-top: 0; color: #667eea;">Quick Navigation</h3>
+            <ul>
+                <li><a href="#transactions">Transactions & Journal Entries</a></li>
+                <li><a href="#reports">Financial Reports</a></li>
+                <li><a href="#master-data">Master Data (Accounts)</a></li>
+                <li><a href="#expenses-incomes">Expenses & Incomes</a></li>
+                <li><a href="#tax">Tax Submissions</a></li>
+                <li><a href="#database">Database Schema</a></li>
+            </ul>
+        </div>
+
+        <!-- Database Schema Section -->
+        <div class="card" id="database">
+            <h2>📊 Database Schema</h2>
+
+            <h3>ER Diagram</h3>
+            <div class="mermaid">
+erDiagram
+    Account ||--o{ JournalLine : "debits/credits"
+    Journal ||--o{ JournalLine : "contains"
+    Journal }o--|| Transaction : "references"
+    Account ||--o{ TaxSubmission : "tracks"
+
+    Account {
+        int id PK
+        string code UK
+        string name
+        enum type
+        int parent_id FK
+        text description
+    }
+
+    Transaction {
+        int id PK
+        enum type
+        decimal amount
+        enum payment_mode
+        date date
+        string description
+    }
+
+    Journal {
+        int id PK
+        date date
+        string narration
+        string reference_type
+        int reference_id FK
+    }
+
+    JournalLine {
+        int id PK
+        int journal_id FK
+        int account_id FK
+        decimal debit
+        decimal credit
+    }
+
+    TaxSubmission {
+        int id PK
+        string tax_type
+        date period_start
+        date period_end
+        decimal amount
+        date submission_date
+        string status
+        enum payment_mode
+        string reference_number
+        string attachment_url
+        text notes
+    }
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Description</th>
+                        <th>Key Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>accounts</code></td>
+                        <td>Chart of Accounts - COA entities</td>
+                        <td>id, code, name, type (ASSET/LIABILITY/EQUITY/INCOME/EXPENSE)</td>
+                    </tr>
+                    <tr>
+                        <td><code>transactions</code></td>
+                        <td>Single-entry transaction records</td>
+                        <td>id, type, amount, payment_mode, date</td>
+                    </tr>
+                    <tr>
+                        <td><code>journals</code></td>
+                        <td>Journal entry headers</td>
+                        <td>id, date, narration, reference_type, reference_id</td>
+                    </tr>
+                    <tr>
+                        <td><code>journal_lines</code></td>
+                        <td>Individual debit/credit lines</td>
+                        <td>journal_id, account_id, debit, credit</td>
+                    </tr>
+                    <tr>
+                        <td><code>tax_submissions</code></td>
+                        <td>Tax filing and payment records</td>
+                        <td>tax_type, period_start, period_end, amount, status</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Transaction Types</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Debit Account</th>
+                        <th>Credit Account</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SALES</td>
+                        <td>Sales transaction</td>
+                        <td>Cash/Bank/AR</td>
+                        <td>Sales, Tax Payable</td>
+                    </tr>
+                    <tr>
+                        <td>PURCHASE</td>
+                        <td>Purchase transaction</td>
+                        <td>Purchase, Tax Payable</td>
+                        <td>Cash/Bank/AP</td>
+                    </tr>
+                    <tr>
+                        <td>EXPENSE</td>
+                        <td>General expense</td>
+                        <td>Expense Account</td>
+                        <td>Cash</td>
+                    </tr>
+                    <tr>
+                        <td>INCOME</td>
+                        <td>Other income</td>
+                        <td>Cash</td>
+                        <td>Other Income</td>
+                    </tr>
+                    <tr>
+                        <td>PAYROLL</td>
+                        <td>Payroll payment</td>
+                        <td>Salary</td>
+                        <td>Cash/Bank</td>
+                    </tr>
+                    <tr>
+                        <td>TAX_SUBMISSION</td>
+                        <td>Tax payment to authority</td>
+                        <td>Tax Payable</td>
+                        <td>Cash/Bank</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Transactions & Journal Entries Section -->
+        <div class="card" id="transactions">
+            <h2>💰 Transactions & Journal Entries</h2>
+
+            <!-- POST /journal-entry -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /journal-entry <span class="file-badge">accounting.routes.js:20</span></h3>
+                <p>Create a manual journal entry with double-entry validation</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate(createJournal)
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/accounting/journal-entry
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'accounting' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate(createJournal): Validate Request Body
+    validate(createJournal)->>Controller: Validation Passed
+    Controller->>Service: createManualJournal(data)
+    Service->>Service: Validate Sum(Debit) == Sum(Credit)
+    Service->>Repository: createJournalEntry(journalData, linesData)
+    Repository->>Database: BEGIN TRANSACTION
+    Database->>Repository: Transaction Started
+    Repository->>Database: INSERT INTO journals
+    Database->>Repository: Journal Created
+    Repository->>Database: INSERT INTO journal_lines (Bulk)
+    Database->>Repository: Lines Created
+    Repository->>Database: COMMIT
+    Database->>Repository: Transaction Committed
+    Repository->>Service: Journal Entry
+    Service->>Controller: Journal Entry Result
+    Controller->>Client: 201 Success Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Accounting Controller]
+    Controller -->|createManualJournal| Service[Accounting Service]
+    Service -->|Data Access| Repository[Journal Entry Repository]
+    end
+
+    subgraph "Create Manual Journal Entry"
+    CreateJournal[POST /api/accounting/journal-entry] -->|Request Body| ValidateBalance[Service - Validate Balance]
+    ValidateBalance -->|Sum Debit = Sum Credit| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> CreateJournalRecord[Repository - Create Journal]
+    CreateJournalRecord -->|INSERT INTO journals| DB[(MySQL Database)]
+
+    DB -->|Journal ID| CreateLines[Repository - Create Journal Lines]
+    CreateLines -->|BULK INSERT journal_lines| DBLines[(MySQL - journal_lines)]
+
+    DBLines --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>date</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>narration</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>entries</td>
+                            <td>array</td>
+                            <td>Required, Min 2 items</td>
+                        </tr>
+                        <tr>
+                            <td>entries[].account_id</td>
+                            <td>number</td>
+                            <td>Required, Positive integer</td>
+                        </tr>
+                        <tr>
+                            <td>entries[].debit</td>
+                            <td>number</td>
+                            <td>Required, Min 0</td>
+                        </tr>
+                        <tr>
+                            <td>entries[].credit</td>
+                            <td>number</td>
+                            <td>Required, Min 0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>Business Rule:</strong> Total Debits must equal Total Credits for the journal entry to be valid.
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:16
+async createJournalEntry(req, res) {
+    try {
+        const journal = await AccountingService.createManualJournal(req.body);
+        return success(res, 'Journal Entry created successfully', journal, 201);
+    } catch (err) {
+        const message = err.errors ? err.errors.map(e => e.message).join(', ') : err.message;
+        return error(res, message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:604
+async createManualJournal(data) {
+    // 1. Validate Debit = Credit
+    const totalDebit = data.entries.reduce((sum, e) => sum + e.debit, 0);
+    const totalCredit = data.entries.reduce((sum, e) => sum + e.credit, 0);
+
+    if (Math.abs(totalDebit - totalCredit) > 0.01) {
+        throw new Error(`Debit (${totalDebit}) must equal Credit (${totalCredit})`);
+    }
+
+    // 2. Use repository to create journal with lines
+    const journalData = {
+        date: data.date,
+        narration: data.narration || 'Manual Journal Entry',
+        reference_type: 'MANUAL',
+        reference_id: null
+    };
+
+    return await sequelize.transaction(async (t) => {
+        return await AccountingRepository.createJournalEntry(journalData, data.entries, t);
+    });
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:131
+async createJournalEntry(journalData, linesData, transaction) {
+    // 1. Create Journal Header
+    const journal = await Journal.create(journalData, { transaction });
+
+    // 2. Create Journal Lines
+    const lines = linesData.map(line => ({
+        ...line,
+        journal_id: journal.id
+    }));
+
+    await JournalLine.bulkCreate(lines, { transaction });
+
+    return journal;
+}
+
+SQL Equivalent:
+INSERT INTO journals (date, narration, reference_type, reference_id)
+VALUES (?, ?, ?, ?);
+
+INSERT INTO journal_lines (journal_id, account_id, debit, credit)
+VALUES
+    (?, ?, ?, ?),
+    (?, ?, ?, ?);</code></pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><code>journals</code> - Stores journal header</li>
+                    <li><code>journal_lines</code> - Stores individual debit/credit entries</li>
+                </ul>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "date": "2026-01-15",
+    "narration": "Depreciation Expense for January",
+    "entries": [
+        {
+            "account_id": 50,
+            "debit": 500,
+            "credit": 0
+        },
+        {
+            "account_id": 51,
+            "debit": 0,
+            "credit": 500
+        }
+    ]
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Journal Entry created successfully",
+    "data": {
+        "id": 10,
+        "date": "2026-01-15",
+        "narration": "Depreciation Expense for January",
+        "reference_type": "MANUAL",
+        "reference_id": null
+    }
+}</code>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request</strong>
+                    <code>{
+    "status": false,
+    "message": "Debit (500) must equal Credit (600)"
+}</code>
+                </div>
+            </div>
+
+            <!-- POST /transactions -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /transactions <span class="file-badge">accounting.routes.js:66</span></h3>
+                <p>Create a single-entry transaction that auto-generates journal entries</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/accounting/transactions
+    Router->>verifyToken: Verify JWT
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'accounting'
+    moduleCheck->>Router: Access OK
+    Router->>Controller: createTransaction(req, res)
+    Controller->>Service: processTransaction(data)
+    Service->>Service: Determine Journal Entries based on type
+    Service->>Service: Build linesData (Dr/Cr)
+    Service->>Database: BEGIN TRANSACTION
+    Service->>Repository: createTransaction(data, transaction)
+    Repository->>Database: INSERT INTO transactions
+    Database->>Repository: Transaction ID
+    Service->>Repository: createJournalEntry(journalData, linesData)
+    Repository->>Database: INSERT INTO journals + journal_lines
+    Service->>Database: COMMIT
+    Database->>Service: Transaction Committed
+    Service->>Controller: { transaction, journal }
+    Controller->>Client: 201 Success
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|createTransaction| Service[Accounting Service]
+    Service -->|Data Access| Repository[Transaction Repository]
+    end
+
+    subgraph "Create Single-Entry Transaction"
+    CreateTrans[POST /api/accounting/transactions] -->|Request Body| DetermineEntries[Service - Determine Journal Entries]
+    DetermineEntries -->|Based on type| BuildLines[Service - Build Lines Data]
+    BuildLines -->|Debit/Credit lines| StartTrans[Service - START TRANSACTION]
+    StartTrans --> CreateTransRecord[Repository - Create Transaction]
+    CreateTransRecord -->|INSERT INTO transactions| DB[(MySQL Database)]
+
+    DB -->|Transaction ID| CreateJournal[Service - Create Journal Entry]
+    CreateJournal -->|INSERT journals + journal_lines| DBJournal[(MySQL - journals, journal_lines)]
+
+    DBJournal --> CommitTrans[Service - COMMIT]
+    CommitTrans --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>type</td>
+                            <td>enum</td>
+                            <td>Required: SALES, PURCHASE, SALES_RETURN, PURCHASE_RETURN, EXPENSE, INCOME, BANK_DEPOSIT, PROFESSIONAL_FEE</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>number</td>
+                            <td>Required, Positive</td>
+                        </tr>
+                        <tr>
+                            <td>payment_mode</td>
+                            <td>enum</td>
+                            <td>Required: CASH, BANK, DUE, CHEQUE</td>
+                        </tr>
+                        <tr>
+                            <td>date</td>
+                            <td>string</td>
+                            <td>Optional, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>tax_amount</td>
+                            <td>number</td>
+                            <td>Optional, Tax portion of amount</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>Account Code Mapping:</strong><br>
+                    CASH: 1000, BANK: 1100, AR: 1200, AP: 2000, SALES: 4000, PURCHASE: 5000, TAX_PAYABLE: 2100
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:7
+async createTransaction(req, res) {
+    try {
+        const result = await AccountingService.processTransaction(req.body);
+        return success(res, 'Transaction posted and journalized successfully', result, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic (SALES Example)</h4>
+                <pre class="code-block"><code>File: accounting.service.js:37
+async processTransaction(data, existingTransaction = null) {
+    return await sequelize.transaction(async (t) => {
+        // 1. Create the Single Entry Transaction
+        const transaction = await AccountingRepository.createTransaction(data, t);
+
+        // 2. Build Journal Entries based on type
+        const amount = parseFloat(data.amount);
+        const tax_amount = parseFloat(data.tax_amount || 0);
+        const linesData = [];
+
+        switch (data.type) {
+            case 'SALES': {
+                // Dr Cash/Bank/AR (Full Amount)
+                const drCode = (data.payment_mode === 'CASH') ? ACCOUNTS.CASH :
+                    (data.payment_mode === 'BANK') ? ACCOUNTS.BANK : ACCOUNTS.AR;
+                linesData.push({
+                    account_id: await this.getAccountId(drCode),
+                    debit: amount,
+                    credit: 0
+                });
+
+                // Cr Sales (Amount - Tax)
+                const subtotal = amount - tax_amount;
+                linesData.push({
+                    account_id: await this.getAccountId(ACCOUNTS.SALES),
+                    debit: 0,
+                    credit: subtotal
+                });
+
+                // Cr Tax Payable (Tax)
+                if (tax_amount > 0) {
+                    linesData.push({
+                        account_id: await this.getAccountId(ACCOUNTS.TAX_PAYABLE),
+                        debit: 0,
+                        credit: tax_amount
+                    });
+                }
+                break;
+            }
+            // ... other types
+        }
+
+        // 3. Create Journal Entry
+        const journalData = {
+            date: data.date || new Date(),
+            reference_type: 'TRANSACTION',
+            reference_id: transaction.id,
+            narration: data.description || `${data.type} Transaction`
+        };
+
+        const journal = await AccountingRepository.createJournalEntry(journalData, linesData, t);
+
+        return { transaction, journal };
+    });
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:8
+async createTransaction(data, transaction) {
+    return await Transaction.create(data, { transaction });
+}
+
+SQL Equivalent:
+INSERT INTO transactions (type, amount, payment_mode, date, description)
+VALUES (?, ?, ?, ?, ?);</code></pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><code>transactions</code> - Stores transaction record</li>
+                    <li><code>journals</code> - Links to transaction via reference_id</li>
+                    <li><code>journal_lines</code> - Stores debit/credit entries</li>
+                    <li><code>accounts</code> - Referenced by journal_lines</li>
+                </ul>
+
+                <h4>Sample Payload - Cash Sale with Tax</h4>
+                <pre class="code-block"><code>{
+    "type": "SALES",
+    "amount": 11800,
+    "tax_amount": 1800,
+    "payment_mode": "CASH",
+    "date": "2026-01-15",
+    "description": "Invoice #INV-2026-001"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Transaction posted and journalized successfully",
+    "data": {
+        "transaction": {
+            "id": 45,
+            "type": "SALES",
+            "amount": 11800,
+            "payment_mode": "CASH",
+            "date": "2026-01-15",
+            "description": "Invoice #INV-2026-001"
+        },
+        "journal": {
+            "id": 78,
+            "date": "2026-01-15",
+            "narration": "Invoice #INV-2026-001",
+            "reference_type": "TRANSACTION",
+            "reference_id": 45
+        }
+    }
+}</code>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request</strong>
+                    <code>{
+    "status": false,
+    "message": "Account with code 4000 not found. Please Seed Accounts."
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /transactions -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /transactions <span class="file-badge">accounting.routes.js:106</span></h3>
+                <p>Retrieve transactions with pagination and filtering</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/accounting/transactions
+    Router->>verifyToken: Verify JWT
+    verifyToken->>Router: Valid
+    Router->>moduleCheck: Check Access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getTransactions(req.query)
+    Service->>Service: Parse pagination params
+    Service->>Service: Build filters object
+    Service->>Repository: findAllTransactions(filters, limit, offset)
+    Repository->>Database: SELECT * FROM transactions WHERE...
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result
+    Service->>Controller: { count, rows }
+    Controller->>Client: Paginated Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getTransactions| Service[Accounting Service]
+    Service -->|Data Access| Repository[Transaction Repository]
+    end
+
+    subgraph "Get Transactions"
+    GetTrans[GET /api/accounting/transactions] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit, filters| BuildFilters[Service - Build Filters]
+    BuildFilters -->|start_date, end_date, type, date| FindAll[Repository - FindAll]
+    FindAll -->|SELECT FROM transactions| DB[(MySQL Database)]
+
+    DB -->|Transactions Array| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Request Headers</h4>
+                <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:27
+async getTransactions(req, res) {
+    try {
+        const { count, rows } = await AccountingService.getTransactions(req.query);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const pagination = {
+            total: count,
+            page,
+            limit,
+            totalPage: Math.ceil(count / limit)
+        };
+        return successWithPagination(res, 'Transactions retrieved successfully', rows, pagination);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:216
+async getTransactions(query) {
+    const page = parseInt(query.page) || 1;
+    const limit = parseInt(query.limit) || 20;
+    const offset = (page - 1) * limit;
+
+    const filters = {
+        from: query.from,
+        to: query.to,
+        date: query.date,
+        start_date: query.start_date,
+        end_date: query.end_date,
+        type: query.type
+    };
+
+    return await AccountingRepository.findAllTransactions(filters, limit, offset);
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:12
+async findAllTransactions(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.type) where.type = filters.type;
+
+    // Date aliases
+    const fromDate = filters.from || filters.start_date;
+    const toDate = filters.to || filters.end_date;
+    const exactDate = filters.date;
+
+    if (fromDate && toDate) {
+        where.date = { [Op.between]: [fromDate, toDate] };
+    } else if (exactDate) {
+        where.date = exactDate;
+    }
+
+    return await Transaction.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [['date', 'DESC'], ['id', 'DESC']]
+    });
+}
+
+SQL Equivalent:
+SELECT COUNT(*) FROM transactions
+WHERE type = ? AND date BETWEEN ? AND ?;
+
+SELECT * FROM transactions
+WHERE type = ? AND date BETWEEN ? AND ?
+ORDER BY date DESC, id DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+                <h4>Multiple Requests & Responses</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. List Transactions (Paginated)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/transactions?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Transactions retrieved successfully",
+    "pagination": {
+        "total": 45,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 5
+    },
+    "data": [
+        {
+            "id": 45,
+            "type": "SALES",
+            "amount": 11800,
+            "payment_mode": "CASH",
+            "date": "2026-01-15",
+            "description": "Invoice #INV-2026-001"
+        },
+        {
+            "id": 44,
+            "type": "PURCHASE",
+            "amount": 5000,
+            "payment_mode": "BANK",
+            "date": "2026-01-14",
+            "description": "Supplier Payment"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Filter by Date Range</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/transactions?start_date=2026-01-01&end_date=2026-01-31</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Transactions retrieved successfully",
+    "pagination": {
+        "total": 23,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 2
+    },
+    "data": [
+        {
+            "id": 45,
+            "type": "SALES",
+            "amount": 11800,
+            "payment_mode": "CASH",
+            "date": "2026-01-15",
+            "description": "Invoice #INV-2026-001"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Filter by Transaction Type</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/transactions?type=SALES</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Transactions retrieved successfully",
+    "pagination": {
+        "total": 18,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 45,
+            "type": "SALES",
+            "amount": 11800,
+            "payment_mode": "CASH",
+            "date": "2026-01-15",
+            "description": "Invoice #INV-2026-001"
+        },
+        {
+            "id": 42,
+            "type": "SALES",
+            "amount": 5000,
+            "payment_mode": "BANK",
+            "date": "2026-01-12",
+            "description": "Invoice #INV-2026-002"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4. Filter by Specific Date</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/transactions?date=2026-01-15</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Transactions retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 45,
+            "type": "SALES",
+            "amount": 11800,
+            "payment_mode": "CASH",
+            "date": "2026-01-15",
+            "description": "Invoice #INV-2026-001"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>500 Internal Server Error</strong>
+                    <code>{
+    "status": false,
+    "message": "Database connection error"
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Reports Section -->
+        <div class="card" id="reports">
+            <h2>📈 Financial Reports</h2>
+
+            <!-- GET /reports/journal -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /reports/journal <span class="file-badge">accounting.routes.js:210</span></h3>
+                <p>Generate Journal Report with date filtering</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /reports/journal?from=&to=
+    Controller->>Service: getJournalReport(query)
+    Service->>Service: Parse pagination & date filters
+    Service->>Repository: getJournalReport(filters, limit, offset)
+    Repository->>Database: SELECT journals with journal_lines + accounts
+    Database->>Repository: Journal entries with details
+    Repository->>Service: { count, rows }
+    Service->>Controller: Result
+    Controller->>Client: Paginated Journal Report
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getJournalReport| Service[Accounting Service]
+    Service -->|Data Access| Repository[Journal Repository]
+    end
+
+    subgraph "Get Journal Report"
+    GetJournal[GET /api/accounting/reports/journal] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit, from, to| BuildFilters[Service - Build Date Filters]
+    BuildFilters -->|Date range| GetReport[Repository - Get Journal Report]
+    GetReport -->|SELECT with joins| DB[(MySQL Database)]
+
+    DB -->|Journals with Lines & Accounts| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:75
+async getJournalReport(req, res) {
+    try {
+        const { count, rows } = await AccountingService.getJournalReport(req.query);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const pagination = {
+            total: count,
+            page,
+            limit,
+            totalPage: Math.ceil(count / limit)
+        };
+        return successWithPagination(res, 'Journal report retrieved successfully', rows, pagination);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:203
+async getJournalReport(query) {
+    const page = parseInt(query.page) || 1;
+    const limit = parseInt(query.limit) || 20;
+    const offset = (page - 1) * limit;
+
+    const filters = {
+        from: query.from,
+        to: query.to
+    };
+
+    return await AccountingRepository.getJournalReport(filters, limit, offset);
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:149
+async getJournalReport(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+    if (filters.from && filters.to) {
+        where.date = { [Op.between]: [filters.from, filters.to] };
+    }
+
+    return await Journal.findAndCountAll({
+        where,
+        include: [{
+            model: JournalLine,
+            as: 'entries',
+            include: [{
+                model: Account,
+                as: 'account',
+                attributes: ['code', 'name']
+            }]
+        }],
+        limit,
+        offset,
+        distinct: true,
+        order: [['date', 'DESC'], ['id', 'DESC']]
+    });
+}
+
+SQL Equivalent:
+SELECT
+    j.*,
+    jl.id as line_id,
+    jl.debit, jl.credit,
+    a.code, a.name
+FROM journals j
+LEFT JOIN journal_lines jl ON jl.journal_id = j.id
+LEFT JOIN accounts a ON a.id = jl.account_id
+WHERE j.date BETWEEN ? AND ?
+ORDER BY j.date DESC, j.id DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+                <h4>Multiple Requests & Responses</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. Get Journal Report (Date Range)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/reports/journal?from=2026-01-01&to=2026-01-31&page=1&limit=20</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Journal report retrieved successfully",
+    "pagination": {
+        "total": 15,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 78,
+            "date": "2026-01-15",
+            "narration": "Invoice #INV-2026-001",
+            "reference_type": "TRANSACTION",
+            "reference_id": 45,
+            "entries": [
+                {
+                    "id": 156,
+                    "account_id": 1,
+                    "debit": 11800,
+                    "credit": 0,
+                    "account": {
+                        "code": "1000",
+                        "name": "Cash"
+                    }
+                },
+                {
+                    "id": 157,
+                    "account_id": 8,
+                    "debit": 0,
+                    "credit": 10000,
+                    "account": {
+                        "code": "4000",
+                        "name": "Sales"
+                    }
+                },
+                {
+                    "id": 158,
+                    "account_id": 12,
+                    "debit": 0,
+                    "credit": 1800,
+                    "account": {
+                        "code": "2100",
+                        "name": "Tax Payable"
+                    }
+                }
+            ]
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Calculation Notes</h4>
+                <div class="info-box">
+                    <strong>Validation:</strong> Each journal entry must have Sum(Debit) = Sum(Credit).<br>
+                    <strong>Aggregation:</strong> Groups Journal Lines by Journal ID.
+                </div>
+            </div>
+
+            <!-- GET /reports/ledger/:id -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /reports/ledger/:id <span class="file-badge">accounting.routes.js:254</span></h3>
+                <p>Get Ledger Report for a specific Account with running balance</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /reports/ledger/:id?from=&to=
+    Controller->>Service: getLedgerReport(id, filters)
+    Service->>Repository: getLedgerReport(accountId, filters)
+    Repository->>Database: Calculate opening balance
+    Repository->>Database: Fetch journal lines for account
+    Repository->>Service: { openingBalance, lines }
+    Service->>Service: Calculate running balance for each line
+    Service->>Service: Enhance with date, narration, type
+    Service->>Controller: Enhanced ledger report
+    Controller->>Client: Ledger with running balance
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getLedgerReport| Service[Accounting Service]
+    Service -->|Data Access| Repository[Ledger Repository]
+    end
+
+    subgraph "Get Ledger Report"
+    GetLedger[GET /api/accounting/reports/ledger/:id] -->|Extract id and filters| GetOpeningBalance[Repository - Calculate Opening Balance]
+    GetOpeningBalance -->|Sum debits and credits before from date| DBOpening[(MySQL - journal_lines)]
+
+    DBOpening --> FetchLines[Repository - Fetch Journal Lines]
+    FetchLines -->|SELECT with date filter| DBLines[(MySQL - journal_lines)]
+
+    DBLines --> CalcRunningBalance[Service - Calculate Running Balance]
+    CalcRunningBalance -->|For each line| CheckType[Service - Check Account Type]
+    CheckType -->|ASSET or EXPENSE| DebitBalance[Service - Add Debit Nature]
+    CheckType -->|LIABILITY, EQUITY, INCOME| CreditBalance[Service - Add Credit Nature]
+
+    DebitBalance --> Enhance[Service - Enhance Lines]
+    CreditBalance --> Enhance
+    Enhance -->|Add date, narration, type| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:92
+async getLedgerReport(req, res) {
+    try {
+        const { id } = req.params;
+        const { from, to } = req.query;
+        const report = await AccountingService.getLedgerReport(id, { from, to, code: req.query.code });
+        return success(res, 'Ledger report retrieved successfully', report);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:233
+async getLedgerReport(accountId, filters) {
+    // Get opening balance and lines from repository
+    const { openingBalance, lines } = await AccountingRepository.getLedgerReport(accountId, filters);
+
+    // Get account details
+    const account = await AccountingRepository.findAccountById(accountId);
+    if (!account) throw new Error('Account not found');
+
+    const isDebitNature = ['ASSET', 'EXPENSE'].includes(account.type);
+    let currentBalance = openingBalance;
+
+    // Add running balance to each line
+    const enhancedLines = lines.map(line => {
+        const dr = parseFloat(line.debit);
+        const cr = parseFloat(line.credit);
+
+        if (isDebitNature) {
+            currentBalance += (dr - cr);
+        } else {
+            currentBalance += (cr - dr);
+        }
+
+        return {
+            date: line.Journal.date,
+            narration: line.Journal.narration,
+            debit: dr,
+            credit: cr,
+            balance: currentBalance,
+            type: line.Journal.reference_type
+        };
+    });
+
+    return {
+        account: accountId,
+        opening_balance: openingBalance,
+        closing_balance: currentBalance,
+        transactions: enhancedLines
+    };
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:174
+async getLedgerReport(accountId, filters = {}) {
+    let openingBalance = 0;
+
+    // Calculate opening balance if 'from' date is provided
+    if (filters.from) {
+        const prevLines = await JournalLine.findAll({
+            where: { account_id: accountId },
+            include: [{
+                model: Journal,
+                where: {
+                    date: { [Op.lt]: filters.from }
+                }
+            }]
+        });
+
+        const account = await Account.findByPk(accountId);
+        const isDebitNature = ['ASSET', 'EXPENSE'].includes(account.type);
+
+        prevLines.forEach(line => {
+            const debit = parseFloat(line.debit) || 0;
+            const credit = parseFloat(line.credit) || 0;
+            if (isDebitNature) {
+                openingBalance += (debit - credit);
+            } else {
+                openingBalance += (credit - debit);
+            }
+        });
+    }
+
+    // Get lines for the period
+    const where = { account_id: accountId };
+    const journalWhere = {};
+    if (filters.from && filters.to) {
+        journalWhere.date = { [Op.between]: [filters.from, filters.to] };
+    }
+
+    const lines = await JournalLine.findAll({
+        where,
+        include: [{
+            model: Journal,
+            where: journalWhere
+        }],
+        order: [[{ model: Journal }, 'date', 'ASC']]
+    });
+
+    return { openingBalance, lines };
+}
+
+SQL Equivalent:
+-- Opening Balance
+SELECT
+    jl.debit, jl.credit, j.date
+FROM journal_lines jl
+INNER JOIN journals j ON j.id = jl.journal_id
+WHERE jl.account_id = ? AND j.date < ?;
+
+-- Period Transactions
+SELECT
+    jl.*, j.date, j.narration, j.reference_type
+FROM journal_lines jl
+INNER JOIN journals j ON j.id = jl.journal_id
+WHERE jl.account_id = ? AND j.date BETWEEN ? AND ?
+ORDER BY j.date ASC;</code></pre>
+
+                <h4>Multiple Requests & Responses</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. Get Cash Ledger (Date Range)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/reports/ledger/1?from=2026-01-01&to=2026-01-31</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Ledger report retrieved successfully",
+    "data": {
+        "account": 1,
+        "opening_balance": 50000,
+        "closing_balance": 61800,
+        "transactions": [
+            {
+                "date": "2026-01-15",
+                "narration": "Invoice #INV-2026-001",
+                "debit": 11800,
+                "credit": 0,
+                "balance": 61800,
+                "type": "TRANSACTION"
+            }
+        ]
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Calculation Notes</h4>
+                <div class="info-box">
+                    <strong>Running Balance Strategy:</strong><br>
+                    1. Asset/Expense Types: Balance = Prev Balance + Debit - Credit<br>
+                    2. Liability/Equity/Income: Balance = Prev Balance + Credit - Debit
+                </div>
+            </div>
+
+            <!-- GET /reports/trial-balance -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /reports/trial-balance <span class="file-badge">accounting.routes.js:294</span></h3>
+                <p>Generate Trial Balance Summary</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getTrialBalance| Service[Accounting Service]
+    Service -->|Data Access| Repository[Trial Balance Repository]
+    end
+
+    subgraph "Get Trial Balance"
+    GetTB[GET /api/accounting/reports/trial-balance] -->|Query params date| FetchAccounts[Repository - Get Accounts]
+    FetchAccounts -->|SUM debits and credits| DB[(MySQL Database)]
+
+    DB -->|Accounts with totals| CalcTotals[Service - Calculate Totals]
+    CalcTotals -->|Sum all debits| TotalDebit[total_debit]
+    CalcTotals -->|Sum all credits| TotalCredit[total_credit]
+
+    TotalDebit --> CheckStatus[Service - Check Balance Status]
+    TotalCredit --> CheckStatus
+    CheckStatus -->|Compare totals| BuildResponse[Service - Build Response]
+    BuildResponse -->|trial_balance, totals, status| Response[Controller - Send Response]
+    end
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:103
+async getTrialBalance(req, res) {
+    try {
+        const { date } = req.query;
+        const report = await AccountingService.getTrialBalance(date);
+        return success(res, 'Trial Balance retrieved successfully', report);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:276
+async getTrialBalance(date) {
+    const data = await AccountingRepository.getTrialBalance(date);
+
+    const totalDebit = data.reduce((sum, row) => sum + row.debit, 0);
+    const totalCredit = data.reduce((sum, row) => sum + row.credit, 0);
+
+    return {
+        trial_balance: data,
+        total_debit: totalDebit,
+        total_credit: totalCredit,
+        status: (Math.abs(totalDebit - totalCredit) < 0.01) ? 'BALANCED' : 'UNBALANCED'
+    };
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: accounting.repository.js:260
+async getTrialBalance(date = null) {
+    const where = {};
+    if (date) {
+        where['$Journal.date$'] = { [Op.lte]: date };
+    }
+
+    const accounts = await Account.findAll({
+        where,
+        attributes: [
+            'id', 'code', 'name', 'type',
+            [sequelize.fn('SUM', sequelize.col('JournalLines.debit')), 'debit'],
+            [sequelize.fn('SUM', sequelize.col('JournalLines.credit')), 'credit']
+        ],
+        include: [{
+            model: JournalLine,
+            attributes: [],
+            required: false,
+            where: date ? {} : undefined,
+            include: date ? [{
+                model: Journal,
+                where: { date: { [Op.lte]: date } }
+            }] : undefined
+        }],
+        group: ['Account.id'],
+        order: [['code', 'ASC']]
+    });
+
+    return accounts.map(a => {
+        const data = a.get({ plain: true });
+        return {
+            code: data.code,
+            account: data.name,
+            type: data.type,
+            debit: parseFloat(data.debit) || 0,
+            credit: parseFloat(data.credit) || 0
+        };
+    });
+}
+
+SQL Equivalent:
+SELECT
+    a.id, a.code, a.name, a.type,
+    SUM(jl.debit) as debit,
+    SUM(jl.credit) as credit
+FROM accounts a
+LEFT JOIN journal_lines jl ON jl.account_id = a.id
+LEFT JOIN journals j ON j.id = jl.journal_id AND j.date <= ?
+GROUP BY a.id
+ORDER BY a.code ASC;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Trial Balance</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/reports/trial-balance?date=2026-01-31</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Trial Balance retrieved successfully",
+    "data": {
+        "trial_balance": [
+            {
+                "code": "1000",
+                "account": "Cash",
+                "type": "ASSET",
+                "debit": 61800,
+                "credit": 0
+            },
+            {
+                "code": "2000",
+                "account": "Accounts Payable",
+                "type": "LIABILITY",
+                "debit": 0,
+                "credit": 5000
+            },
+            {
+                "code": "4000",
+                "account": "Sales",
+                "type": "INCOME",
+                "debit": 0,
+                "credit": 50000
+            },
+            {
+                "code": "5000",
+                "account": "Purchase",
+                "type": "EXPENSE",
+                "debit": 3200,
+                "credit": 0
+            }
+        ],
+        "total_debit": 65000,
+        "total_credit": 65000,
+        "status": "BALANCED"
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /reports/profit-and-loss -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /reports/profit-and-loss <span class="file-badge">accounting.routes.js:335</span></h3>
+                <p>Generate Profit and Loss Statement</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getProfitAndLoss| Service[Accounting Service]
+    Service -->|Data Access| Repository[P&L Repository]
+    end
+
+    subgraph "Get Profit and Loss"
+    GetPnL[GET /api/accounting/reports/profit-and-loss] -->|from, to params| FetchIncome[Service - Get Income Accounts]
+    FetchIncome -->|WHERE type = INCOME| DBIncome[(MySQL - accounts)]
+
+    DBIncome --> CalcIncome[Service - Calculate Income Balances]
+    CalcIncome -->|Net = Credit - Debit| IncomeTotal[Total Income]
+
+    IncomeTotal --> FetchExpense[Service - Get Expense Accounts]
+    FetchExpense -->|WHERE type = EXPENSE| DBExpense[(MySQL - accounts)]
+
+    DBExpense --> CalcExpense[Service - Calculate Expense Balances]
+    CalcExpense -->|Net = Debit - Credit| ExpenseTotal[Total Expenses]
+
+    ExpenseTotal --> CalcNet[Service - Calculate Net Profit]
+    CalcNet -->|Income - Expenses| NetProfit[Net Profit or Loss]
+    NetProfit --> Response[Controller - Send Response]
+    end
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:113
+async getProfitAndLoss(req, res) {
+    try {
+        const { from, to } = req.query;
+        const report = await AccountingService.getProfitAndLoss({ from, to });
+        return success(res, 'Profit and Loss report retrieved successfully', report);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:362
+async getProfitAndLoss(filters = {}) {
+    const incomeAccounts = await AccountingRepository.findAccountsByTypes(['INCOME']);
+    const expenseAccounts = await AccountingRepository.findAccountsByTypes(['EXPENSE']);
+
+    const getAccountBalances = async (accounts) => {
+        const results = [];
+        for (const acc of accounts) {
+            const lines = await AccountingRepository.getAccountLinesForPeriod(acc.id, filters);
+            const dr = lines.reduce((sum, l) => sum + (parseFloat(l.debit) || 0), 0);
+            const cr = lines.reduce((sum, l) => sum + (parseFloat(l.credit) || 0), 0);
+
+            // Income: Net = Credit - Debit
+            // Expense: Net = Debit - Credit
+            const net = (acc.type === 'INCOME') ? (cr - dr) : (dr - cr);
+
+            if (net !== 0) {
+                results.push({
+                    code: acc.code,
+                    name: acc.name,
+                    amount: Math.abs(net)
+                });
+            }
+        }
+        return results;
+    };
+
+    const income = await getAccountBalances(incomeAccounts);
+    const expense = await getAccountBalances(expenseAccounts);
+
+    const totalIncome = income.reduce((sum, i) => sum + i.amount, 0);
+    const totalExpense = expense.reduce((sum, e) => sum + e.amount, 0);
+    const netProfit = totalIncome - totalExpense;
+
+    return {
+        income,
+        expense,
+        total_income: totalIncome,
+        total_expense: totalExpense,
+        net_profit: netProfit
+    };
+}</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Profit & Loss Statement</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/reports/profit-and-loss?from=2026-01-01&to=2026-01-31</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Profit and Loss report retrieved successfully",
+    "data": {
+        "income": [
+            {
+                "code": "4000",
+                "name": "Sales",
+                "amount": 50000
+            },
+            {
+                "code": "4100",
+                "name": "Other Income",
+                "amount": 2000
+            }
+        ],
+        "expense": [
+            {
+                "code": "5000",
+                "name": "Purchase",
+                "amount": 3200
+            },
+            {
+                "code": "5200",
+                "name": "Office Expense",
+                "amount": 800
+            }
+        ],
+        "total_income": 52000,
+        "total_expense": 4000,
+        "net_profit": 48000
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /reports/balance-sheet -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /reports/balance-sheet <span class="file-badge">accounting.routes.js:375</span></h3>
+                <p>Generate Balance Sheet Report</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getBalanceSheet| Service[Accounting Service]
+    Service -->|Data Access| Repository[Balance Sheet Repository]
+    end
+
+    subgraph "Get Balance Sheet"
+    GetBS[GET /api/accounting/reports/balance-sheet] -->|date param| FetchAssets[Service - Get Asset Accounts]
+    FetchAssets -->|WHERE type = ASSET| DBAssets[(MySQL - accounts)]
+
+    DBAssets --> CalcAssets[Service - Calculate Asset Balances]
+    CalcAssets -->|Net = Debit - Credit| AssetsTotal[Total Assets]
+
+    AssetsTotal --> FetchLiabilities[Service - Get Liability Accounts]
+    FetchLiabilities -->|WHERE type = LIABILITY| DBLiab[(MySQL - accounts)]
+
+    DBLiab --> CalcLiab[Service - Calculate Liability Balances]
+    CalcLiab -->|Net = Credit - Debit| LiabTotal[Total Liabilities]
+
+    LiabTotal --> FetchEquity[Service - Get Equity Accounts]
+    FetchEquity -->|WHERE type = EQUITY| DBEquity[(MySQL - accounts)]
+
+    DBEquity --> CalcEquity[Service - Calculate Equity Balances]
+    CalcEquity -->|Include P&L| EquityTotal[Total Equity]
+
+    EquityTotal --> BuildResponse[Service - Build Balance Sheet]
+    BuildResponse -->|assets, liabilities, equity| Response[Controller - Send Response]
+    end
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: accounting.controller.js:123
+async getBalanceSheet(req, res) {
+    try {
+        const { date } = req.query;
+        const report = await AccountingService.getBalanceSheet(date);
+        return success(res, 'Balance Sheet retrieved successfully', report);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: accounting.service.js:412
+async getBalanceSheet(date) {
+    // Get P&L for retained earnings
+    const pAndL = await this.getProfitAndLoss({ to: date });
+    const retainedEarnings = pAndL.net_profit;
+
+    // Get Assets
+    const assetAccounts = await AccountingRepository.findAccountsByTypes(['ASSET']);
+    const assets = await this.getAccountBalances(assetAccounts, date);
+
+    // Get Liabilities
+    const liabilityAccounts = await AccountingRepository.findAccountsByTypes(['LIABILITY']);
+    const liabilities = await this.getAccountBalances(liabilityAccounts, date);
+
+    // Get Equity
+    const equityAccounts = await AccountingRepository.findAccountsByTypes(['EQUITY']);
+    const equities = await this.getAccountBalances(equityAccounts, date);
+
+    const totalAssets = assets.reduce((sum, a) => sum + a.balance, 0);
+    const totalLiabilities = liabilities.reduce((sum, l) => sum + l.balance, 0);
+    const totalEquity = equities.reduce((sum, e) => sum + e.balance, 0) + retainedEarnings;
+
+    return {
+        assets,
+        liabilities,
+        equity: [
+            ...equities,
+            { name: 'Retained Earnings', balance: retainedEarnings }
+        ],
+        total_assets: totalAssets,
+        total_liabilities: totalLiabilities,
+        total_equity: totalEquity
+    };
+}</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Balance Sheet</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/reports/balance-sheet?date=2026-01-31</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Balance Sheet retrieved successfully",
+    "data": {
+        "assets": [
+            {
+                "code": "1000",
+                "name": "Cash",
+                "balance": 61800
+            },
+            {
+                "code": "1200",
+                "name": "Accounts Receivable",
+                "balance": 5000
+            }
+        ],
+        "liabilities": [
+            {
+                "code": "2000",
+                "name": "Accounts Payable",
+                "balance": 5000
+            },
+            {
+                "code": "2100",
+                "name": "Tax Payable",
+                "balance": 1800
+            }
+        ],
+        "equity": [
+            {
+                "code": "3000",
+                "name": "Owner Capital",
+                "balance": 10000
+            },
+            {
+                "name": "Retained Earnings",
+                "balance": 48000
+            }
+        ],
+        "total_assets": 66800,
+        "total_liabilities": 6800,
+        "total_equity": 60000
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Master Data Section -->
+        <div class="card" id="master-data">
+            <h2>📚 Master Data (Accounts)</h2>
+
+            <!-- GET /accounts -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /accounts <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Get Chart of Accounts with pagination</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /accounts?page=&limit=&search=
+    Controller->>Service: getAccounts(req.query)
+    Service->>Repository: findAllAccounts(filters, limit, offset)
+    Repository->>Database: SELECT * FROM accounts WHERE...
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result
+    Service->>Controller: Result
+    Controller->>Client: Paginated Chart of Accounts
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getAccounts| Service[Accounting Service]
+    Service -->|Data Access| Repository[Account Repository]
+    end
+
+    subgraph "Get Chart of Accounts"
+    GetAccounts[GET /api/accounting/accounts] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit, search| FindAll[Repository - FindAll]
+    FindAll -->|SELECT FROM accounts| DB[(MySQL Database)]
+
+    DB -->|Accounts Array| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>List All Accounts</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/accounts?page=1&limit=20</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Chart of Accounts retrieved successfully",
+    "pagination": {
+        "total": 15,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "code": "1000",
+            "name": "Cash",
+            "type": "ASSET",
+            "parent_id": null,
+            "description": null
+        },
+        {
+            "id": 2,
+            "code": "1100",
+            "name": "Bank",
+            "type": "ASSET",
+            "parent_id": null,
+            "description": null
+        },
+        {
+            "id": 8,
+            "code": "4000",
+            "name": "Sales",
+            "type": "INCOME",
+            "parent_id": null,
+            "description": null
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Search Accounts</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/accounts?search=cash</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Chart of Accounts retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 20,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "code": "1000",
+            "name": "Cash",
+            "type": "ASSET",
+            "parent_id": null
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- POST /accounts -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /accounts <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Create a new Account</p>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>code</td>
+                            <td>string</td>
+                            <td>Required, Unique, Max 20 chars</td>
+                        </tr>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td>Required, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>type</td>
+                            <td>enum</td>
+                            <td>Required: ASSET, LIABILITY, EQUITY, INCOME, EXPENSE</td>
+                        </tr>
+                        <tr>
+                            <td>parent_id</td>
+                            <td>number</td>
+                            <td>Optional, Positive integer or null</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "code": "6000",
+    "name": "Rent Expense",
+    "type": "EXPENSE",
+    "parent_id": null,
+    "description": "Monthly rent payments"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Account created successfully",
+    "data": {
+        "id": 16,
+        "code": "6000",
+        "name": "Rent Expense",
+        "type": "EXPENSE",
+        "parent_id": null,
+        "description": "Monthly rent payments"
+    }
+}</code>
+                </div>
+            </div>
+
+            <!-- POST /expenses/head-wise -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /expenses/head-wise <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Record a head-wise expense with automatic journal entry</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant validate
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /expenses/head-wise
+    Router->>validate: validate(createHeadWiseExpense)
+    validate->>Controller: Valid
+    Controller->>Service: createHeadWiseExpense(data)
+    Service->>Service: Parse payment_method (ID or Name)
+    Service->>Repository: createJournalEntry + Transaction
+    Repository->>Database: BEGIN TRANS
+    Database->>Repository: Expense + Journal created
+    Service->>Controller: Result
+    Controller->>Client: 201 Success
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>title</td>
+                            <td>string</td>
+                            <td>Required</td>
+                        </tr>
+                        <tr>
+                            <td>expense_date</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>debit_head_id</td>
+                            <td>number</td>
+                            <td>Required, Positive integer (Expense Account ID)</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>number</td>
+                            <td>Required, Positive</td>
+                        </tr>
+                        <tr>
+                            <td>payment_method</td>
+                            <td>string|number</td>
+                            <td>Required (Asset Account ID or Name)</td>
+                        </tr>
+                        <tr>
+                            <td>reference_number</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "title": "Office Rent for January",
+    "expense_date": "2026-01-15",
+    "debit_head_id": 16,
+    "amount": 5000,
+    "payment_method": "1000",
+    "reference_number": "RENT-2026-01",
+    "description": "Monthly office rent payment"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Expense recorded successfully",
+    "data": {
+        "transaction": {
+            "id": 46,
+            "type": "EXPENSE",
+            "amount": 5000,
+            "date": "2026-01-15"
+        },
+        "journal": {
+            "id": 79,
+            "date": "2026-01-15",
+            "narration": "Office Rent for January"
+        }
+    }
+}</code>
+                </div>
+            </div>
+
+            <!-- POST /incomes/head-wise -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /incomes/head-wise <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Record a head-wise income with automatic journal entry</p>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>title</td>
+                            <td>string</td>
+                            <td>Required</td>
+                        </tr>
+                        <tr>
+                            <td>income_date</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>income_head_id</td>
+                            <td>number</td>
+                            <td>Required, Positive integer (Income Account ID)</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>number</td>
+                            <td>Required, Positive</td>
+                        </tr>
+                        <tr>
+                            <td>payment_method</td>
+                            <td>string|number</td>
+                            <td>Required (Asset Account ID or Name)</td>
+                        </tr>
+                        <tr>
+                            <td>reference_number</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>description</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "title": "Consulting Fee",
+    "income_date": "2026-01-15",
+    "income_head_id": 9,
+    "amount": 8000,
+    "payment_method": "1100",
+    "reference_number": "CF-2026-01",
+    "description": "Consulting services provided"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Income recorded successfully",
+    "data": {
+        "transaction": {
+            "id": 47,
+            "type": "INCOME",
+            "amount": 8000,
+            "date": "2026-01-15"
+        },
+        "journal": {
+            "id": 80,
+            "date": "2026-01-15",
+            "narration": "Consulting Fee"
+        }
+    }
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tax Submissions Section -->
+        <div class="card" id="tax">
+            <h2>🏛️ Tax Submissions</h2>
+
+            <!-- POST /tax-submissions -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> /tax-submissions <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Create a tax submission record with accounting entry</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant validate
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /tax-submissions
+    Router->>validate: validate(createTaxSubmission)
+    validate->>Controller: Valid
+    Controller->>Service: createTaxSubmission(data)
+    Service->>Service: Calculate stats from ledger
+    Service->>Service: Create TAX_SUBMISSION transaction
+    Service->>Service: Auto-generate journal entry
+    Service->>Repository: Create tax submission + journal
+    Repository->>Database: INSERT + INSERTs
+    Service->>Controller: Tax submission with stats
+    Controller->>Client: 201 Success
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Accounting Controller]
+    Controller -->|createTaxSubmission| Service[Accounting Service]
+    Service -->|Data Access| Repository[Tax Submission Repository]
+    end
+
+    subgraph "Create Tax Submission"
+    CreateTax[POST /api/accounting/tax-submissions] -->|Request Body| CalcStats[Service - Calculate Stats]
+    CalcStats -->|From Tax Payable Ledger| CreateTrans[Service - Create Transaction]
+    CreateTrans -->|Type: TAX_SUBMISSION| AutoJournal[Service - Auto-Generate Journal]
+
+    AutoJournal -->|Debit Tax Payable, Credit Cash/Bank| StartTrans[Service - START TRANSACTION]
+    StartTrans --> CreateTaxRecord[Repository - Create Tax Submission]
+    CreateTaxRecord -->|INSERT INTO tax_submissions| DB[(MySQL Database)]
+
+    DB -->|Tax Submission ID| CreateJournalRecord[Repository - Create Journal Record]
+    CreateJournalRecord -->|INSERT INTO journals + journal_lines| DBJournal[(MySQL - journals, journal_lines)]
+
+    DBJournal --> CommitTrans[Service - COMMIT]
+    CommitTrans --> Response[Controller - Send Response]
+    end
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>tax_type</td>
+                            <td>string</td>
+                            <td>Required</td>
+                        </tr>
+                        <tr>
+                            <td>period_start</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>period_end</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>amount</td>
+                            <td>number</td>
+                            <td>Required, Positive</td>
+                        </tr>
+                        <tr>
+                            <td>submission_date</td>
+                            <td>string</td>
+                            <td>Required, Format: YYYY-MM-DD</td>
+                        </tr>
+                        <tr>
+                            <td>status</td>
+                            <td>enum</td>
+                            <td>Optional: PENDING, SUBMITTED, PAID (Default: SUBMITTED)</td>
+                        </tr>
+                        <tr>
+                            <td>payment_mode</td>
+                            <td>enum</td>
+                            <td>Optional: CASH, BANK (Default: BANK)</td>
+                        </tr>
+                        <tr>
+                            <td>reference_number</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>attachment_url</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>notes</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>Side Effects:</strong> Creating a tax submission automatically generates a TAX_SUBMISSION transaction that debits Tax Payable and credits Cash/Bank.
+                </div>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "tax_type": "VAT",
+    "period_start": "2026-01-01",
+    "period_end": "2026-01-31",
+    "amount": 1800,
+    "submission_date": "2026-02-15",
+    "status": "SUBMITTED",
+    "payment_mode": "BANK",
+    "reference_number": "VAT-2026-Q1",
+    "notes": "VAT payment for Q1 2026"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Tax submission recorded successfully",
+    "data": {
+        "id": 5,
+        "tax_type": "VAT",
+        "period_start": "2026-01-01",
+        "period_end": "2026-01-31",
+        "amount": 1800,
+        "submission_date": "2026-02-15",
+        "status": "SUBMITTED",
+        "reference_number": "VAT-2026-Q1",
+        "stats": {
+            "total_collected": 5000,
+            "total_paid": 3200,
+            "balance_due": 1800
+        }
+    }
+}</code>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request</strong>
+                    <code>{
+    "status": false,
+    "message": "Start date must be YYYY-MM-DD"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /tax-submissions -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /tax-submissions <span class="file-badge">accounting.routes.js</span></h3>
+                <p>Get all tax submissions with statistics</p>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Accounting"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check accounting access| Controller[Accounting Controller]
+    Controller -->|getTaxSubmissions| Service[Accounting Service]
+    Service -->|Data Access| Repository[Tax Submission Repository]
+    end
+
+    subgraph "Get Tax Submissions"
+    GetTax[GET /api/accounting/tax-submissions] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit, status| FindAll[Repository - FindAll]
+    FindAll -->|SELECT FROM tax_submissions| DB[(MySQL Database)]
+
+    DB -->|Tax Submissions Array| CalcStats[Service - Calculate Statistics]
+    CalcStats -->|Sum submitted, paid, pending| Pagination[Service - Build Pagination]
+    Pagination -->|total, stats| Response[Controller - Send Response]
+    end
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>List Tax Submissions</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/tax-submissions?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Tax submissions retrieved successfully",
+    "data": [
+        {
+            "id": 5,
+            "tax_type": "VAT",
+            "period_start": "2026-01-01",
+            "period_end": "2026-01-31",
+            "amount": 1800,
+            "submission_date": "2026-02-15",
+            "status": "SUBMITTED",
+            "reference_number": "VAT-2026-Q1"
+        },
+        {
+            "id": 4,
+            "tax_type": "INCOME_TAX",
+            "period_start": "2025-01-01",
+            "period_end": "2025-12-31",
+            "amount": 25000,
+            "submission_date": "2026-01-30",
+            "status": "PAID",
+            "reference_number": "IT-2025"
+        }
+    ],
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "stats": {
+        "total_submitted": 50000,
+        "total_paid": 32000,
+        "pending_payment": 18000
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Filter by Status</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/accounting/tax-submissions?status=PENDING</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Tax submissions retrieved successfully",
+    "data": [
+        {
+            "id": 6,
+            "tax_type": "VAT",
+            "period_start": "2026-02-01",
+            "period_end": "2026-02-28",
+            "amount": 2200,
+            "submission_date": "2026-03-15",
+            "status": "PENDING",
+            "reference_number": "VAT-2026-Q2"
+        }
+    ],
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "stats": {
+        "total_submitted": 2200,
+        "total_paid": 0,
+        "pending_payment": 2200
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Types Reference -->
+        <div class="card">
+            <h2>📖 Account Types Reference</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Normal Balance</th>
+                        <th>Examples</th>
+                        <th>Rules</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>ASSET</strong></td>
+                        <td>Debit</td>
+                        <td>Cash, Bank, Accounts Receivable, Inventory</td>
+                        <td>Dr increases, Cr decreases</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LIABILITY</strong></td>
+                        <td>Credit</td>
+                        <td>Accounts Payable, Tax Payable, Loans</td>
+                        <td>Cr increases, Dr decreases</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EQUITY</strong></td>
+                        <td>Credit</td>
+                        <td>Owner Capital, Retained Earnings</td>
+                        <td>Cr increases, Dr decreases</td>
+                    </tr>
+                    <tr>
+                        <td><strong>INCOME</strong></td>
+                        <td>Credit</td>
+                        <td>Sales, Other Income, Service Revenue</td>
+                        <td>Cr increases, Dr decreases</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EXPENSE</strong></td>
+                        <td>Debit</td>
+                        <td>Purchase, Office Expense, Salary, Rent</td>
+                        <td>Dr increases, Cr decreases</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Transaction Status Flow</h3>
+            <div class="mermaid">
+graph LR
+    A[POST /transactions] --> B[Transaction Created]
+    B --> C[Journal Auto-Generated]
+    C --> D[Posted to Ledger]
+    D --> E[Included in Reports]
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#667eea',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#5a67d8',
+                lineColor: '#667eea',
+                secondaryColor: '#764ba2',
+                tertiaryColor: '#f8f9fa'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

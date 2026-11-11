@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ERP Dashboard</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: #1f2937;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-header h3 {
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .grid-kpi {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+
+    .kpi-card {
+      background: #f9fafb;
+      border-radius: 8px;
+      padding: 10px 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 4px;
+    }
+
+    .kpi-value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .kpi-sub {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .kpi-positive {
+      color: #15803d;
+    }
+
+    .kpi-negative {
+      color: #b91c1c;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .quick-link-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      font-size: 12px;
+      color: #1d4ed8;
+      cursor: pointer;
+    }
+
+    .quick-link-pill:hover {
+      background: #dbeafe;
+    }
+
+    .columns-main {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.4fr);
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    .table th, .table td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    .table th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .table tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .tag-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .tag-warning {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .tag-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .list-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .list-title {
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    .list-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .badge {
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      color: #374151;
+      white-space: nowrap;
+    }
+
+    .badge-soft {
+      background: #e0f2fe;
+      color: #1d4ed8;
+    }
+
+    .badge-soft-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .badge-soft-warning {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .pill-filter:last-child {
+      border-right: none;
+    }
+
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    @media (max-width: 1100px) {
+      .grid-kpi {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+      .columns-main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+      }
+      .grid-kpi {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#" class="active">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Company Dashboard</h1>
+    <div class="subtitle">
+      High-level overview of Sales, Purchases, Profit, Cash and Stock — with quick access to daily operations.
+    </div>
+
+    <!-- TOP: KPIs + QUICK LINKS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Key Performance Indicators</h3>
+        <div class="flex-between">
+          <span class="hint">Today · This Week · This Month</span>
+          <div class="pill-filter-group">
+            <div class="pill-filter active">Today</div>
+            <div class="pill-filter">This Week</div>
+            <div class="pill-filter">This Month</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI GRID -->
+      <div class="grid-kpi">
+        <!-- Sales -->
+        <div class="kpi-card">
+          <div class="kpi-label">Sales</div>
+          <div class="kpi-value">$42,350</div>
+          <div class="kpi-sub">
+            <span class="kpi-positive">▲ +12.4%</span> vs last period
+          </div>
+        </div>
+
+        <!-- Purchases -->
+        <div class="kpi-card">
+          <div class="kpi-label">Purchases</div>
+          <div class="kpi-value">$18,920</div>
+          <div class="kpi-sub">
+            <span class="kpi-negative">▼ -3.1%</span> vs last period
+          </div>
+        </div>
+
+        <!-- Profit -->
+        <div class="kpi-card">
+          <div class="kpi-label">Gross Profit</div>
+          <div class="kpi-value">$23,430</div>
+          <div class="kpi-sub">
+            Margin: <strong>55.3%</strong>
+          </div>
+        </div>
+
+        <!-- Cash -->
+        <div class="kpi-card">
+          <div class="kpi-label">Cash on Hand</div>
+          <div class="kpi-value">$128,500</div>
+          <div class="kpi-sub">
+            In bank & cash accounts
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <div class="kpi-card">
+          <div class="kpi-label">Stock Value</div>
+          <div class="kpi-value">$76,210</div>
+          <div class="kpi-sub">
+            <span class="kpi-warning">Low stock: 7 items</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUICK LINKS -->
+      <div style="margin-top:12px;">
+        <div class="card-header" style="padding:0;margin-bottom:6px;">
+          <h3 style="font-size:14px;">Quick Links</h3>
+        </div>
+        <div class="quick-links">
+          <div class="quick-link-pill">+ New Invoice</div>
+          <div class="quick-link-pill">+ New Sales Order</div>
+          <div class="quick-link-pill">+ New Purchase Order</div>
+          <div class="quick-link-pill">+ New Customer</div>
+          <div class="quick-link-pill">+ New Supplier</div>
+          <div class="quick-link-pill">View Aged Receivables</div>
+          <div class="quick-link-pill">View Aged Payables</div>
+          <div class="quick-link-pill">Stock Reorder Report</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MIDDLE / BOTTOM SECTIONS -->
+    <div class="columns-main">
+      <!-- LEFT: Activities + Top Customers / Products -->
+      <div>
+        <!-- TODAY'S ACTIVITIES / REMINDERS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Today’s Activities & Reminders</h3>
+            <button class="btn btn-outline btn-sm">View Calendar</button>
+          </div>
+
+          <ul class="list">
+            <li class="list-item">
+              <div>
+                <div class="list-title">Follow up with ABC Trading (Invoice #INV-1042)</div>
+                <div class="list-meta">Due: Today · Overdue by 3 days · Amount: $1,250.00</div>
+              </div>
+              <span class="badge badge-soft-danger">Overdue</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Confirm Purchase Order with Global Supplies</div>
+                <div class="list-meta">PO #PO-3098 · Expected delivery: Tomorrow</div>
+              </div>
+              <span class="badge badge-soft-warning">Pending</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Review low stock alert items</div>
+                <div class="list-meta">7 products below reorder level</div>
+              </div>
+              <span class="badge badge-soft">Inventory</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Approve payroll for March</div>
+                <div class="list-meta">Total employees: 24 · Total payroll: $38,400</div>
+              </div>
+              <span class="badge badge-soft">Payroll</span>
+            </li>
+          </ul>
+
+          <div class="hint">
+            Sync this section with your tasks, approvals, unpaid invoices, and upcoming deliveries.
+          </div>
+        </div>
+
+        <!-- TOP CUSTOMERS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Top Customers (This Month)</h3>
+            <button class="btn btn-outline btn-sm">View All</button>
+          </div>
+
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Customer</th>
+              <th style="width:110px;">Sales</th>
+              <th style="width:90px;">Invoices</th>
+              <th style="width:90px;">Outstanding</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>ABC Trading</td>
+              <td>$12,800</td>
+              <td>8</td>
+              <td><span class="tag tag-danger">$1,250</span></td>
+            </tr>
+            <tr>
+              <td>Global Industries</td>
+              <td>$9,540</td>
+              <td>5</td>
+              <td><span class="tag tag-success">$0</span></td>
+            </tr>
+            <tr>
+              <td>Sunrise Retail</td>
+              <td>$7,120</td>
+              <td>4</td>
+              <td><span class="tag">$320</span></td>
+            </tr>
+            <tr>
+              <td>Delta Engineering</td>
+              <td>$6,890</td>
+              <td>3</td>
+              <td><span class="tag tag-success">$0</span></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- TOP PRODUCTS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Top Products (By Quantity Sold)</h3>
+            <button class="btn btn-outline btn-sm">View Inventory</button>
+          </div>
+
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Product</th>
+              <th style="width:90px;">Qty Sold</th>
+              <th style="width:90px;">Revenue</th>
+              <th style="width:120px;">Stock Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Item A - Industrial Cleaner</td>
+              <td>320</td>
+              <td>$6,400</td>
+              <td><span class="tag tag-success">In Stock</span></td>
+            </tr>
+            <tr>
+              <td>Item B - Safety Gloves</td>
+              <td>280</td>
+              <td>$4,200</td>
+              <td><span class="tag tag-warning">Low Stock</span></td>
+            </tr>
+            <tr>
+              <td>Item C - PPE Kit</td>
+              <td>190</td>
+              <td>$5,700</td>
+              <td><span class="tag tag-danger">Out of Stock</span></td>
+            </tr>
+            <tr>
+              <td>Item D - Cable Ties (Pack)</td>
+              <td>150</td>
+              <td>$1,050</td>
+              <td><span class="tag tag-success">In Stock</span></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- RIGHT: NOTIFICATIONS / ALERTS / SNAPSHOTS -->
+      <div>
+        <!-- NOTIFICATIONS & ALERTS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Notifications & Alerts</h3>
+            <button class="btn btn-outline btn-sm">Mark All Read</button>
+          </div>
+
+          <ul class="list">
+            <li class="list-item">
+              <div>
+                <div class="list-title">Low stock: Safety Gloves</div>
+                <div class="list-meta">
+                  Current: 24 units · Reorder level: 50 units
+                </div>
+              </div>
+              <span class="badge badge-soft-warning">Inventory</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Overdue invoice: INV-1042</div>
+                <div class="list-meta">
+                  ABC Trading · Due 3 days ago · Amount: $1,250
+                </div>
+              </div>
+              <span class="badge badge-soft-danger">Receivable</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Supplier payment due tomorrow</div>
+                <div class="list-meta">
+                  Global Supplies · Bill #BILL-908 · $2,780
+                </div>
+              </div>
+              <span class="badge badge-soft">Payable</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">Bank reconciliation pending</div>
+                <div class="list-meta">
+                  Main Account · Last reconciled 10 days ago
+                </div>
+              </div>
+              <span class="badge badge-soft">Accounting</span>
+            </li>
+            <li class="list-item">
+              <div>
+                <div class="list-title">New customer registered: Brightline Sdn Bhd</div>
+                <div class="list-meta">
+                  Added today by Admin User
+                </div>
+              </div>
+              <span class="badge badge-soft">Customer</span>
+            </li>
+          </ul>
+
+          <div class="hint">
+            Later you can filter by module (Sales, Inventory, Accounting, etc.) and severity.
+          </div>
+        </div>
+
+        <!-- CASH & RECEIVABLE SNAPSHOT -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Cash & Receivables Snapshot</h3>
+          </div>
+
+          <table class="table">
+            <tbody>
+            <tr>
+              <th>Total Cash (All Accounts)</th>
+              <td>$128,500</td>
+            </tr>
+            <tr>
+              <th>Aged Receivables (0–30 days)</th>
+              <td>$9,300</td>
+            </tr>
+            <tr>
+              <th>Aged Receivables (31–60 days)</th>
+              <td>$2,450</td>
+            </tr>
+            <tr>
+              <th>Aged Receivables (60+ days)</th>
+              <td><span class="tag tag-danger">$1,250</span></td>
+            </tr>
+            <tr>
+              <th>Aged Payables (0–30 days)</th>
+              <td>$5,900</td>
+            </tr>
+            <tr>
+              <th>Aged Payables (31–60 days)</th>
+              <td>$1,720</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- QUICK ACTIONS (RIGHT SIDE) -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Quick Actions</h3>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <button class="btn btn-primary btn-sm">+ New Invoice</button>
+            <button class="btn btn-outline btn-sm">+ New PO</button>
+            <button class="btn btn-outline btn-sm">+ New Customer</button>
+            <button class="btn btn-outline btn-sm">+ New Supplier</button>
+            <button class="btn btn-outline btn-sm">Run Sales Report</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

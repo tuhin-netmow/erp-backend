@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #c471f5 0%, #fa71cd 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #c471f5; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #c471f5; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #c471f5; border-bottom: 3px solid #fa71cd; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .card h3 { color: #c471f5; margin-top: 30px; margin-bottom: 15px; font-size: 1.3em; }
+        .card h4 { color: #fa71cd; margin-top: 20px; margin-bottom: 10px; font-size: 1.1em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #fa71cd; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(250, 113, 205, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #fa71cd 0%, #c471f5 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .category-header { background: linear-gradient(90deg, #f3e5f5 0%, #e1bee7 100%); padding: 15px 20px; border-radius: 10px; margin: 30px 0 20px 0; font-size: 1.2em; font-weight: 600; color: #7b1fa2; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #fa71cd; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block .string { color: #80cbc4; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .property { color: #82b1ff; }
+        .code-block .comment { color: #546e7a; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #fa71cd 0%, #c471f5 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        .badge-protected { background: #fff3e0; color: #ef6c00; }
+        .file-badge { display: inline-block; padding: 3px 8px; background: #fa71cd; color: white; border-radius: 4px; font-size: 0.7em; font-family: monospace; margin-left: 10px; }
+        .response-box { background: #f0fff4; border-left: 4px solid #28a745; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .error-box { background: #fff5f5; border-left: 4px solid #dc3545; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .response-box code, .error-box code { font-family: 'Courier New', monospace; font-size: 0.9em; color: #333; white-space: pre-wrap; word-break: break-word; }
+        .mermaid { display: flex; justify-content: center; background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .expandable { background: white; border: 2px solid #e0e0e0; border-radius: 8px; margin: 15px 0; overflow: hidden; }
+        .expandable-header { background: #f5f5f5; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .expandable-header:hover { background: #eeeeee; }
+        .expandable-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+        .expandable.open .expandable-content { max-height: 2000px; padding: 15px; }
+        .expandable-arrow { transition: transform 0.3s ease; }
+        .expandable.open .expandable-arrow { transform: rotate(180deg); }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>📊 Reports Module</h1>
+            <p class="subtitle">Comprehensive business analytics, financial statements, and performance reporting across all modules</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">💰 Sales Reports (6)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/sales/summary</div><div class="route-desc">Sales summary metrics</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/sales/top-customers</div><div class="route-desc">Top customers by revenue</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/sales/top-products</div><div class="route-desc">Top products by sales</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/sales/by-customer</div><div class="route-desc">Sales grouped by customer</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/sales/staff-wise</div><div class="route-desc">Staff sales performance</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/invoices/staff-wise</div><div class="route-desc">Staff invoice summary</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">👥 Customer Reports (2)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/customers</div><div class="route-desc">Customer statistics</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/customers/account-receivables</div><div class="route-desc">Account receivables</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">📦 Purchase Reports (2)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/purchase/summary</div><div class="route-desc">Purchase summary</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/purchase/by-supplier</div><div class="route-desc">Spending by supplier</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">📊 Inventory Reports (3)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/inventory/status</div><div class="route-desc">Stock status</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/inventory/valuation</div><div class="route-desc">Stock valuation</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/inventory/low-stock-list</div><div class="route-desc">Low stock items</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">👔 HR Reports (2)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/hr/attendance</div><div class="route-desc">Attendance summary</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/hr/payroll</div><div class="route-desc">Payroll summary</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">💹 Finance Reports (1)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/finance/profit-loss</div><div class="route-desc">Profit & Loss statement</div></div>
+            </div>
+
+            <h3 style="color: #c471f5; margin: 25px 0 15px 0;">👤 My Reports - Staff (6)</h3>
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/sales</div><div class="route-desc">My sales data</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/invoices</div><div class="route-desc">My invoices</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/customer-wise-sales</div><div class="route-desc">My sales by customer</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/customer-wise-invoices</div><div class="route-desc">My invoices by customer</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/customers</div><div class="route-desc">My customers list</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/reports/my/dashboard-statistics</div><div class="route-desc">My dashboard stats</div></div>
+            </div>
+        </div>
+
+        <!-- ==================== SALES SUMMARY ==================== -->
+        <div class="category-header">💰 SALES REPORTS</div>
+        <div class="section-title">📌 SALES SUMMARY</div>
+        <div class="card">
+            <h2>GET /api/reports/sales/summary <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Query Parameters] --> B[Verify JWT Token<br/>Middleware]
+                B --> C[Validate Date Range<br/>dateRangeSchema]
+                C --> D[Extract Parameters<br/>startDate, endDate]
+                D --> E[Query Database<br/>Aggregate Sales]
+                E --> F[Calculate Metrics<br/>Orders, Revenue, Avg]
+                F --> G[Return Summary<br/>Statistics]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Rules</th></tr>
+                <tr><td>startDate / start_date</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Date format: YYYY-MM-DD</td></tr>
+                <tr><td>endDate / end_date</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Date format: YYYY-MM-DD</td></tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/reports/reports.controller.js</code> <span class="file-badge">getSalesSummary</span></p>
+            <pre class="code-block"><span class="keyword">async</span> getSalesSummary(req, res) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> start_date = req.query.start_date || req.query.startDate;
+        <span class="keyword">const</span> end_date = req.query.end_date || req.query.endDate;
+        <span class="keyword">if</span> (!start_date || !end_date) {
+            <span class="keyword">return</span> error(res, <span class="string">'start_date and end_date are required'</span>, <span class="number">400</span>);
+        }
+        <span class="keyword">const</span> data = <span class="keyword">await</span> ReportService.getSalesSummary(start_date, end_date);
+        <span class="keyword">return</span> success(res, <span class="string">'Sales summary retrieved successfully'</span>, data);
+    } <span class="keyword">catch</span> (err) {
+        <span class="keyword">return</span> error(res, err.message, <span class="number">500</span>);
+    }
+}</pre>
+
+            <h4>Service Logic</h4>
+            <pre class="code-block"><span class="comment">// Aggregate sales data within date range</span>
+<span class="keyword">const</span> result = <span class="keyword">await</span> Sale.findAll({
+    where: { sale_date: { [Op.between]: [startDate, endDate] } },
+    attributes: [
+        [sequelize.fn(<span class="string">'COUNT'</span>, sequelize.col(<span class="string">'id'</span>)), <span class="string">'total_orders'</span>],
+        [sequelize.fn(<span class="string">'SUM'</span>, sequelize.col(<span class="string">'total_amount'</span>)), <span class="string">'total_revenue'</span>],
+        [sequelize.fn(<span class="string">'AVG'</span>, sequelize.col(<span class="string">'total_amount'</span>)), <span class="string">'average_order_value'</span>]
+    ],
+    raw: <span class="keyword">true</span>
+});</pre>
+
+            <h4>Repository Logic (SQL)</h4>
+            <pre class="code-block"><span class="comment">-- Sales Summary Query</span>
+SELECT
+    COUNT(id) as total_orders,
+    SUM(total_amount) as total_revenue,
+    AVG(total_amount) as average_order_value
+FROM sales
+WHERE sale_date BETWEEN <span class="string">'2025-01-01'</span> AND <span class="string">'2025-01-31'</span>
+AND status = <span class="string">'completed'</span>;</pre>
+
+            <h4>Database Tables</h4>
+            <table>
+                <tr><th>Table</th><th>Columns Used</th></tr>
+                <tr><td><strong>sales</strong></td>
+                <td>id, sale_date, total_amount, status</td></tr>
+            </table>
+
+            <h4>Multiple Same Requests & Responses</h4>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. Daily Sales Summary</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/sales/summary?startDate=2025-01-01&endDate=2025-01-01</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales summary retrieved successfully",
+    "data": {
+        "total_orders": 15,
+        "total_revenue": 4500.00,
+        "average_order_value": 300.00
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Monthly Sales Summary</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/sales/summary?startDate=2025-01-01&endDate=2025-01-31</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales summary retrieved successfully",
+    "data": {
+        "total_orders": 450,
+        "total_revenue": 135000.00,
+        "average_order_value": 300.00
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Yearly Sales Summary</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/sales/summary?startDate=2025-01-01&endDate=2025-12-31</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales summary retrieved successfully",
+    "data": {
+        "total_orders": 5400,
+        "total_revenue": 1620000.00,
+        "average_order_value": 300.00
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales summary retrieved successfully",
+    "data": {
+        "total_orders": 150,
+        "total_revenue": 45000.00,
+        "average_order_value": 300.00
+    }
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "start_date and end_date are required"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== ACCOUNT RECEIVABLES ==================== -->
+        <div class="category-header">👥 CUSTOMER REPORTS</div>
+        <div class="section-title">📌 ACCOUNT RECEIVABLES</div>
+        <div class="card">
+            <h2>GET /api/reports/customers/account-receivables <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Date + Pagination] --> B[Verify JWT Token]
+                B --> C[Validate Parameters]
+                C --> D[Join Invoices + Customers]
+                D --> E[Filter Unpaid Balance]
+                E --> F[Apply Date Range]
+                F --> G[Apply Search Filter]
+                G --> H[Paginate Results]
+                H --> I[Return Unpaid Invoices]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Rules</th></tr>
+                <tr><td>startDate</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter invoices from date</td></tr>
+                <tr><td>endDate</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter invoices until date</td></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Default: 1</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Default: 10</td></tr>
+                <tr><td>search</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Search by customer/invoice</td></tr>
+            </table>
+
+            <h4>Multiple Same Requests & Responses</h4>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. All Unpaid Invoices</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/customers/account-receivables?page=1&limit=10</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Account receivables retrieved",
+    "pagination": { "total": 6, "page": 1, "limit": 10, "totalPage": 1 },
+    "data": [
+        { "invoiceNumber": "INV-20251012-D72F5C", "customer": "Modern Enterprises", "balance": 1325 }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Filter by Date Range</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/customers/account-receivables?startDate=2025-01-01&endDate=2025-01-31</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Account receivables retrieved",
+    "pagination": { "total": 3, "page": 1, "limit": 10, "totalPage": 1 },
+    "data": [{ "invoiceNumber": "INV2025001", "customer": "Acme Corp", "balance": 5000.00 }]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Search by Customer Name</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/customers/account-receivables?search=Acme</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Account receivables retrieved",
+    "data": [{ "invoiceNumber": "INV2025003", "customer": "Acme Corp", "balance": 2500.00 }]
+}</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== PROFIT & LOSS ==================== -->
+        <div class="category-header">💹 FINANCE REPORTS</div>
+        <div class="section-title">📌 PROFIT & LOSS STATEMENT</div>
+        <div class="card">
+            <h2>GET /api/reports/finance/profit-loss <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Date Range] --> B[Verify JWT Token]
+                B --> C[Validate Date Range]
+                C --> D[Calculate Total Revenue<br/>Sum Sales]
+                D --> E[Calculate COGS<br/>Cost of Goods Sold]
+                E --> F[Calculate Gross Profit<br/>Revenue - COGS]
+                F --> G[Calculate Expenses<br/>Operating Costs]
+                G --> H[Calculate Net Profit<br/>Gross Profit - Expenses]
+                H --> I[Return P&L Statement]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Rules</th></tr>
+                <tr><td>startDate</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Date format: YYYY-MM-DD</td></tr>
+                <tr><td>endDate</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Date format: YYYY-MM-DD</td></tr>
+            </table>
+
+            <h4>Multiple Same Requests & Responses</h4>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. Monthly P&L Statement</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/finance/profit-loss?startDate=2025-01-01&endDate=2025-01-31</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Profit & Loss statement retrieved",
+    "data": {
+        "revenue": 120000.00,
+        "cogs": 80000.00,
+        "gross_profit": 40000.00,
+        "expenses": 15000.00,
+        "net_profit": 25000.00
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Quarterly P&L Statement</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/finance/profit-loss?startDate=2025-01-01&endDate=2025-03-31</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Profit & Loss statement retrieved",
+    "data": { "net_profit": 75000.00 }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Database Tables</h4>
+            <table>
+                <tr><th>Table</th><th>Columns Used</th></tr>
+                <tr><td><strong>sales</strong></td>
+                <td>id, sale_date, total_amount, status</td></tr>
+                <tr><td><strong>sale_items</strong></td>
+                <td>sale_id, quantity, cost_price</td></tr>
+                <tr><td><strong>expenses</strong></td>
+                <td>expense_date, amount</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ P&L Formula:</strong><br>
+                • Gross Profit = Revenue - COGS<br>
+                • Net Profit = Gross Profit - Expenses
+            </div>
+        </div>
+
+        <!-- ==================== MY DASHBOARD STATISTICS ==================== -->
+        <div class="category-header">👤 MY REPORTS (STAFF)</div>
+        <div class="section-title">📌 MY DASHBOARD STATISTICS</div>
+        <div class="card">
+            <h2>GET /api/reports/my/dashboard-statistics <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Filter Type] --> B[Verify JWT Token]
+                B --> C[Extract User ID<br/>from Token]
+                C --> D[Calculate Date Range<br/>Based on Filter]
+                D --> E[Filter by Staff ID<br/>Isolate My Data]
+                E --> F[Aggregate Metrics<br/>Sales, Orders, Collections]
+                F --> G[Return Statistics<br/>+ Period Info]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Rules</th></tr>
+                <tr><td>filter</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Enum: thisWeek, thisMonth, lastMonth, thisYear (default: thisMonth)</td></tr>
+            </table>
+
+            <h4>Multiple Same Requests & Responses</h4>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. This Month Statistics (Default)</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/my/dashboard-statistics</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Dashboard statistics retrieved",
+    "data": {
+        "total_sales": 15000.00,
+        "total_orders": 25,
+        "total_invoices": 20,
+        "total_collections": 12000.00,
+        "period": { "filter": "thisMonth", "start_date": "2025-03-01", "end_date": "2025-03-11" }
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. This Week Statistics</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/my/dashboard-statistics?filter=thisWeek</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Dashboard statistics retrieved",
+    "data": { "total_sales": 3500.00, "total_orders": 8 }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Last Month Statistics</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/my/dashboard-statistics?filter=lastMonth</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Dashboard statistics retrieved",
+    "data": { "total_sales": 45000.00, "total_orders": 85 }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4. This Year Statistics</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/reports/my/dashboard-statistics?filter=thisYear</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Dashboard statistics retrieved",
+    "data": { "total_sales": 180000.00, "total_orders": 350 }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Note:</strong> This endpoint filters data by the logged-in user's ID (req.user.id), providing personalized statistics for each staff member.
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="section-title">🗄️ DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+
+            <div class="mermaid">
+                erDiagram
+                SALES {
+                    int id PK
+                    int customer_id FK
+                    int staff_id FK
+                    datetime sale_date
+                    decimal total_amount
+                    string status
+                }
+                CUSTOMERS {
+                    int id PK
+                    string name
+                    string company
+                    string email
+                    decimal opening_balance
+                }
+                SALES_ITEMS {
+                    int id PK
+                    int sale_id FK
+                    int product_id FK
+                    decimal quantity
+                    decimal unit_price
+                }
+                SALES_INVOICES {
+                    int id PK
+                    int customer_id FK
+                    string invoice_number
+                    decimal total_amount
+                    decimal paid_amount
+                    string payment_status
+                }
+                PRODUCTS {
+                    int id PK
+                    string name
+                    decimal cost_price
+                    decimal selling_price
+                    int stock_quantity
+                }
+                ATTENDANCE {
+                    int id PK
+                    int staff_id FK
+                    datetime check_in
+                    datetime check_out
+                }
+                PAYROLL_ITEMS {
+                    int id PK
+                    int staff_id FK
+                    decimal net_salary
+                    string payment_status
+                }
+                SALES ||--o{ CUSTOMERS : "places_orders"
+                SALES ||--o{ SALES_ITEMS : "contains"
+                SALES ||--o| SALES_INVOICES : "billed_as"
+                SALES_ITEMS }o--|| PRODUCTS : "references"
+                ATTENDANCE }o--|| USERS : "tracked_for"
+                PAYROLL_ITEMS }o--|| USERS : "paid_to"
+            </div>
+        </div>
+
+        <!-- ==================== VALIDATION RULES ==================== -->
+        <div class="section-title">✅ VALIDATION RULES</div>
+        <div class="card">
+            <h2>API Validation Schemas</h2>
+
+            <h3>Date Range Schema</h3>
+            <pre class="code-block">{
+    <span class="property">"startDate"</span>: { <span class="property">"type"</span>: <span class="string">"string"</span>, <span class="property">"required"</span>: <span class="keyword">true</span>, <span class="property">"format"</span>: <span class="string">"YYYY-MM-DD"</span> },
+    <span class="property">"endDate"</span>: { <span class="property">"type"</span>: <span class="string">"string"</span>, <span class="property">"required"</span>: <span class="keyword">true</span>, <span class="property">"format"</span>: <span class="string">"YYYY-MM-DD"</span> }
+}</pre>
+
+            <h3>Dashboard Filter Schema</h3>
+            <pre class="code-block">{
+    <span class="property">"filter"</span>: {
+        <span class="property">"type"</span>: <span class="string">"string"</span>,
+        <span class="property">"enum"</span>: [<span class="string">"thisWeek"</span>, <span class="string">"thisMonth"</span>, <span class="string">"lastMonth"</span>, <span class="string">"thisYear"</span>],
+        <span class="property">"default"</span>: <span class="string">"thisMonth"</span>
+    }
+}</pre>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default', securityLevel: 'loose' });
+        function toggleExpandable(element) { element.parentElement.classList.toggle('open'); }
+    </script>
+</body>
+</html>

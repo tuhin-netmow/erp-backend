@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Customers (CRM – Basic)</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: #1f2937;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 18px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-header h3 {
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .tag-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .tag-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .tag-warning {
+      background: #fef9c3;
+      color: #854d0e;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+
+    .pill-filter:last-child {
+      border-right: none;
+    }
+
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .file-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-name {
+      font-weight: 500;
+    }
+
+    .file-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .three-column {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#" class="active">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Customers (CRM – Basic)</h1>
+    <div class="subtitle">
+      Manage customer master data, groups, contacts, pricing, ledgers, payments, statements and attachments.
+    </div>
+
+    <!-- CUSTOMER LIST + FILTERS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Customer List</h3>
+        <button class="btn btn-primary btn-sm">+ New Customer</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Search</label>
+          <input type="text" placeholder="Search by name, code, phone or email" />
+        </div>
+        <div class="form-group">
+          <label>Group / Type</label>
+          <select>
+            <option value="">All Groups</option>
+            <option>Retail</option>
+            <option>Wholesale</option>
+            <option>Key Account</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select>
+            <option value="">All</option>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:90px;">Code</th>
+          <th>Name</th>
+          <th style="width:130px;">Group</th>
+          <th style="width:120px;">Phone</th>
+          <th style="width:180px;">Email</th>
+          <th style="width:110px;">Credit Limit</th>
+          <th style="width:110px;">Balance</th>
+          <th style="width:80px;">Risk</th>
+          <th style="width:80px;">Status</th>
+          <th style="width:140px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>CUST-001</td>
+          <td>ABC Trading</td>
+          <td>Wholesale</td>
+          <td>+60 12-345 6789</td>
+          <td>accounts@abctrading.com</td>
+          <td>$10,000</td>
+          <td>$1,250</td>
+          <td><span class="tag-warning tag">Medium</span></td>
+          <td><span class="tag-success tag">Active</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline">Edit</button>
+            <button class="btn btn-sm btn-outline">Ledger</button>
+          </td>
+        </tr>
+        <tr>
+          <td>CUST-002</td>
+          <td>Global Industries</td>
+          <td>Key Account</td>
+          <td>+60 17-222 8899</td>
+          <td>finance@globalind.com</td>
+          <td>$25,000</td>
+          <td>$0</td>
+          <td><span class="tag-success tag">Low</span></td>
+          <td><span class="tag-success tag">Active</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline">Edit</button>
+            <button class="btn btn-sm btn-outline">Ledger</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="hint">
+        This table maps to the <code>customers</code> and <code>customer_groups</code> tables with balances from <code>customer_ledger_entries</code>.
+      </div>
+    </div>
+
+    <!-- ADD / EDIT CUSTOMER + GROUPS / CONTACTS / CREDIT -->
+    <div class="two-column">
+      <!-- LEFT: ADD / EDIT CUSTOMER -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Add / Edit Customer</h3>
+          <div class="pill-filter-group">
+            <div class="pill-filter active">Details</div>
+            <div class="pill-filter">Billing & Shipping</div>
+            <div class="pill-filter">Credit & Risk</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer Code</label>
+            <input type="text" placeholder="Auto or manual, e.g. CUST-001" />
+          </div>
+          <div class="form-group">
+            <label>Customer Name</label>
+            <input type="text" placeholder="Legal / trading name" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer Group / Type</label>
+            <select>
+              <option>Retail</option>
+              <option>Wholesale</option>
+              <option>Key Account</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tax Number / Registration No.</label>
+            <input type="text" placeholder="GST / VAT / Company Reg." />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="accounts@customer.com" />
+          </div>
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" placeholder="+60 xx-xxx xxxx" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Billing Address</label>
+            <textarea placeholder="Billing address"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Shipping Address</label>
+            <textarea placeholder="Shipping address"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Credit Limit</label>
+            <input type="number" step="0.01" placeholder="e.g. 10000.00" />
+          </div>
+          <div class="form-group">
+            <label>Credit Days (Payment Terms)</label>
+            <input type="number" placeholder="e.g. 30" />
+          </div>
+          <div class="form-group">
+            <label>Risk Level</label>
+            <select>
+              <option>LOW</option>
+              <option>MEDIUM</option>
+              <option>HIGH</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-sm">Save Customer</button>
+        <button class="btn btn-outline btn-sm">Reset</button>
+
+        <div class="hint">
+          This form maps to <code>customers</code> (including credit limit, credit days and risk level).
+        </div>
+      </div>
+
+      <!-- RIGHT: GROUPS + CONTACTS -->
+      <div>
+        <!-- CUSTOMER GROUPS / TYPES -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Customer Groups / Types</h3>
+            <button class="btn btn-outline btn-sm">+ New Group</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Group Name</label>
+              <input type="text" placeholder="e.g. Retail, Wholesale, Key Account" />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" placeholder="Optional group description" />
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Group</button>
+
+          <table>
+            <thead>
+            <tr>
+              <th style="width:60px;">ID</th>
+              <th>Group Name</th>
+              <th>Description</th>
+              <th style="width:80px;">Status</th>
+              <th style="width:80px;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>Retail</td>
+              <td>Small and medium retail customers</td>
+              <td><span class="tag-success tag">Active</span></td>
+              <td><button class="btn btn-sm btn-outline">Edit</button></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Wholesale</td>
+              <td>Bulk orders and distributors</td>
+              <td><span class="tag-success tag">Active</span></td>
+              <td><button class="btn btn-sm btn-outline">Edit</button></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="hint">
+            Maps to <code>customer_groups</code>.
+          </div>
+        </div>
+
+        <!-- CUSTOMER CONTACTS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Customer Contacts (Per Customer)</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Contact Name</label>
+              <input type="text" placeholder="Contact person name" />
+            </div>
+            <div class="form-group">
+              <label>Position / Role</label>
+              <input type="text" placeholder="e.g. Finance Manager" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Contact Email</label>
+              <input type="email" placeholder="contact@customer.com" />
+            </div>
+            <div class="form-group">
+              <label>Contact Phone</label>
+              <input type="text" placeholder="+60 xx-xxx xxxx" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Primary Contact</label>
+              <select>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Contact</button>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th style="width:80px;">Primary</th>
+              <th style="width:80px;">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Jane Tan</td>
+              <td>Finance Manager</td>
+              <td>jane.tan@abctrading.com</td>
+              <td>+60 12-888 2233</td>
+              <td><span class="tag-success tag">Yes</span></td>
+              <td><button class="btn btn-sm btn-outline">Edit</button></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="hint">
+            Maps to <code>customer_contacts</code> (with <code>customer_id</code> FK).
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICE LIST / SPECIAL PRICING + LEDGER / PAYMENTS -->
+    <div class="two-column">
+      <!-- CUSTOMER PRICE LIST -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Customer Price List / Special Pricing</h3>
+          <button class="btn btn-outline btn-sm">Import Price List</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product</label>
+            <input type="text" placeholder="Search product / SKU" />
+          </div>
+          <div class="form-group">
+            <label>Special Price</label>
+            <input type="number" step="0.0001" placeholder="e.g. 12.5000" />
+          </div>
+          <div class="form-group">
+            <label>Currency</label>
+            <select>
+              <option>MYR</option>
+              <option>USD</option>
+              <option>AUD</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Valid From</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="form-group">
+            <label>Valid To</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="btn btn-sm btn-outline">Save Special Price</button>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:100px;">Price</th>
+            <th style="width:80px;">Currency</th>
+            <th style="width:120px;">Valid Period</th>
+            <th style="width:80px;">Status</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Item A - Industrial Cleaner</td>
+            <td>$12.50</td>
+            <td>MYR</td>
+            <td>2025-01-01 – 2025-03-31</td>
+            <td><span class="tag-success tag">Active</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Maps to <code>customer_price_lists</code> (per customer & product).
+        </div>
+      </div>
+
+      <!-- CUSTOMER LEDGER & PAYMENTS -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Customer Ledger & Payments</h3>
+          <button class="btn btn-outline btn-sm">View Statement</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Range</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>Show</label>
+            <select>
+              <option>All Entries</option>
+              <option>Invoices Only</option>
+              <option>Payments Only</option>
+              <option>Credits & Adjustments</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Date</th>
+            <th style="width:110px;">Ref</th>
+            <th>Description</th>
+            <th style="width:90px;">Debit</th>
+            <th style="width:90px;">Credit</th>
+            <th style="width:100px;">Balance</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-02</td>
+            <td>INV-1042</td>
+            <td>Sales invoice</td>
+            <td>$1,250.00</td>
+            <td></td>
+            <td>$1,250.00</td>
+          </tr>
+          <tr>
+            <td>2025-01-10</td>
+            <td>PAY-778</td>
+            <td>Customer payment</td>
+            <td></td>
+            <td>$1,000.00</td>
+            <td>$250.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          This table maps to <code>customer_ledger_entries</code>.  
+          Customer Statements are generated from this (no extra table needed).
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid #e5e7eb;">
+
+        <h4 style="font-size:14px;margin-bottom:6px;">Record Customer Payment</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Payment Date</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+          <div class="form-group">
+            <label>Amount</label>
+            <input type="number" step="0.01" placeholder="e.g. 500.00" />
+          </div>
+          <div class="form-group">
+            <label>Method</label>
+            <select>
+              <option>CASH</option>
+              <option>BANK_TRANSFER</option>
+              <option>CARD</option>
+              <option>CHEQUE</option>
+              <option>OTHER</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Reference No.</label>
+            <input type="text" placeholder="Bank ref / cheque no." />
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <input type="text" placeholder="Optional notes" />
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline">Save Payment</button>
+
+        <div class="hint">
+          Payments map to <code>customer_payments</code>, and also create ledger entries.
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTACHMENTS + IMPORT / EXPORT -->
+    <div class="two-column">
+      <!-- ATTACHMENTS -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Attachments (Contracts / Documents)</h3>
+          <button class="btn btn-outline btn-sm">Upload File</button>
+        </div>
+
+        <ul class="file-list">
+          <li class="file-item">
+            <div>
+              <div class="file-name">Credit_Terms_ABC_Trading.pdf</div>
+              <div class="file-meta">PDF · 320 KB · Uploaded by Admin · 2025-01-05</div>
+            </div>
+            <button class="btn btn-sm btn-outline">View</button>
+          </li>
+          <li class="file-item">
+            <div>
+              <div class="file-name">Customer_Contract_2025_ABC.docx</div>
+              <div class="file-meta">DOCX · 1.2 MB · Uploaded by Sales · 2025-01-10</div>
+            </div>
+            <button class="btn btn-sm btn-outline">Download</button>
+          </li>
+        </ul>
+
+        <div class="hint">
+          Maps to <code>customer_attachments</code> (file path stored on server / object storage).
+        </div>
+      </div>
+
+      <!-- IMPORT / EXPORT -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Import / Export Customers</h3>
+        </div>
+
+        <p style="font-size:13px;margin-bottom:8px;">
+          Bulk import customers from CSV/Excel or export the current customer list.
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Import File (CSV / XLSX)</label>
+            <input type="text" placeholder="Select file (UI placeholder)" />
+          </div>
+        </div>
+        <button class="btn btn-sm btn-primary">Start Import</button>
+        <button class="btn btn-sm btn-outline">Export Customers</button>
+
+        <div class="hint">
+          Import jobs can be logged in <code>customer_import_logs</code> (file name, rows, success/fail count, status).
+        </div>
+
+        <table style="margin-top:10px;">
+          <thead>
+          <tr>
+            <th style="width:150px;">Imported At</th>
+            <th>File Name</th>
+            <th style="width:90px;">Rows</th>
+            <th style="width:90px;">Success</th>
+            <th style="width:90px;">Failed</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-02 10:22</td>
+            <td>customers_import_jan.csv</td>
+            <td>120</td>
+            <td>118</td>
+            <td>2</td>
+            <td><span class="tag-success tag">Completed</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

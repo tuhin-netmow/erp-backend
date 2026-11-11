@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaves Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #19547b;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #19547b;
+            border-bottom: 3px solid #ffd89b;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #ffd89b;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #19547b;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #ffd89b;
+            color: #333;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .back-link:hover {
+            background: #e6c288;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .status-pending {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .status-approved {
+            background: #28a745;
+            color: white;
+        }
+
+        .status-rejected {
+            background: #dc3545;
+            color: white;
+        }
+
+        .status-cancelled {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🏖️ Leaves Module</h1>
+            <p>Complete leave management system for staff leave applications, approvals, and tracking</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/leaves</span>
+                </h3>
+                <p class="route-desc">List all leave applications with pagination. Supports filtering by staff, status, and leave type.</p>
+                <p style="font-size: 13px; color: #888; margin-top: 8px;">
+                    <strong>Query Parameters:</strong> staff_id, status, leave_type, page, limit
+                </p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/leaves</span>
+                </h3>
+                <p class="route-desc">Apply for a new leave request. Staff can submit leave applications with reason and dates.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/leaves/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed information about a specific leave application.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/leaves/:id</span>
+                </h3>
+                <p class="route-desc">Update leave application details (dates, reason, etc.). Cannot change status directly.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/leaves/:id/status</span>
+                </h3>
+                <p class="route-desc">Approve or reject leave application. Updates status and records approver.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/leaves/:id</span>
+                </h3>
+                <p class="route-desc">Cancel/delete a leave application (only if pending).</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🗄️ Database Schema (ER Diagram)</h2>
+            <div class="mermaid">
+                erDiagram
+                LEAVES {
+                int id PK
+                int staff_id FK
+                enum leave_type
+                date start_date
+                date end_date
+                text reason
+                enum status
+                int approved_by FK
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                STAFFS {
+                int id PK
+                string first_name
+                string last_name
+                string email
+                }
+
+                STAFFS ||--o{ LEAVES : "submits"
+                STAFFS ||--o{ LEAVES : "approves"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tables Used</h2>
+            <ul>
+                <li><strong>leaves</strong> - Leave application records</li>
+                <li><strong>staffs</strong> - Staff information (applicant and approver)</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>📋 Leave Types</h2>
+            <p style="margin-bottom: 15px;">The following leave types are supported:</p>
+            <ul>
+                <li><strong>annual</strong> - Annual/vacation leave</li>
+                <li><strong>sick</strong> - Sick leave</li>
+                <li><strong>unpaid</strong> - Unpaid leave</li>
+                <li><strong>maternity</strong> - Maternity leave</li>
+                <li><strong>paternity</strong> - Paternity leave</li>
+                <li><strong>emergency</strong> - Emergency leave</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🔄 Leave Status Flow</h2>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
+                <div style="display: inline-block; margin: 0 10px;">
+                    <span class="status-badge status-pending">Pending</span>
+                </div>
+                <span style="font-size: 24px;">→</span>
+                <div style="display: inline-block; margin: 0 10px;">
+                    <span class="status-badge status-approved">Approved</span>
+                    <span style="margin: 0 15px; color: #999;">or</span>
+                    <span class="status-badge status-rejected">Rejected</span>
+                </div>
+                <span style="font-size: 24px;">→</span>
+                <div style="display: inline-block; margin: 0 10px;">
+                    <span class="status-badge status-cancelled">Cancelled</span>
+                </div>
+            </div>
+            <p style="margin-top: 15px; font-size: 14px; color: #666;">
+                <strong>Note:</strong> Leave applications can be cancelled by the applicant only when in "pending" status.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>📝 Example API Usage</h2>
+
+            <h3 style="color: #19547b; margin-top: 0;">1. Apply for Leave</h3>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;"><code style="font-family: 'Courier New', monospace; font-size: 13px;">POST /api/leaves
+{
+  "staff_id": 5,
+  "leave_type": "sick",
+  "start_date": "2026-03-15",
+  "end_date": "2026-03-16",
+  "reason": "Medical appointment"
+}</code></pre>
+
+            <h3 style="color: #19547b; margin-top: 25px;">2. Approve Leave</h3>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;"><code style="font-family: 'Courier New', monospace; font-size: 13px;">PUT /api/leaves/1/status
+{
+  "status": "approved"
+}</code></pre>
+
+            <h3 style="color: #19547b; margin-top: 25px;">3. List All Leaves for a Staff</h3>
+            <pre style="background: #f8f9fa; padding: 15px; border-radius: 6px; overflow-x: auto;"><code style="font-family: 'Courier New', monospace; font-size: 13px;">GET /api/leaves?staff_id=5&status=approved&page=1&limit=10</code></pre>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+
+</html>

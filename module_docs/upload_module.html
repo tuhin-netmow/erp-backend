@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #00d2ff; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #00d2ff; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #00d2ff; border-bottom: 3px solid #3a7bd5; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .card h3 { color: #00d2ff; margin-top: 30px; margin-bottom: 15px; font-size: 1.3em; }
+        .card h4 { color: #3a7bd5; margin-top: 20px; margin-bottom: 10px; font-size: 1.1em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #e1f5fe 0%, #b3e5fc 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #3a7bd5; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(58, 123, 213, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-section { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #00d2ff; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block .string { color: #80cbc4; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .keyword { color: #c792ea; }
+        .code-block .property { color: #82b1ff; }
+        .code-block .comment { color: #546e7a; }
+        .info-box { background: #e1f5fe; border-left: 4px solid #0288d1; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        .badge-protected { background: #fff3e0; color: #ef6c00; }
+        .file-badge { display: inline-block; padding: 3px 8px; background: #00d2ff; color: white; border-radius: 4px; font-size: 0.7em; font-family: monospace; margin-left: 10px; }
+        .response-box { background: #f0fff4; border-left: 4px solid #28a745; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .error-box { background: #fff5f5; border-left: 4px solid #dc3545; padding: 15px; border-radius: 6px; margin: 10px 0; }
+        .response-box code, .error-box code { font-family: 'Courier New', monospace; font-size: 0.9em; color: #333; white-space: pre-wrap; word-break: break-word; }
+        .mermaid { display: flex; justify-content: center; background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; }
+        .expandable { background: white; border: 2px solid #e0e0e0; border-radius: 8px; margin: 15px 0; overflow: hidden; }
+        .expandable-header { background: #f5f5f5; padding: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .expandable-header:hover { background: #eeeeee; }
+        .expandable-content { padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease; }
+        .expandable.open .expandable-content { max-height: 2000px; padding: 15px; }
+        .expandable-arrow { transition: transform 0.3s ease; }
+        .expandable.open .expandable-arrow { transform: rotate(180deg); }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>📤 Upload Module</h1>
+            <p class="subtitle">Comprehensive file upload management with image gallery support, metadata handling, and dual storage (Local/Cloud)</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/upload/image</div><div class="route-desc">Upload single image to global gallery</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/upload/images</div><div class="route-desc">Upload multiple images (max 10)</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/upload/images</div><div class="route-desc">List uploaded images with pagination</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/upload/images/:filename</div><div class="route-desc">Delete image from gallery</div></div>
+            </div>
+        </div>
+
+        <!-- ==================== 1. UPLOAD SINGLE IMAGE ==================== -->
+        <div class="section-title">📌 UPLOAD SINGLE IMAGE</div>
+        <div class="card">
+            <h2>POST /api/upload/image</h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>multipart/form-data] --> B[Verify JWT Token<br/>Middleware]
+                B --> C[Multer File Upload<br/>Validate & Store]
+                C --> D{Storage Provider?}
+                D -->|DO Spaces| E[Upload to S3<br/>Generate URL]
+                D -->|Local| F[Save to Disk<br/>Generate Path]
+                E --> G[Extract Metadata<br/>caption, alt_text]
+                F --> G
+                G --> H[Save to Database<br/>Gallery Table]
+                H --> I[Return: File Info + URL]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+<span class="property">Content-Type</span>: <span class="string">multipart/form-data</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Rules</th></tr>
+                <tr><td>image</td><td>File</td><td><span class="badge badge-required">Required</span> Max 5MB, Types: JPEG, PNG, GIF, WebP</td></tr>
+                <tr><td>caption</td><td>string</td><td><span class="badge badge-optional">Optional</span> Max 255 characters</td></tr>
+                <tr><td>description</td><td>string</td><td><span class="badge badge-optional">Optional</span> TEXT type</td></tr>
+                <tr><td>alt_text</td><td>string</td><td><span class="badge badge-optional">Optional</span> Max 255 characters</td></tr>
+            </table>
+
+            <h4>Sample Payload (multipart/form-data)</h4>
+            <pre class="code-block"><span class="comment">// Form Data</span>
+<span class="property">image</span>: <span class="string">(binary file data)</span>
+<span class="property">caption</span>: <span class="string">"Product front view"</span>
+<span class="property">description</span>: <span class="string">"High quality front view of the product"</span>
+<span class="property">alt_text</span>: <span class="string">"Product front view"</span></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">uploadImage</span></p>
+            <pre class="code-block"><span class="keyword">async</span> uploadImage(req, res) {
+    <span class="keyword">try</span> {
+        <span class="comment">// Handle both single file (req.file) and any file (req.files)</span>
+        <span class="keyword">const</span> file = req.file || (req.files && req.files.length > <span class="number">0</span> ? req.files[<span class="number">0</span>] : <span class="keyword">null</span>);
+
+        <span class="keyword">if</span> (!file) {
+            <span class="keyword">return</span> error(res, <span class="string">'No file uploaded'</span>, <span class="number">400</span>);
+        }
+
+        <span class="keyword">const</span> fileProps = <span class="keyword">this</span>._getFileProps(file);
+
+        <span class="comment">// Extract metadata from request body</span>
+        <span class="keyword">const</span> { caption, description, alt_text } = req.body;
+
+        <span class="comment">// Save to database</span>
+        <span class="keyword">const</span> galleryItem = <span class="keyword">await</span> Gallery.create({
+            ...fileProps,
+            caption: caption || <span class="keyword">null</span>,
+            description: description || <span class="keyword">null</span>,
+            alt_text: alt_text || <span class="keyword">null</span>,
+            uploaded_by: req.user ? req.user.id : <span class="keyword">null</span>
+        });
+
+        <span class="keyword">return</span> success(res, <span class="string">'Image uploaded successfully'</span>, {
+            ...fileProps,
+            id: galleryItem.id,
+            meta: { caption, description, alt_text }
+        }, <span class="number">201</span>);
+    } <span class="keyword">catch</span> (err) {
+        <span class="keyword">return</span> error(res, err.message, <span class="number">500</span>);
+    }
+}</pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">_getFileProps</span></p>
+            <pre class="code-block"><span class="comment">// Helper to get file URL and properties regardless of storage provider</span>
+_getFileProps(file) {
+    <span class="keyword">if</span> (useDO) {
+        <span class="comment">// Digital Ocean Spaces file object properties</span>
+        <span class="keyword">return</span> {
+            filename: path.basename(file.key),
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size,
+            url: file.location,  <span class="comment">// Full DO Space URL</span>
+            path: file.key        <span class="comment">// Use key as path reference</span>
+        };
+    } <span class="keyword">else</span> {
+        <span class="comment">// Local file object properties</span>
+        <span class="keyword">return</span> {
+            filename: file.filename,
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size,
+            url: <span class="string">`/uploads/images/${file.filename}`</span>,
+            path: file.path
+        };
+    }
+}</pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.model.js</code> <span class="file-badge">Gallery.create</span></p>
+            <pre class="code-block"><span class="comment">// Sequelize Model Definition</span>
+<span class="keyword">const</span> Gallery = sequelize.define(<span class="string">'Gallery'</span>, {
+    id: { type: DataTypes.INTEGER, primaryKey: <span class="keyword">true</span>, autoIncrement: <span class="keyword">true</span> },
+    filename: { type: DataTypes.STRING(<span class="number">255</span>), allowNull: <span class="keyword">false</span> },
+    originalname: { type: DataTypes.STRING(<span class="number">255</span>) },
+    mimetype: { type: DataTypes.STRING(<span class="number">100</span>) },
+    size: { type: DataTypes.INTEGER },
+    url: { type: DataTypes.STRING(<span class="number">500</span>), allowNull: <span class="keyword">false</span> },
+    path: { type: DataTypes.STRING(<span class="number">500</span>) },
+    caption: { type: DataTypes.STRING(<span class="number">255</span>) },
+    description: { type: DataTypes.TEXT },
+    alt_text: { type: DataTypes.STRING(<span class="number">255</span>) },
+    uploaded_by: { type: DataTypes.INTEGER, references: { model: <span class="string">'users'</span>, key: <span class="string">'id'</span> } }
+}, { tableName: <span class="string">'gallery'</span>, underscored: <span class="keyword">true</span>, timestamps: <span class="keyword">true</span> });</pre>
+
+            <h4>Database Tables</h4>
+            <pre class="code-block"><span class="comment">-- Insert into gallery table</span>
+INSERT INTO gallery (
+    filename, originalname, mimetype, size, url, path,
+    caption, description, alt_text, uploaded_by, created_at, updated_at
+) VALUES (
+    <span class="string">'product_image-1733400000000-123456789.jpg'</span>,
+    <span class="string">'product_image.jpg'</span>,
+    <span class="string">'image/jpeg'</span>,
+    <span class="number">245678</span>,
+    <span class="string">'/uploads/images/product_image-1733400000000-123456789.jpg'</span>,
+    <span class="string">'/path/to/public/uploads/images/...'</span>,
+    <span class="string">'Product front view'</span>,
+    <span class="string">'High quality front view'</span>,
+    <span class="string">'Product front view'</span>,
+    <span class="number">1</span>,
+    NOW(),
+    NOW()
+);
+
+<span class="comment">-- Returns: new gallery record id</span></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Image uploaded successfully",
+    "data": {
+        "id": 123,
+        "filename": "product_image-1733400000000-123456789.jpg",
+        "originalname": "product_image.jpg",
+        "mimetype": "image/jpeg",
+        "size": 245678,
+        "url": "/uploads/images/product_image-1733400000000-123456789.jpg",
+        "path": "/path/to/public/uploads/images/product_image-1733400000000-123456789.jpg",
+        "meta": {
+            "caption": "Product front view",
+            "description": "High quality front view of the product",
+            "alt_text": "Product front view"
+        }
+    }
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "No file uploaded"
+}</code>
+            </div>
+
+            <h4>Error Response (415)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed."
+}</code>
+            </div>
+
+            <h4>Error Response (413)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "File too large. Maximum size is 5MB."
+}</code>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Storage Configuration:</strong><br>
+                • Local Storage: Files stored in <code>/public/uploads/images/</code><br>
+                • Cloud Storage: Digital Ocean Spaces (when configured)<br>
+                • Filename format: <code>originalname-timestamp-random.ext</code><br>
+                • Field name can be any name (uses <code>.any()</code> middleware)
+            </div>
+        </div>
+
+        <!-- ==================== 2. UPLOAD MULTIPLE IMAGES ==================== -->
+        <div class="section-title">📌 UPLOAD MULTIPLE IMAGES</div>
+        <div class="card">
+            <h2>POST /api/upload/images</h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Multiple Files] --> B[Verify JWT Token<br/>Middleware]
+                B --> C[Multer File Upload<br/>Max 10 files]
+                C --> D{Storage Provider?}
+                D -->|DO Spaces| E[Upload to S3<br/>Generate URLs]
+                D -->|Local| F[Save to Disk<br/>Generate Paths]
+                E --> G[Parse Metadata<br/>JSON or Array]
+                F --> G
+                G --> H[Map Metadata<br/>to Each File]
+                H --> I[Batch Save to DB<br/>Gallery Table]
+                I --> J[Return: Files Array<br/>with Count]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>
+<span class="property">Content-Type</span>: <span class="string">multipart/form-data</span></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Rules</th></tr>
+                <tr><td>images</td><td>File[]</td><td><span class="badge badge-required">Required</span> Min 1, Max 10 files, Max 5MB each</td></tr>
+                <tr><td>metadata</td><td>JSON String</td><td><span class="badge badge-optional">Optional</span> Array of objects for each file</td></tr>
+                <tr><td>caption</td><td>string|array</td><td><span class="badge badge-optional">Optional</span> Legacy field</td></tr>
+                <tr><td>description</td><td>string|array</td><td><span class="badge badge-optional">Optional</span> Legacy field</td></tr>
+                <tr><td>alt_text</td><td>string|array</td><td><span class="badge badge-optional">Optional</span> Legacy field</td></tr>
+            </table>
+
+            <h4>Sample Payload (multipart/form-data)</h4>
+            <pre class="code-block"><span class="comment">// Form Data</span>
+<span class="property">images</span>: [<span class="string">(binary file 1)</span>, <span class="string">(binary file 2)</span>, <span class="string">(binary file 3)</span>]
+<span class="property">metadata</span>: <span class="string">'[{"caption":"Image 1","alt_text":"Alt 1"},{"caption":"Image 2","alt_text":"Alt 2"},{"caption":"Image 3","alt_text":"Alt 3"}]'</span></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">uploadMultipleImages</span></p>
+            <pre class="code-block"><span class="keyword">async</span> uploadMultipleImages(req, res) {
+    <span class="keyword">try</span> {
+        <span class="keyword">if</span> (!req.files || req.files.length === <span class="number">0</span>) {
+            <span class="keyword">return</span> error(res, <span class="string">'No files uploaded'</span>, <span class="number">400</span>);
+        }
+
+        <span class="comment">// Parse metadata JSON</span>
+        <span class="keyword">let</span> metadata = [];
+        <span class="keyword">if</span> (req.body.metadata) {
+            <span class="keyword">try</span> { metadata = JSON.parse(req.body.metadata); }
+            <span class="keyword">catch</span> (e) { <span class="comment">Ignore parse error</span> }
+        }
+
+        <span class="keyword">const</span> { caption, description, alt_text } = req.body;
+
+        <span class="comment">// Process each file</span>
+        <span class="keyword">const</span> uploadPromises = req.files.map(<span class="keyword">async</span> (file, index) => {
+            <span class="keyword">const</span> fileProps = <span class="keyword">this</span>._getFileProps(file);
+
+            <span class="comment">// Determine metadata for this specific file</span>
+            <span class="keyword">let</span> fileMeta = metadata[index] || {
+                caption: Array.isArray(caption) ? caption[index] : caption,
+                description: Array.isArray(description) ? description[index] : description,
+                alt_text: Array.isArray(alt_text) ? alt_text[index] : alt_text
+            };
+
+            <span class="comment">// Save to database</span>
+            <span class="keyword">const</span> galleryItem = <span class="keyword">await</span> Gallery.create({
+                ...fileProps,
+                caption: fileMeta.caption || <span class="keyword">null</span>,
+                description: fileMeta.description || <span class="keyword">null</span>,
+                alt_text: fileMeta.alt_text || <span class="keyword">null</span>,
+                uploaded_by: req.user ? req.user.id : <span class="keyword">null</span>
+            });
+
+            <span class="keyword">return</span> { ...fileProps, id: galleryItem.id, meta: fileMeta };
+        });
+
+        <span class="keyword">const</span> uploadedFiles = <span class="keyword">await</span> Promise.all(uploadPromises);
+
+        <span class="keyword">return</span> success(res, <span class="string">`${uploadedFiles.length} images uploaded successfully`</span>, {
+            count: uploadedFiles.length,
+            files: uploadedFiles
+        }, <span class="number">201</span>);
+    } <span class="keyword">catch</span> (err) {
+        <span class="keyword">return</span> error(res, err.message, <span class="number">500</span>);
+    }
+}</pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">Multer Configuration</span></p>
+            <pre class="code-block"><span class="comment">// File filter - only allow images</span>
+<span class="keyword">const</span> fileFilter = (req, file, cb) => {
+    <span class="keyword">const</span> allowedTypes = [<span class="string">'image/jpeg'</span>, <span class="string">'image/jpg'</span>, <span class="string">'image/png'</span>, <span class="string">'image/gif'</span>, <span class="string">'image/webp'</span>];
+    <span class="keyword">if</span> (allowedTypes.includes(file.mimetype)) {
+        cb(<span class="keyword">null</span>, <span class="keyword">true</span>);
+    } <span class="keyword">else</span> {
+        cb(<span class="keyword">new</span> Error(<span class="string">'Invalid file type. Only JPEG, PNG, GIF, and WebP images are allowed.'</span>), <span class="keyword">false</span>);
+    }
+};
+
+<span class="comment">// Configure multer</span>
+<span class="keyword">const</span> upload = multer({
+    storage: storage,
+    fileFilter: fileFilter,
+    limits: { fileSize: <span class="number">5</span> * <span class="number">1024</span> * <span class="number">1024</span> }  <span class="comment">// 5MB max file size</span>
+});</pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">Gallery.create (Batch)</span></p>
+            <pre class="code-block"><span class="comment">// Batch insert using Promise.all</span>
+<span class="keyword">const</span> uploadPromises = req.files.map(<span class="keyword">async</span> (file, index) => {
+    <span class="keyword">return await</span> Gallery.create({
+        filename: fileProps.filename,
+        originalname: fileProps.originalname,
+        mimetype: fileProps.mimetype,
+        size: fileProps.size,
+        url: fileProps.url,
+        path: fileProps.path,
+        caption: fileMeta.caption,
+        description: fileMeta.description,
+        alt_text: fileMeta.alt_text,
+        uploaded_by: req.user.id
+    });
+});
+
+<span class="keyword">const</span> uploadedFiles = <span class="keyword">await</span> Promise.all(uploadPromises);</pre>
+
+            <h4>Database Tables</h4>
+            <pre class="code-block"><span class="comment">-- Batch insert into gallery table</span>
+INSERT INTO gallery (filename, originalname, mimetype, size, url, caption, uploaded_by, created_at, updated_at)
+VALUES
+    (<span class="string">'image1-1733400000000-123456789.jpg'</span>, <span class="string">'image1.jpg'</span>, <span class="string">'image/jpeg'</span>, <span class="number">245678</span>, <span class="string">'/uploads/images/...'</span>, <span class="string">'Caption 1'</span>, <span class="number">1</span>, NOW(), NOW()),
+    (<span class="string">'image2-1733400000001-123456789.png'</span>, <span class="string">'image2.png'</span>, <span class="string">'image/png'</span>, <span class="number">189456</span>, <span class="string">'/uploads/images/...'</span>, <span class="string">'Caption 2'</span>, <span class="number">1</span>, NOW(), NOW()),
+    (<span class="string">'image3-1733400000002-123456789.webp'</span>, <span class="string">'image3.webp'</span>, <span class="string">'image/webp'</span>, <span class="number">156234</span>, <span class="string">'/uploads/images/...'</span>, <span class="string">'Caption 3'</span>, <span class="number">1</span>, NOW(), NOW());
+
+<span class="comment">-- Returns: 3 new gallery record ids</span></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "3 images uploaded successfully",
+    "data": {
+        "count": 3,
+        "files": [
+            {
+                "id": 124,
+                "filename": "image1-1733400000000-123456789.jpg",
+                "originalname": "image1.jpg",
+                "mimetype": "image/jpeg",
+                "size": 245678,
+                "url": "/uploads/images/image1-1733400000000-123456789.jpg",
+                "path": "/path/to/public/uploads/images/...",
+                "meta": {
+                    "caption": "Image 1 caption",
+                    "description": null,
+                    "alt_text": "Alt 1"
+                }
+            },
+            {
+                "id": 125,
+                "filename": "image2-1733400000001-123456789.png",
+                "originalname": "image2.png",
+                "mimetype": "image/png",
+                "size": 189456,
+                "url": "/uploads/images/image2-1733400000001-123456789.png",
+                "path": "/path/to/public/uploads/images/...",
+                "meta": {
+                    "caption": "Image 2 caption",
+                    "description": null,
+                    "alt_text": "Alt 2"
+                }
+            }
+        ]
+    }
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "No files uploaded"
+}</code>
+            </div>
+
+            <h4>Error Response (413)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "Too many files. Maximum 10 files allowed."
+}</code>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Metadata Format:</strong><br>
+                The <code>metadata</code> field should be a JSON string array where each object corresponds to an image in order.<br>
+                Example: <code>[{"caption":"First image","alt_text":"Alt 1"},{"caption":"Second image","alt_text":"Alt 2"}]</code><br>
+                <br>
+                Legacy fields (caption, description, alt_text) support both string (applied to all) and array (mapped to files).
+            </div>
+        </div>
+
+        <!-- ==================== 3. LIST IMAGES ==================== -->
+        <div class="section-title">📌 LIST UPLOADED IMAGES</div>
+        <div class="card">
+            <h2>GET /api/upload/images <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>Query Parameters] --> B[Verify JWT Token<br/>Middleware]
+                B --> C[Extract Pagination<br/>page, limit]
+                C --> D[Query Database<br/>Gallery Table]
+                D --> E[Include Uploader<br/>User Info]
+                E --> F[Order by Created<br/>DESC]
+                F --> G[Calculate Pagination<br/>Metadata]
+                G --> H[Return: Images Array<br/>+ Pagination]
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">listImages</span></p>
+            <pre class="code-block"><span class="keyword">async</span> listImages(req, res) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> page = parseInt(req.query.page, <span class="number">10</span>) || <span class="number">1</span>;
+        <span class="keyword">const</span> limit = parseInt(req.query.limit, <span class="number">10</span>) || <span class="number">12</span>;
+        <span class="keyword">const</span> offset = (page - <span class="number">1</span>) * limit;
+
+        <span class="comment">// Fetch from database with uploader info</span>
+        <span class="keyword">const</span> { count, rows: images } = <span class="keyword">await</span> Gallery.findAndCountAll({
+            limit,
+            offset,
+            order: [[<span class="string">'created_at'</span>, <span class="string">'DESC'</span>]],
+            include: [{
+                association: <span class="string">'uploader'</span>,
+                attributes: [<span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'email'</span>]
+            }]
+        });
+
+        <span class="keyword">return</span> successWithPagination(res, <span class="string">'Images retrieved successfully'</span>, images, {
+            total: count,
+            page,
+            limit,
+            totalPage: Math.ceil(count / limit)
+        });
+    } <span class="keyword">catch</span> (err) {
+        <span class="keyword">return</span> error(res, err.message, <span class="number">500</span>);
+    }
+}</pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.model.js</code> <span class="file-badge">Gallery Associations</span></p>
+            <pre class="code-block"><span class="comment">// Gallery Model with User Association</span>
+Gallery.belongsTo(User, { foreignKey: <span class="string">'uploaded_by'</span>, as: <span class="string">'uploader'</span> });
+
+<span class="comment">// Query with include fetches user who uploaded</span>
+Gallery.findAndCountAll({
+    include: [{ association: <span class="string">'uploader'</span>, attributes: [<span class="string">'id'</span>, <span class="string">'name'</span>, <span class="string">'email'</span>] }]
+});</pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">Database Query</span></p>
+            <pre class="code-block"><span class="comment">-- Query gallery with uploader info</span>
+SELECT
+    g.id, g.filename, g.originalname, g.mimetype, g.size,
+    g.url, g.path, g.caption, g.description, g.alt_text,
+    g.created_at, g.updated_at, g.uploaded_by,
+    u.id as uploader_id, u.name as uploader_name, u.email as uploader_email
+FROM gallery g
+LEFT JOIN users u ON g.uploaded_by = u.id
+ORDER BY g.created_at DESC
+LIMIT <span class="number">12</span> OFFSET <span class="number">0</span>;
+
+<span class="comment">-- Count total</span>
+SELECT COUNT(*) FROM gallery;</pre>
+
+            <h4>Multiple Same Requests & Responses</h4>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. List - First Page</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/upload/images?page=1&limit=12</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": {
+        "total": 45,
+        "page": "1",
+        "limit": "12",
+        "totalPage": 4
+    },
+    "data": [
+        {
+            "id": 125,
+            "filename": "product-1733400000000-123456789.jpg",
+            "originalname": "product.jpg",
+            "mimetype": "image/jpeg",
+            "size": 245678,
+            "url": "/uploads/images/product-1733400000000-123456789.jpg",
+            "caption": "Product Image",
+            "alt_text": "Product view",
+            "created_at": "2025-12-05T12:00:00.000Z",
+            "updated_at": "2025-12-05T12:00:00.000Z",
+            "uploaded_by": 1,
+            "uploader": {
+                "id": 1,
+                "name": "Admin User",
+                "email": "admin@erp.com"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Filter by Uploader ID</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <p><em>Note: This requires adding a where clause to the controller. Currently not implemented but can be added.</em></p>
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/upload/images?uploaded_by=1&page=1&limit=10</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": { "total": 15, "page": "1", "limit": "10", "totalPage": 2 },
+    "data": [
+        { "filename": "img1.jpg", "uploaded_by": 1, "uploader": { "name": "Admin User" } }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Filter by File Type (MIME)</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <p><em>Note: This requires adding a where clause for mimetype filtering. Currently not implemented but can be added.</em></p>
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/upload/images?mimetype=image/png&page=1&limit=10</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": { "total": 8, "page": "1", "limit": "10", "totalPage": 1 },
+    "data": [
+        { "filename": "logo.png", "mimetype": "image/png" }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4. Search by Filename</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <p><em>Note: This requires adding a LIKE query. Currently not implemented but can be added.</em></p>
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/upload/images?search=product&page=1&limit=10</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": { "total": 5, "page": "1", "limit": "10", "totalPage": 1 },
+    "data": [
+        { "filename": "product-front.jpg" },
+        { "filename": "product-back.jpg" }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>5. List - Last Page</span>
+                    <span class="expandable-arrow">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h5>Request</h5>
+                    <pre class="code-block">GET /api/upload/images?page=4&limit=12</pre>
+                    <h5>Response</h5>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": {
+        "total": 45,
+        "page": "4",
+        "limit": "12",
+        "totalPage": 4
+    },
+    "data": [
+        { "id": 1, "filename": "oldest-image.jpg", "created_at": "2025-01-01T10:00:00.000Z" }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+    "success": true,
+    "message": "Images retrieved successfully",
+    "pagination": {
+        "total": 15,
+        "page": "1",
+        "limit": "12",
+        "totalPage": 2
+    },
+    "data": [
+        {
+            "id": 123,
+            "filename": "product_image-1733400000000-123456789.jpg",
+            "originalname": "product_image.jpg",
+            "mimetype": "image/jpeg",
+            "size": 245678,
+            "url": "/uploads/images/product_image-1733400000000-123456789.jpg",
+            "path": "/path/to/public/uploads/images/...",
+            "caption": "Product front view",
+            "description": null,
+            "alt_text": "Product front view",
+            "created_at": "2025-12-05T12:00:00.000Z",
+            "updated_at": "2025-12-05T12:00:00.000Z",
+            "uploaded_by": 1,
+            "uploader": {
+                "id": 1,
+                "name": "Admin User",
+                "email": "admin@erp.com"
+            }
+        }
+    ]
+}</code>
+            </div>
+
+            <h4>Error Response (401)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "No token provided"
+}</code>
+            </div>
+
+            <div class="info-box">
+                <strong>ℹ️ Query Parameters:</strong><br>
+                • <code>page</code> - Page number (default: 1)<br>
+                • <code>limit</code> - Items per page (default: 12)<br>
+                • Returns pagination metadata including total records and total pages<br>
+                • Results ordered by <code>created_at DESC</code> (newest first)
+            </div>
+        </div>
+
+        <!-- ==================== 4. DELETE IMAGE ==================== -->
+        <div class="section-title">📌 DELETE IMAGE</div>
+        <div class="card">
+            <h2>DELETE /api/upload/images/:filename <span class="badge badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                A[Client Request<br/>filename param] --> B[Verify JWT Token<br/>Middleware]
+                B --> C[Extract Filename<br/>from URL]
+                C --> D[Delete from DB<br/>Gallery Table]
+                D --> E{Storage Provider?}
+                E -->|DO Spaces| F[Delete from S3<br/>DeleteObjectCommand]
+                E -->|Local| G[Delete File<br/>fs.unlinkSync]
+                F --> H[Return Success]
+                G --> H
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><span class="property">Authorization</span>: <span class="string">Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span></pre>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>filename</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Name of the file to delete (with extension)</td></tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">deleteImage</span></p>
+            <pre class="code-block"><span class="keyword">async</span> deleteImage(req, res) {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> { filename } = req.params;
+
+        <span class="comment">// Delete from database first</span>
+        <span class="keyword">await</span> Gallery.destroy({ where: { filename: filename } });
+
+        <span class="keyword">if</span> (useDO) {
+            <span class="comment">// Delete from DO Spaces</span>
+            <span class="keyword">const</span> key = <span class="string">`uploads/images/${filename}`</span>;
+
+            <span class="keyword">try</span> {
+                <span class="keyword">await</span> s3Client.send(<span class="keyword">new</span> DeleteObjectCommand({
+                    Bucket: process.env.DO_BUCKET,
+                    Key: key
+                }));
+                <span class="keyword">return</span> success(res, <span class="string">'Image deleted successfully'</span>, { filename });
+            } <span class="keyword">catch</span> (s3Err) {
+                console.error(<span class="string">'S3 Delete Error:'</span>, s3Err);
+                <span class="keyword">return</span> success(res, <span class="string">'Image deleted from DB but failed/missing on S3'</span>, { filename });
+            }
+        } <span class="keyword">else</span> {
+            <span class="comment">// Delete from local filesystem</span>
+            <span class="keyword">const</span> filePath = path.join(__dirname, <span class="string">'../../../public/uploads/images'</span>, filename);
+
+            <span class="keyword">if</span> (fs.existsSync(filePath)) {
+                fs.unlinkSync(filePath);
+            }
+
+            <span class="keyword">return</span> success(res, <span class="string">'Image deleted successfully'</span>, { filename });
+        }
+    } <span class="keyword">catch</span> (err) {
+        <span class="keyword">return</span> error(res, err.message, <span class="number">500</span>);
+    }
+}</pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">S3 Delete Command</span></p>
+            <pre class="code-block"><span class="comment">// AWS SDK S3 Delete for Digital Ocean Spaces</span>
+<span class="keyword">const</span> { DeleteObjectCommand } = <span class="keyword">require</span>(<span class="string">'@aws-sdk/client-s3'</span>);
+
+<span class="keyword">await</span> s3Client.send(<span class="keyword">new</span> DeleteObjectCommand({
+    Bucket: process.env.DO_BUCKET,
+    Key: <span class="string">`uploads/images/${filename}`</span>
+}));</pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/upload/upload.controller.js</code> <span class="file-badge">Gallery.destroy</span></p>
+            <pre class="code-block"><span class="comment">// Sequelize destroy method</span>
+<span class="keyword">await</span> Gallery.destroy({
+    where: { filename: filename }
+});
+
+<span class="comment">-- SQL Equivalent</span>
+DELETE FROM gallery WHERE filename = <span class="string">'product_image-1733400000000-123456789.jpg'</span>;</pre>
+
+            <h4>Database Tables</h4>
+            <pre class="code-block"><span class="comment">-- Delete from gallery table</span>
+DELETE FROM gallery
+WHERE filename = <span class="string">'product_image-1733400000000-123456789.jpg'</span>;
+
+<span class="comment">-- Returns: number of affected rows (1 if deleted, 0 if not found)</span></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Image deleted successfully",
+    "data": {
+        "filename": "product_image-1733400000000-123456789.jpg"
+    }
+}</code>
+            </div>
+
+            <h4>Success Response - Partial (200)</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Image deleted from DB but failed/missing on S3",
+    "data": {
+        "filename": "product_image-1733400000000-123456789.jpg"
+    }
+}</code>
+            </div>
+
+            <h4>Error Response (500)</h4>
+            <div class="error-box">
+                <code>{
+    "status": false,
+    "message": "Error deleting image"
+}</code>
+            </div>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong><br>
+                • Deletion is permanent and cannot be undone<br>
+                • File is deleted from both database and storage<br>
+                • If S3 deletion fails, DB record is still removed<br>
+                • Consider implementing soft delete or backup for production
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="section-title">🗄️ DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+
+            <div class="mermaid">
+                erDiagram
+                GALLERY {
+                    int id PK
+                    string filename UK
+                    string originalname
+                    string mimetype
+                    int size
+                    string url
+                    string path
+                    string caption
+                    text description
+                    string alt_text
+                    int uploaded_by FK
+                    datetime created_at
+                    datetime updated_at
+                }
+
+                USERS {
+                    int id PK
+                    string name
+                    string email
+                    string password
+                    int role_id FK
+                }
+
+                PRODUCTS {
+                    int id PK
+                    string name
+                    string sku
+                    string thumb_url
+                    json gallery_items
+                }
+
+                CUSTOMERS {
+                    int id PK
+                    string name
+                    string company
+                    string thumb_url
+                    json gallery_items
+                }
+
+                GALLERY ||--o| USERS : "uploaded_by"
+                PRODUCTS }o--o{ GALLERY : "thumb_url references"
+                CUSTOMERS }o--o{ GALLERY : "thumb_url references"
+            </div>
+
+            <h3>Gallery Table Structure</h3>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Nullable</th><th>Description</th></tr>
+                <tr><td>id</td><td>INT</td><td>No</td><td>Primary Key (Auto Increment)</td></tr>
+                <tr><td>filename</td><td>VARCHAR(255)</td><td>No</td><td>Generated unique filename</td></tr>
+                <tr><td>originalname</td><td>VARCHAR(255)</td><td>Yes</td><td>Original filename from upload</td></tr>
+                <tr><td>mimetype</td><td>VARCHAR(100)</td><td>Yes</td><td>File MIME type</td></tr>
+                <tr><td>size</td><td>INT</td><td>Yes</td><td>File size in bytes</td></tr>
+                <tr><td>url</td><td>VARCHAR(500)</td><td>No</td><td>Public URL path</td></tr>
+                <tr><td>path</td><td>VARCHAR(500)</td><td>Yes</td><td>Full file system path or S3 key</td></tr>
+                <tr><td>caption</td><td>VARCHAR(255)</td><td>Yes</td><td>Optional image caption</td></tr>
+                <tr><td>description</td><td>TEXT</td><td>Yes</td><td>Optional image description</td></tr>
+                <tr><td>alt_text</td><td>VARCHAR(255)</td><td>Yes</td><td>Optional alt text for accessibility</td></tr>
+                <tr><td>uploaded_by</td><td>INT</td><td>Yes</td><td>Foreign key to users table</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>No</td><td>Upload timestamp</td></tr>
+                <tr><td>updated_at</td><td>DATETIME</td><td>No</td><td>Last update timestamp</td></tr>
+            </table>
+
+            <h3>Storage Directory Structure</h3>
+            <pre class="code-block">/public/uploads/
+├── images/
+│   ├── product_image-1733400000000-123456789.jpg
+│   ├── banner-1733400100000-987654321.png
+│   └── profile-1733400200000-555555555.webp
+└── temp/
+    └── (temporary uploads during processing)</pre>
+
+            <h3>Image References in Other Tables</h3>
+            <table>
+                <tr><th>Table</th><th>Column</th><th>Purpose</th></tr>
+                <tr><td>products</td><td>thumb_url</td><td>Product thumbnail image</td></tr>
+                <tr><td>products</td><td>gallery_items</td><td>Product gallery images (JSON array)</td></tr>
+                <tr><td>customers</td><td>thumb_url</td><td>Customer profile image</td></tr>
+                <tr><td>customers</td><td>gallery_items</td><td>Customer gallery images (JSON array)</td></tr>
+                <tr><td>users</td><td>thumb_url</td><td>Staff profile image</td></tr>
+                <tr><td>users</td><td>gallery_items</td><td>Staff gallery images (JSON array)</td></tr>
+            </table>
+        </div>
+
+        <!-- ==================== CONFIGURATION ==================== -->
+        <div class="section-title">⚙️ CONFIGURATION & LIMITS</div>
+        <div class="card">
+            <h2>Upload Settings</h2>
+
+            <h3>File Specifications</h3>
+            <table>
+                <tr><th>Setting</th><th>Value</th><th>Description</th></tr>
+                <tr><td>Supported Formats</td><td>JPEG, PNG, GIF, WebP</td><td>Image file types accepted</td></tr>
+                <tr><td>Max File Size</td><td>5 MB</td><td>Maximum size per file</td></tr>
+                <tr><td>Max Multiple Upload</td><td>10 files</td><td>Maximum files in one request</td></tr>
+                <tr><td>Storage Location (Local)</td><td>/public/uploads/images/</td><td>Local file system storage</td></tr>
+                <tr><td>Naming Convention</td><td>name-timestamp-random.ext</td><td>Prevents filename conflicts</td></tr>
+            </table>
+
+            <h3>Storage Providers</h3>
+            <table>
+                <tr><th>Provider</th><th>Environment Variables</th><th>Description</th></tr>
+                <tr><td>Local Storage</td><td>(Default)</td><td>Files stored on local disk</td></tr>
+                <tr><td>Digital Ocean Spaces</td><td>DO_BUCKET, DO_KEY, DO_SECRETE, DO_ENDPOINT, DO_REGION</td><td>S3-compatible cloud storage</td></tr>
+            </table>
+
+            <h3>Environment Variables (Optional)</h3>
+            <pre class="code-block"><span class="comment"># .env configuration</span>
+<span class="property">DO_BUCKET</span>=<span class="string">your-bucket-name</span>
+<span class="property">DO_KEY</span>=<span class="string">your-access-key</span>
+<span class="property">DO_SECRETE</span>=<span class="string">your-secret-key</span>
+<span class="property">DO_ENDPOINT</span>=<span class="string">https://nyc3.digitaloceanspaces.com</span>
+<span class="property">DO_REGION</span>=<span class="string">nyc3</span></pre>
+
+            <div class="info-box">
+                <strong>ℹ️ Storage Provider Logic:</strong><br>
+                The system automatically detects if Digital Ocean credentials are configured and switches between local and cloud storage automatically. Files are stored in <code>uploads/images/</code> directory regardless of provider.
+            </div>
+        </div>
+
+        <!-- ==================== VALIDATION RULES ==================== -->
+        <div class="section-title">✅ VALIDATION RULES</div>
+        <div class="card">
+            <h2>API Validation</h2>
+
+            <h3>Upload Image (Single)</h3>
+            <pre class="code-block">{
+    <span class="property">"image"</span>: {
+        <span class="property">"type"</span>: <span class="string">"file"</span>,
+        <span class="property">"required"</span>: <span class="keyword">true</span>,
+        <span class="property">"mimetypes"</span>: [<span class="string">"image/jpeg"</span>, <span class="string">"image/png"</span>, <span class="string">"image/gif"</span>, <span class="string">"image/webp"</span>],
+        <span class="property">"maxSize"</span>: <span class="string">"5MB"</span>
+    },
+    <span class="property">"caption"</span>: {
+        <span class="property">"type"</span>: <span class="string">"string"</span>,
+        <span class="property">"optional"</span>: <span class="keyword">true</span>,
+        <span class="property">"maxLength"</span>: <span class="number">255</span>
+    },
+    <span class="property">"description"</span>: {
+        <span class="property">"type"</span>: <span class="string">"string"</span>,
+        <span class="property">"optional"</span>: <span class="keyword">true</span>
+    },
+    <span class="property">"alt_text"</span>: {
+        <span class="property">"type"</span>: <span class="string">"string"</span>,
+        <span class="property">"optional"</span>: <span class="keyword">true</span>,
+        <span class="property">"maxLength"</span>: <span class="number">255</span>
+    }
+}</pre>
+
+            <h3>Upload Multiple Images</h3>
+            <pre class="code-block">{
+    <span class="property">"images"</span>: {
+        <span class="property">"type"</span>: <span class="string">"file[]"</span>,
+        <span class="property">"required"</span>: <span class="keyword">true</span>,
+        <span class="property">"minItems"</span>: <span class="number">1</span>,
+        <span class="property">"maxItems"</span>: <span class="number">10</span>,
+        <span class="property">"mimetypes"</span>: [<span class="string">"image/jpeg"</span>, <span class="string">"image/png"</span>, <span class="string">"image/gif"</span>, <span class="string">"image/webp"</span>],
+        <span class="property">"maxSizePerItem"</span>: <span class="string">"5MB"</span>
+    },
+    <span class="property">"metadata"</span>: {
+        <span class="property">"type"</span>: <span class="string">"json"</span>,
+        <span class="property">"optional"</span>: <span class="keyword">true</span>,
+        <span class="property">"format"</span>: <span class="string">"array of objects"</span>
+    }
+}</pre>
+
+            <div class="success-box">
+                <strong>✓ Validation Checks:</strong><br>
+                • File type must be an allowed image format (checked by fileFilter)<br>
+                • File size must not exceed 5MB per file (enforced by multer limits)<br>
+                • Multiple uploads limited to 10 files max (enforced by middleware)<br>
+                • Metadata (if provided) must be valid JSON array<br>
+                • Field name for single upload can be any name (uses .any())
+            </div>
+        </div>
+
+        <!-- ==================== USE CASES ==================== -->
+        <div class="section-title">💡 COMMON USE CASES</div>
+        <div class="card">
+            <h2>Implementation Examples</h2>
+
+            <h3>Product Image Upload (JavaScript)</h3>
+            <pre class="code-block"><span class="keyword">async function</span> uploadProductImage(file, metadata) {
+    <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();
+    formData.append(<span class="string">'image'</span>, file);
+    formData.append(<span class="string">'caption'</span>, metadata.caption);
+    formData.append(<span class="string">'alt_text'</span>, metadata.alt_text);
+
+    <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'/api/upload/image'</span>, {
+        method: <span class="string">'POST'</span>,
+        headers: {
+            <span class="string">'Authorization'</span>: <span class="string">`Bearer ${getToken()}`</span>
+        },
+        body: formData
+    });
+
+    <span class="keyword">const</span> result = <span class="keyword">await</span> response.json();
+    <span class="keyword">return</span> result.data.url;
+}
+
+<span class="comment">// Usage</span>
+<span class="keyword">const</span> imageUrl = <span class="keyword">await</span> uploadProductImage(
+    productImageFile,
+    { caption: <span class="string">'Product View'</span>, alt_text: <span class="string">'Front view of product'</span> }
+);</pre>
+
+            <h3>Gallery Upload (React Example)</h3>
+            <pre class="code-block"><span class="keyword">function</span> GalleryUpload() {
+    <span class="keyword">const</span> [files, setFiles] = useState([]);
+    <span class="keyword">const</span> [uploading, setUploading] = useState(<span class="keyword">false</span>);
+
+    <span class="keyword">const</span> handleUpload = <span class="keyword">async</span> () => {
+        setUploading(<span class="keyword">true</span>);
+        <span class="keyword">const</span> formData = <span class="keyword">new</span> FormData();
+
+        files.forEach(file => formData.append(<span class="string">'images'</span>, file));
+
+        <span class="keyword">const</span> metadata = JSON.stringify(
+            files.map(f => ({ caption: f.name }))
+        );
+        formData.append(<span class="string">'metadata'</span>, metadata);
+
+        <span class="keyword">try</span> {
+            <span class="keyword">const</span> response = <span class="keyword">await</span> fetch(<span class="string">'/api/upload/images'</span>, {
+                method: <span class="string">'POST'</span>,
+                headers: { <span class="string">'Authorization'</span>: <span class="string">`Bearer ${token}`</span> },
+                body: formData
+            });
+            <span class="keyword">const</span> result = <span class="keyword">await</span> response.json();
+            console.log(<span class="string">`${result.data.count} images uploaded`</span>);
+        } <span class="keyword">finally</span> {
+            setUploading(<span class="keyword">false</span>);
+        }
+    };
+
+    <span class="keyword">return</span> (
+        &lt;div&gt;
+            &lt;input
+                type=<span class="string">"file"</span>
+                multiple
+                accept=<span class="string">"image/*"</span>
+                onChange={(e) => setFiles([...e.target.files])}
+            /&gt;
+            &lt;button onClick={handleUpload} disabled={uploading}&gt;
+                {uploading ? <span class="string">'Uploading...'</span> : <span class="string">'Upload Gallery'</span>}
+            &lt;/button&gt;
+        &lt;/div&gt;
+    );
+}</pre>
+
+            <div class="success-box">
+                <strong>✓ Best Practices:</strong><br>
+                • Always provide alt_text for accessibility<br>
+                • Use meaningful captions for better organization<br>
+                • Compress images before upload to reduce bandwidth<br>
+                • Implement upload progress indicators for UX<br>
+                • Handle upload errors gracefully with user feedback
+            </div>
+        </div>
+
+        <!-- ==================== ERROR HANDLING ==================== -->
+        <div class="section-title">⚠️ ERROR HANDLING</div>
+        <div class="card">
+            <h2>Common Errors</h2>
+
+            <table>
+                <tr><th>Error</th><th>Status Code</th><th>Cause</th><th>Solution</th></tr>
+                <tr><td>File too large</td><td>413</td><td>File exceeds 5MB limit</td><td>Compress image or split upload</td></tr>
+                <tr><td>Invalid file type</td><td>415</td><td>Unsupported image format</td><td>Use JPEG, PNG, GIF, or WebP</td></tr>
+                <tr><td>Too many files</td><td>413</td><td>More than 10 files in batch</td><td>Split into multiple requests</td></tr>
+                <tr><td>No file provided</td><td>400</td><td>Missing file in request</td><td>Include file in form data</td></tr>
+                <tr><td>File not found</td><td>404</td><td>Requested file doesn't exist</td><td>Verify filename is correct</td></tr>
+                <tr><td>No token provided</td><td>401</td><td>Missing Authorization header</td><td>Include JWT token in request</td></tr>
+            </table>
+
+            <div class="warning-box">
+                <strong>⚠️ Important Notes:</strong><br>
+                • Files are permanently deleted and cannot be recovered<br>
+                • Large uploads may timeout - consider implementing chunked uploads for very large files<br>
+                • Always validate file types on the client side before uploading<br>
+                • Store returned URLs in your database for referencing uploaded images
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+
+        // Expandable toggle function
+        function toggleExpandable(element) {
+            element.parentElement.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

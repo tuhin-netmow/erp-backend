@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products List Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #667eea;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateX(-5px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #764ba2;
+        }
+
+        .action-card {
+            background: #f8f9fa;
+            border-left: 5px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-title {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-icon {
+            font-size: 1.2em;
+        }
+
+        .action-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .code-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .code-section-title {
+            color: #667eea;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-section-title.ui {
+            color: #10b981;
+        }
+
+        .code-section-title.api {
+            color: #f59e0b;
+        }
+
+        .endpoint {
+            background: #f0f7ff;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-right: 10px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method.get { background: #e3f2fd; color: #1976d2; }
+        .method.post { background: #e8f5e9; color: #388e3c; }
+        .method.put { background: #fff3e0; color: #f57c00; }
+        .method.patch { background: #fce4ec; color: #c2185b; }
+        .method.delete { background: #ffebee; color: #d32f2f; }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            color: #333;
+            font-size: 1em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+            background: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.9em;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 0; border-radius: 12px; overflow: hidden; margin: 12px 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.85em; line-height: 1.6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .code-block-header { background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%); padding: 10px 15px; border-bottom: 1px solid #454545; display: flex; align-items: center; gap: 10px; }
+        .code-block-header .dots { display: flex; gap: 6px; }
+        .code-block-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .code-block-header .dot.red { background: #ff5f56; }
+        .code-block-header .dot.yellow { background: #ffbd2e; }
+        .code-block-header .dot.green { background: #27c93f; }
+        .code-block-header .file-path { color: #9cdcfe; font-size: 0.8em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; margin-left: auto; }
+        .code-block-content { padding: 15px; overflow-x: auto; white-space: pre; }
+        .code-block-content .comment { color: #6a9955; }
+        .code-block-content .keyword { color: #569cd6; }
+        .code-block-content .string { color: #ce9178; }
+        .code-block-content .function { color: #dcdcaa; }
+        .code-block-content .number { color: #b5cea8; }
+        .code-block-content .operator { color: #d4d4d4; }
+        .code-block-content .variable { color: #9cdcfe; }
+        .code-block-content .property { color: #9cdcfe; }
+        .code-block-content .tag { color: #569cd6; }
+        .code-block-content .jsx-tag { color: #569cd6; }
+        .code-block-content .jsx-attr { color: #9cdcfe; }
+        .code-block-content .jsx-string { color: #ce9178; }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-size: 0.9em;
+        }
+
+        code {
+            font-family: 'Courier New', monospace;
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .badge.ui {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.api {
+            background: #fef3c7;
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>📦 Products List Module</h1>
+            <p>UI Design & API Documentation for Products List Management</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <div class="info-box">
+                <strong>📌 Module:</strong> Products List Management<br>
+                <strong>🔗 Base URL:</strong> <code>/api/products</code>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">UI Actions & Implementation</h2>
+
+            <!-- Action 1: View Products List -->
+            <div class="action-card">
+                <div class="action-title">
+                    <span class="action-icon">📋</span>
+                    View Products List
+                    <span class="badge ui">UI Design</span>
+                    <span class="badge api">API Call</span>
+                </div>
+                <div class="action-description">
+                    Display a paginated table showing all products with their details. Users can navigate through pages, search, and filter products.
+                </div>
+
+                <!-- UI Design Code -->
+                <div class="code-section">
+                    <div class="code-section-title ui">🎨 UI Design Code (React + Tailwind)</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">ProductsList.tsx</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">import</span> React<span class="punctuation">,</span> <span class="punctuation">{</span> useState<span class="punctuation">,</span> useEffect <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> Trash2<span class="punctuation">,</span> Edit<span class="punctuation">,</span> Eye <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">const</span> ProductsList <span class="operator">=</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span>products<span class="punctuation">,</span> setProducts<span class="punctuation">]</span> <span class="operator">=</span> useState<span class="punctuation">&lt;</span><span class="punctuation">[]</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span>page<span class="punctuation">,</span> setPage<span class="punctuation">]</span> <span class="operator">=</span> useState<span class="punctuation">&lt;</span><span class="number">1</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span>totalPages<span class="punctuation">,</span> setTotalPages<span class="punctuation">]</span> <span class="operator">=</span> useState<span class="punctuation">&lt;</span><span class="number">1</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span>loading<span class="punctuation">,</span> setLoading<span class="punctuation">]</span> <span class="operator">=</span> useState<span class="punctuation">&lt;</span><span class="keyword">false</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+
+  <span class="comment">// Fetch products (API call below)</span>
+  <span class="function">fetchProducts</span><span class="punctuation">(</span>page<span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"p-6"</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"flex justify-between items-center mb-6"</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;</span><span class="tag">h2</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"text-2xl font-bold"</span><span class="operator">&gt;</span>Products List<span class="operator">&lt;/</span><span class="tag">h2</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;</span><span class="tag">button</span> <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="function">handleAddProduct</span><span class="punctuation">}</span>
+                <span class="attr">className</span><span class="operator">=</span><span class="string">"bg-blue-600 text-white px-4 py-2 rounded-lg"</span><span class="operator">&gt;</span>
+          Add Product
+        <span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+
+      <span class="comment">// Products Table</span>
+      <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"bg-white rounded-lg shadow overflow-hidden"</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;</span><span class="tag">table</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"min-w-full divide-y divide-gray-200"</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;</span><span class="tag">thead</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"bg-gray-50"</span><span class="operator">&gt;</span>
+            <span class="operator">&lt;</span><span class="tag">tr</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>Name<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>SKU<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>Price<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>Stock<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>Status<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;</span><span class="tag">th</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"</span><span class="operator">&gt;</span>Actions<span class="operator">&lt;/</span><span class="tag">th</span><span class="operator">&gt;</span>
+            <span class="operator">&lt;/</span><span class="tag">tr</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;/</span><span class="tag">thead</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;</span><span class="tag">tbody</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"divide-y divide-gray-200"</span><span class="operator">&gt;</span>
+            <span class="punctuation">{</span>products<span class="punctuation">.</span><span class="function">map</span><span class="punctuation">((</span>product<span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">(</span>
+              <span class="operator">&lt;</span><span class="tag">tr</span> <span class="attr">key</span><span class="operator">=</span><span class="punctuation">{</span>product<span class="punctuation">.</span>id<span class="punctuation">}</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap"</span><span class="operator">&gt;</span><span class="punctuation">{</span>product<span class="punctuation">.</span>name<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap"</span><span class="operator">&gt;</span><span class="punctuation">{</span>product<span class="punctuation">.</span>sku<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap"</span><span class="operator">&gt;</span><span class="punctuation">{</span>product<span class="punctuation">.</span>price<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap"</span><span class="operator">&gt;</span><span class="punctuation">{</span>product<span class="punctuation">.</span>stock<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap"</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;</span><span class="tag">span</span> <span class="attr">className</span><span class="operator">=</span><span class="string">`px-2 inline-flex text-xs leading-5 font-semibold rounded-full </span>
+                    <span class="punctuation">${</span>product<span class="punctuation">.</span>status <span class="operator">===</span> <span class="string">'active'</span> <span class="operator">?</span> <span class="string">'bg-green-100 text-green-800'</span> <span class="operator">:</span> <span class="string">'bg-red-100 text-red-800'</span><span class="punctuation">}`}</span><span class="operator">&gt;</span>
+                    <span class="punctuation">{</span>product<span class="punctuation">.</span>status<span class="punctuation">}</span>
+                  <span class="operator">&lt;/</span><span class="tag">span</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;</span><span class="tag">td</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 whitespace-nowrap text-right text-sm font-medium"</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;</span><span class="tag">button</span> <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">handleView</span><span class="punctuation">(</span>product<span class="punctuation">)}</span><span class="operator">&gt;</span>
+                    <span class="operator">&lt;</span><span class="tag">Eye</span> <span class="attr">size</span><span class="operator">=</span><span class="punctuation">{</span><span class="number">16</span><span class="punctuation">}</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"text-blue-600 hover:text-blue-900 mr-3"</span> <span class="operator">/</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;</span><span class="tag">button</span> <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">handleEdit</span><span class="punctuation">(</span>product<span class="punctuation">)}</span><span class="operator">&gt;</span>
+                    <span class="operator">&lt;</span><span class="tag">Edit</span> <span class="attr">size</span><span class="operator">=</span><span class="punctuation">{</span><span class="number">16</span><span class="punctuation">}</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"text-yellow-600 hover:text-yellow-900 mr-3"</span> <span class="operator">/</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;</span><span class="tag">button</span> <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">handleDelete</span><span class="punctuation">(</span>product<span class="punctuation">)}</span><span class="operator">&gt;</span>
+                    <span class="operator">&lt;</span><span class="tag">Trash2</span> <span class="attr">size</span><span class="operator">=</span><span class="punctuation">{</span><span class="number">16</span><span class="punctuation">}</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"text-red-600 hover:text-red-900"</span> <span class="operator">/</span><span class="operator">&gt;</span>
+                  <span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+                <span class="operator">&lt;/</span><span class="tag">td</span><span class="operator">&gt;</span>
+              <span class="operator">&lt;/</span><span class="tag">tr</span><span class="operator">&gt;</span>
+            <span class="punctuation">))</span>
+          <span class="operator">&lt;/</span><span class="tag">tbody</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;/</span><span class="tag">table</span><span class="operator">&gt;</span>
+
+        <span class="comment">// Pagination</span>
+        <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"flex justify-center gap-2 mt-4"</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;</span><span class="tag">button</span>
+            <span class="attr">disabled</span><span class="operator">=</span><span class="punctuation">{</span>page <span class="operator">&lt;=</span> <span class="number">1</span><span class="punctuation">}</span>
+            <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">setPage</span><span class="punctuation">(</span>page <span class="operator">-</span> <span class="number">1</span><span class="punctuation">)}</span>
+            <span class="attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 bg-gray-200 rounded"</span>
+          <span class="operator">&gt;</span>Previous<span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;</span><span class="tag">span</span><span class="operator">&gt;</span>Page <span class="punctuation">{</span>page<span class="punctuation">}</span> <span class="keyword">of</span> <span class="punctuation">{</span>totalPages<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">span</span><span class="operator">&gt;</span>
+          <span class="operator">&lt;</span><span class="tag">button</span>
+            <span class="attr">disabled</span><span class="operator">=</span><span class="punctuation">{</span>page <span class="operator">&gt;=</span> totalPages<span class="punctuation">}</span>
+            <span class="attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">setPage</span><span class="punctuation">(</span>page <span class="operator">+</span> <span class="number">1</span><span class="punctuation">)}</span>
+            <span class="attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 bg-gray-200 rounded"</span>
+          <span class="operator">&gt;</span>Next<span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+
+                <!-- API Call Code -->
+                <div class="code-section">
+                    <div class="code-section-title api">🔌 API Call Code (Fetch/Axios)</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">apiCalls.ts</div>
+                        </div>
+                        <div class="code-block-content"><span class="comment">// Using fetch API</span>
+<span class="keyword">const</span> <span class="function">fetchProducts</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>page<span class="punctuation">:</span> <span class="token-type">number</span> <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> token <span class="operator">=</span> localStorage<span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> API_URL <span class="operator">=</span> import<span class="punctuation">.</span>meta<span class="punctuation">.</span>env<span class="punctuation">.</span>VITE_API_URL<span class="punctuation">;</span>
+
+  <span class="keyword">try</span> <span class="punctuation">{</span>
+    <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+      <span class="string">`${API_URL}/api/products?page=${page}&limit=10`</span><span class="punctuation">,</span>
+      <span class="punctuation">{</span>
+        <span class="property">method</span><span class="operator">:</span> <span class="string">'GET'</span><span class="punctuation">,</span>
+        <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+          <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span><span class="punctuation">,</span>
+          <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+        <span class="punctuation">}</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">);</span>
+
+    <span class="keyword">if</span> <span class="punctuation">(!</span>response<span class="punctuation">.</span><span class="function">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span><span class="punctuation">(</span><span class="string">'Failed to fetch products'</span><span class="punctuation">);</span>
+    <span class="punctuation">}</span>
+
+    <span class="keyword">const</span> data <span class="operator">=</span> <span class="keyword">await</span> response<span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+
+    <span class="function">setProducts</span><span class="punctuation">(</span>data<span class="punctuation">.</span>data<span class="punctuation">);</span>
+    <span class="function">setTotalPages</span><span class="punctuation">(</span>data<span class="punctuation">.</span>pagination<span class="punctuation">.</span>totalPages<span class="punctuation">);</span>
+  <span class="punctuation">}</span> <span class="keyword">catch</span> <span class="punctuation">(</span>error<span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="variable">console</span><span class="punctuation">.</span><span class="function">error</span><span class="punctuation">(</span><span class="string">'Error fetching products:'</span><span class="punctuation">,</span> error<span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">};</span>
+
+<span class="comment">// Using Axios</span>
+<span class="keyword">import</span> axios <span class="keyword">from</span> <span class="string">'axios'</span><span class="punctuation">;</span>
+
+<span class="keyword">const</span> <span class="function">fetchProductsAxios</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>page<span class="punctuation">:</span> <span class="token-type">number</span> <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">try</span> <span class="punctuation">{</span>
+    <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> axios.<span class="function">get</span><span class="punctuation">(</span>
+      <span class="string">`${API_URL}/api/products`</span><span class="punctuation">,</span>
+      <span class="punctuation">{</span>
+        <span class="property">params</span><span class="operator">:</span> <span class="punctuation">{</span> <span class="property">page</span><span class="operator">:</span> page<span class="punctuation">,</span> <span class="property">limit</span><span class="operator">:</span> <span class="number">10</span> <span class="punctuation">},</span>
+        <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+          <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span>
+        <span class="punctuation">}</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">);</span>
+
+    <span class="function">setProducts</span><span class="punctuation">(</span>response<span class="punctuation">.</span>data<span class="punctuation">.</span>data<span class="punctuation">);</span>
+    <span class="function">setTotalPages</span><span class="punctuation">(</span>response<span class="punctuation">.</span>data<span class="punctuation">.</span>pagination<span class="punctuation">.</span>totalPages<span class="punctuation">);</span>
+  <span class="punctuation">}</span> <span class="keyword">catch</span> <span class="punctuation">(</span>error<span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="variable">console</span><span class="punctuation">.</span><span class="function">error</span><span class="punctuation">(</span><span class="string">'Error fetching products:'</span><span class="punctuation">,</span> error<span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action 2: Search Products -->
+            <div class="action-card">
+                <div class="action-title">
+                    <span class="action-icon">🔍</span>
+                    Search Products
+                    <span class="badge ui">UI Design</span>
+                    <span class="badge api">API Call</span>
+                </div>
+                <div class="action-description">
+                    Real-time search functionality that filters products as users type in the search box.
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title ui">🎨 UI Design Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">SearchBar.tsx</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="punctuation">[</span>searchTerm<span class="punctuation">,</span> setSearchTerm<span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="punctuation">&lt;</span><span class="string">''</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+
+<span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"mb-6"</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"relative"</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;</span><span class="tag">input</span>
+      <span class="attr">type</span><span class="operator">=</span><span class="string">"text"</span>
+      <span class="attr">placeholder</span><span class="operator">=</span><span class="string">"Search products..."</span>
+      <span class="attr">value</span><span class="operator">=</span><span class="punctuation">{</span>searchTerm<span class="punctuation">}</span>
+      <span class="attr">onChange</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">(</span>e<span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="function">setSearchTerm</span><span class="punctuation">(</span>e<span class="punctuation">.</span>target<span class="punctuation">.</span>value<span class="punctuation">)}</span>
+      <span class="attr">className</span><span class="operator">=</span><span class="string">"w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"</span>
+    <span class="operator">/&gt;</span>
+    <span class="operator">&lt;</span><span class="tag">Search</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"</span> <span class="attr">size</span><span class="operator">=</span><span class="punctuation">{</span><span class="number">20</span><span class="punctuation">}</span> <span class="operator">/</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+<span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span></div>
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title api">🔌 API Call Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">searchApi.ts</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="function">searchProducts</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>query<span class="punctuation">:</span> <span class="token-type">string</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`${API_URL}/api/products?search=${encodeURIComponent</span><span class="punctuation">(</span>query<span class="punctuation">)}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">const</span> data <span class="operator">=</span> <span class="keyword">await</span> response<span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> data<span class="punctuation">.</span>data<span class="punctuation">;</span>
+<span class="punctuation">};</span>
+
+<span class="comment">// Debounced search</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> useDebounce <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'use-debounce'</span><span class="punctuation">;</span>
+
+<span class="keyword">const</span> debouncedSearch <span class="operator">=</span> <span class="function">useDebounce</span><span class="punctuation">(</span><span class="punctuation">(</span>query<span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">if</span> <span class="punctuation">(</span>query<span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="function">searchProducts</span><span class="punctuation">(</span>query<span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">},</span> <span class="number">500</span><span class="punctuation">);</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action 3: View Product Details -->
+            <div class="action-card">
+                <div class="action-title">
+                    <span class="action-icon">👁️</span>
+                    View Product Details
+                    <span class="badge ui">UI Design</span>
+                    <span class="badge api">API Call</span>
+                </div>
+                <div class="action-description">
+                    Display detailed product information in a modal or separate page when user clicks on a product.
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title ui">🎨 UI Design Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">ProductModal.tsx</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="punctuation">[</span>selectedProduct<span class="punctuation">,</span> setSelectedProduct<span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="punctuation">&lt;</span><span class="keyword">null</span><span class="operator">&gt;</span><span class="punctuation">;</span>
+
+<span class="operator">&lt;</span><span class="tag">Dialog</span> <span class="attr">open</span><span class="operator">=</span><span class="punctuation">{</span><span class="operator">!</span><span class="operator">!</span>selectedProduct<span class="punctuation">}</span> <span class="attr">onClose</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="function">setSelectedProduct</span><span class="punctuation">(</span><span class="keyword">null</span><span class="punctuation">)}</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;</span><span class="tag">DialogContent</span><span class="attr">className</span><span class="operator">=</span><span class="string">"max-w-2xl"</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;</span><span class="tag">h3</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"text-xl font-bold mb-4"</span><span class="operator">&gt;</span><span class="punctuation">{</span>selectedProduct<span class="punctuation">.</span>name<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">h3</span><span class="operator">&gt;</span>
+
+    <span class="operator">&lt;</span><span class="tag">div</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"grid grid-cols-2 gap-4"</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;</span><span class="tag">div</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;</span><span class="tag">p</span><span class="attr">className</span><span class="operator">=</span><span class="string">"text-sm text-gray-600"</span><span class="operator">&gt;</span>SKU:<span class="operator">&lt;/</span><span class="tag">p</span><span class="operator">&gt;</span>
+        <span class="operator">&lt;</span><span class="tag">p</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"font-semibold"</span><span class="operator">&gt;</span><span class="punctuation">{</span>selectedProduct<span class="punctuation">.</span>sku<span class="punctuation">}</span><span class="operator">&lt;/</span><span class="tag">p</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+      <span class="operator">&lt;/</span><span class="tag">div</span><span class="operator">&gt;</span>
+    <span class="operator">&lt;/</span><span class="tag">DialogContent</span><span class="operator">&gt;</span>
+<span class="operator">&lt;/</span><span class="tag">Dialog</span><span class="operator">&gt;</span></div>
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title api">🔌 API Call Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">fetchProduct.ts</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="function">fetchProductById</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>id<span class="punctuation">:</span> <span class="token-type">number</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`${API_URL}/api/products/${id}`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(!</span>response<span class="punctuation">.</span><span class="function">ok</span><span class="punctuation">)</span> <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span><span class="punctuation">(</span><span class="string">'Product not found'</span><span class="punctuation">);</span>
+
+  <span class="keyword">const</span> data <span class="operator">=</span> <span class="keyword">await</span> response<span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> data<span class="punctuation">.</span>data<span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action 4: Edit Product -->
+            <div class="action-card">
+                <div class="action-title">
+                    <span class="action-icon">✏️</span>
+                    Edit Product
+                    <span class="badge ui">UI Design</span>
+                    <span class="badge api">API Call</span>
+                </div>
+                <div class="action-description">
+                    Update product information through a form modal with validation.
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title ui">🎨 UI Design Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">EditProductForm.tsx</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="punctuation">[</span>formData<span class="punctuation">,</span> setFormData<span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="punctuation">({</span>
+  <span class="property">name</span><span class="operator">:</span> <span class="string">''</span><span class="punctuation">,</span>
+  <span class="property">price</span><span class="operator">:</span> <span class="string">''</span><span class="punctuation">,</span>
+  <span class="property">stock</span><span class="operator">:</span> <span class="string">''</span>
+  <span class="property">categoryId</span><span class="operator">:</span> <span class="string">''</span>
+<span class="punctuation">});</span>
+
+<span class="operator">&lt;</span><span class="tag">form</span> <span class="attr">onSubmit</span><span class="operator">=</span><span class="punctuation">{</span><span class="function">handleSubmit</span><span class="punctuation">}</span><span class="operator">&gt;</span>
+  <span class="operator">&lt;</span><span class="tag">input</span>
+    <span class="attr">type</span><span class="operator">=</span><span class="string">"text"</span>
+    <span class="attr">value</span><span class="operator">=</span><span class="punctuation">{</span>formData<span class="punctuation">.</span>name<span class="punctuation">}</span>
+    <span class="attr">onChange</span><span class="operator">=</span><span class="punctuation">{</span><span class="punctuation">(</span>e<span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="function">setFormData</span><span class="punctuation">({</span> <span class="punctuation">...</span>formData<span class="punctuation">,</span> <span class="property">name</span><span class="operator">:</span> e<span class="punctuation">.</span>target<span class="punctuation">.</span>value <span class="punctuation">})}</span>
+    <span class="attr">className</span><span class="operator">=</span><span class="string">"w-full border rounded p-2 mb-4"</span>
+  <span class="operator">/&gt;</span>
+  <span class="operator">&lt;</span><span class="tag">button</span> <span class="attr">type</span><span class="operator">=</span><span class="string">"submit"</span> <span class="attr">className</span><span class="operator">=</span><span class="string">"bg-blue-600 text-white px-4 py-2 rounded"</span><span class="operator">&gt;</span>
+    Update Product
+  <span class="operator">&lt;/</span><span class="tag">button</span><span class="operator">&gt;</span>
+<span class="operator">&lt;/</span><span class="tag">form</span><span class="operator">&gt;</span></div>
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title api">🔌 API Call Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">updateProduct.ts</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="function">updateProduct</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>id<span class="punctuation">:</span> <span class="token-type">number</span><span class="punctuation">,</span> productData<span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`${API_URL}/api/products/${id}`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'PATCH'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">},</span>
+      <span class="property">body</span><span class="operator">:</span> <span class="punctuation">JSON.</span><span class="function">stringify</span><span class="punctuation">(</span>productData<span class="punctuation">)</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(!</span>response<span class="punctuation">.</span><span class="function">ok</span><span class="punctuation">)</span> <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span><span class="punctuation">(</span><span class="string">'Failed to update product'</span><span class="punctuation">);</span>
+
+  <span class="keyword">const</span> data <span class="operator">=</span> <span class="keyword">await</span> response<span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> data<span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action 5: Delete Product -->
+            <div class="action-card">
+                <div class="action-title">
+                    <span class="action-icon">🗑️</span>
+                    Delete Product
+                    <span class="badge ui">UI Design</span>
+                    <span class="badge api">API Call</span>
+                </div>
+                <div class="action-description">
+                    Delete a product with confirmation dialog. Checks for existing orders before allowing deletion.
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title ui">🎨 UI Design Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">DeleteConfirm.tsx</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="function">handleDelete</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">()</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">if</span> <span class="punctuation">(!</span><span class="function">confirm</span><span class="punctuation">(</span><span class="string">'Delete this product permanently?'</span><span class="punctuation">))</span> <span class="punctuation">{</span>
+    <span class="keyword">return</span><span class="punctuation">;</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">try</span> <span class="punctuation">{</span>
+    <span class="keyword">await</span> <span class="function">deleteProduct</span><span class="punctuation">(</span>product<span class="punctuation">.</span>id<span class="punctuation">);</span>
+    <span class="function">toast</span><span class="punctuation">.</span><span class="function">success</span><span class="punctuation">(</span><span class="string">'Product deleted successfully'</span><span class="punctuation">);</span>
+    <span class="comment">// Refresh list</span>
+    <span class="function">fetchProducts</span><span class="punctuation">(</span>page<span class="punctuation">);</span>
+  <span class="punctuation">}</span> <span class="keyword">catch</span> <span class="punctuation">(</span>error<span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="function">toast</span><span class="punctuation">.</span><span class="function">error</span><span class="punctuation">(</span><span class="string">'Failed to delete product'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+
+                <div class="code-section">
+                    <div class="code-section-title api">🔌 API Call Code</div>
+                    <div class="code-block">
+                        <div class="code-block-header">
+                            <div class="dots">
+                                <div class="dot red"></div>
+                                <div class="dot yellow"></div>
+                                <div class="dot green"></div>
+                            </div>
+                            <div class="file-path">deleteProduct.ts</div>
+                        </div>
+                        <div class="code-block-content"><span class="keyword">const</span> <span class="function">deleteProduct</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span>id<span class="punctuation">:</span> <span class="token-type">number</span><span class="punctuation">)</span> <span class="operator">=&gt;</span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> response <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`${API_URL}/api/products/${id}`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'DELETE'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer ${token}`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(!</span>response<span class="punctuation">.</span><span class="function">ok</span><span class="punctuation">)</span> <span class="keyword">throw</span> <span class="keyword">new</span> <span class="function">Error</span><span class="punctuation">(</span><span class="string">'Failed to delete product'</span><span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> response<span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Error Responses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status Code</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>400</code></td>
+                        <td>Bad Request - Invalid parameters</td>
+                    </tr>
+                    <tr>
+                        <td><code>401</code></td>
+                        <td>Unauthorized - Authentication required</td>
+                    </tr>
+                    <tr>
+                        <td><code>403</code></td>
+                        <td>Forbidden - Insufficient permissions</td>
+                    </tr>
+                    <tr>
+                        <td><code>404</code></td>
+                        <td>Not Found - Product not found</td>
+                    </tr>
+                    <tr>
+                        <td><code>500</code></td>
+                        <td>Internal Server Error</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Required Permissions</h2>
+            <div class="success-box">
+                <strong>✅ Permissions:</strong><br>
+                - <code>products.view</code> - View products<br>
+                - <code>products.edit</code> - Edit products<br>
+                - <code>products.delete</code> - Delete products
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #5568d3;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🔐 Auth Module</h1>
+            <p>Complete authentication and authorization system with JWT tokens, role-based access control, and user management</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/auth/login</span>
+                </h3>
+                <p class="route-desc">User login with email and password. Returns JWT token, user info, menus, and dashboards.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/auth/register</span>
+                </h3>
+                <p class="route-desc">Create a new user account. Returns user data and JWT token.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/auth/me</span>
+                </h3>
+                <p class="route-desc">Get current authenticated user details with role, menus, and dashboards. Requires JWT token.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/auth/refresh</span>
+                </h3>
+                <p class="route-desc">Refresh an expired JWT token using a valid refresh token.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/auth/logout</span>
+                </h3>
+                <p class="route-desc">Logout current user. Requires JWT token.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/auth/profile</span>
+                </h3>
+                <p class="route-desc">Update current user profile information. Requires JWT token.</p>
+            </div>
+        </div>
+
+        <!-- ==================== 1. LOGIN ==================== -->
+        <div class="card">
+            <h2>1. POST /auth/login - User Login</h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /auth/login
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: login(email, password)
+    Service->>Repository: findByEmailWithRole(email)
+    Repository->>Database: SELECT user with role
+    Database->>Repository: User data
+    Repository->>Service: User object
+    Service->>Service: Compare password using bcrypt
+    Service->>Service: Generate JWT token (1 day expiry)
+    Service->>Repository: getRoleMenus()
+    Repository->>Database: SELECT role menus
+    Database->>Repository: Menu items
+    Repository->>Service: Menu list
+    Service->>Repository: getRoleDashboards()
+    Repository->>Database: SELECT role dashboards
+    Database->>Repository: Dashboard items
+    Repository->>Service: Dashboard list
+    Service->>Service: Build hierarchical menu tree
+    Service->>Service: Remove password from response
+    Service->>Controller: User, Token, Menus, Dashboards
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|Route Handler| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                Service -->|Data Access| Repository[Auth Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Login Flow
+                subgraph "Login Process"
+                Login[POST /api/auth/login] --> Validate[Controller: Validate Request]
+                Validate --> FindUser[Service: findByEmailWithRole]
+                FindUser --> Repo1[Repository: SELECT users]
+                Repo1 --> UserDB[(users table)]
+                UserDB --> UserData[Repository: User with Role]
+                UserData --> Compare[Service: Compare Password]
+                Compare -->|Valid| Token[Service: Generate JWT]
+                Token --> Menus[Service: getRoleMenus]
+                Menus --> Repo2[Repository: SELECT role_menus]
+                Repo2 --> MenuDB[(role_menus table)]
+                MenuDB --> MenuData[Repository: Menu List]
+                MenuData --> BuildTree[Service: Build Menu Tree]
+                BuildTree --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "email": "admin@example.com",
+  "password": "SecurePassword123!"
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>required, email format</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>required, min 4 characters</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.login</span></p>
+            <pre class="code-block"><code>exports.login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    const result = await service.login(email, password);
+    return success(res, 'Login successful', result);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.login</span></p>
+            <pre class="code-block"><code>exports.login = async (email, password) => {
+  // 1. Find user by email (with role)
+  const user = await repo.findByEmailWithRole(email);
+  if (!user) throw { status: 400, message: 'Invalid credentials' };
+
+  // 2. Compare password using bcrypt
+  const ok = await bcrypt.compare(password, user.password);
+  if (!ok) throw { status: 400, message: 'Invalid credentials' };
+
+  // 3. Generate JWT token
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role_id: user.role_id },
+    jwtSecret,
+    { expiresIn: jwtExpiresIn }
+  );
+
+  // 4. Get role menus and dashboards
+  const roleMenus = await repo.getRoleMenus();
+  const roleDashboards = await repo.getRoleDashboards();
+
+  // 5. Build hierarchical menu structure
+  const buildMenuTree = (menus, parentId = null) => {
+    return menus
+      .filter(menu => menu.parent_id === parentId)
+      .map(menu => ({
+        id: menu.id,
+        title: menu.title,
+        icon: menu.icon,
+        path: menu.path,
+        children: buildMenuTree(menus, menu.id)
+      }));
+  };
+
+  const menuTree = buildMenuTree(roleMenus);
+
+  // 6. Remove password from response
+  const userData = user.toJSON();
+  delete userData.password;
+
+  // 7. Return user, token, menus, dashboards
+  return {
+    user: userData,
+    token,
+    menus: menuTree,
+    dashboards: roleDashboards
+  };
+};</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.repository.js</code> <span class="file-badge">findByEmailWithRole</span></p>
+            <pre class="code-block"><code>exports.findByEmailWithRole = async (email) => {
+  // First check User table
+  let user = await User.findOne({
+    where: { email },
+    include: [
+      {
+        model: Role,
+        as: 'role',
+        include: [{ model: RoleSettings, required: false }]
+      }
+    ]
+  });
+
+  if (user) return user;
+
+  // Then check Staff table
+  return Staff.findOne({
+    where: { email },
+    include: [
+      {
+        model: Role,
+        as: 'role',
+        include: [{ model: RoleSettings, required: false }]
+      }
+    ]
+  });
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Query users table with role
+SELECT
+  u.id, u.name, u.email, u.password, u.role_id,
+  r.id as role_id, r.name as role_name, r.permissions,
+  rs.menu, rs.dashboard, rs.custom
+FROM users u
+LEFT JOIN roles r ON u.role_id = r.id
+LEFT JOIN role_settings rs ON r.id = rs.role_id
+WHERE u.email = 'admin@example.com';
+
+-- Returns: user record with hashed password and role info</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Login successful",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "role_id": 1,
+      "role": {
+        "id": 1,
+        "name": "admin",
+        "display_name": "Administrator",
+        "permissions": ["users.create", "users.read", "*"]
+      }
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "menus": [
+      {
+        "id": 1,
+        "title": "Dashboard",
+        "icon": "layout",
+        "path": "/dashboard",
+        "children": []
+      }
+    ],
+    "dashboards": [...]
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "Invalid credentials"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 2. REGISTER ==================== -->
+        <div class="card">
+            <h2>2. POST /auth/register - User Registration</h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /auth/register
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: register(userData)
+    Service->>Repository: findByEmail(email)
+    Repository->>Database: SELECT user by email
+    Database->>Repository: User or null
+    Repository->>Service: Existing user check
+    Service->>Service: Hash password with bcrypt (10 rounds)
+    Service->>Repository: create(userData)
+    Repository->>Database: INSERT INTO users
+    Database->>Repository: New user created
+    Repository->>Service: User object
+    Service->>Service: Generate JWT token (1 day expiry)
+    Service->>Service: Remove password from response
+    Service->>Controller: User and Token
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|Route Handler| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                Service -->|Data Access| Repository[Auth Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Registration Flow
+                subgraph "Registration Process"
+                Register[POST /api/auth/register] --> Validate[Controller: Validate Request]
+                Validate --> CheckEmail[Service: findByEmail]
+                CheckEmail --> Repo1[Repository: SELECT users]
+                Repo1 --> UserDB[(users table)]
+                UserDB -->|Email exists| Error[Service: Throw Error]
+                UserDB -->|Email unique| HashPass[Service: Hash Password]
+                HashPass --> Create[Service: Create User]
+                Create --> Repo2[Repository: INSERT users]
+                Repo2 --> NewUser[(New user created)]
+                NewUser --> UserObj[Repository: User Object]
+                UserObj --> Token[Service: Generate JWT]
+                Token --> RemovePass[Service: Remove Password]
+                RemovePass --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "role_id": 2
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>name</td>
+                    <td>required, min 1 character</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>required, email format, must be unique</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>required, min 8 characters</td>
+                </tr>
+                <tr>
+                    <td>role_id</td>
+                    <td>optional, must exist in roles table</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.register</span></p>
+            <pre class="code-block"><code>exports.register = async (req, res, next) => {
+  try {
+    const result = await service.register(req.body);
+    return success(res, 'User registered successfully', result, 201);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.register</span></p>
+            <pre class="code-block"><code>exports.register = async (userData) => {
+  // 1. Check if user already exists
+  const existing = await repo.findByEmail(userData.email);
+  if (existing) throw { status: 400, message: 'Email already registered' };
+
+  // 2. Hash password with bcrypt (10 salt rounds)
+  const hashedPassword = await bcrypt.hash(userData.password, 10);
+  userData.password = hashedPassword;
+
+  // 3. Create user
+  const user = await repo.create(userData);
+  delete user.password;
+
+  // 4. Generate JWT token
+  const token = jwt.sign(
+    { id: user.id, email: user.email, role_id: user.role_id },
+    jwtSecret,
+    { expiresIn: jwtExpiresIn }
+  );
+
+  return { user, token };
+};</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.repository.js</code> <span class="file-badge">exports.create</span></p>
+            <pre class="code-block"><code>exports.create = async (data) => {
+  return User.create(data);
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert into users
+INSERT INTO users (
+    name, email, password, role_id, created_at
+) VALUES (
+    'John Doe',
+    'john.doe@example.com',
+    '$2b$10$abcdefghijklmnopqrstuvwxyz123456',
+    2,
+    NOW()
+);
+
+-- Returns: new user id (last_insert_id)</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User registered successfully",
+  "data": {
+    "user": {
+      "id": 25,
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role_id": 2
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  },
+  "code": 201
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "Email already registered"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 3. GET CURRENT USER ==================== -->
+        <div class="card">
+            <h2>3. GET /auth/me - Get Current User <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /auth/me
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid (extract userId)
+    Router->>Controller: Pass request with user
+    Controller->>Service: getCurrentUser(userId)
+    Service->>Repository: findByIdWithRole(userId)
+    Repository->>Database: SELECT user with role
+    Database->>Repository: User data with role
+    Repository->>Service: User object
+    Service->>Repository: getRoleMenus()
+    Repository->>Database: SELECT role menus
+    Database->>Repository: Menu items
+    Repository->>Service: Menu list
+    Service->>Repository: getRoleDashboards()
+    Repository->>Database: SELECT role dashboards
+    Database->>Repository: Dashboard items
+    Repository->>Service: Dashboard list
+    Service->>Service: Build hierarchical menu tree
+    Service->>Service: Remove password from response
+    Service->>Controller: User, Menus, Dashboards
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                Service -->|Data Access| Repository[Auth Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Current User Flow
+                subgraph "Get Current User Process"
+                GetMe[GET /api/auth/me] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| CurrentUser[Service: getCurrentUser]
+                CurrentUser --> FindUser[Service: findByIdWithRole]
+                FindUser --> Repo1[Repository: SELECT users]
+                Repo1 --> UserDB[(users table)]
+                UserDB --> UserData[Repository: User with Role]
+                UserData --> Menus[Service: getRoleMenus]
+                Menus --> Repo2[Repository: SELECT role_menus]
+                Repo2 --> MenuDB[(role_menus table)]
+                MenuDB --> MenuData[Repository: Menu List]
+                MenuData --> Dashboards[Service: getRoleDashboards]
+                Dashboards --> Repo3[Repository: SELECT role_dashboards]
+                Repo3 --> DashDB[(role_dashboards table)]
+                DashDB --> DashData[Repository: Dashboard List]
+                DashData --> BuildTree[Service: Build Menu Tree]
+                BuildTree --> RemovePass[Service: Remove Password]
+                RemovePass --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.me</span></p>
+            <pre class="code-block"><code>exports.me = async (req, res, next) => {
+  try {
+    // req.user.id is populated by verifyToken middleware
+    const result = await service.getCurrentUser(req.user.id);
+    return success(res, 'User retrieved successfully', result);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.getCurrentUser</span></p>
+            <pre class="code-block"><code>exports.getCurrentUser = async (userId) => {
+  // 1. Find user with role
+  const user = await repo.findByIdWithRole(userId);
+  if (!user) throw { status: 404, message: 'User not found' };
+
+  // 2. Get role menus and dashboards
+  const roleMenus = await repo.getRoleMenus();
+  const roleDashboards = await repo.getRoleDashboards();
+
+  // 3. Build hierarchical menu structure
+  const buildMenuTree = (menus, parentId = null) => {
+    return menus
+      .filter(menu => menu.parent_id === parentId)
+      .map(menu => ({
+        id: menu.id,
+        title: menu.title,
+        icon: menu.icon,
+        path: menu.path,
+        is_active: menu.is_active,
+        children: buildMenuTree(menus, menu.id)
+      }));
+  };
+
+  const menuTree = buildMenuTree(roleMenus);
+
+  // 4. Remove password from response
+  const userData = user.toJSON();
+  delete userData.password;
+  userData.phone = userData.phone || null;
+  userData.profile_image = userData.thumb_url || null;
+
+  // 5. Return complete profile
+  return {
+    user: userData,
+    menus: menuTree,
+    dashboards: roleDashboards
+  };
+};</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.repository.js</code> <span class="file-badge">findByIdWithRole</span></p>
+            <pre class="code-block"><code>exports.findByIdWithRole = async (id) => {
+  // First check User table
+  let user = await User.findByPk(id, {
+    include: [
+      {
+        model: Role,
+        as: 'role',
+        include: [{ model: RoleSettings, required: false }]
+      }
+    ]
+  });
+
+  if (user) return user;
+
+  // Then check Staff table
+  return Staff.findByPk(id, {
+    include: [
+      {
+        model: Role,
+        as: 'role',
+        include: [{ model: RoleSettings, required: false }]
+      }
+    ]
+  });
+};</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User retrieved successfully",
+  "data": {
+    "user": {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@example.com",
+      "phone": "+1234567890",
+      "profile_image": "https://example.com/avatar.jpg",
+      "role_id": 1,
+      "role": {
+        "id": 1,
+        "name": "admin",
+        "display_name": "Administrator",
+        "permissions": ["users.create", "users.read", "*"]
+      }
+    },
+    "menus": [...],
+    "dashboards": [...]
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (401)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "No token provided"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 4. REFRESH TOKEN ==================== -->
+        <div class="card">
+            <h2>4. POST /auth/refresh - Refresh Access Token</h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /auth/refresh
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: refreshToken(token)
+    Service->>Service: Verify JWT refresh token
+    Service->>Service: Extract userId from token
+    Service->>Repository: findById(userId)
+    Repository->>Database: SELECT user by id
+    Database->>Repository: User data
+    Repository->>Service: User object
+    Service->>Service: Generate new JWT token (1 day expiry)
+    Service->>Controller: New token
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|Route Handler| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                Service -->|Data Access| Repository[Auth Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Refresh Token Flow
+                subgraph "Refresh Token Process"
+                Refresh[POST /api/auth/refresh] --> Validate[Controller: Validate Request]
+                Validate --> VerifyToken[Service: Verify JWT Token]
+                VerifyToken --> Extract[Service: Extract userId]
+                Extract --> FindUser[Service: findById]
+                FindUser --> Repo1[Repository: SELECT users]
+                Repo1 --> UserDB[(users table)]
+                UserDB --> UserData[Repository: User Object]
+                UserData --> GenToken[Service: Generate New JWT]
+                GenToken -->|New Token| Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>refreshToken</td>
+                    <td>optional (but one of refreshToken or refresh_token required)</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.refresh</span></p>
+            <pre class="code-block"><code>exports.refresh = async (req, res, next) => {
+  try {
+    const { refreshToken, refresh_token } = req.body;
+    const token = refreshToken || refresh_token;
+
+    if (!token) {
+      return res.status(400).json({
+        status: false,
+        message: 'Validation Error',
+        errors: [{ path: ['refreshToken'], message: 'Refresh token is required' }]
+      });
+    }
+
+    const result = await service.refreshToken(token);
+    return success(res, 'Token refreshed successfully', result);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.refreshToken</span></p>
+            <pre class="code-block"><code>exports.refreshToken = async (token) => {
+  try {
+    // 1. Verify the refresh token
+    const decoded = jwt.verify(token, jwtSecret);
+
+    // 2. Find user
+    const user = await repo.findById(decoded.id);
+    if (!user) throw { status: 404, message: 'User not found' };
+
+    // 3. Generate new access token
+    const newToken = jwt.sign(
+      { id: user.id, email: user.email, role_id: user.role_id },
+      jwtSecret,
+      { expiresIn: jwtExpiresIn }
+    );
+
+    return { token: newToken };
+  } catch (err) {
+    throw { status: 401, message: 'Invalid or expired refresh token' };
+  }
+};</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Token refreshed successfully",
+  "data": {
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (401)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "Invalid or expired refresh token"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 5. LOGOUT ==================== -->
+        <div class="card">
+            <h2>5. POST /auth/logout - Logout User <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+
+    Client->>Router: POST /auth/logout
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid (extract userId)
+    Router->>Controller: Pass request with user
+    Controller->>Service: logout(userId)
+    Service->>Service: Process logout (token invalidation)
+    Service->>Controller: Success message
+    Controller->>Client: 200 Success Response
+    Note over Client: Clear token from client storage
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                end
+
+                %% Logout Flow
+                subgraph "Logout Process"
+                Logout[POST /api/auth/logout] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| LogoutSvc[Service: logout]
+                LogoutSvc --> Invalidate[Service: Invalidate Token]
+                Invalidate --> Success[Service: Success Message]
+                Success --> Response[Controller: Send Response]
+                Response --> ClientClear[Client: Clear Token Storage]
+                end
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.logout</span></p>
+            <pre class="code-block"><code>exports.logout = async (req, res, next) => {
+  try {
+    await service.logout(req.user.id);
+    return success(res, 'Logged out successfully');
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.logout</span></p>
+            <pre class="code-block"><code>exports.logout = async (userId) => {
+  // Token invalidation happens client-side
+  // In production, implement token blacklisting
+  // Example: Add token to Redis blacklist with TTL
+  return { message: 'Logged out successfully' };
+};</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Logged out successfully",
+  "data": null
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 6. UPDATE PROFILE ==================== -->
+        <div class="card">
+            <h2>6. PUT /auth/profile - Update User Profile <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /auth/profile
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid (extract userId)
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: updateProfile(userId, data)
+    Service->>Service: Prevent updating sensitive fields (password, role_id, email)
+    Service->>Service: Map profile_image to thumb_url
+    Service->>Repository: update(userId, data)
+    Repository->>Database: SELECT user by id
+    Database->>Repository: User data
+    Repository->>Database: UPDATE users
+    Database->>Repository: Updated user
+    Repository->>Service: User object
+    Service->>Service: Remove password from response
+    Service->>Service: Ensure profile_image field is present
+    Service->>Controller: Updated profile
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Auth"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Auth Controller]
+                Controller -->|Business Logic| Service[Auth Service]
+                Service -->|Data Access| Repository[Auth Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Update Profile Flow
+                subgraph "Update Profile Process"
+                Update[PUT /api/auth/profile] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| UpdateSvc[Service: updateProfile]
+                UpdateSvc --> Prevent[Service: Prevent Sensitive Fields]
+                Prevent -->|Block password, role_id, email| Map[Service: Map profile_image]
+                Map -->|thumb_url| FindUser[Repository: SELECT users]
+                FindUser --> UserDB[(users table)]
+                UserDB --> UpdateDB[Repository: UPDATE users]
+                UpdateDB --> Updated[(Updated user)]
+                Updated --> UserObj[Repository: User Object]
+                UserObj --> RemovePass[Service: Remove Password]
+                RemovePass --> EnsureImage[Service: Ensure profile_image]
+                EnsureImage --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone": "+1234567890",
+  "position": "Manager",
+  "address": "123 Main St",
+  "city": "New York",
+  "profile_image": "https://example.com/avatar.jpg"
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>first_name</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>last_name</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>phone</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>address, city, state, country, postal_code</td>
+                    <td>optional, string</td>
+                </tr>
+                <tr>
+                    <td>profile_image / thumb_url</td>
+                    <td>optional, string (URL)</td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>⚠️ Protected Fields (cannot update):</strong> password, role_id, email</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.controller.js</code> <span class="file-badge">exports.updateProfile</span></p>
+            <pre class="code-block"><code>exports.updateProfile = async (req, res, next) => {
+  try {
+    const result = await service.updateProfile(req.user.id, req.body);
+    return success(res, 'Profile updated successfully', result);
+  } catch (err) { next(err); }
+};</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.service.js</code> <span class="file-badge">exports.updateProfile</span></p>
+            <pre class="code-block"><code>exports.updateProfile = async (userId, data) => {
+  // 1. Prevent updating sensitive fields
+  delete data.password;
+  delete data.role_id;
+  delete data.email;
+
+  // 2. Map profile_image to thumb_url
+  if (data.profile_image) {
+    data.thumb_url = data.profile_image;
+  }
+
+  // 3. Update user
+  const updatedUser = await repo.update(userId, data);
+  if (!updatedUser) throw { status: 404, message: 'User not found' };
+
+  // 4. Remove password from response
+  const userData = updatedUser.toJSON();
+  delete userData.password;
+
+  // 5. Ensure fields are present in response
+  userData.phone = userData.phone || null;
+  userData.profile_image = userData.thumb_url || userData.profile_image || null;
+
+  return userData;
+};</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/auth/auth.repository.js</code> <span class="file-badge">exports.update</span></p>
+            <pre class="code-block"><code>exports.update = async (id, data) => {
+  // Try to find and update in User table first
+  let user = await User.findByPk(id);
+  if (user) {
+    return await user.update(data);
+  }
+
+  // If not found, try Staff table
+  let staff = await Staff.findByPk(id);
+  if (staff) {
+    return await staff.update(data);
+  }
+
+  return null;
+};</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Update user record
+UPDATE users
+SET first_name = ?,
+    last_name = ?,
+    phone = ?,
+    thumb_url = ?
+WHERE id = ?;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Profile updated successfully",
+  "data": {
+    "id": 1,
+    "name": "Admin User",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "admin@example.com",
+    "phone": "+1234567890",
+    "profile_image": "https://example.com/avatar.jpg",
+    "role_id": 1
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (404)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "User not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="card">
+            <h2>🗄️ Database Schema (ER Diagram)</h2>
+            <div class="mermaid">
+                erDiagram
+                USERS {
+                int id PK
+                string name
+                string email UK
+                string password
+                string phone
+                string first_name
+                string last_name
+                string position
+                string address
+                string city
+                string state
+                string country
+                string postal_code
+                string thumb_url
+                int role_id FK
+                datetime created_at
+                datetime updated_at
+                }
+                ROLES {
+                int id PK
+                string name UK
+                string display_name
+                string description
+                enum status
+                json permissions
+                datetime created_at
+                datetime updated_at
+                }
+                ROLE_SETTINGS {
+                int id PK
+                int role_id FK
+                text menu
+                text dashboard
+                text custom
+                datetime created_at
+                datetime updated_at
+                }
+                ROLE_MENUS {
+                int id PK
+                int role_id FK
+                string title
+                string icon
+                string path
+                int parent_id FK
+                int sort_order
+                boolean is_active
+                }
+                ROLE_DASHBOARDS {
+                int id PK
+                int role_id FK
+                string name
+                string slug
+                string type
+                string size
+                boolean is_active
+                }
+
+                USERS ||--o| ROLES : "has"
+                ROLES ||--|| ROLE_SETTINGS : "has settings"
+                ROLES ||--o{ ROLE_MENUS : "has menus"
+                ROLES ||--o{ ROLE_DASHBOARDS : "has dashboards"
+                ROLE_MENUS }o--|| ROLE_MENUS : "parent-child"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tables Used</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>users</strong></td>
+                        <td>Stores user account information and credentials</td>
+                        <td>id, email, password, role_id, name, first_name, last_name, phone, thumb_url</td>
+                    </tr>
+                    <tr>
+                        <td><strong>roles</strong></td>
+                        <td>Defines user roles with permissions</td>
+                        <td>id, name, display_name, status, permissions (JSON)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_settings</strong></td>
+                        <td>Stores role-specific settings (menus, dashboards, custom)</td>
+                        <td>id, role_id, menu, dashboard, custom</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_menus</strong></td>
+                        <td>Defines menu items accessible to each role</td>
+                        <td>id, role_id, title, icon, path, parent_id, sort_order, is_active</td>
+                    </tr>
+                    <tr>
+                        <td><strong>role_dashboards</strong></td>
+                        <td>Defines dashboard widgets accessible to each role</td>
+                        <td>id, role_id, name, slug, type, size, is_active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🔐 JWT Token Structure</h2>
+            <h4>Token Payload</h4>
+            <pre class="code-block"><code>{
+  "id": 1,
+  "email": "admin@example.com",
+  "role_id": 1,
+  "iat": 1670000000,
+  "exp": 1670086400
+}</code></pre>
+
+            <h4>Token Configuration</h4>
+            <pre class="code-block"><code>// File: src/core/config/env.js
+module.exports = {
+  jwtSecret: process.env.JWT_SECRET,
+  jwtExpiresIn: process.env.JWT_EXPIRES_IN || '1d'
+};</code></pre>
+        </div>
+
+        <div class="card">
+            <h2>🔐 Authentication & Authorization Flow</h2>
+
+            <h3>Token-Based Authentication</h3>
+            <ul style="line-height: 2;">
+                <li>✅ <strong>JWT (JSON Web Token)</strong> for stateless authentication</li>
+                <li>✅ <strong>Access Token</strong>: Short-lived (1 day default) for API requests</li>
+                <li>✅ <strong>Refresh Token</strong>: Long-lived token for obtaining new access tokens</li>
+                <li>✅ <strong>Middleware</strong>: <code>verifyToken()</code> checks Authorization header on protected routes</li>
+            </ul>
+
+            <h3>Role-Based Access Control (RBAC)</h3>
+            <ul style="line-height: 2;">
+                <li>✅ Each user assigned to one <strong>Role</strong></li>
+                <li>✅ Roles have <strong>Permissions</strong> array (JSON format)</li>
+                <li>✅ Roles have custom <strong>Menus</strong> and <strong>Dashboards</strong></li>
+                <li>✅ <strong>Role Settings</strong> store UI configurations per role</li>
+            </ul>
+
+            <h3>Permission Examples</h3>
+            <pre class="code-block"><code>{
+  "permissions": [
+    "users.create",
+    "users.read",
+    "users.update",
+    "users.delete",
+    "sales.create",
+    "sales.read",
+    "inventory.manage",
+    "reports.view"
+  ]
+}</code></pre>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Quick Testing</h2>
+
+            <h4>Login</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "admin@example.com",
+    "password": "SecurePassword123!"
+  }'</code></pre>
+
+            <h4>Get Current User</h4>
+            <pre class="code-block"><code>curl -X GET http://localhost:5000/api/auth/me \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+            <h4>Refresh Token</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{
+    "refreshToken": "YOUR_REFRESH_TOKEN"
+  }'</code></pre>
+
+            <h4>Logout</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/auth/logout \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+
+</html>

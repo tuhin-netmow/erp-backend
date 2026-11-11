@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #667eea; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #667eea; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #667eea; border-bottom: 3px solid #764ba2; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #764ba2; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(118, 75, 162, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #764ba2; }
+        .endpoint-detail h3 { color: #667eea; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #764ba2; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 0; border-radius: 12px; overflow: hidden; margin: 12px 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .code-block-header { background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%); padding: 12px 18px; border-bottom: 1px solid #454545; display: flex; align-items: center; gap: 10px; }
+        .code-block-header .icon { color: #ff5252; font-size: 16px; }
+        .code-block-header .dots { display: flex; gap: 6px; }
+        .code-block-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .code-block-header .dot.red { background: #ff5f56; }
+        .code-block-header .dot.yellow { background: #ffbd2e; }
+        .code-block-header .dot.green { background: #27c93f; }
+        .code-block-header .file-path { color: #9cdcfe; font-size: 0.85em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; margin-left: auto; }
+        .code-block-content { padding: 18px; overflow-x: auto; white-space: pre; }
+        .code-block-content .comment { color: #6a9955; }
+        .code-block-content .keyword { color: #569cd6; }
+        .code-block-content .string { color: #ce9178; }
+        .code-block-content .function { color: #dcdcaa; }
+        .code-block-content .number { color: #b5cea8; }
+        .code-block-content .operator { color: #d4d4d4; }
+        .code-block-content .variable { color: #9cdcfe; }
+        .code-block-content .property { color: #9cdcfe; }
+        .code-block-content .tag { color: #569cd6; }
+        .info-box { background: #e8eaf6; border-left: 4px solid #3f51b5; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .stat-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin: 10px 0; text-align: center; }
+        .stat-value { font-size: 2em; font-weight: bold; margin: 10px 0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+
+        /* Expandable section styles */
+        .expandable-container { border: 1px solid #e0e0e0; border-radius: 8px; margin: 15px 0; overflow: hidden; }
+        .expandable-header { background: linear-gradient(135deg, #e8eaf6 0%, #c5cae9 100%); padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .expandable-header:hover { background: linear-gradient(135deg, #c5cae9 0%, #b3b7d9 100%); }
+        .expandable-header h4 { margin: 0; color: #3f51b5; font-size: 1em; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .expandable-content.expanded { max-height: 2000px; }
+        .expandable-content-inner { padding: 20px; }
+        .expand-icon { transition: transform 0.3s; font-size: 1.2em; color: #3f51b5; }
+        .expand-icon.rotated { transform: rotate(180deg); }
+
+        /* Mermaid diagram styles */
+        .mermaid { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>📊 Dashboard Module</h1>
+            <p class="subtitle">Analytics and aggregated statistics for business intelligence and performance tracking</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/dashboard</div><div class="route-desc">Dashboard stats</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/dashboard/charts</div><div class="route-desc">Monthly sales</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/dashboard/staffs/charts</div><div class="route-desc">Staff sales</div></div>
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA</div>
+        <div class="card">
+            <h2>Database Tables</h2>
+
+            <div class="mermaid">
+erDiagram
+    orders ||--o{ order_items : contains
+    customers ||--o{ orders : places
+    users ||--o{ orders : creates
+    products ||--o{ order_items : "included in"
+
+    orders {
+        int id PK
+        int customer_id FK
+        int created_by FK
+        decimal total_amount
+        string status
+        string payment_status
+        datetime order_date
+        datetime created_at
+    }
+
+    customers {
+        int id PK
+        string name
+        string email
+        boolean is_active
+        datetime created_at
+    }
+
+    users {
+        int id PK
+        string name
+        string email
+        string role
+        string status
+        datetime created_at
+    }
+
+    products {
+        int id PK
+        string name
+        int stock_quantity
+        int min_stock_level
+        decimal price
+        datetime created_at
+    }
+
+    order_items {
+        int id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal unit_price
+        decimal subtotal
+    }
+            </div>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">Dashboard Module Tables</h3>
+            <table>
+                <tr><th>Table Name</th><th>Used For</th><th>Key Fields</th></tr>
+                <tr><td>orders</td><td>Order statistics, revenue calculation</td><td>total_amount, status, payment_status, created_by, order_date</td></tr>
+                <tr><td>customers</td><td>Active customer count</td><td>is_active</td></tr>
+                <tr><td>users</td><td>Staff member count</td><td>role, status</td></tr>
+                <tr><td>products</td><td>Low stock alerts</td><td>stock_quantity, min_stock_level</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Database Notes:</strong><br>
+                • All dashboard queries use aggregation functions (COUNT, SUM)<br>
+                • Parallel execution with Promise.all for optimal performance<br>
+                • Staff charts filter by created_by field linking to users table<br>
+                • Chart data grouped by month using database date functions
+            </div>
+        </div>
+
+        <!-- DASHBOARD STATS ENDPOINT -->
+        <div class="section-title">📌 DASHBOARD STATISTICS</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/dashboard</h3>
+                <p>Retrieves aggregated statistics for the main dashboard including orders, customers, inventory, revenue, and staff metrics.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Dashboard Controller]
+    C --> D[Promise.all Parallel Queries]
+    D --> E1[Order.count]
+    D --> E2[Order.count - Pending]
+    D --> E3[Customer.count - Active]
+    D --> E4[Product.count - Low Stock]
+    D --> E5[Order.sum - Revenue]
+    D --> E6[Staff.count - Active]
+    E1 --> F[Aggregate Results]
+    E2 --> F
+    E3 --> F
+    E4 --> F
+    E5 --> F
+    E6 --> F
+    F --> G[JSON Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>Authentication</td><td>Token</td><td><span style="color:#c62828;">Yes</span></td><td>Valid JWT token required via verifyToken middleware</td></tr>
+                    <tr><td>Query Parameters</td><td>-</td><td>No</td><td>No query parameters accepted</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 src/modules/dashboard/dashboard.controller.js</span>
+                    </div>
+                    <div class="code-block-content"><span class="keyword">const</span> <span class="function">getDashboardStats</span> = <span class="keyword">async</span> (<span class="variable">req</span>, <span class="variable">res</span>) => {
+    <span class="keyword">try</span> {
+        <span class="comment">// Execute 6 queries in parallel for optimal performance</span>
+        <span class="keyword">const</span> [<span class="variable">totalOrders</span>, <span class="variable">pendingOrders</span>, <span class="variable">activeCustomers</span>, <span class="variable">lowStockProducts</span>, <span class="variable">revenueResult</span>, <span class="variable">activeStaff</span>] = <span class="keyword">await</span> <span class="variable">Promise</span>.<span class="function">all</span>([
+            <span class="comment">// Total orders count</span>
+            <span class="variable">Order</span>.<span class="function">count</span>(),
+
+            <span class="comment">// Pending orders count</span>
+            <span class="variable">Order</span>.<span class="function">count</span>({ <span class="property">where</span>: { <span class="property">status</span>: <span class="string">'pending'</span> } }),
+
+            <span class="comment">// Active customers count</span>
+            <span class="variable">Customer</span>.<span class="function">count</span>({ <span class="property">where</span>: { <span class="property">is_active</span>: <span class="keyword">true</span> } }),
+
+            <span class="comment">// Low stock products (quantity &lt;= min_stock_level)</span>
+            <span class="variable">Product</span>.<span class="function">count</span>({
+                <span class="property">where</span>: {
+                    <span class="property">stock_quantity</span>: {
+                        [<span class="variable">Op</span>.<span class="property">lte</span>]: <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'min_stock_level'</span>)
+                    }
+                }
+            }),
+
+            <span class="comment">// Total revenue from paid orders</span>
+            <span class="variable">Order</span>.<span class="function">sum</span>(<span class="string">'total_amount'</span>, {
+                <span class="property">where</span>: { <span class="property">payment_status</span>: <span class="string">'paid'</span> }
+            }),
+
+            <span class="comment">// Active staff count</span>
+            <span class="variable">Staff</span>.<span class="function">count</span>({ <span class="property">where</span>: { <span class="property">status</span>: <span class="string">'active'</span> } })
+        ]);
+
+        <span class="comment">// Handle null revenue (no orders yet)</span>
+        <span class="keyword">const</span> <span class="variable">revenue</span> = <span class="variable">revenueResult</span> || <span class="number">0</span>;
+
+        <span class="comment">// Return success response with all statistics</span>
+        <span class="variable">res</span>.<span class="function">json</span>({
+            <span class="property">success</span>: <span class="keyword">true</span>,
+            <span class="property">data</span>: {
+                <span class="property">totalOrders</span>,
+                <span class="property">pendingOrders</span>,
+                <span class="property">activeCustomers</span>,
+                <span class="property">lowStock</span>: <span class="variable">lowStockProducts</span>,
+                <span class="property">revenue</span>,
+                <span class="property">activeStaff</span>
+            }
+        });
+    } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+        <span class="variable">res</span>.<span class="function">status</span>(<span class="number">500</span>).<span class="function">json</span>({
+            <span class="property">success</span>: <span class="keyword">false</span>,
+            <span class="property">message</span>: <span class="string">'Error fetching dashboard statistics'</span>,
+            <span class="property">error</span>: <span class="variable">error</span>.<span class="property">message</span>
+        });
+    }
+};</div>
+                </div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="info-box">
+                    <strong>Service Implementation:</strong><br><br>
+                    The Dashboard module does not have a separate service layer. All business logic is implemented directly in the controller using Sequelize ORM methods.<br><br>
+                    <strong>Key Features:</strong><br>
+                    • Uses Promise.all for parallel query execution<br>
+                    • All 6 queries execute simultaneously, not sequentially<br>
+                    • Reduces total response time significantly<br>
+                    • Handles null results gracefully (e.g., revenue with no orders)<br>
+                    • Uses Sequelize operators for complex queries (Op.lte for low stock)
+                </div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 SQL Queries</span>
+                    </div>
+                    <div class="code-block-content"><span class="comment">-- Query 1: Total Orders</span>
+<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">as</span> <span class="variable">totalOrders</span> <span class="keyword">FROM</span> <span class="variable">orders</span>;
+
+<span class="comment">-- Query 2: Pending Orders</span>
+<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">as</span> <span class="variable">pendingOrders</span> <span class="keyword">FROM</span> <span class="variable">orders</span> <span class="keyword">WHERE</span> <span class="property">status</span> = <span class="string">'pending'</span>;
+
+<span class="comment">-- Query 3: Active Customers</span>
+<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">as</span> <span class="variable">activeCustomers</span> <span class="keyword">FROM</span> <span class="variable">customers</span> <span class="keyword">WHERE</span> <span class="property">is_active</span> = <span class="keyword">true</span>;
+
+<span class="comment">-- Query 4: Low Stock Products</span>
+<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">as</span> <span class="variable">lowStock</span> <span class="keyword">FROM</span> <span class="variable">products</span>
+<span class="keyword">WHERE</span> <span class="property">stock_quantity</span> <= <span class="property">min_stock_level</span>;
+
+<span class="comment">-- Query 5: Total Revenue</span>
+<span class="keyword">SELECT</span> <span class="function">COALESCE</span>(<span class="function">SUM</span>(<span class="property">total_amount</span>), <span class="number">0</span>) <span class="keyword">as</span> <span class="variable">revenue</span> <span class="keyword">FROM</span> <span class="variable">orders</span>
+<span class="keyword">WHERE</span> <span class="property">payment_status</span> = <span class="string">'paid'</span>;
+
+<span class="comment">-- Query 6: Active Staff</span>
+<span class="keyword">SELECT</span> <span class="function">COUNT</span>(*) <span class="keyword">as</span> <span class="variable">activeStaff</span> <span class="keyword">FROM</span> <span class="variable">users</span>
+<span class="keyword">WHERE</span> <span class="property">role</span> = <span class="string">'staff'</span> <span class="keyword">AND</span> <span class="property">status</span> = <span class="string">'active'</span>;</div>
+                </div>
+
+                <h4>📦 Sample Request</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 Bash/Terminal</span>
+                    </div>
+                    <div class="code-block-content">curl -X <span class="string">GET</span> <span class="string">"http://localhost:5000/api/dashboard"</span> \
+  -H <span class="string">"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span> \
+  -H <span class="string">"Content-Type: application/json"</span></div>
+                </div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">true</span>,
+    <span class="property">"data"</span>: {
+        <span class="property">"totalOrders"</span>: <span class="number">22</span>,
+        <span class="property">"pendingOrders"</span>: <span class="number">12</span>,
+        <span class="property">"activeCustomers"</span>: <span class="number">10</span>,
+        <span class="property">"lowStock"</span>: <span class="number">2</span>,
+        <span class="property">"revenue"</span>: <span class="number">81643.10</span>,
+        <span class="property">"activeStaff"</span>: <span class="number">15</span>
+    }
+}</div>
+                </div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"No token provided"</span>
+}</div>
+                </div>
+
+                <h4>❌ Error Response (500 - Server Error)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"Error fetching dashboard statistics"</span>,
+    <span class="property">"error"</span>: <span class="string">"Connection timeout"</span>
+}</div>
+                </div>
+
+                <h4>📊 Response Fields</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>totalOrders</td><td>number</td><td>Total count of all orders in the system</td></tr>
+                    <tr><td>pendingOrders</td><td>number</td><td>Orders with status 'pending'</td></tr>
+                    <tr><td>activeCustomers</td><td>number</td><td>Count of customers with is_active=true</td></tr>
+                    <tr><td>lowStock</td><td>number</td><td>Products where stock_quantity <= min_stock_level</td></tr>
+                    <tr><td>revenue</td><td>number</td><td>SUM of total_amount from paid orders (0 if none)</td></tr>
+                    <tr><td>activeStaff</td><td>number</td><td>Count of staff with status='active'</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- CHARTS DATA ENDPOINT -->
+        <div class="section-title">📌 MONTHLY SALES CHARTS</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/dashboard/charts</h3>
+                <p>Retrieves monthly sales data for the previous year, suitable for charting and trend analysis.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[Dashboard Controller]
+    C --> D[Get Current Year]
+    D --> E[Order.findAll with GROUP BY]
+    E --> F[Extract Month Names]
+    F --> G[Ensure All 12 Months]
+    G --> H[Fill Missing Months with 0]
+    H --> I[Map to Response Format]
+    I --> J[JSON Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>Authentication</td><td>Token</td><td><span style="color:#c62828;">Yes</span></td><td>Valid JWT token required via verifyToken middleware</td></tr>
+                    <tr><td>Query Parameters</td><td>-</td><td>No</td><td>No query parameters accepted</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 src/modules/dashboard/dashboard.controller.js</span>
+                    </div>
+                    <div class="code-block-content"><span class="keyword">const</span> <span class="function">getChartsData</span> = <span class="keyword">async</span> (<span class="variable">req</span>, <span class="variable">res</span>) => {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> <span class="variable">currentYear</span> = <span class="keyword">new</span> <span class="variable">Date</span>().<span class="function">getFullYear</span>();
+
+        <span class="comment">// Get orders grouped by month for current year</span>
+        <span class="keyword">const</span> <span class="variable">monthlySales</span> = <span class="keyword">await</span> <span class="variable">Order</span>.<span class="function">findAll</span>({
+            <span class="property">attributes</span>: [
+                [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'MONTH'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>)), <span class="string">'month'</span>],
+                [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'SUM'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'total_amount'</span>)), <span class="string">'total'</span>]
+            ],
+            <span class="property">where</span>: <span class="variable">sequelize</span>.<span class="function">where</span>(
+                <span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'YEAR'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>)),
+                <span class="variable">currentYear</span>
+            ),
+            <span class="property">group</span>: [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'MONTH'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>))],
+            <span class="property">raw</span>: <span class="keyword">true</span>
+        });
+
+        <span class="comment">// Month names mapping</span>
+        <span class="keyword">const</span> <span class="variable">monthNames</span> = [<span class="string">'Jan'</span>, <span class="string">'Feb'</span>, <span class="string">'Mar'</span>, <span class="string">'Apr'</span>, <span class="string">'May'</span>, <span class="string">'Jun'</span>,
+                           <span class="string">'Jul'</span>, <span class="string">'Aug'</span>, <span class="string">'Sep'</span>, <span class="string">'Oct'</span>, <span class="string">'Nov'</span>, <span class="string">'Dec'</span>];
+
+        <span class="comment">// Create result with all 12 months</span>
+        <span class="keyword">const</span> <span class="variable">result</span> = <span class="variable">monthNames</span>.<span class="function">map</span>((<span class="variable">name</span>, <span class="variable">index</span>) => {
+            <span class="keyword">const</span> <span class="variable">monthData</span> = <span class="variable">monthlySales</span>.<span class="function">find</span>(<span class="variable">m</span> => <span class="function">parseInt</span>(<span class="variable">m</span>.<span class="property">month</span>) === <span class="variable">index</span> + <span class="number">1</span>);
+            <span class="keyword">return</span> {
+                <span class="property">name</span>: <span class="variable">name</span>,
+                <span class="property">total</span>: <span class="variable">monthData</span> ? <span class="function">parseFloat</span>(<span class="variable">monthData</span>.<span class="property">total</span>) : <span class="number">0</span>
+            };
+        });
+
+        <span class="variable">res</span>.<span class="function">json</span>(<span class="variable">result</span>);
+    } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+        <span class="variable">res</span>.<span class="function">status</span>(<span class="number">500</span>).<span class="function">json</span>({
+            <span class="property">success</span>: <span class="keyword">false</span>,
+            <span class="property">message</span>: <span class="string">'Error fetching charts data'</span>,
+            <span class="property">error</span>: <span class="variable">error</span>.<span class="property">message</span>
+        });
+    }
+};</div>
+                </div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="info-box">
+                    <strong>Service Implementation:</strong><br><br>
+                    The charts endpoint directly queries the database using Sequelize aggregation functions. No separate service layer exists.<br><br>
+                    <strong>Key Features:</strong><br>
+                    • Uses SQL MONTH() and YEAR() functions for grouping<br>
+                    • Returns all 12 months even if no data exists (fills with 0)<br>
+                    • Guarantees consistent response format for chart libraries<br>
+                    • Uses raw: true for faster query execution<br>
+                    • Automatically filters for current year
+                </div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 SQL Query</span>
+                    </div>
+                    <div class="code-block-content"><span class="comment">-- Query monthly sales for current year</span>
+<span class="keyword">SELECT</span>
+    <span class="function">MONTH</span>(<span class="property">created_at</span>) <span class="keyword">as</span> <span class="variable">month</span>,
+    <span class="function">SUM</span>(<span class="property">total_amount</span>) <span class="keyword">as</span> <span class="variable">total</span>
+<span class="keyword">FROM</span> <span class="variable">orders</span>
+<span class="keyword">WHERE</span> <span class="function">YEAR</span>(<span class="property">created_at</span>) = <span class="number">2025</span>
+<span class="keyword">GROUP BY</span> <span class="function">MONTH</span>(<span class="property">created_at</span>)
+<span class="keyword">ORDER BY</span> <span class="variable">month</span>;</div>
+                </div>
+
+                <h4>📦 Sample Request</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 Bash/Terminal</span>
+                    </div>
+                    <div class="code-block-content">curl -X <span class="string">GET</span> <span class="string">"http://localhost:5000/api/dashboard/charts"</span> \
+  -H <span class="string">"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span> \
+  -H <span class="string">"Content-Type: application/json"</span></div>
+                </div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">[
+    { <span class="property">"name"</span>: <span class="string">"Jan"</span>, <span class="property">"total"</span>: <span class="number">1500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Feb"</span>, <span class="property">"total"</span>: <span class="number">2300</span> },
+    { <span class="property">"name"</span>: <span class="string">"Mar"</span>, <span class="property">"total"</span>: <span class="number">1800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Apr"</span>, <span class="property">"total"</span>: <span class="number">3200</span> },
+    { <span class="property">"name"</span>: <span class="string">"May"</span>, <span class="property">"total"</span>: <span class="number">2800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jun"</span>, <span class="property">"total"</span>: <span class="number">3500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jul"</span>, <span class="property">"total"</span>: <span class="number">4100</span> },
+    { <span class="property">"name"</span>: <span class="string">"Aug"</span>, <span class="property">"total"</span>: <span class="number">3900</span> },
+    { <span class="property">"name"</span>: <span class="string">"Sep"</span>, <span class="property">"total"</span>: <span class="number">4500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Oct"</span>, <span class="property">"total"</span>: <span class="number">5200</span> },
+    { <span class="property">"name"</span>: <span class="string">"Nov"</span>, <span class="property">"total"</span>: <span class="number">4800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Dec"</span>, <span class="property">"total"</span>: <span class="number">6100</span> }
+]</div>
+                </div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"No token provided"</span>
+}</div>
+                </div>
+
+                <h4>❌ Error Response (500 - Server Error)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"Error fetching charts data"</span>,
+    <span class="property">"error"</span>: <span class="string">"Database connection failed"</span>
+}</div>
+                </div>
+
+                <h4>📊 Response Fields</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>name</td><td>string</td><td>3-letter month abbreviation (Jan, Feb, etc.)</td></tr>
+                    <tr><td>total</td><td>number</td><td>Total sales amount for that month (0 if no sales)</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- STAFF SALES CHARTS ENDPOINT -->
+        <div class="section-title">📌 STAFF SALES CHARTS</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/dashboard/staffs/charts</h3>
+                <p>Retrieves month-wise total sales for a specific staff member for the current year. Filters by created_by field to track individual staff performance.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C{User is Staff?}
+    C -->|Yes| D[Use req.user.id]
+    C -->|No| E[Use req.query.staff_id]
+    D --> F[Get Current Year]
+    E --> F
+    F --> G[Order.findAll with GROUP BY]
+    G --> H[Filter by staff_id]
+    H --> I[Extract Month Names]
+    I --> J[Ensure All 12 Months]
+    J --> K[Fill Missing Months with 0]
+    K --> L[Map to Response Format]
+    L --> M[JSON Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>Authentication</td><td>Token</td><td><span style="color:#c62828;">Yes</span></td><td>Valid JWT token required via verifyToken middleware</td></tr>
+                    <tr><td>staff_id</td><td>number</td><td>Conditional</td><td>Required if user is not staff; uses req.user.id for staff users</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 src/modules/dashboard/dashboard.controller.js</span>
+                    </div>
+                    <div class="code-block-content"><span class="keyword">const</span> <span class="function">getStaffsChartsData</span> = <span class="keyword">async</span> (<span class="variable">req</span>, <span class="variable">res</span>) => {
+    <span class="keyword">try</span> {
+        <span class="comment">// Use staff_id from query or fall back to authenticated user's ID</span>
+        <span class="keyword">const</span> <span class="variable">staffId</span> = <span class="variable">req</span>.<span class="property">query</span>.<span class="property">staff_id</span> || <span class="variable">req</span>.<span class="property">user</span>.<span class="property">id</span>;
+        <span class="keyword">const</span> <span class="variable">currentYear</span> = <span class="keyword">new</span> <span class="variable">Date</span>().<span class="function">getFullYear</span>();
+
+        <span class="comment">// Get orders grouped by month for specific staff</span>
+        <span class="keyword">const</span> <span class="variable">monthlySales</span> = <span class="keyword">await</span> <span class="variable">Order</span>.<span class="function">findAll</span>({
+            <span class="property">attributes</span>: [
+                [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'MONTH'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>)), <span class="string">'month'</span>],
+                [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'SUM'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'total_amount'</span>)), <span class="string">'total'</span>]
+            ],
+            <span class="property">where</span>: {
+                [<span class="variable">Op</span>.<span class="property">and</span>]: [
+                    <span class="variable">sequelize</span>.<span class="function">where</span>(
+                        <span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'YEAR'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>)),
+                        <span class="variable">currentYear</span>
+                    ),
+                    { <span class="property">created_by</span>: <span class="variable">staffId</span> }
+                ]
+            },
+            <span class="property">group</span>: [<span class="variable">sequelize</span>.<span class="function">fn</span>(<span class="string">'MONTH'</span>, <span class="variable">sequelize</span>.<span class="function">col</span>(<span class="string">'created_at'</span>))],
+            <span class="property">raw</span>: <span class="keyword">true</span>
+        });
+
+        <span class="comment">// Month names mapping</span>
+        <span class="keyword">const</span> <span class="variable">monthNames</span> = [<span class="string">'Jan'</span>, <span class="string">'Feb'</span>, <span class="string">'Mar'</span>, <span class="string">'Apr'</span>, <span class="string">'May'</span>, <span class="string">'Jun'</span>,
+                           <span class="string">'Jul'</span>, <span class="string">'Aug'</span>, <span class="string">'Sep'</span>, <span class="string">'Oct'</span>, <span class="string">'Nov'</span>, <span class="string">'Dec'</span>];
+
+        <span class="comment">// Create result with all 12 months</span>
+        <span class="keyword">const</span> <span class="variable">result</span> = <span class="variable">monthNames</span>.<span class="function">map</span>((<span class="variable">name</span>, <span class="variable">index</span>) => {
+            <span class="keyword">const</span> <span class="variable">monthData</span> = <span class="variable">monthlySales</span>.<span class="function">find</span>(<span class="variable">m</span> => <span class="function">parseInt</span>(<span class="variable">m</span>.<span class="property">month</span>) === <span class="variable">index</span> + <span class="number">1</span>);
+            <span class="keyword">return</span> {
+                <span class="property">name</span>: <span class="variable">name</span>,
+                <span class="property">total</span>: <span class="variable">monthData</span> ? <span class="function">parseFloat</span>(<span class="variable">monthData</span>.<span class="property">total</span>) : <span class="number">0</span>
+            };
+        });
+
+        <span class="variable">res</span>.<span class="function">json</span>(<span class="variable">result</span>);
+    } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+        <span class="variable">res</span>.<span class="function">status</span>(<span class="number">500</span>).<span class="function">json</span>({
+            <span class="property">success</span>: <span class="keyword">false</span>,
+            <span class="property">message</span>: <span class="string">'Error fetching staff charts data'</span>,
+            <span class="property">error</span>: <span class="variable">error</span>.<span class="property">message</span>
+        });
+    }
+};</div>
+                </div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="info-box">
+                    <strong>Service Implementation:</strong><br><br>
+                    The staff charts endpoint extends the general charts functionality with staff-specific filtering. No separate service layer exists.<br><br>
+                    <strong>Key Features:</strong><br>
+                    • Automatically uses authenticated staff's ID if no staff_id provided<br>
+                    • Allows admins to query any staff's data by passing staff_id<br>
+                    • Filters by created_by field linking orders to staff<br>
+                    • Returns all 12 months for complete year view<br>
+                    • Useful for performance reviews and commission calculations
+                </div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 SQL Query</span>
+                    </div>
+                    <div class="code-block-content"><span class="comment">-- Query monthly sales for specific staff member</span>
+<span class="keyword">SELECT</span>
+    <span class="function">MONTH</span>(<span class="property">created_at</span>) <span class="keyword">as</span> <span class="variable">month</span>,
+    <span class="function">SUM</span>(<span class="property">total_amount</span>) <span class="keyword">as</span> <span class="variable">total</span>
+<span class="keyword">FROM</span> <span class="variable">orders</span>
+<span class="keyword">WHERE</span> <span class="function">YEAR</span>(<span class="property">created_at</span>) = <span class="number">2025</span>
+  <span class="keyword">AND</span> <span class="property">created_by</span> = <span class="number">5</span>
+<span class="keyword">GROUP BY</span> <span class="function">MONTH</span>(<span class="property">created_at</span>)
+<span class="keyword">ORDER BY</span> <span class="variable">month</span>;</div>
+                </div>
+
+                <h4>📦 Sample Request</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 Bash/Terminal</span>
+                    </div>
+                    <div class="code-block-content">curl -X <span class="string">GET</span> <span class="string">"http://localhost:5000/api/dashboard/staffs/charts?staff_id=5"</span> \
+  -H <span class="string">"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span> \
+  -H <span class="string">"Content-Type: application/json"</span></div>
+                </div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">[
+    { <span class="property">"name"</span>: <span class="string">"Jan"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Feb"</span>, <span class="property">"total"</span>: <span class="number">1544</span> },
+    { <span class="property">"name"</span>: <span class="string">"Mar"</span>, <span class="property">"total"</span>: <span class="number">353.16</span> },
+    { <span class="property">"name"</span>: <span class="string">"Apr"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"May"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jun"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jul"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Aug"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Sep"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Oct"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Nov"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Dec"</span>, <span class="property">"total"</span>: <span class="number">0</span> }
+]</div>
+                </div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"No token provided"</span>
+}</div>
+                </div>
+
+                <h4>❌ Error Response (500 - Server Error)</h4>
+                <div class="code-block">
+                    <div class="code-block-header">
+                        <div class="dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <span class="file-path">📄 JSON Response</span>
+                    </div>
+                    <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"Error fetching staff charts data"</span>,
+    <span class="property">"error"</span>: <span class="string">"Invalid staff_id"</span>
+}</div>
+                </div>
+
+                <h4>📊 Response Fields</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+                    <tr><td>name</td><td>string</td><td>3-letter month abbreviation</td></tr>
+                    <tr><td>total</td><td>number</td><td>Total sales by staff member for that month</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- EXPANDABLE EXAMPLES -->
+        <div class="section-title">📌 MULTIPLE REQUEST EXAMPLES</div>
+        <div class="card">
+            <h2>Request & Response Examples</h2>
+
+            <!-- Dashboard Stats Examples -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📊 Dashboard Statistics - Basic Request</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Authorization</span>: <span class="variable">Bearer</span> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNjE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (200 OK)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">true</span>,
+    <span class="property">"data"</span>: {
+        <span class="property">"totalOrders"</span>: <span class="number">22</span>,
+        <span class="property">"pendingOrders"</span>: <span class="number">12</span>,
+        <span class="property">"activeCustomers"</span>: <span class="number">10</span>,
+        <span class="property">"lowStock"</span>: <span class="number">2</span>,
+        <span class="property">"revenue"</span>: <span class="number">81643.10</span>,
+        <span class="property">"activeStaff"</span>: <span class="number">15</span>
+    }
+}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Data Examples -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📈 Monthly Sales Charts - Full Year Data</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard/charts</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Authorization</span>: <span class="variable">Bearer</span> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (200 OK)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">[
+    { <span class="property">"name"</span>: <span class="string">"Jan"</span>, <span class="property">"total"</span>: <span class="number">1500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Feb"</span>, <span class="property">"total"</span>: <span class="number">2300</span> },
+    { <span class="property">"name"</span>: <span class="string">"Mar"</span>, <span class="property">"total"</span>: <span class="number">1800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Apr"</span>, <span class="property">"total"</span>: <span class="number">3200</span> },
+    { <span class="property">"name"</span>: <span class="string">"May"</span>, <span class="property">"total"</span>: <span class="number">2800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jun"</span>, <span class="property">"total"</span>: <span class="number">3500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jul"</span>, <span class="property">"total"</span>: <span class="number">4100</span> },
+    { <span class="property">"name"</span>: <span class="string">"Aug"</span>, <span class="property">"total"</span>: <span class="number">3900</span> },
+    { <span class="property">"name"</span>: <span class="string">"Sep"</span>, <span class="property">"total"</span>: <span class="number">4500</span> },
+    { <span class="property">"name"</span>: <span class="string">"Oct"</span>, <span class="property">"total"</span>: <span class="number">5200</span> },
+    { <span class="property">"name"</span>: <span class="string">"Nov"</span>, <span class="property">"total"</span>: <span class="number">4800</span> },
+    { <span class="property">"name"</span>: <span class="string">"Dec"</span>, <span class="property">"total"</span>: <span class="number">6100</span> }
+]</div>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Note:</strong> This endpoint always returns all 12 months. Months with no sales will show total: 0.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Charts Examples - With staff_id -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>👤 Staff Sales Charts - Admin Query for Specific Staff</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard/staffs/charts?staff_id=5</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Authorization</span>: <span class="variable">Bearer</span> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (200 OK)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">[
+    { <span class="property">"name"</span>: <span class="string">"Jan"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Feb"</span>, <span class="property">"total"</span>: <span class="number">1544</span> },
+    { <span class="property">"name"</span>: <span class="string">"Mar"</span>, <span class="property">"total"</span>: <span class="number">353.16</span> },
+    { <span class="property">"name"</span>: <span class="string">"Apr"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"May"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jun"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jul"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Aug"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Sep"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Oct"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Nov"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Dec"</span>, <span class="property">"total"</span>: <span class="number">0</span> }
+]</div>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Use Case:</strong> Admin querying sales performance for staff member ID 5. Useful for performance reviews, commission calculations, and leaderboard comparisons.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Staff Charts Examples - Staff User (Self) -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>👤 Staff Sales Charts - Staff Member Querying Own Data</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard/staffs/charts</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Authorization</span>: <span class="variable">Bearer</span> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (200 OK)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">[
+    { <span class="property">"name"</span>: <span class="string">"Jan"</span>, <span class="property">"total"</span>: <span class="number">850</span> },
+    { <span class="property">"name"</span>: <span class="string">"Feb"</span>, <span class="property">"total"</span>: <span class="number">1200</span> },
+    { <span class="property">"name"</span>: <span class="string">"Mar"</span>, <span class="property">"total"</span>: <span class="number">950</span> },
+    { <span class="property">"name"</span>: <span class="string">"Apr"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"May"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jun"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Jul"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Aug"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Sep"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Oct"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Nov"</span>, <span class="property">"total"</span>: <span class="number">0</span> },
+    { <span class="property">"name"</span>: <span class="string">"Dec"</span>, <span class="property">"total"</span>: <span class="number">0</span> }
+]</div>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Use Case:</strong> When a staff member queries without providing staff_id, the system automatically uses their own user ID from the JWT token. This allows staff to view their own performance data.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Example - No Token -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Missing Authentication Token</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Content-Type</span>: <span class="string">application/json</span></div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (401 Unauthorized)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"No token provided"</span>
+}</div>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>⚠️ Important:</strong> All dashboard endpoints require authentication via verifyToken middleware. Requests without a valid JWT token will be rejected with 401 status.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Example - Invalid Token -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Invalid Authentication Token</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#667eea;">Request</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 HTTP Request</span>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">GET</span> <span class="string">/api/dashboard/charts</span> <span class="variable">HTTP</span>/<span class="number">1.1</span>
+<span class="property">Host</span>: localhost:<span class="number">5000</span>
+<span class="property">Authorization</span>: <span class="variable">Bearer</span> invalid.token.here
+<span class="property">Content-Type</span>: <span class="string">application/json</span></div>
+                        </div>
+
+                        <h4 style="color:#667eea;">Response (401 Unauthorized)</h4>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <span class="dot red"></span>
+                                    <span class="dot yellow"></span>
+                                    <span class="dot green"></span>
+                                </div>
+                                <span class="file-path">📄 JSON Response</span>
+                            </div>
+                            <div class="code-block-content">{
+    <span class="property">"success"</span>: <span class="keyword">false</span>,
+    <span class="property">"message"</span>: <span class="string">"Invalid token"</span>
+}</div>
+                        </div>
+
+                        <div class="info-box">
+                            <strong>⚠️ Important:</strong> JWT tokens must be valid and not expired. Ensure tokens are properly generated and refreshed.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- USE CASES -->
+        <div class="section-title">📌 DASHBOARD USE CASES</div>
+        <div class="card">
+            <h2>Common Applications</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div class="stat-card">
+                    <div>📦 Total Orders</div>
+                    <div class="stat-value">22</div>
+                    <div>Current status of all orders</div>
+                </div>
+
+                <div class="stat-card" style="background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);">
+                    <div>⏳ Pending Orders</div>
+                    <div class="stat-value">12</div>
+                    <div>Orders awaiting action</div>
+                </div>
+
+                <div class="stat-card" style="background: linear-gradient(135deg, #42a5f5 0%, #1e88e5 100%);">
+                    <div>👥 Active Customers</div>
+                    <div class="stat-value">10</div>
+                    <div>Customers with recent activity</div>
+                </div>
+
+                <div class="stat-card" style="background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);">
+                    <div>⚠️ Low Stock Items</div>
+                    <div class="stat-value">2</div>
+                    <div>Products needing reorder</div>
+                </div>
+
+                <div class="stat-card" style="background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);">
+                    <div>💰 Total Revenue</div>
+                    <div class="stat-value">$81,643</div>
+                    <div>Lifetime sales revenue</div>
+                </div>
+
+                <div class="stat-card" style="background: linear-gradient(135deg, #ab47bc 0%, #8e24aa 100%);">
+                    <div>👷 Active Staff</div>
+                    <div class="stat-value">15</div>
+                    <div>Current active employees</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISUALIZATION EXAMPLES -->
+        <div class="section-title">📌 CHART VISUALIZATION EXAMPLES</div>
+        <div class="card">
+            <h2>Sample Chart Implementations</h2>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">Monthly Sales Trend (Line Chart - Chart.js)</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="file-path">📄 JavaScript (Chart.js)</span>
+                </div>
+                <div class="code-block-content"><span class="comment">// Chart.js Example</span>
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/dashboard/charts'</span>, {
+    <span class="property">headers</span>: {
+        <span class="property">'Authorization'</span>: <span class="string">`Bearer ${token}`</span>
+    }
+});
+<span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+
+<span class="keyword">new</span> <span class="function">Chart</span>(<span class="variable">ctx</span>, {
+    <span class="property">type</span>: <span class="string">'line'</span>,
+    <span class="property">data</span>: {
+        <span class="property">labels</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">name</span>),
+        <span class="property">datasets</span>: [{
+            <span class="property">label</span>: <span class="string">'Monthly Sales'</span>,
+            <span class="property">data</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">total</span>),
+            <span class="property">borderColor</span>: <span class="string">'#667eea'</span>,
+            <span class="property">backgroundColor</span>: <span class="string">'rgba(102, 126, 234, 0.1)'</span>,
+            <span class="property">tension</span>: <span class="number">0.4</span>,
+            <span class="property">fill</span>: <span class="keyword">true</span>
+        }]
+    },
+    <span class="property">options</span>: {
+        <span class="property">responsive</span>: <span class="keyword">true</span>,
+        <span class="property">plugins</span>: {
+            <span class="property">legend</span>: { <span class="property">display</span>: <span class="keyword">true</span> },
+            <span class="property">tooltip</span>: {
+                <span class="property">callbacks</span>: {
+                    <span class="property">label</span>: <span class="keyword">function</span>(<span class="variable">context</span>) {
+                        <span class="keyword">return</span> <span class="string">'Sales: $'</span> + <span class="variable">context</span>.<span class="property">parsed</span>.<span class="property">y</span>.<span class="function">toLocaleString</span>();
+                    }
+                }
+            }
+        },
+        <span class="property">scales</span>: {
+            <span class="property">y</span>: {
+                <span class="property">beginAtZero</span>: <span class="keyword">true</span>,
+                <span class="property">ticks</span>: {
+                    <span class="property">callback</span>: <span class="variable">value</span> => <span class="string">'$'</span> + <span class="variable">value</span>.<span class="function">toLocaleString</span>()
+                }
+            }
+        }
+    }
+});</div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">Staff Performance (Bar Chart - Chart.js)</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="file-path">📄 JavaScript (Chart.js)</span>
+                </div>
+                <div class="code-block-content"><span class="comment">// Chart.js Example</span>
+<span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/dashboard/staffs/charts?staff_id=5'</span>, {
+    <span class="property">headers</span>: {
+        <span class="property">'Authorization'</span>: <span class="string">`Bearer ${token}`</span>
+    }
+});
+<span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+
+<span class="keyword">new</span> <span class="function">Chart</span>(<span class="variable">ctx</span>, {
+    <span class="property">type</span>: <span class="string">'bar'</span>,
+    <span class="property">data</span>: {
+        <span class="property">labels</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">name</span>),
+        <span class="property">datasets</span>: [{
+            <span class="property">label</span>: <span class="string">'Monthly Sales'</span>,
+            <span class="property">data</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">total</span>),
+            <span class="property">backgroundColor</span>: <span class="string">'#764ba2'</span>,
+            <span class="property">borderRadius</span>: <span class="number">5</span>
+        }]
+    },
+    <span class="property">options</span>: {
+        <span class="property">responsive</span>: <span class="keyword">true</span>,
+        <span class="property">plugins</span>: {
+            <span class="property">title</span>: {
+                <span class="property">display</span>: <span class="keyword">true</span>,
+                <span class="property">text</span>: <span class="string">'Staff Sales Performance - 2025'</span>,
+                <span class="property">font</span>: { <span class="property">size</span>: <span class="number">16</span> }
+            },
+            <span class="property">legend</span>: { <span class="property">display</span>: <span class="keyword">false</span> }
+        },
+        <span class="property">scales</span>: {
+            <span class="property">y</span>: {
+                <span class="property">beginAtZero</span>: <span class="keyword">true</span>,
+                <span class="property">ticks</span>: {
+                    <span class="property">callback</span>: <span class="variable">value</span> => <span class="string">'$'</span> + <span class="variable">value</span>.<span class="function">toLocaleString</span>()
+                }
+            }
+        }
+    }
+});</div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">React Component Example</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="file-path">📄 React Component (DashboardCharts.jsx)</span>
+                </div>
+                <div class="code-block-content"><span class="comment">// React Component with Real-time Updates</span>
+<span class="keyword">import</span> { <span class="variable">useState</span>, <span class="variable">useEffect</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+<span class="keyword">import</span> { <span class="variable">Line</span> } <span class="keyword">from</span> <span class="string">'react-chartjs-2'</span>;
+
+<span class="keyword">const</span> <span class="function">DashboardCharts</span> = () => {
+    <span class="keyword">const</span> [<span class="variable">chartData</span>, <span class="function">setChartData</span>] = <span class="function">useState</span>(<span class="keyword">null</span>);
+    <span class="keyword">const</span> [<span class="variable">loading</span>, <span class="function">setLoading</span>] = <span class="function">useState</span>(<span class="keyword">true</span>);
+    <span class="keyword">const</span> <span class="variable">token</span> = <span class="variable">localStorage</span>.<span class="function">getItem</span>(<span class="string">'token'</span>);
+
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">const</span> <span class="function">fetchChartsData</span> = <span class="keyword">async</span> () => {
+            <span class="keyword">try</span> {
+                <span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/dashboard/charts'</span>, {
+                    <span class="property">headers</span>: {
+                        <span class="property">'Authorization'</span>: <span class="string">`Bearer ${token}`</span>
+                    }
+                });
+                <span class="keyword">const</span> <span class="variable">data</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+
+                <span class="function">setChartData</span>({
+                    <span class="property">labels</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">name</span>),
+                    <span class="property">datasets</span>: [{
+                        <span class="property">label</span>: <span class="string">'Monthly Sales'</span>,
+                        <span class="property">data</span>: <span class="variable">data</span>.<span class="function">map</span>(<span class="variable">d</span> => <span class="variable">d</span>.<span class="property">total</span>),
+                        <span class="property">borderColor</span>: <span class="string">'#667eea'</span>,
+                        <span class="property">backgroundColor</span>: <span class="string">'rgba(102, 126, 234, 0.1)'</span>,
+                        <span class="property">tension</span>: <span class="number">0.4</span>,
+                        <span class="property">fill</span>: <span class="keyword">true</span>
+                    }]
+                });
+                <span class="function">setLoading</span>(<span class="keyword">false</span>);
+            } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+                <span class="variable">console</span>.<span class="function">error</span>(<span class="string">'Error fetching chart data:'</span>, <span class="variable">error</span>);
+                <span class="function">setLoading</span>(<span class="keyword">false</span>);
+            }
+        };
+
+        <span class="function">fetchChartsData</span>();
+
+        <span class="comment">// Refresh every 5 minutes</span>
+        <span class="keyword">const</span> <span class="variable">interval</span> = <span class="function">setInterval</span>(<span class="variable">fetchChartsData</span>, <span class="number">300000</span>);
+
+        <span class="keyword">return</span> () => <span class="function">clearInterval</span>(<span class="variable">interval</span>);
+    }, [<span class="variable">token</span>]);
+
+    <span class="keyword">if</span> (<span class="variable">loading</span>) <span class="keyword">return</span> <span class="tag">&lt;div&gt;</span>Loading charts...<span class="tag">&lt;/div&gt;</span>;
+
+    <span class="keyword">return</span> (
+        <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"chart-container"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;Line</span> <span class="property">data</span>={<span class="variable">chartData</span>} <span class="property">options</span>={{
+                <span class="property">responsive</span>: <span class="keyword">true</span>,
+                <span class="property">scales</span>: {
+                    <span class="property">y</span>: {
+                        <span class="property">beginAtZero</span>: <span class="keyword">true</span>,
+                        <span class="property">ticks</span>: {
+                            <span class="property">callback</span>: <span class="variable">value</span> => <span class="string">'$'</span> + <span class="variable">value</span>.<span class="function">toLocaleString</span>()
+                        }
+                    }
+                }
+            }} /<span class="tag">&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+    );
+};
+
+<span class="keyword">export default</span> <span class="variable">DashboardCharts</span>;</div>
+            </div>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">Dashboard Stats Cards (React)</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="file-path">📄 React Component (DashboardStats.jsx)</span>
+                </div>
+                <div class="code-block-content"><span class="comment">// React Component for Dashboard Statistics</span>
+<span class="keyword">import</span> { <span class="variable">useState</span>, <span class="variable">useEffect</span> } <span class="keyword">from</span> <span class="string">'react'</span>;
+
+<span class="keyword">const</span> <span class="function">DashboardStats</span> = () => {
+    <span class="keyword">const</span> [<span class="variable">stats</span>, <span class="function">setStats</span>] = <span class="function">useState</span>(<span class="keyword">null</span>);
+    <span class="keyword">const</span> [<span class="variable">loading</span>, <span class="function">setLoading</span>] = <span class="function">useState</span>(<span class="keyword">true</span>);
+    <span class="keyword">const</span> <span class="variable">token</span> = <span class="variable">localStorage</span>.<span class="function">getItem</span>(<span class="string">'token'</span>);
+
+    <span class="function">useEffect</span>(() => {
+        <span class="keyword">const</span> <span class="function">fetchStats</span> = <span class="keyword">async</span> () => {
+            <span class="keyword">try</span> {
+                <span class="keyword">const</span> <span class="variable">response</span> = <span class="keyword">await</span> <span class="function">fetch</span>(<span class="string">'/api/dashboard'</span>, {
+                    <span class="property">headers</span>: {
+                        <span class="property">'Authorization'</span>: <span class="string">`Bearer ${token}`</span>
+                    }
+                });
+                <span class="keyword">const</span> <span class="variable">result</span> = <span class="keyword">await</span> <span class="variable">response</span>.<span class="function">json</span>();
+                <span class="function">setStats</span>(<span class="variable">result</span>.<span class="property">data</span>);
+                <span class="function">setLoading</span>(<span class="keyword">false</span>);
+            } <span class="keyword">catch</span> (<span class="variable">error</span>) {
+                <span class="variable">console</span>.<span class="function">error</span>(<span class="string">'Error fetching stats:'</span>, <span class="variable">error</span>);
+                <span class="function">setLoading</span>(<span class="keyword">false</span>);
+            }
+        };
+
+        <span class="function">fetchStats</span>();
+    }, [<span class="variable">token</span>]);
+
+    <span class="keyword">if</span> (<span class="variable">loading</span>) <span class="keyword">return</span> <span class="tag">&lt;div&gt;</span>Loading statistics...<span class="tag">&lt;/div&gt;</span>;
+    <span class="keyword">if</span> (!<span class="variable">stats</span>) <span class="keyword">return</span> <span class="tag">&lt;div&gt;</span>Error loading statistics<span class="tag">&lt;/div&gt;</span>;
+
+    <span class="keyword">return</span> (
+        <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"stats-grid"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Total Orders"</span>
+                <span class="property">value</span>={<span class="variable">stats</span>.<span class="property">totalOrders</span>}
+                <span class="property">icon</span>=<span class="string">"📦"</span>
+                <span class="property">color</span>=<span class="string">"#667eea"</span>
+            /<span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Pending Orders"</span>
+                <span class="property">value</span>={<span class="variable">stats</span>.<span class="property">pendingOrders</span>}
+                <span class="property">icon</span>=<span class="string">"⏳"</span>
+                <span class="property">color</span>=<span class="string">"#ffa726"</span>
+            /<span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Active Customers"</span>
+                <span class="property">value</span>={<span class="variable">stats</span>.<span class="property">activeCustomers</span>}
+                <span class="property">icon</span>=<span class="string">"👥"</span>
+                <span class="property">color</span>=<span class="string">"#42a5f5"</span>
+            /<span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Low Stock Items"</span>
+                <span class="property">value</span>={<span class="variable">stats</span>.<span class="property">lowStock</span>}
+                <span class="property">icon</span>=<span class="string">"⚠️"</span>
+                <span class="property">color</span>=<span class="string">"#ef5350"</span>
+            /<span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Total Revenue"</span>
+                <span class="property">value</span>={<span class="string">`$${stats.revenue.toLocaleString()}`</span>}
+                <span class="property">icon</span>=<span class="string">"💰"</span>
+                <span class="property">color</span>=<span class="string">"#66bb6a"</span>
+            /<span class="tag">&gt;</span>
+            <span class="tag">&lt;StatCard</span>
+                <span class="property">title</span>=<span class="string">"Active Staff"</span>
+                <span class="property">value</span>={<span class="variable">stats</span>.<span class="property">activeStaff</span>}
+                <span class="property">icon</span>=<span class="string">"👷"</span>
+                <span class="property">color</span>=<span class="string">"#ab47bc"</span>
+            /<span class="tag">&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+    );
+};
+
+<span class="keyword">const</span> <span class="function">StatCard</span> = ({ <span class="variable">title</span>, <span class="variable">value</span>, <span class="variable">icon</span>, <span class="variable">color</span> }) => (
+    <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"stat-card"</span> <span class="property">style</span>={{ <span class="property">background</span>: <span class="string">`linear-gradient(135deg, ${color} 0%, ${color}dd 100%)`</span> }}<span class="tag">&gt;</span>
+        <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"stat-icon"</span><span class="tag">&gt;</span>{<span class="variable">icon</span>}<span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"stat-title"</span><span class="tag">&gt;</span>{<span class="variable">title</span>}<span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;div</span> <span class="property">className</span>=<span class="string">"stat-value"</span><span class="tag">&gt;</span>{<span class="variable">value</span>}<span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+);
+
+<span class="keyword">export default</span> <span class="variable">DashboardStats</span>;</div>
+            </div>
+
+            <div class="success-box">
+                <strong>✓ Integration Tips:</strong><br>
+                • Use Chart.js, Recharts, or ECharts for visualization<br>
+                • Implement real-time updates with polling (every 5-15 minutes) or WebSocket<br>
+                • Cache dashboard data for 5-15 minutes to reduce database load<br>
+                • Add loading states and error handling for better UX<br>
+                • Use responsive design for mobile dashboard views<br>
+                • Consider implementing lazy loading for chart components<br>
+                • Add date range filters for historical data analysis
+            </div>
+        </div>
+
+        <!-- PERFORMANCE NOTES -->
+        <div class="section-title">📌 PERFORMANCE & OPTIMIZATION</div>
+        <div class="card">
+            <h2>Performance Considerations</h2>
+
+            <h3 style="color: #667eea; margin: 20px 0 10px 0;">Current Implementation</h3>
+            <table>
+                <tr><th>Aspect</th><th>Implementation</th><th>Performance Impact</th></tr>
+                <tr><td>Query Execution</td><td>Promise.all for parallel queries</td><td>✅ Optimal - 6 queries run simultaneously</td></tr>
+                <tr><td>Data Freshness</td><td>Real-time (no caching)</td><td>⚠️ May cause load with high traffic</td></tr>
+                <tr><td>Aggregation</td><td>Database-level (COUNT, SUM)</td><td>✅ Efficient for moderate data sizes</td></tr>
+                <tr><td>Chart Data</td><td>All 12 months returned</td><td>✅ Consistent response format</td></tr>
+                <tr><td>Authentication</td><td>JWT verification on each request</td><td>✅ Standard security practice</td></tr>
+            </table>
+
+            <h3 style="color: #667eea; margin: 30px 0 10px 0;">Recommended Optimizations</h3>
+            <div class="info-box">
+                <strong>🚀 Performance Improvements:</strong><br><br>
+                <strong>1. Implement Caching:</strong><br>
+                • Cache dashboard stats for 5-15 minutes using Redis<br>
+                • Reduces database load significantly<br>
+                • Still provides near real-time data<br><br>
+
+                <strong>2. Database Indexing:</strong><br>
+                • Add indexes on: orders(status), orders(payment_status), customers(is_active)<br>
+                • Add composite index on orders(created_at) for chart queries<br>
+                • Improves query performance by 10-100x<br><br>
+
+                <strong>3. Materialized Views:</strong><br>
+                • Create materialized views for complex aggregations<br>
+                • Refresh on schedule (e.g., every 15 minutes)<br>
+                • Best for historical data analysis<br><br>
+
+                <strong>4. Pagination for Large Datasets:</strong><br>
+                • If orders table grows large, consider pagination<br>
+                • Use LIMIT and OFFSET for large result sets<br>
+                • Implement cursor-based pagination for better performance<br><br>
+
+                <strong>5. Background Jobs:</strong><br>
+                • Calculate stats in background jobs<br>
+                • Store pre-calculated results<br>
+                • Serve from cache for instant responses
+            </div>
+
+            <h3 style="color: #667eea; margin: 30px 0 10px 0;">Example Caching Implementation (Node.js)</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="file-path">📄 Node.js (Redis Caching)</span>
+                </div>
+                <div class="code-block-content"><span class="comment">// Example: Redis caching with Node.js</span>
+<span class="keyword">const</span> <span class="variable">Redis</span> = <span class="function">require</span>(<span class="string">'redis'</span>);
+<span class="keyword">const</span> <span class="variable">redis</span> = <span class="variable">Redis</span>.<span class="function">createClient</span>();
+
+<span class="keyword">const</span> <span class="function">getCachedDashboardStats</span> = <span class="keyword">async</span> () => {
+    <span class="keyword">const</span> <span class="variable">cacheKey</span> = <span class="string">'dashboard:stats'</span>;
+
+    <span class="comment">// Try to get from cache first</span>
+    <span class="keyword">const</span> <span class="variable">cached</span> = <span class="keyword">await</span> <span class="variable">redis</span>.<span class="function">get</span>(<span class="variable">cacheKey</span>);
+    <span class="keyword">if</span> (<span class="variable">cached</span>) {
+        <span class="keyword">return</span> <span class="variable">JSON</span>.<span class="function">parse</span>(<span class="variable">cached</span>);
+    }
+
+    <span class="comment">// Cache miss - fetch from database</span>
+    <span class="keyword">const</span> <span class="variable">stats</span> = <span class="keyword">await</span> <span class="function">fetchDashboardStatsFromDB</span>();
+
+    <span class="comment">// Store in cache for 10 minutes (600 seconds)</span>
+    <span class="keyword">await</span> <span class="variable">redis</span>.<span class="function">setex</span>(<span class="variable">cacheKey</span>, <span class="number">600</span>, <span class="variable">JSON</span>.<span class="function">stringify</span>(<span class="variable">stats</span>));
+
+    <span class="keyword">return</span> <span class="variable">stats</span>;
+};</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.expand-icon');
+
+            content.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>

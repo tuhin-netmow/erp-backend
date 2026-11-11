@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+head>
+  <meta charset="UTF-8" />
+  <title>Products & Item Master</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: #1f2937;
+    }
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 18px;
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 {
+      font-size: 15px;
+      margin: 0;
+    }
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+    .tree-container {
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 8px;
+      font-size: 13px;
+    }
+    .tree-item { margin-left: 12px; padding: 2px 0; }
+    .file-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 13px;
+    }
+    .file-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .file-item:last-child { border-bottom: none; }
+    .file-name { font-weight: 500; }
+    .file-meta { font-size: 11px; color: #6b7280; }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#" class="active">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Products & Item Master</h1>
+    <div class="subtitle">
+      Maintain product catalog, categories, units, brands, variants, barcodes, pricing, opening stock and BOM.
+    </div>
+
+    <!-- PRODUCT LIST -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Product List</h3>
+        <button class="btn btn-primary btn-sm">+ New Product</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Search</label>
+          <input type="text" placeholder="Search by name, SKU, barcode" />
+        </div>
+        <div class="form-group">
+          <label>Category</label>
+          <select>
+            <option value="">All Categories</option>
+            <option>PPE / Safety</option>
+            <option>Tools</option>
+            <option>Chemicals</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Brand</label>
+          <select>
+            <option value="">All Brands</option>
+            <option>3M</option>
+            <option>Honeywell</option>
+            <option>Generic</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select>
+            <option value="">All</option>
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:90px;">SKU</th>
+          <th>Product Name</th>
+          <th style="width:130px;">Category</th>
+          <th style="width:100px;">Brand</th>
+          <th style="width:80px;">Base UOM</th>
+          <th style="width:90px;">Cost</th>
+          <th style="width:90px;">Selling</th>
+          <th style="width:90px;">Stock</th>
+          <th style="width:80px;">Status</th>
+          <th style="width:140px;">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>PPE-GLV-001</td>
+          <td>Nitrile Safety Gloves</td>
+          <td>PPE / Gloves</td>
+          <td>3M</td>
+          <td>PAIR</td>
+          <td>$3.20</td>
+          <td>$5.50</td>
+          <td>480</td>
+          <td><span class="tag-success tag">Active</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline">Edit</button>
+            <button class="btn btn-sm btn-outline">Stock</button>
+          </td>
+        </tr>
+        <tr>
+          <td>CHEM-CLN-010</td>
+          <td>Industrial Cleaner 5L</td>
+          <td>Chemicals / Cleaners</td>
+          <td>Generic</td>
+          <td>CAN</td>
+          <td>$12.80</td>
+          <td>$18.50</td>
+          <td>120</td>
+          <td><span class="tag-success tag">Active</span></td>
+          <td>
+            <button class="btn btn-sm btn-outline">Edit</button>
+            <button class="btn btn-sm btn-outline">Stock</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="hint">
+        This table maps to <code>products</code> joined with <code>product_categories</code>, <code>brands</code>, and price from <code>product_prices</code>.
+      </div>
+    </div>
+
+    <!-- MAIN LAYOUT: PRODUCT FORM + MASTER DATA (CATEGORIES / UOM / BRANDS / ATTRIBUTES) -->
+    <div class="two-column">
+      <!-- LEFT: ADD / EDIT PRODUCT -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Add / Edit Product</h3>
+          <div class="pill-filter-group">
+            <div class="pill-filter active">General</div>
+            <div class="pill-filter">Pricing</div>
+            <div class="pill-filter">Stock</div>
+            <div class="pill-filter">BOM</div>
+          </div>
+        </div>
+
+        <!-- General -->
+        <div class="form-row">
+          <div class="form-group">
+            <label>SKU / Product Code</label>
+            <input type="text" placeholder="e.g. PPE-GLV-001" />
+          </div>
+          <div class="form-group">
+            <label>Product Name</label>
+            <input type="text" placeholder="Product name" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select>
+              <option>PPE / Gloves</option>
+              <option>PPE / Masks</option>
+              <option>Chemicals / Cleaners</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Brand</label>
+            <select>
+              <option>3M</option>
+              <option>Honeywell</option>
+              <option>Generic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Base Unit of Measure</label>
+            <select>
+              <option>PAIR</option>
+              <option>BOX</option>
+              <option>CARTON</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Barcode (Primary)</label>
+            <input type="text" placeholder="EAN / UPC / internal barcode" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Attributes / Variants</label>
+            <input type="text" placeholder="e.g. Size: M, L, XL; Color: Blue" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="Internal / sales description of the item"></textarea>
+          </div>
+        </div>
+
+        <!-- Pricing -->
+        <h4 style="font-size:14px;margin-top:10px;margin-bottom:6px;">Price Management</h4>
+        <div class="three-column">
+          <div class="form-group">
+            <label>Cost Price</label>
+            <input type="number" step="0.0001" placeholder="e.g. 3.2000" />
+          </div>
+          <div class="form-group">
+            <label>Selling Price</label>
+            <input type="number" step="0.0001" placeholder="e.g. 5.5000" />
+          </div>
+          <div class="form-group">
+            <label>Wholesale Price</label>
+            <input type="number" step="0.0001" placeholder="e.g. 4.8000" />
+          </div>
+        </div>
+
+        <!-- Stock -->
+        <h4 style="font-size:14px;margin-top:10px;margin-bottom:6px;">Opening Stock & Reorder</h4>
+        <div class="three-column">
+          <div class="form-group">
+            <label>Opening Qty</label>
+            <input type="number" step="0.0000" placeholder="e.g. 100" />
+          </div>
+          <div class="form-group">
+            <label>Opening Cost (per unit)</label>
+            <input type="number" step="0.0001" placeholder="e.g. 3.2000" />
+          </div>
+          <div class="form-group">
+            <label>As of Date</label>
+            <input type="text" placeholder="YYYY-MM-DD" />
+          </div>
+        </div>
+
+        <div class="three-column">
+          <div class="form-group">
+            <label>Reorder Level</label>
+            <input type="number" placeholder="e.g. 100" />
+          </div>
+          <div class="form-group">
+            <label>Safety Stock</label>
+            <input type="number" placeholder="e.g. 50" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- BOM (optional) -->
+        <h4 style="font-size:14px;margin-top:10px;margin-bottom:6px;">Bill of Materials (Optional)</h4>
+        <p style="font-size:12px;color:#4b5563;margin-bottom:6px;">
+          If this product is manufactured from components, define its simple BOM here.
+        </p>
+        <table>
+          <thead>
+          <tr>
+            <th>Component Product</th>
+            <th style="width:80px;">Qty</th>
+            <th style="width:80px;">UOM</th>
+            <th style="width:90px;">Scrap %</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Raw Material A</td>
+            <td>2.00</td>
+            <td>KG</td>
+            <td>0%</td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          </tbody>
+        </table>
+        <button class="btn btn-sm btn-outline" style="margin-top:6px;">+ Add Component</button>
+
+        <div class="hint">
+          Product general info maps to <code>products</code>, prices to <code>product_prices</code>,  
+          opening stock to <code>product_opening_balances</code>, and BOM to <code>product_boms</code> / <code>product_bom_items</code>.
+        </div>
+
+        <div style="margin-top:10px;">
+          <button class="btn btn-primary btn-sm">Save Product</button>
+          <button class="btn btn-outline btn-sm">Reset</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: CATEGORIES, UNITS, BRANDS, ATTRIBUTES -->
+      <div>
+        <!-- CATEGORIES (TREE) -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Categories (Tree)</h3>
+            <button class="btn btn-outline btn-sm">+ New Category</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Category Name</label>
+              <input type="text" placeholder="e.g. PPE / Gloves" />
+            </div>
+            <div class="form-group">
+              <label>Parent Category</label>
+              <select>
+                <option>(None – Top Level)</option>
+                <option>PPE</option>
+                <option>Chemicals</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Category</button>
+
+          <div class="tree-container" style="margin-top:10px;">
+            <div><strong>PPE</strong></div>
+            <div class="tree-item">Gloves</div>
+            <div class="tree-item">Masks</div>
+            <div class="tree-item">Safety Shoes</div>
+            <div><strong>Chemicals</strong></div>
+            <div class="tree-item">Cleaners</div>
+            <div class="tree-item">Solvents</div>
+          </div>
+
+          <div class="hint">
+            Maps to <code>product_categories</code> with <code>parent_id</code> for tree hierarchy.
+          </div>
+        </div>
+
+        <!-- UNITS OF MEASURE -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Units of Measure (Base + Conversions)</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Unit Code</label>
+              <input type="text" placeholder="e.g. PAIR, BOX, CTN" />
+            </div>
+            <div class="form-group">
+              <label>Unit Name</label>
+              <input type="text" placeholder="e.g. Pair, Box, Carton" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Base Unit</label>
+              <select>
+                <option>PAIR</option>
+                <option>BOX</option>
+                <option>CARTON</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Conversion Factor</label>
+              <input type="number" step="0.0000" placeholder="e.g. 1 BOX = 12 PAIR → 12" />
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Unit</button>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Base Unit</th>
+              <th>Factor</th>
+              <th style="width:80px;">Base?</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>PAIR</td>
+              <td>Pair</td>
+              <td>PAIR</td>
+              <td>1.0000</td>
+              <td><span class="tag-success tag">Yes</span></td>
+            </tr>
+            <tr>
+              <td>BOX</td>
+              <td>Box</td>
+              <td>PAIR</td>
+              <td>12.0000</td>
+              <td><span class="tag tag">No</span></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="hint">
+            Maps to <code>units_of_measure</code> with <code>base_unit_id</code> and <code>conversion_factor</code>.
+          </div>
+        </div>
+
+        <!-- BRANDS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Brands</h3>
+            <button class="btn btn-outline btn-sm">+ New Brand</button>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Brand Name</label>
+              <input type="text" placeholder="e.g. 3M, Honeywell" />
+            </div>
+            <div class="form-group">
+              <label>Description</label>
+              <input type="text" placeholder="Optional description" />
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Brand</button>
+
+          <table>
+            <thead>
+            <tr>
+              <th style="width:60px;">ID</th>
+              <th>Brand Name</th>
+              <th>Description</th>
+              <th style="width:80px;">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>1</td>
+              <td>3M</td>
+              <td>Safety & industrial products</td>
+              <td><span class="tag-success tag">Active</span></td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Honeywell</td>
+              <td>Industrial safety gear</td>
+              <td><span class="tag-success tag">Active</span></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="hint">
+            Maps to <code>brands</code>.
+          </div>
+        </div>
+
+        <!-- ATTRIBUTES & VARIANTS -->
+        <div class="card">
+          <div class="card-header">
+            <h3>Attributes / Variants</h3>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Attribute Name</label>
+              <input type="text" placeholder="e.g. Size, Color" />
+            </div>
+            <div class="form-group">
+              <label>Is Variant Attribute?</label>
+              <select>
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-sm btn-outline">Save Attribute</button>
+
+          <table>
+            <thead>
+            <tr>
+              <th>Attribute</th>
+              <th>Values</th>
+              <th style="width:80px;">Variant?</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Size</td>
+              <td>S, M, L, XL</td>
+              <td><span class="tag-success tag">Yes</span></td>
+            </tr>
+            <tr>
+              <td>Color</td>
+              <td>Blue, Black, White</td>
+              <td><span class="tag-success tag">Yes</span></td>
+            </tr>
+            </tbody>
+          </table>
+
+          <div class="hint">
+            Attribute definitions map to <code>attributes</code> and <code>attribute_values</code>.  
+            Per-product attribute selections map to <code>product_attribute_values</code>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPORT / EXPORT & ATTACHMENTS -->
+    <div class="two-column">
+      <!-- IMPORT / EXPORT PRODUCTS -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Import / Export Products</h3>
+        </div>
+
+        <p style="font-size:13px;margin-bottom:8px;">
+          Bulk import product master from CSV/Excel or export the current catalog.
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Import File (CSV / XLSX)</label>
+            <input type="text" placeholder="Select file (UI placeholder)" />
+          </div>
+        </div>
+        <button class="btn btn-sm btn-primary">Start Import</button>
+        <button class="btn btn-sm btn-outline">Export Products</button>
+
+        <div class="hint">
+          Import jobs can be logged in <code>product_import_logs</code> (file name, rows, success/fail count, status).
+        </div>
+
+        <table style="margin-top:10px;">
+          <thead>
+          <tr>
+            <th style="width:150px;">Imported At</th>
+            <th>File Name</th>
+            <th style="width:90px;">Rows</th>
+            <th style="width:90px;">Success</th>
+            <th style="width:90px;">Failed</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-04 09:30</td>
+            <td>products_master_jan.csv</td>
+            <td>320</td>
+            <td>318</td>
+            <td>2</td>
+            <td><span class="tag-success tag">Completed</span></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- (OPTIONAL) PRODUCT ATTACHMENTS – if you want spec sheets, MSDS, etc. -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Product Attachments (Datasheets / MSDS)</h3>
+          <button class="btn btn-outline btn-sm">Upload File</button>
+        </div>
+
+        <ul class="file-list">
+          <li class="file-item">
+            <div>
+              <div class="file-name">Nitrile_Gloves_TDS.pdf</div>
+              <div class="file-meta">PDF · 210 KB · Uploaded by Admin · 2025-01-05</div>
+            </div>
+            <button class="btn btn-sm btn-outline">View</button>
+          </li>
+          <li class="file-item">
+            <div>
+              <div class="file-name">Industrial_Cleaner_MSDS.pdf</div>
+              <div class="file-meta">PDF · 540 KB · Uploaded by HSE · 2025-01-07</div>
+            </div>
+            <button class="btn btn-sm btn-outline">Download</button>
+          </li>
+        </ul>
+
+        <div class="hint">
+          Can map to a generic <code>product_attachments</code> table if you want (similar to customers/suppliers).
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

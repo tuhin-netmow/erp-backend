@@ -1,0 +1,1530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Check-in Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #19547b; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #19547b; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #19547b; border-bottom: 3px solid #ffd89b; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #ffd89b; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 216, 155, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #ffd89b; }
+        .endpoint-detail h3 { color: #19547b; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #ffd89b; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+
+        /* Expandable section styles */
+        .expandable-container { border: 1px solid #e0e0e0; border-radius: 8px; margin: 15px 0; overflow: hidden; }
+        .expandable-header { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 15px 20px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: background 0.2s; }
+        .expandable-header:hover { background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%); }
+        .expandable-header h4 { margin: 0; color: #1565c0; font-size: 1em; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .expandable-content.expanded { max-height: 2000px; }
+        .expandable-content-inner { padding: 20px; }
+        .expand-icon { transition: transform 0.3s; font-size: 1.2em; color: #1565c0; }
+        .expand-icon.rotated { transform: rotate(180deg); }
+
+        /* Mermaid diagram styles */
+        .mermaid { background: white; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>📍 Staff Check-in Module</h1>
+            <p class="subtitle">Customer visit tracking with GPS location, distance measurement, and attendance management</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staff-attendance</div><div class="route-desc">List check-ins</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/staff-attendance</div><div class="route-desc">Create check-in</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staff-attendance/customer-list/:date</div><div class="route-desc">Customer list</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/staff-attendance/:id</div><div class="route-desc">Get check-in</div></div>
+                <div class="route-item"><span class="route-method method-put">PUT</span><div class="route-path">/api/staff-attendance/:id</div><div class="route-desc">Update check-in</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/staff-attendance/:id</div><div class="route-desc">Delete check-in</div></div>
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA</div>
+        <div class="card">
+            <h2>Database Tables</h2>
+
+            <div class="mermaid">
+erDiagram
+    STAFF_CHECKINS ||--o| USERS : "checked_by"
+    STAFF_CHECKINS ||--o| CUSTOMERS : "visited"
+    CUSTOMERS ||--o| SALES_ROUTES : "assigned_to"
+
+    STAFF_CHECKINS {
+        int id PK
+        int customer_id FK
+        int staff_id FK
+        datetime check_in_time
+        decimal latitude
+        decimal longitude
+        decimal distance_meters
+        text note
+        datetime created_at
+        datetime updated_at
+    }
+
+    USERS {
+        int id PK
+        string name
+        string first_name
+        string last_name
+        string email
+        string phone
+        string position
+        string thumb_url
+    }
+
+    CUSTOMERS {
+        int id PK
+        string name
+        string company
+        string email
+        string phone
+        string address
+        string city
+        int sales_route_id FK
+    }
+
+    SALES_ROUTES {
+        int id PK
+        string route_name
+        text description
+        string start_location
+        string end_location
+    }
+            </div>
+
+            <h3 style="color: #19547b; margin: 20px 0 10px 0;">Check-in Module Tables</h3>
+            <table>
+                <tr><th>Table Name</th><th>Used For</th><th>Key Fields</th></tr>
+                <tr><td>staff_checkins</td><td>Check-in records with GPS data</td><td>customer_id, staff_id, check_in_time, latitude, longitude, distance_meters, note</td></tr>
+                <tr><td>users</td><td>Staff member information</td><td>id, name, first_name, last_name, email, phone, position, thumb_url</td></tr>
+                <tr><td>customers</td><td>Customer being visited</td><td>id, name, company, email, phone, address, city, sales_route_id</td></tr>
+                <tr><td>sales_routes</td><td>Sales route assignment</td><td>id, route_name, description, start_location, end_location</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Database Notes:</strong><br>
+                • GPS coordinates stored as DECIMAL for precision (latitude: 10,8 / longitude: 11,8)<br>
+                • Distance measured in meters from customer location<br>
+                • Supports multiple check-ins per customer per day<br>
+                • Includes associations to staff and customer details
+            </div>
+        </div>
+
+        <!-- LIST CHECK-INS (GET) -->
+        <div class="section-title">📌 LIST STAFF CHECK-INS (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/staff-attendance</h3>
+                <p>Retrieves all staff check-ins with filters for staff, customer, date, and search functionality.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[CheckInController.getCheckIns]
+    C --> D[Parse Query Parameters]
+    D --> E[page, limit, staff_id, customer_id, date, search]
+    E --> F[CheckInService.getAllCheckIns]
+    F --> G[CheckInRepository.findAll]
+    G --> H[Build WHERE Clause]
+    H --> I[Apply Filters]
+    I --> J1[staff_id filter]
+    I --> J2[customer_id filter]
+    I --> J3[date range filter]
+    I --> J4[search across staff/customer names]
+    J1 --> K[StaffCheckIn.findAndCountAll]
+    J2 --> K
+    J3 --> K
+    J4 --> K
+    K --> L[Include Staff & Customer]
+    L --> M[Order by check_in_time DESC]
+    M --> N[Apply Pagination]
+    N --> O[Return Results]
+    O --> P[successWithPagination Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>page</td><td>number</td><td>No</td><td>Integer >= 1, default: 1</td></tr>
+                    <tr><td>limit</td><td>number</td><td>No</td><td>Integer >= 1, default: 10</td></tr>
+                    <tr><td>staff_id</td><td>number</td><td>No</td><td>Valid staff ID from users table</td></tr>
+                    <tr><td>customer_id</td><td>number</td><td>No</td><td>Valid customer ID from customers table</td></tr>
+                    <tr><td>date</td><td>string</td><td>No</td><td>YYYY-MM-DD format</td></tr>
+                    <tr><td>search</td><td>string</td><td>No</td><td>Searches staff names and customer/company names</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async getCheckIns(req, res) {
+    try {
+        // Parse pagination parameters
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Build filter object from query parameters
+        const filters = {
+            staff_id: req.query.staff_id,
+            customer_id: req.query.customer_id,
+            date: req.query.date,
+            search: req.query.search
+        };
+
+        // Call service layer with filters and pagination
+        const result = await CheckInService.getAllCheckIns(filters, page, limit);
+
+        // Return paginated response
+        return successWithPagination(res, 'Check-ins retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async getAllCheckIns(filters = {}, page = 1, limit = 10) {
+    // Calculate offset for pagination
+    const offset = (page - 1) * limit;
+
+    // Call repository with filters and pagination
+    const result = await CheckInRepository.findAll(filters, limit, offset);
+
+    // Return data and total count
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async findAll(filters = {}, limit = 10, offset = 0) {
+    // Build WHERE clause based on filters
+    const where = {};
+
+    // Filter by staff_id
+    if (filters.staff_id) where.staff_id = filters.staff_id;
+
+    // Filter by customer_id
+    if (filters.customer_id) where.customer_id = filters.customer_id;
+
+    // Filter by date (range query for full day)
+    if (filters.date) {
+        const startOfDay = new Date(filters.date);
+        startOfDay.setHours(0, 0, 0, 0);
+        const endOfDay = new Date(filters.date);
+        endOfDay.setHours(23, 59, 59, 999);
+        where.check_in_time = { [Op.between]: [startOfDay, endOfDay] };
+    }
+
+    // Search across staff and customer names
+    if (filters.search) {
+        where[Op.or] = [
+            { '$staff.first_name$': { [Op.like]: `%${filters.search}%` } },
+            { '$staff.last_name$': { [Op.like]: `%${filters.search}%` } },
+            { '$staff.name$': { [Op.like]: `%${filters.search}%` } },
+            { '$customer.name$': { [Op.like]: `%${filters.search}%` } },
+            { '$customer.company$': { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    // Execute query with includes and pagination
+    return await StaffCheckIn.findAndCountAll({
+        where,
+        include: [
+            {
+                model: Staff,
+                as: 'staff',
+                attributes: ['id', 'name', 'first_name', 'last_name', 'email', 'phone', 'position', 'thumb_url']
+            },
+            {
+                model: Customer,
+                as: 'customer',
+                attributes: ['id', 'name', 'company', 'email', 'phone', 'address', 'city']
+            }
+        ],
+        order: [['check_in_time', 'DESC']],
+        limit,
+        offset
+    });
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-ins retrieved successfully",
+    "pagination": {
+        "total": 25,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 3
+    },
+    "data": [
+        {
+            "id": 1,
+            "customer_id": 1,
+            "staff_id": 123,
+            "check_in_time": "2026-01-08T10:25:30.123Z",
+            "latitude": 3.07381,
+            "longitude": 101.51829,
+            "distance_meters": 42,
+            "note": "Checked in from mobile app",
+            "created_at": "2026-01-08T10:25:30.123Z",
+            "staff": {
+                "id": 123,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "phone": "1234567890",
+                "position": "Sales Representative",
+                "thumb_url": "http://example.com/profile.jpg"
+            },
+            "customer": {
+                "id": 1,
+                "name": "Jane Smith",
+                "company": "Acme Corp",
+                "email": "jane@acme.com",
+                "phone": "0987654321",
+                "address": "123 Business Rd",
+                "city": "Kuala Lumpur"
+            }
+        }
+    ]
+}</json></div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "No token provided"
+}</json></div>
+
+                <h4>❌ Error Response (500 - Server Error)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Database connection error"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- CREATE CHECK-IN (POST) -->
+        <div class="section-title">📌 CREATE STAFF CHECK-IN (POST)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>POST /api/staff-attendance</h3>
+                <p>Creates a new staff check-in record when a staff member visits a customer location.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[validate createCheckIn Middleware]
+    C --> D[CheckInController.createCheckIn]
+    D --> E[Extract Request Body]
+    E --> F{Validation Passed?}
+    F -->|No| G[Return 400 Error]
+    F -->|Yes| H[CheckInService.createCheckIn]
+    H --> I[CheckInRepository.create]
+    I --> J[StaffCheckIn.create]
+    J --> K[Insert into staff_checkins]
+    K --> L[Return Created Record]
+    L --> M[success Response 201]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td><span style="color:#c62828;">Yes</span></td><td>Request body format</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>customer_id</td><td>number</td><td><span style="color:#c62828;">Yes</span></td><td>Integer > 0, must exist in customers table</td></tr>
+                    <tr><td>staff_id</td><td>number</td><td><span style="color:#c62828;">Yes</span></td><td>Integer > 0, must exist in users table</td></tr>
+                    <tr><td>check_in_time</td><td>string</td><td>No</td><td>ISO 8601 datetime format</td></tr>
+                    <tr><td>latitude</td><td>number</td><td>No</td><td>Decimal between -90 and 90</td></tr>
+                    <tr><td>longitude</td><td>number</td><td>No</td><td>Decimal between -180 and 180</td></tr>
+                    <tr><td>distance_meters</td><td>number</td><td>No</td><td>Decimal >= 0</td></tr>
+                    <tr><td>note</td><td>string</td><td>No</td><td>Text field for check-in notes</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async createCheckIn(req, res) {
+    try {
+        // Call service layer to create check-in
+        const checkIn = await CheckInService.createCheckIn(req.body);
+
+        // Return success response with created record
+        return success(res, 'Check-in created successfully', checkIn, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async createCheckIn(data) {
+    // Direct repository call to create record
+    // Validation handled by middleware before reaching controller
+    return await CheckInRepository.create(data);
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async create(data) {
+    // Sequelize create method
+    return await StaffCheckIn.create(data);
+}
+
+-- Equivalent SQL:
+INSERT INTO staff_checkins (
+    customer_id,
+    staff_id,
+    check_in_time,
+    latitude,
+    longitude,
+    distance_meters,
+    note,
+    created_at,
+    updated_at
+) VALUES (
+    1,
+    123,
+    '2026-01-08T10:25:30.123Z',
+    3.07381,
+    101.51829,
+    42,
+    'Checked in from mobile app',
+    NOW(),
+    NOW()
+);</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">POST /api/staff-attendance
+
+{
+    "customer_id": 1,
+    "staff_id": 123,
+    "check_in_time": "2026-01-08T10:25:30.123Z",
+    "latitude": 3.07381,
+    "longitude": 101.51829,
+    "distance_meters": 42,
+    "note": "Checked in from mobile app"
+}</div>
+
+                <h4>✅ Success Response (201)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in created successfully",
+    "data": {
+        "id": 1,
+        "customer_id": 1,
+        "staff_id": 123,
+        "check_in_time": "2026-01-08T10:25:30.123Z",
+        "latitude": 3.07381,
+        "longitude": 101.51829,
+        "distance_meters": 42,
+        "note": "Checked in from mobile app",
+        "created_at": "2026-01-08T10:25:30.123Z",
+        "updated_at": "2026-01-08T10:25:30.123Z"
+    }
+}</json></div>
+
+                <h4>❌ Error Response (400 - Validation Error)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "field": "customer_id",
+            "message": "Customer ID is required"
+        }
+    ]
+}</json></div>
+
+                <h4>❌ Error Response (401 - Unauthorized)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "No token provided"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- CUSTOMER LIST WITH CHECK-INS (GET) -->
+        <div class="section-title">📌 CUSTOMER LIST WITH CHECK-INS (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/staff-attendance/customer-list/:date</h3>
+                <p>Retrieves all customers with staff check-ins for a specific date, including sales route information.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[CheckInController.getCustomersWithCheckIns]
+    C --> D[Extract date from params]
+    D --> E{Date Valid?}
+    E -->|No| F[Return 400 Error]
+    E -->|Yes| G[Parse page & limit]
+    G --> H[CheckInService.getCustomersWithCheckIns]
+    H --> I[CheckInRepository.findCustomersWithCheckIns]
+    I --> J[Build Date Range]
+    J --> K[Customer.findAndCountAll]
+    K --> L[Include checkins for date]
+    L --> M[Include staff details]
+    M --> N[Include salesRoute]
+    N --> O[Order by customer name]
+    O --> P[Apply Pagination]
+    P --> Q[successWithPagination Response]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td>No</td><td>Response content type</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>date (path)</td><td>string</td><td><span style="color:#c62828;">Yes</span></td><td>YYYY-MM-DD format, valid date</td></tr>
+                    <tr><td>page</td><td>number</td><td>No</td><td>Integer >= 1, default: 1</td></tr>
+                    <tr><td>limit</td><td>number</td><td>No</td><td>Integer >= 1, default: 10</td></tr>
+                </table>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async getCustomersWithCheckIns(req, res) {
+    try {
+        // Extract date from path parameters
+        const date = req.params.date;
+        if (!date) {
+            return error(res, 'Date parameter is required', 400);
+        }
+
+        // Parse pagination parameters
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+
+        // Call service layer
+        const result = await CheckInService.getCustomersWithCheckIns(date, page, limit);
+
+        // Return paginated response
+        return successWithPagination(res, 'Customer list with check-ins retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async getCustomersWithCheckIns(date, page = 1, limit = 10) {
+    // Calculate offset for pagination
+    const offset = (page - 1) * limit;
+
+    // Call repository with date filter and pagination
+    const result = await CheckInRepository.findCustomersWithCheckIns(date, limit, offset);
+
+    // Return data and total count
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async findCustomersWithCheckIns(date, limit = 10, offset = 0) {
+    // Parse date and build range
+    const startOfDay = new Date(date);
+    if (isNaN(startOfDay)) {
+        throw new Error('Invalid date format');
+    }
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date);
+    endOfDay.setHours(23, 59, 59, 999);
+
+    // Query customers with check-ins for the date
+    return await Customer.findAndCountAll({
+        distinct: true, // Important for correct count with includes
+        include: [
+            {
+                model: StaffCheckIn,
+                as: 'checkins',
+                required: false, // Include customers even without check-ins
+                where: {
+                    check_in_time: {
+                        [Op.between]: [startOfDay, endOfDay]
+                    }
+                },
+                include: [{
+                    model: Staff,
+                    as: 'staff',
+                    attributes: ['id', 'first_name', 'last_name', 'email', 'position', 'thumb_url']
+                }]
+            },
+            {
+                model: SalesRoute,
+                as: 'salesRoute',
+                attributes: ['id', 'route_name', 'description', 'start_location', 'end_location']
+            }
+        ],
+        order: [['name', 'ASC']],
+        limit,
+        offset
+    });
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Customer list with check-ins retrieved successfully",
+    "pagination": {
+        "total": 50,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 5
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Jane Smith",
+            "company": "Acme Corp",
+            "email": "jane@acme.com",
+            "phone": "0987654321",
+            "address": "123 Business Rd",
+            "city": "Kuala Lumpur",
+            "salesRoute": {
+                "id": 5,
+                "route_name": "Downtown Route",
+                "description": "Main commercial district"
+            },
+            "checkins": [
+                {
+                    "id": 10,
+                    "check_in_time": "2026-01-08T10:25:30.123Z",
+                    "latitude": 3.07381,
+                    "longitude": 101.51829,
+                    "distance_meters": 42,
+                    "note": "Follow-up visit",
+                    "staff": {
+                        "id": 123,
+                        "first_name": "John",
+                        "last_name": "Doe",
+                        "position": "Sales Representative"
+                    }
+                }
+            ]
+        }
+    ]
+}</json></div>
+
+                <h4>❌ Error Response (400 - Invalid Date)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Date parameter is required"
+}</json></div>
+
+                <h4>❌ Error Response (500 - Invalid Date Format)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Invalid date format"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- GET CHECK-IN BY ID (GET) -->
+        <div class="section-title">📌 GET CHECK-IN BY ID (GET)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>GET /api/staff-attendance/:id</h3>
+                <p>Retrieves detailed information about a specific check-in record with staff and customer details.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[CheckInController.getCheckInById]
+    C --> D[Extract id from params]
+    D --> E[CheckInService.getCheckInById]
+    E --> F[CheckInRepository.findById]
+    F --> G[StaffCheckIn.findByPk]
+    G --> H{Record Found?}
+    H -->|No| I[Throw Error]
+    H -->|Yes| J[Include Staff Details]
+    J --> K[Include Customer Details]
+    K --> L[Return Check-in]
+    L --> M[success Response]
+    I --> N[error Response 404]
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async getCheckInById(req, res) {
+    try {
+        const checkIn = await CheckInService.getCheckInById(req.params.id);
+        return success(res, 'Check-in retrieved successfully', checkIn);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async getCheckInById(id) {
+    const checkIn = await CheckInRepository.findById(id);
+    if (!checkIn) {
+        throw new Error('Check-in record not found');
+    }
+    return checkIn;
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async findById(id) {
+    return await StaffCheckIn.findByPk(id, {
+        include: [
+            {
+                model: Staff,
+                as: 'staff',
+                attributes: ['id', 'name', 'first_name', 'last_name', 'email', 'phone', 'position', 'thumb_url']
+            },
+            {
+                model: Customer,
+                as: 'customer',
+                attributes: ['id', 'name', 'company', 'email', 'phone', 'address', 'city']
+            }
+        ]
+    });
+}
+
+-- Equivalent SQL:
+SELECT
+    sc.*,
+    s.id as staff_id, s.first_name, s.last_name, s.email, s.phone, s.position, s.thumb_url,
+    c.id as customer_id, c.name, c.company, c.email, c.phone, c.address, c.city
+FROM staff_checkins sc
+LEFT JOIN users s ON sc.staff_id = s.id
+LEFT JOIN customers c ON sc.customer_id = c.id
+WHERE sc.id = ?;</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in retrieved successfully",
+    "data": {
+        "id": 1,
+        "customer_id": 1,
+        "staff_id": 123,
+        "check_in_time": "2026-01-08T10:25:30.123Z",
+        "latitude": 3.07381,
+        "longitude": 101.51829,
+        "distance_meters": 42,
+        "note": "Checked in from mobile app",
+        "created_at": "2026-01-08T10:25:30.123Z",
+        "staff": {
+            "id": 123,
+            "first_name": "John",
+            "last_name": "Doe",
+            "email": "john@example.com",
+            "phone": "1234567890",
+            "position": "Sales Representative"
+        },
+        "customer": {
+            "id": 1,
+            "name": "Jane Smith",
+            "company": "Acme Corp",
+            "email": "jane@acme.com",
+            "phone": "0987654321",
+            "address": "123 Business Rd",
+            "city": "Kuala Lumpur"
+        }
+    }
+}</json></div>
+
+                <h4>❌ Error Response (404 - Not Found)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Check-in record not found"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- UPDATE CHECK-IN (PUT) -->
+        <div class="section-title">📌 UPDATE CHECK-IN (PUT)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>PUT /api/staff-attendance/:id</h3>
+                <p>Updates an existing check-in record. Only editable fields can be modified.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[validate updateCheckIn Middleware]
+    C --> D[CheckInController.updateCheckIn]
+    D --> E[Extract id and body]
+    E --> F[CheckInService.updateCheckIn]
+    F --> G[CheckInRepository.update]
+    G --> H[StaffCheckIn.findByPk]
+    H --> I{Record Found?}
+    I -->|No| J[Throw Error]
+    I -->|Yes| K[checkIn.update]
+    K --> L[Apply Updates]
+    L --> M[Return Updated Record]
+    M --> N[success Response]
+    J --> O[error Response 400]
+                </div>
+
+                <h4>📝 Request Headers</h4>
+                <table>
+                    <tr><th>Header</th><th>Value</th><th>Required</th><th>Description</th></tr>
+                    <tr><td>Authorization</td><td>Bearer &lt;token&gt;</td><td><span style="color:#c62828;">Yes</span></td><td>JWT authentication token</td></tr>
+                    <tr><td>Content-Type</td><td>application/json</td><td><span style="color:#c62828;">Yes</span></td><td>Request body format</td></tr>
+                </table>
+
+                <h4>🔧 Validation Rules</h4>
+                <table>
+                    <tr><th>Field</th><th>Type</th><th>Required</th><th>Validation</th></tr>
+                    <tr><td>note</td><td>string</td><td>No</td><td>Text field for notes</td></tr>
+                    <tr><td>latitude</td><td>number</td><td>No</td><td>Decimal between -90 and 90</td></tr>
+                    <tr><td>longitude</td><td>number</td><td>No</td><td>Decimal between -180 and 180</td></tr>
+                    <tr><td>distance_meters</td><td>number</td><td>No</td><td>Decimal >= 0</td></tr>
+                </table>
+
+                <div class="info-box">
+                    <strong>ℹ️ Read-only Fields:</strong><br>
+                    The following fields cannot be modified: id, customer_id, staff_id, check_in_time, created_at
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async updateCheckIn(req, res) {
+    try {
+        const checkIn = await CheckInService.updateCheckIn(req.params.id, req.body);
+        return success(res, 'Check-in updated successfully', checkIn);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async updateCheckIn(id, data) {
+    const checkIn = await CheckInRepository.update(id, data);
+    if (!checkIn) {
+        throw new Error('Check-in record not found');
+    }
+    return checkIn;
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async update(id, data) {
+    const checkIn = await StaffCheckIn.findByPk(id);
+    if (!checkIn) return null;
+    return await checkIn.update(data);
+}
+
+-- Equivalent SQL:
+UPDATE staff_checkins
+SET
+    note = 'Updated note',
+    latitude = 3.07382,
+    longitude = 101.51830,
+    distance_meters = 45,
+    updated_at = NOW()
+WHERE id = ?;</div>
+
+                <h4>📦 Sample Payload</h4>
+                <div class="code-block">PUT /api/staff-attendance/1
+
+{
+    "note": "Updated note - completed follow-up visit",
+    "distance_meters": 45
+}</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in updated successfully",
+    "data": {
+        "id": 1,
+        "customer_id": 1,
+        "staff_id": 123,
+        "check_in_time": "2026-01-08T10:25:30.123Z",
+        "latitude": 3.07381,
+        "longitude": 101.51829,
+        "distance_meters": 45,
+        "note": "Updated note - completed follow-up visit",
+        "created_at": "2026-01-08T10:25:30.123Z",
+        "updated_at": "2026-01-08T11:00:00.000Z"
+    }
+}</json></div>
+
+                <h4>❌ Error Response (400 - Not Found)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Check-in record not found"
+}</json></div>
+
+                <h4>❌ Error Response (400 - Validation Error)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "field": "latitude",
+            "message": "Number must be less than or equal to 90"
+        }
+    ]
+}</json></div>
+            </div>
+        </div>
+
+        <!-- DELETE CHECK-IN (DELETE) -->
+        <div class="section-title">📌 DELETE CHECK-IN (DELETE)</div>
+        <div class="card">
+            <div class="endpoint-detail">
+                <h3>DELETE /api/staff-attendance/:id</h3>
+                <p>Permanently removes a check-in record from the database.</p>
+
+                <h4>📊 Request Flow</h4>
+                <div class="mermaid">
+flowchart TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[CheckInController.deleteCheckIn]
+    C --> D[Extract id from params]
+    D --> E[CheckInService.deleteCheckIn]
+    E --> F[CheckInRepository.delete]
+    F --> G[StaffCheckIn.findByPk]
+    G --> H{Record Found?}
+    H -->|No| I[Throw Error]
+    H -->|Yes| J[checkIn.destroy]
+    J --> K[DELETE from staff_checkins]
+    K --> L[Return Deleted Record]
+    L --> M[success Response]
+    I --> N[error Response 404]
+                </div>
+
+                <h4>⚙️ Controller Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.controller.js
+
+async deleteCheckIn(req, res) {
+    try {
+        await CheckInService.deleteCheckIn(req.params.id);
+        return success(res, 'Check-in deleted successfully');
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</div>
+
+                <h4>🔨 Service Logic</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.service.js
+
+async deleteCheckIn(id) {
+    const checkIn = await CheckInRepository.delete(id);
+    if (!checkIn) {
+        throw new Error('Check-in record not found');
+    }
+    return checkIn;
+}</div>
+
+                <h4>💾 Repository Logic (SQL Queries)</h4>
+                <div class="code-block">// File: src/modules/attendance/checkin.repository.js
+
+async delete(id) {
+    const checkIn = await StaffCheckIn.findByPk(id);
+    if (!checkIn) return null;
+    await checkIn.destroy();
+    return checkIn;
+}
+
+-- Equivalent SQL:
+DELETE FROM staff_checkins
+WHERE id = ?;</div>
+
+                <h4>✅ Success Response (200)</h4>
+                <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in deleted successfully"
+}</json></div>
+
+                <h4>❌ Error Response (404 - Not Found)</h4>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Check-in record not found"
+}</json></div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Warning:</strong> Deletion is permanent and cannot be undone. This will affect sales activity reports and customer visit history.
+                </div>
+            </div>
+        </div>
+
+        <!-- EXPANDABLE EXAMPLES -->
+        <div class="section-title">📌 MULTIPLE REQUEST EXAMPLES</div>
+        <div class="card">
+            <h2>Request & Response Examples</h2>
+
+            <!-- List Check-ins - Basic -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📋 List Check-ins - Basic Request</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance?page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-ins retrieved successfully",
+    "pagination": {
+        "total": 25,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 3
+    },
+    "data": [
+        {
+            "id": 1,
+            "customer_id": 1,
+            "staff_id": 123,
+            "check_in_time": "2026-01-08T10:25:30.123Z",
+            "latitude": 3.07381,
+            "longitude": 101.51829,
+            "distance_meters": 42,
+            "note": "Checked in from mobile app",
+            "staff": {
+                "id": 123,
+                "first_name": "John",
+                "last_name": "Doe",
+                "position": "Sales Representative"
+            },
+            "customer": {
+                "id": 1,
+                "name": "Jane Smith",
+                "company": "Acme Corp",
+                "city": "Kuala Lumpur"
+            }
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List Check-ins - Filter by Staff -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>👤 Filter by Staff ID</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance?staff_id=123&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Staff Performance Tracking:</strong><br>
+                            View all check-ins for a specific staff member to track their customer visits and performance.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List Check-ins - Filter by Date -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📅 Filter by Date</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance?date=2026-01-08&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Daily Activity Reports:</strong><br>
+                            View all check-ins for a specific date to generate daily sales activity reports.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- List Check-ins - Search -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>🔍 Search Check-ins</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance?search=John&page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Use Case</h4>
+                        <div class="info-box">
+                            <strong>ℹ️ Quick Search:</strong><br>
+                            Search across staff names (first_name, last_name, name) and customer/company names.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer List with Check-ins -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📋 Customer List with Check-ins for Date</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance/customer-list/2026-01-08?page=1&limit=10 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Customer list with check-ins retrieved successfully",
+    "pagination": {
+        "total": 50,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 5
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Jane Smith",
+            "company": "Acme Corp",
+            "salesRoute": {
+                "id": 5,
+                "route_name": "Downtown Route"
+            },
+            "checkins": [
+                {
+                    "id": 10,
+                    "check_in_time": "2026-01-08T10:25:30.123Z",
+                    "staff": {
+                        "id": 123,
+                        "first_name": "John",
+                        "last_name": "Doe"
+                    }
+                }
+            ]
+        }
+    ]
+}</json></div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Use Case:</strong> Perfect for daily sales route planning, customer visit tracking, and performance analysis.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Check-in - Full GPS Data -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📍 Create Check-in with Full GPS Data</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">POST /api/staff-attendance HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "staff_id": 123,
+    "check_in_time": "2026-01-08T10:25:30.123Z",
+    "latitude": 3.07381,
+    "longitude": 101.51829,
+    "distance_meters": 42,
+    "note": "Checked in from mobile app"
+}</div>
+
+                        <h4 style="color:#19547b;">Response (201 Created)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in created successfully",
+    "data": {
+        "id": 1,
+        "customer_id": 1,
+        "staff_id": 123,
+        "check_in_time": "2026-01-08T10:25:30.123Z",
+        "latitude": 3.07381,
+        "longitude": 101.51829,
+        "distance_meters": 42,
+        "note": "Checked in from mobile app",
+        "created_at": "2026-01-08T10:25:30.123Z",
+        "updated_at": "2026-01-08T10:25:30.123Z"
+    }
+}</json></div>
+
+                        <div class="success-box">
+                            <strong>✓ Mobile App Integration:</strong> This payload structure is ideal for mobile apps capturing GPS location and calculating distance from customer location.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Check-in - Minimal -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>📍 Create Check-in - Minimal Required Fields</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">POST /api/staff-attendance HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "customer_id": 1,
+    "staff_id": 123
+}</div>
+
+                        <h4 style="color:#19547b;">Response (201 Created)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in created successfully",
+    "data": {
+        "id": 2,
+        "customer_id": 1,
+        "staff_id": 123,
+        "check_in_time": "2026-03-11T05:30:00.000Z",
+        "latitude": null,
+        "longitude": null,
+        "distance_meters": null,
+        "note": null,
+        "created_at": "2026-03-11T05:30:00.000Z",
+        "updated_at": "2026-03-11T05:30:00.000Z"
+    }
+}</json></div>
+
+                        <div class="info-box">
+                            <strong>ℹ️ Note:</strong> When GPS data is not provided, latitude, longitude, and distance_meters will be null. check_in_time defaults to current time.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Check-in -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>✏️ Update Check-in Note</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">PUT /api/staff-attendance/1 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "note": "Updated note - completed follow-up visit",
+    "distance_meters": 45
+}</div>
+
+                        <h4 style="color:#19547b;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in updated successfully",
+    "data": {
+        "id": 1,
+        "note": "Updated note - completed follow-up visit",
+        "distance_meters": 45,
+        "updated_at": "2026-03-11T06:00:00.000Z"
+    }
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete Check-in -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>🗑️ Delete Check-in</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">DELETE /api/staff-attendance/1 HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</div>
+
+                        <h4 style="color:#19547b;">Response (200 OK)</h4>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Check-in deleted successfully"
+}</json></div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Warning:</strong> This action cannot be undone. The check-in will be permanently removed from all reports.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error - Missing Token -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Missing Authentication Token</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">GET /api/staff-attendance HTTP/1.1
+Host: localhost:5000</div>
+
+                        <h4 style="color:#19547b;">Response (401 Unauthorized)</h4>
+                        <div class="code-block"><json>{
+    "success": false,
+    "message": "No token provided"
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error - Validation -->
+            <div class="expandable-container">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>❌ Error Response - Validation Error (Create)</h4>
+                    <span class="expand-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <h4 style="color:#19547b;">Request</h4>
+                        <div class="code-block">POST /api/staff-attendance HTTP/1.1
+Host: localhost:5000
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Content-Type: application/json
+
+{
+    "latitude": 200,
+    "longitude": 300
+}</div>
+
+                        <h4 style="color:#19547b;">Response (400 Bad Request)</h4>
+                        <div class="code-block"><json>{
+    "success": false,
+    "message": "Validation error",
+    "errors": [
+        {
+            "field": "customer_id",
+            "message": "Customer ID is required"
+        },
+        {
+            "field": "staff_id",
+            "message": "Staff ID is required"
+        },
+        {
+            "field": "latitude",
+            "message": "Number must be less than or equal to 90"
+        },
+        {
+            "field": "longitude",
+            "message": "Number must be less than or equal to 180"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- USE CASES -->
+        <div class="section-title">📌 COMMON USE CASES</div>
+        <div class="card">
+            <h2>Business Applications</h2>
+
+            <table>
+                <tr><th>Use Case</th><th>Description</th><th>API Usage</th></tr>
+                <tr><td>Sales Visit Tracking</td><td>Track when sales staff visit customers</td><td>POST /api/staff-attendance with GPS coordinates</td></tr>
+                <tr><td>Daily Activity Reports</td><td>View all customer visits for a specific date</td><td>GET /api/staff-attendance/customer-list/:date</td></tr>
+                <tr><td>Staff Performance</td><td>Check how many customers visited by staff</td><td>GET /api/staff-attendance?staff_id={id}</td></tr>
+                <tr><td>Location Verification</td><td>Verify staff was actually at customer location</td><td>Check distance_meters field in response</td></tr>
+                <tr><td>Route Optimization</td><td>Analyze visit patterns by sales route</td><td>GET /api/staff-attendance/customer-list/:date</td></tr>
+                <tr><td>Search Check-ins</td><td>Find check-ins by staff or customer name</td><td>GET /api/staff-attendance?search={query}</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ GPS Accuracy:</strong><br>
+                • Latitude/Longitude precision affects distance calculation<br>
+                • distance_meters helps verify if check-in was legitimate<br>
+                • Typical accuracy: 5-50 meters depending on device<br>
+                • Consider using geofencing for automated check-ins<br>
+                • GPS coordinates stored with high precision (DECIMAL(10,8) for latitude, DECIMAL(11,8) for longitude)
+            </div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #19547b; margin: 20px 0 10px 0;">Creating a Check-in</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates new STAFF_CHECKINS record</li>
+                <li>✓ Validates customer and staff existence</li>
+                <li>✓ Stores GPS coordinates for location tracking</li>
+                <li>✓ Calculates distance from customer location</li>
+                <li>✓ Auto-generates created_at and updated_at timestamps</li>
+                <li>✅ Available for sales activity reports</li>
+                <li>✅ Tracks customer visits for performance metrics</li>
+            </ul>
+
+            <h3 style="color: #19547b; margin: 20px 0 10px 0;">Updating a Check-in</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates specified fields only</li>
+                <li>✓ Allows modification of notes and GPS data</li>
+                <li>✅ Does NOT modify customer or staff references</li>
+                <li>✅ Does NOT change check_in_time</li>
+                <li>✅ Updates updated_at timestamp automatically</li>
+            </ul>
+
+            <h3 style="color: #19547b; margin: 20px 0 10px 0;">Deleting a Check-in</h3>
+            <ul style="line-height: 2;">
+                <li>⚠️ Permanently removes check-in record</li>
+                <li>⚠️ Cannot be undone</li>
+                <li>⚠️ Affects sales activity reports</li>
+                <li>✅ Removes from customer visit history</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Check-ins track customer visits for sales performance</li>
+                    <li>GPS coordinates verify location proximity</li>
+                    <li>Distance measurement helps verify customer visits</li>
+                    <li>Multiple check-ins allowed per customer per day</li>
+                    <li>Check-in data feeds into sales activity dashboards</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('.expand-icon');
+
+            content.classList.toggle('expanded');
+            icon.classList.toggle('rotated');
+        }
+    </script>
+</body>
+</html>

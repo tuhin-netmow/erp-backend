@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CRM – Leads & Pipeline</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .kanban-column {
+      background: #f9fafb;
+      border-radius: 6px;
+      padding: 8px;
+      border: 1px solid #e5e7eb;
+      font-size: 12px;
+    }
+    .kanban-column h4 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .kanban-card {
+      background: #fff;
+      border-radius: 4px;
+      padding: 6px 7px;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 6px;
+    }
+    .kanban-card-title {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .kanban-card-meta {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    @media (max-width: 1200px) {
+      .kanban { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#" class="active">CRM</a>
+    <a href="#">Sales</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Accounting</a>
+    <a href="#">HR & Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>CRM – Leads & Pipeline</h1>
+    <div class="subtitle">
+      Manage leads, opportunities, pipeline stages, activities and conversions from lead → customer.
+    </div>
+
+    <!-- SNAPSHOT -->
+    <div class="card">
+      <div class="card-header">
+        <h3>CRM Snapshot</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">Last Month</div>
+          <div class="pill-filter">This Quarter</div>
+        </div>
+      </div>
+      <div class="three-column">
+        <div>
+          <label>Open Leads</label>
+          <div style="font-size:20px;font-weight:600;">42</div>
+          <div class="hint">Status NEW / CONTACTED / QUALIFIED in <code>crm_leads</code></div>
+        </div>
+        <div>
+          <label>Open Pipeline Value</label>
+          <div style="font-size:20px;font-weight:600;">125,000.00</div>
+          <div class="hint">Sum of opportunity value in <code>crm_opportunities</code></div>
+        </div>
+        <div>
+          <label>Conversion Rate</label>
+          <div style="font-size:20px;font-weight:600;">28%</div>
+          <div class="hint">Leads converted → customers this period</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEADS & OPPORTUNITIES -->
+    <div class="two-column">
+      <!-- Leads -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Leads</h3>
+          <button class="btn btn-primary btn-sm">+ New Lead</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Search</label>
+            <input type="text" placeholder="Name / company / email" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>NEW</option>
+              <option>CONTACTED</option>
+              <option>QUALIFIED</option>
+              <option>UNQUALIFIED</option>
+              <option>CONVERTED</option>
+              <option>LOST</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Owner</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Sales Team A</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Lead Code</th>
+            <th>Lead / Company</th>
+            <th style="width:110px;">Source</th>
+            <th style="width:80px;">Stage</th>
+            <th style="width:80px;">Value</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:110px;">Next Follow-up</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>L-2025-010</td>
+            <td>Yazhi Manufacturing</td>
+            <td>Website</td>
+            <td>MQL</td>
+            <td>15,000</td>
+            <td><span class="tag-info tag">CONTACTED</span></td>
+            <td>2025-01-20</td>
+          </tr>
+          <tr>
+            <td>L-2025-011</td>
+            <td>Speedex Express</td>
+            <td>Referral</td>
+            <td>Proposal</td>
+            <td>35,000</td>
+            <td><span class="tag-warning tag">QUALIFIED</span></td>
+            <td>2025-01-18</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Leads stored in <code>crm_leads</code> with owner, status, stage and value.
+        </div>
+      </div>
+
+      <!-- Opportunities -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Opportunities</h3>
+          <button class="btn btn-outline btn-sm">+ New Opportunity</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pipeline</label>
+            <select>
+              <option>Default Sales Pipeline</option>
+              <option>Enterprise Deals</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Stage</label>
+            <select>
+              <option>All</option>
+              <option>New</option>
+              <option>Qualified</option>
+              <option>Proposal</option>
+              <option>Negotiation</option>
+              <option>Won</option>
+              <option>Lost</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:100px;">Opportunity</th>
+            <th>Customer / Lead</th>
+            <th style="width:90px;">Stage</th>
+            <th style="width:80px;">Prob %</th>
+            <th style="width:90px;">Value</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:100px;">Close Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>OP-2025-003</td>
+            <td>Speedex Express</td>
+            <td>Proposal</td>
+            <td>60%</td>
+            <td>35,000</td>
+            <td><span class="tag-info tag">OPEN</span></td>
+            <td>2025-02-05</td>
+          </tr>
+          <tr>
+            <td>OP-2025-004</td>
+            <td>Yazhi Manufacturing</td>
+            <td>Negotiation</td>
+            <td>75%</td>
+            <td>22,000</td>
+            <td><span class="tag-info tag">OPEN</span></td>
+            <td>2025-02-10</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Opportunities in <code>crm_opportunities</code>, linked to leads/customers and pipeline stages.
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE & ACTIVITIES -->
+    <div class="two-column">
+      <!-- Pipeline / Stages (Kanban) -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Pipeline & Stages</h3>
+          <button class="btn btn-outline btn-sm">Manage Pipelines</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Pipeline</label>
+            <select>
+              <option>Default Sales Pipeline</option>
+              <option>Enterprise Deals</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="kanban">
+          <div class="kanban-column">
+            <h4>New (10%)</h4>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Resident Stylist – Onboarding</div>
+              <div class="kanban-card-meta">Value: 5,000 · Owner: Abdullah</div>
+            </div>
+            <div class="kanban-card">
+              <div class="kanban-card-title">GymnExcel – Trial</div>
+              <div class="kanban-card-meta">Value: 3,000 · Owner: Team A</div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <h4>Qualified (30%)</h4>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Seyon Tradeworld – ERP</div>
+              <div class="kanban-card-meta">Value: 15,000 · Owner: Abdullah</div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <h4>Proposal (60%)</h4>
+            <div class="kanban-card">
+              <div class="kanban-card-title">Speedex Express – CRM</div>
+              <div class="kanban-card-meta">Value: 35,000 · Owner: Abdullah</div>
+            </div>
+          </div>
+          <div class="kanban-column">
+            <h4>Negotiation (80%)</h4>
+            <div class="kanban-card">
+              <div class="kanban-card-title">BBEA – Event Portal</div>
+              <div class="kanban-card-meta">Value: 20,000 · Owner: Team B</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hint">
+          Pipelines in <code>crm_pipelines</code>, stages in <code>crm_pipeline_stages</code>, card data from <code>crm_opportunities</code>.
+        </div>
+      </div>
+
+      <!-- Activities -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Activities (Calls, Meetings, Emails, Tasks)</h3>
+          <button class="btn btn-outline btn-sm">+ New Activity</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Owner</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Team A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Type</label>
+            <select>
+              <option>All</option>
+              <option>CALL</option>
+              <option>MEETING</option>
+              <option>EMAIL</option>
+              <option>TASK</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Due</label>
+            <select>
+              <option>All</option>
+              <option>Overdue</option>
+              <option>Today</option>
+              <option>This Week</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:70px;">Type</th>
+            <th>Subject</th>
+            <th style="width:110px;">Related To</th>
+            <th style="width:80px;">Owner</th>
+            <th style="width:100px;">Due / When</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><span class="tag-info tag">CALL</span></td>
+            <td>Follow up Speedex Express proposal</td>
+            <td>Opportunity OP-2025-003</td>
+            <td>Abdullah</td>
+            <td>2025-01-18 10:30</td>
+            <td><span class="tag-warning tag">OPEN</span></td>
+          </tr>
+          <tr>
+            <td><span class="tag-info tag">MEETING</span></td>
+            <td>Demo for Yazhi Manufacturing</td>
+            <td>Lead L-2025-010</td>
+            <td>Abdullah</td>
+            <td>2025-01-19 15:00</td>
+            <td><span class="tag-warning tag">OPEN</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Activities in <code>crm_activities</code> with type, owner, due date and completion status.
+        </div>
+      </div>
+    </div>
+
+    <!-- FOLLOW-UPS / REMINDERS & LEAD SOURCE ANALYSIS -->
+    <div class="two-column">
+      <!-- Follow-ups & Reminders -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Follow-ups & Reminders</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>View</label>
+            <select>
+              <option>My Follow-ups</option>
+              <option>Team Follow-ups</option>
+              <option>All</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Time Frame</label>
+            <select>
+              <option>Today</option>
+              <option>This Week</option>
+              <option>Next 7 Days</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Lead / Opportunity</th>
+            <th style="width:120px;">Action</th>
+            <th style="width:110px;">Due At</th>
+            <th style="width:90px;">Owner</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Speedex Express – CRM</td>
+            <td>Follow-up call after proposal sent</td>
+            <td>2025-01-18 10:30</td>
+            <td>Abdullah</td>
+            <td><span class="tag-warning tag">OPEN</span></td>
+          </tr>
+          <tr>
+            <td>Yazhi Manufacturing – Demo</td>
+            <td>Send updated pricing deck</td>
+            <td>2025-01-19 17:00</td>
+            <td>Abdullah</td>
+            <td><span class="tag-warning tag">OPEN</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Implemented using <code>crm_activities</code> with due_at + reminder_at and status=OPEN.
+        </div>
+      </div>
+
+      <!-- Lead Source Analysis -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Lead Source Analysis</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Source</th>
+            <th style="width:80px;">Leads</th>
+            <th style="width:80px;">Opportunities</th>
+            <th style="width:80px;">Won</th>
+            <th style="width:80px;">Conv %</th>
+            <th style="width:100px;">Total Value Won</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Website</td>
+            <td>35</td>
+            <td>18</td>
+            <td>6</td>
+            <td>17%</td>
+            <td>45,000</td>
+          </tr>
+          <tr>
+            <td>Referral</td>
+            <td>12</td>
+            <td>10</td>
+            <td>7</td>
+            <td>58%</td>
+            <td>80,000</td>
+          </tr>
+          <tr>
+            <td>Facebook Ads</td>
+            <td>20</td>
+            <td>8</td>
+            <td>2</td>
+            <td>10%</td>
+            <td>15,000</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Sources in <code>crm_lead_sources</code>, stats from <code>crm_leads</code> & <code>crm_opportunities</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- CONVERSION TRACKING -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Conversion Tracking (Lead → Customer)</h3>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Period</label>
+          <input type="text" placeholder="From - To" />
+        </div>
+        <div class="form-group">
+          <label>Owner</label>
+          <select>
+            <option>All</option>
+            <option>Abdullah</option>
+            <option>Team A</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Result</label>
+          <select>
+            <option>All</option>
+            <option>Converted</option>
+            <option>Lost</option>
+          </select>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:90px;">Lead Code</th>
+          <th>Lead / Company</th>
+          <th style="width:120px;">Converted To</th>
+          <th style="width:100px;">Conversion Date</th>
+          <th style="width:100px;">Deal Value</th>
+          <th style="width:90px;">Result</th>
+          <th style="width:90px;">Owner</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>L-2025-005</td>
+          <td>Family Lawyers Mackay</td>
+          <td>Customer C-102 (ERP + SEO)</td>
+          <td>2025-01-12</td>
+          <td>18,000</td>
+          <td><span class="tag-success tag">CONVERTED</span></td>
+          <td>Abdullah</td>
+        </tr>
+        <tr>
+          <td>L-2025-006</td>
+          <td>MK Tower Builders</td>
+          <td>–</td>
+          <td>2025-01-10</td>
+          <td>0</td>
+          <td><span class="tag-danger tag">LOST</span></td>
+          <td>Team A</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="hint">
+        Conversion details stored in <code>crm_leads</code> (status + customer_id + converted_at)
+        and history in <code>crm_lead_conversion_logs</code>.
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

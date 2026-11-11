@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Routes Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #f5576c;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #f5576c;
+            border-bottom: 3px solid #f5576c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #f5576c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #fff5f8;
+            border-left: 4px solid #f5576c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f5576c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #e04658;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f5576c;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #f5576c;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-patch {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #17a2b8;
+            color: white;
+        }
+
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .request-item {
+            background: #fff5f8;
+            padding: 15px;
+            border-left: 3px solid #f5576c;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #ffe8ec;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #f5576c;
+            font-size: 13px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #f5576c;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-patch {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🛣️ Sales Routes Module</h1>
+            <p>Complete sales route and delivery territory management system with staff assignments and customer mapping</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <h3 style="color: #f5576c; margin-top: 0;">📌 Sales Routes Management</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/salesroutes/sales-route</span>
+                </h3>
+                <p class="route-desc">Get all sales routes with pagination and filtering</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/salesroutes/sales-route/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed route information with customers and orders</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/salesroutes/sales-route</span>
+                </h3>
+                <p class="route-desc">Create a new sales route with geographic coverage</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/salesroutes/sales-route/:id</span>
+                </h3>
+                <p class="route-desc">Update sales route details and coverage area</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/salesroutes/sales-route/:id</span>
+                </h3>
+                <p class="route-desc">Delete a sales route</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Staff Assignment</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-patch">PATCH</span>
+                    <span class="route-path">/api/salesroutes/sales-route/:id/assign</span>
+                </h3>
+                <p class="route-desc">Assign staff members to a sales route (replaces existing assignments)</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/salesroutes/sales-route/:id/assign</span>
+                </h3>
+                <p class="route-desc">Get all staff members assigned to a sales route</p>
+            </div>
+        </div>
+
+        <!-- ==================== POST CREATE SALES ROUTE ==================== -->
+        <div class="section-header">📌 CREATE SALES ROUTE (POST)</div>
+
+        <div class="card">
+            <h2>POST /api/salesroutes/sales-route <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Create a new sales route with geographic coverage and staff assignment capability</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/salesroutes/sales-route
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createRoute(req, res)
+    Controller->>Service: createRoute(data, userId)
+    Service->>Repository: create(data)
+    Repository->>Database: INSERT sales_routes
+    Database->>Repository: Route created
+    Repository->>Service: Route object
+    Service->>Controller: Route result
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Business Logic| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Sales Route Flow
+                subgraph "Create Sales Route Process"
+                CreateRoute["POST api-salesroutes-sales-route"] --> Auth[Router - Verify JWT]
+                Auth -->|Extract userId| CreateSvc[Service - createRoute]
+                CreateSvc --> Validate[Service - Validate Data]
+                Validate -->|Valid| Create[Repository - create]
+                Create -->|INSERT| RouteDB[(sales_routes table)]
+                RouteDB --> RouteObj[Repository - Route Object]
+                RouteObj --> Response[Controller - Send Response - 201]
+                end
+            </div>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Rules</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>route_name</td>
+                        <td>string</td>
+                        <td>Required, Max 255 chars</td>
+                    </tr>
+                    <tr>
+                        <td>description</td>
+                        <td>text</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>assigned_sales_rep_id</td>
+                        <td>integer</td>
+                        <td>Optional, Must exist in staff</td>
+                    </tr>
+                    <tr>
+                        <td>start_location</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>end_location</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>zoom_level</td>
+                        <td>integer</td>
+                        <td>Optional, Default: 12</td>
+                    </tr>
+                    <tr>
+                        <td>country</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>state</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>city</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>postal_code</td>
+                        <td>string</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>center_lat</td>
+                        <td>decimal</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>center_lng</td>
+                        <td>decimal</td>
+                        <td>Optional</td>
+                    </tr>
+                    <tr>
+                        <td>coverage_radius</td>
+                        <td>decimal</td>
+                        <td>Optional (in km)</td>
+                    </tr>
+                    <tr>
+                        <td>is_active</td>
+                        <td>boolean</td>
+                        <td>Optional, Default: true</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>Geographic Coverage:</strong> Sales routes support both coordinate-based (center_lat, center_lng, coverage_radius) and location-based (country, state, city, postal_code) definitions for flexible territory management.
+            </div>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: salesroute.controller.js:34
+async createRoute(req, res) {
+    try {
+        const route = await SalesRouteService.createRoute(req.body, req.user.id);
+        return success(res, 'Sales route created successfully', route, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: salesroute.service.js:21
+async createRoute(data, userId) {
+    return await SalesRouteRepository.create({
+        ...data,
+        created_by: userId
+    });
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: salesroute.repository.js:68
+async create(data) {
+    return await SalesRoute.create(data);
+}
+
+SQL Equivalent:
+INSERT INTO sales_routes (
+    route_name, description, assigned_sales_rep_id,
+    start_location, end_location, zoom_level,
+    country, state, city, postal_code,
+    center_lat, center_lng, coverage_radius,
+    is_active, created_by
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);</code></pre>
+
+            <h3>Database Tables</h3>
+            <ul>
+                <li><code>sales_routes</code> - Main sales routes table</li>
+            </ul>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block"><code>{
+    "route_name": "Kuala Lumpur Central",
+    "description": "Coverage for KL city center",
+    "assigned_sales_rep_id": 5,
+    "start_location": "KLCC",
+    "end_location": "Bukit Bintang",
+    "zoom_level": 12,
+    "country": "Malaysia",
+    "state": "Selangor",
+    "city": "Kuala Lumpur",
+    "postal_code": "50088",
+    "center_lat": 3.1570,
+    "center_lng": 101.7123,
+    "coverage_radius": 5,
+    "is_active": true
+}</code></pre>
+
+            <h3>Success Response</h3>
+            <div class="response-box">
+                <strong>201 Created</strong>
+                <code>{
+    "status": true,
+    "message": "Sales route created successfully",
+    "data": {
+        "id": 1,
+        "route_name": "Kuala Lumpur Central",
+        "description": "Coverage for KL city center",
+        "assigned_sales_rep_id": 5,
+        "start_location": "KLCC",
+        "end_location": "Bukit Bintang",
+        "zoom_level": 12,
+        "country": "Malaysia",
+        "state": "Selangor",
+        "city": "Kuala Lumpur",
+        "postal_code": "50088",
+        "center_lat": 3.1570,
+        "center_lng": 101.7123,
+        "coverage_radius": 5,
+        "is_active": true,
+        "created_by": 1,
+        "updated_at": "2025-12-02T10:00:00.000Z",
+        "created_at": "2025-12-02T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>400 Bad Request - Validation Error</strong>
+                <code>{
+    "status": false,
+    "message": "Route name is required"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>500 Internal Server Error</strong>
+                <code>{
+    "status": false,
+    "message": "Database connection failed"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ALL SALES ROUTES ==================== -->
+        <div class="section-header">📌 GET ALL SALES ROUTES (GET)</div>
+
+        <div class="card">
+            <h2>GET /api/salesroutes/sales-route <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all sales routes with pagination, filtering, and active status</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/salesroutes/sales-route?filters
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getAllRoutes(req, res)
+    Controller->>Controller: Parse query params
+    Controller->>Service: getAllRoutes(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with WHERE & ORDER BY
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result data
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Parse Params| Parse[Parse Query Params]
+                Parse -->|page, limit, filters| Service[Sales Route Service]
+                Service -->|Calculate offset| Offset["Offset Calculation"]
+                Offset --> Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Sales Routes Flow
+                subgraph "Get All Sales Routes Process"
+                GetAll["GET api-salesroutes-sales-route"] --> BuildWhere[Repository - Build WHERE Clause]
+                BuildWhere -->|is_active, search| FindAll[Repository - findAndCountAll]
+                FindAll -->|SELECT + WHERE + ORDER BY| RoutesDB[(sales_routes table)]
+                RoutesDB --> Result[Repository - Count and Rows]
+                Result --> Response[Controller - Send Paginated Response]
+                end
+            </div>
+
+            <h3>Request Headers</h3>
+            <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: salesroute.controller.js:5
+async getAllRoutes(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            is_active: req.query.is_active,
+            search: req.query.search
+        };
+
+        const result = await SalesRouteService.getAllRoutes(filters, page, limit);
+        return successWithPagination(res, 'Sales routes retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: salesroute.service.js:4
+async getAllRoutes(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await SalesRouteRepository.findAll(filters, limit, offset);
+    return {
+        data: result.rows,
+        total: result.count
+    };
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: salesroute.repository.js:9
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    if (filters.is_active !== undefined) {
+        where.is_active = filters.is_active;
+    }
+
+    if (filters.search) {
+        where[Op.or] = [
+            { route_name: { [Op.like]: `%${filters.search}%` } },
+            { description: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    return await SalesRoute.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [['created_at', 'DESC']]
+    });
+}
+
+SQL Equivalent:
+SELECT * FROM sales_routes
+WHERE is_active = ?
+AND (
+    route_name LIKE ?
+    OR description LIKE ?
+)
+ORDER BY created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+            <h3>Query Parameters</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>page</td>
+                        <td>integer</td>
+                        <td>1</td>
+                        <td>Page number</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>integer</td>
+                        <td>10</td>
+                        <td>Items per page</td>
+                    </tr>
+                    <tr>
+                        <td>is_active</td>
+                        <td>boolean</td>
+                        <td>-</td>
+                        <td>Filter by active status</td>
+                    </tr>
+                    <tr>
+                        <td>search</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Search by route name or description</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Multiple Requests & Responses</h3>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>1. List All Sales Routes (Paginated)</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/salesroutes/sales-route?page=1&limit=10</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales routes retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "route_name": "Kuala Lumpur Central",
+            "description": "Coverage for KL city center",
+            "assigned_sales_rep_id": 5,
+            "start_location": "KLCC",
+            "end_location": "Bukit Bintang",
+            "zoom_level": 12,
+            "country": "Malaysia",
+            "state": "Selangor",
+            "city": "Kuala Lumpur",
+            "postal_code": "50088",
+            "center_lat": 3.1570,
+            "center_lng": 101.7123,
+            "coverage_radius": 5,
+            "is_active": true,
+            "created_at": "2025-12-02T10:00:00.000Z",
+            "updated_at": "2025-12-02T10:00:00.000Z"
+        }
+    ],
+    "pagination": {
+        "total": 25,
+        "page": 1,
+        "limit": 10
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>2. Filter by Active Status</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/salesroutes/sales-route?is_active=true</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales routes retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "route_name": "Kuala Lumpur Central",
+            "is_active": true,
+            "center_lat": 3.1570,
+            "center_lng": 101.7123,
+            "coverage_radius": 5
+        }
+    ],
+    "pagination": {
+        "total": 20,
+        "page": 1,
+        "limit": 10
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>3. Search Routes</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/salesroutes/sales-route?search=Kuala</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales routes retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "route_name": "Kuala Lumpur Central",
+            "description": "Coverage for KL city center",
+            "is_active": true
+        }
+    ],
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>4. Combined Filters</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/salesroutes/sales-route?is_active=true&search=Central&page=1&limit=5</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "status": true,
+    "message": "Sales routes retrieved successfully",
+    "data": [
+        {
+            "id": 1,
+            "route_name": "Kuala Lumpur Central",
+            "is_active": true
+        }
+    ],
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 5
+    }
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>500 Internal Server Error</strong>
+                <code>{
+    "status": false,
+    "message": "Database connection failed"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ROUTE BY ID ==================== -->
+        <div class="section-header">📌 GET ROUTE BY ID</div>
+
+        <div class="card">
+            <h2>GET /api/salesroutes/sales-route/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/salesroutes/sales-route/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getRouteById(req, res)
+    Controller->>Service: getRouteById(id)
+    Service->>Repository: findById(id)
+    Repository->>Database: SELECT with JOINs
+    Database->>Repository: Route with customers & staff
+    Repository->>Service: Route object
+    Service->>Controller: Route data
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Extract id| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Route by ID Flow
+                subgraph "Get Route by ID Process"
+                GetRoute["GET api-salesroutes-sales-route-id"] --> FindById[Repository - findById]
+                FindById -->|SELECT with JOINs| RouteDB[(sales_routes + staff + customers)]
+                RouteDB -->|Not found| NotFound[Service - Throw Error]
+                RouteDB -->|Exists| RouteObj[Repository - Route Object]
+                RouteObj --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales route ID</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/salesroutes/sales-route/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales route retrieved successfully",
+    "data": {
+        "id": 1,
+        "route_name": "Kuala Lumpur Central",
+        "description": "Coverage for KL city center",
+        "assigned_sales_rep_id": 5,
+        "start_location": "KLCC",
+        "end_location": "Bukit Bintang",
+        "zoom_level": 12,
+        "country": "Malaysia",
+        "state": "Selangor",
+        "city": "Kuala Lumpur",
+        "postal_code": "50088",
+        "center_lat": 3.1570,
+        "center_lng": 101.7123,
+        "coverage_radius": 5,
+        "is_active": true,
+        "customers": [
+            {
+                "id": 1,
+                "name": "ABC Corporation",
+                "sales_route_id": 1,
+                "orders": [
+                    {
+                        "id": 1,
+                        "order_number": "ORD-001",
+                        "customer_id": 1,
+                        "order_date": "2025-12-20T10:00:00.000Z",
+                        "status": "confirmed",
+                        "total_amount": 1500.00,
+                        "items": [
+                            {
+                                "id": 1,
+                                "quantity": 10,
+                                "unit_price": 150.00,
+                                "product": {
+                                    "id": 1,
+                                    "name": "Product A",
+                                    "sku": "PRD-A-001"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ],
+        "assignedStaffMembers": [
+            {
+                "id": 1,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "position": "Sales Representative",
+                "thumb_url": "/uploads/staff/thumbs/1.jpg",
+                "SalesRouteStaff": {
+                    "assigned_at": "2025-12-25T05:14:18.000Z",
+                    "assigned_by": 1
+                }
+            }
+        ],
+        "created_at": "2025-12-02T10:00:00.000Z",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h4>Error Response</h4>
+            <div class="error-box">
+                <strong>404 Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Sales route not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== UPDATE SALES ROUTE ==================== -->
+        <div class="section-header">📌 UPDATE SALES ROUTE</div>
+
+        <div class="card">
+            <h2>PUT /api/salesroutes/sales-route/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP PUT + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Extract id| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Update Sales Route Flow
+                subgraph "Update Sales Route Process"
+                Update["PUT api-salesroutes-sales-route-id"] --> Find[Repository - findById]
+                Find -->|SELECT| RouteDB[(sales_routes table)]
+                RouteDB -->|Not found| NotFound[Service - Throw Error]
+                RouteDB -->|Exists| UpdateRepo[Repository - update]
+                UpdateRepo -->|UPDATE| Updated[(Updated route)]
+                Updated --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>route_name</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>Route name</td>
+                </tr>
+                <tr>
+                    <td>description</td>
+                    <td>text</td>
+                    <td>No</td>
+                    <td>Route description</td>
+                </tr>
+                <tr>
+                    <td>assigned_sales_rep_id</td>
+                    <td>integer</td>
+                    <td>No</td>
+                    <td>Primary sales representative</td>
+                </tr>
+                <tr>
+                    <td>center_lat</td>
+                    <td>decimal</td>
+                    <td>No</td>
+                    <td>Center latitude</td>
+                </tr>
+                <tr>
+                    <td>center_lng</td>
+                    <td>decimal</td>
+                    <td>No</td>
+                    <td>Center longitude</td>
+                </tr>
+                <tr>
+                    <td>coverage_radius</td>
+                    <td>decimal</td>
+                    <td>No</td>
+                    <td>Coverage radius in km</td>
+                </tr>
+                <tr>
+                    <td>is_active</td>
+                    <td>boolean</td>
+                    <td>No</td>
+                    <td>Active status</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>PUT /api/salesroutes/sales-route/1
+
+{
+    "route_name": "Kuala Lumpur Central Updated",
+    "description": "Expanded coverage for KL city center",
+    "coverage_radius": 8
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales route updated successfully",
+    "data": {
+        "id": 1,
+        "route_name": "Kuala Lumpur Central Updated",
+        "description": "Expanded coverage for KL city center",
+        "coverage_radius": 8,
+        "updated_at": "2025-12-02T11:00:00.000Z"
+    }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DELETE SALES ROUTE ==================== -->
+        <div class="section-header">📌 DELETE SALES ROUTE</div>
+
+        <div class="card">
+            <h2>DELETE /api/salesroutes/sales-route/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP DELETE + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Extract id| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Delete Sales Route Flow
+                subgraph "Delete Sales Route Process"
+                Delete["DELETE api-salesroutes-sales-route-id"] --> Find[Repository - findById]
+                Find -->|SELECT| RouteDB[(sales_routes table)]
+                RouteDB -->|Not found| NotFound[Service - Throw Error]
+                RouteDB -->|Exists| Destroy[Repository - destroy]
+                Destroy -->|DELETE| Deleted[(Deleted route)]
+                Deleted --> Success[Service - Success]
+                Success --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>DELETE /api/salesroutes/sales-route/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales route deleted successfully",
+    "data": null
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== ASSIGN STAFF ==================== -->
+        <div class="section-header">📌 ASSIGN STAFF TO ROUTE</div>
+
+        <div class="card">
+            <h2>PATCH /api/salesroutes/sales-route/:id/assign <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Assign staff members to a sales route (replaces all existing assignments)</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PATCH /api/salesroutes/sales-route/:id/assign
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: assignStaff(req, res)
+    Controller->>Service: assignStaff(id, staffIds, userId)
+    Service->>Service: Validate staff_ids is array
+    Service->>Repository: assignStaff(routeId, staffIds, assignedBy)
+    Repository->>Database: BEGIN TRANSACTION
+    Repository->>Database: DELETE existing assignments
+    Repository->>Database: INSERT new assignments
+    Repository->>Database: COMMIT
+    Repository->>Service: Updated route
+    Service->>Controller: Route result
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP PATCH + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Extract id, staff_ids| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Assign Staff Flow
+                subgraph "Assign Staff Process"
+                Assign["PATCH api-salesroutes-sales-route-id-assign"] --> FindRoute[Service - Find Route]
+                FindRoute -->|SELECT| RouteDB[(sales_routes table)]
+                RouteDB -->|Not found| NotFound[Service - Throw Error]
+                RouteDB -->|Exists| DeleteOld[Repository - Delete Old Assignments]
+                DeleteOld -->|DELETE sales_route_staff| Cleared[(Assignments cleared)]
+                Cleared --> CreateNew[Repository - Create New Assignments]
+                CreateNew -->|INSERT sales_route_staff| Assigned[(New assignments)]
+                Assigned --> FindRoute2[Repository - Find Route with Staff]
+                FindRoute2 -->|SELECT with JOINs| Result[(Route + Staff)]
+                Result --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales route ID</td>
+                </tr>
+            </table>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>staff_ids</td>
+                    <td>array</td>
+                    <td>Yes</td>
+                    <td>Array of staff user IDs to assign</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>PATCH /api/salesroutes/sales-route/1/assign
+
+{
+    "staff_ids": [1, 2, 3]
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Staff assigned to sales route successfully",
+    "data": {
+        "id": 1,
+        "route_name": "Kuala Lumpur Central",
+        "assignedStaffMembers": [
+            {
+                "id": 1,
+                "first_name": "John",
+                "last_name": "Doe",
+                "SalesRouteStaff": {
+                    "assigned_at": "2025-12-02T11:00:00.000Z",
+                    "assigned_by": 1
+                }
+            },
+            {
+                "id": 2,
+                "first_name": "Jane",
+                "last_name": "Smith",
+                "SalesRouteStaff": {
+                    "assigned_at": "2025-12-02T11:00:00.000Z",
+                    "assigned_by": 1
+                }
+            }
+        ]
+    }
+}</code>
+            </div>
+
+            <div class="info-box">
+                <strong>⚠️ Note:</strong> This operation replaces all existing staff assignments for the route. Previous assignments are removed and replaced with the new list.
+            </div>
+
+            <h4>Error Response</h4>
+            <div class="error-box">
+                <strong>404 Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Sales route not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ASSIGNED STAFF ==================== -->
+        <div class="section-header">📌 GET ASSIGNED STAFF</div>
+
+        <div class="card">
+            <h2>GET /api/salesroutes/sales-route/:id/assign <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Get all staff members assigned to a specific sales route</p>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph LR
+                Client[Client-Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Routes"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Route Controller]
+                Controller -->|Extract id| Service[Sales Route Service]
+                Service -->|Data Access| Repository[Sales Route Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Staff Assignments Flow
+                subgraph "Get Staff Assignments Process"
+                GetAssign["GET api-salesroutes-sales-route-id-assign"] --> FindRoute[Repository - findById]
+                FindRoute -->|SELECT with JOINs| RouteDB[(sales_routes + sales_route_staff + staff)]
+                RouteDB -->|Not found| NotFound[Service - Throw Error]
+                RouteDB -->|Exists| RouteObj[Repository - Route and Staff List]
+                RouteObj --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales route ID</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/salesroutes/sales-route/1/assign</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Assigned staff retrieved successfully",
+    "data": {
+        "id": 1,
+        "route_name": "Kuala Lumpur Central",
+        "assignedStaffMembers": [
+            {
+                "id": 1,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "position": "Sales Representative",
+                "thumb_url": "/uploads/staff/thumbs/1.jpg",
+                "SalesRouteStaff": {
+                    "assigned_at": "2025-12-25T05:14:18.000Z",
+                    "assigned_by": 1
+                }
+            }
+        ]
+    }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE REFERENCE ==================== -->
+        <div class="section-header">📌 DATABASE REFERENCE</div>
+
+        <div class="card">
+            <h2>Sales Route Fields Reference</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>route_name</strong></td>
+                        <td>string</td>
+                        <td>Name of the sales route/territory</td>
+                    </tr>
+                    <tr>
+                        <td><strong>description</strong></td>
+                        <td>text</td>
+                        <td>Detailed description of the route coverage</td>
+                    </tr>
+                    <tr>
+                        <td><strong>assigned_sales_rep_id</strong></td>
+                        <td>integer (FK)</td>
+                        <td>Primary sales representative for the route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>start_location</strong></td>
+                        <td>string</td>
+                        <td>Starting point of the route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>end_location</strong></td>
+                        <td>string</td>
+                        <td>Ending point of the route</td>
+                    </tr>
+                    <tr>
+                        <td><strong>zoom_level</strong></td>
+                        <td>integer</td>
+                        <td>Map zoom level (default: 12)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>country</strong></td>
+                        <td>string</td>
+                        <td>Country name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>state</strong></td>
+                        <td>string</td>
+                        <td>State/Province name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>city</strong></td>
+                        <td>string</td>
+                        <td>City name</td>
+                    </tr>
+                    <tr>
+                        <td><strong>postal_code</strong></td>
+                        <td>string</td>
+                        <td>Postal/ZIP code</td>
+                    </tr>
+                    <tr>
+                        <td><strong>center_lat</strong></td>
+                        <td>decimal</td>
+                        <td>Center latitude for map display</td>
+                    </tr>
+                    <tr>
+                        <td><strong>center_lng</strong></td>
+                        <td>decimal</td>
+                        <td>Center longitude for map display</td>
+                    </tr>
+                    <tr>
+                        <td><strong>coverage_radius</strong></td>
+                        <td>decimal</td>
+                        <td>Coverage radius in kilometers</td>
+                    </tr>
+                    <tr>
+                        <td><strong>is_active</strong></td>
+                        <td>boolean</td>
+                        <td>Active status (default: true)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Route Status Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>is_active = true</strong></td>
+                        <td>Active route - Can be assigned to customers and staff</td>
+                    </tr>
+                    <tr>
+                        <td><strong>is_active = false</strong></td>
+                        <td>Inactive route - Hidden from selection, preserved for history</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#f5576c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#e04658',
+                lineColor: '#f5576c',
+                secondaryColor: '#f093fb',
+                tertiaryColor: '#f8f9fa',
+                background: '#f8f9fa',
+                mainBkg: '#f5576c',
+                nodeBorder: '#e04658',
+                clusterBkg: '#fff5f8',
+                clusterBorder: '#f5576c',
+                titleColor: '#f5576c',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#f093fb',
+                actorBorder: '#f5576c',
+                actorTextColor: '#fff',
+                actorLineColor: '#f5576c',
+                signalColor: '#f5576c',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#f093fb',
+                labelBoxBorderColor: '#f5576c',
+                labelTextColor: '#fff',
+                loopTextColor: '#333'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

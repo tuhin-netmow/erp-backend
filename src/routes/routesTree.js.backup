@@ -1,0 +1,244 @@
+// src/routes/routesTree.js
+const express = require('express');
+const router = express.Router();
+
+// Sort modules alphabetically
+const sortedModules = Object.keys(routesByModule).sort();
+
+let html = `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>ERP API Routes Tree</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        padding: 40px; 
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+      h1 { 
+        color: white;
+        margin-bottom: 40px;
+        text-align: center;
+        font-size: 32px;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      }
+      .modules-wrapper {
+        display: grid;
+        gap: 40px;
+      }
+      .module-section {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .module-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+      }
+      .module-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-bottom: 5px solid #ffc107;
+      }
+      .module-header h2 {
+        font-size: 24px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin: 0;
+      }
+      .module-content {
+        padding: 25px;
+      }
+      ul { 
+        list-style-type: none; 
+        padding: 0;
+      }
+      li { 
+        margin: 15px 0; 
+        padding: 15px; 
+        background-color: #f8f9fa; 
+        border-left: 5px solid #667eea;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+      li:hover {
+        background-color: #f0f2ff;
+        border-left-color: #764ba2;
+        transform: translateX(5px);
+      }
+      .route-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 8px;
+      }
+      .method { 
+        font-weight: bold; 
+        color: white; 
+        padding: 5px 10px; 
+        border-radius: 4px; 
+        font-size: 11px;
+        min-width: 55px;
+        text-align: center;
+        font-weight: 600;
+      }
+      .GET { background-color: #28a745; }
+      .POST { background-color: #007bff; }
+      .PUT { background-color: #ffc107; color: #222; }
+      .PATCH { background-color: #17a2b8; }
+      .DELETE { background-color: #dc3545; }
+      .path { 
+        font-family: 'Courier New', monospace; 
+        color: #2c3e50; 
+        font-weight: 600;
+        font-size: 14px;
+        background-color: #e8e9ff;
+        padding: 4px 8px;
+        border-radius: 4px;
+      }
+      .auth { 
+        font-size: 11px; 
+        color: white; 
+        padding: 4px 8px; 
+        border-radius: 4px;
+        font-weight: 600;
+      }
+      .auth.protected { background-color: #e74c3c; }
+      .auth.public { background-color: #27ae60; }
+      .fields { 
+        margin-top: 12px; 
+        font-size: 12px; 
+        color: #555;
+        padding-top: 10px;
+        border-top: 1px dashed #ddd;
+      }
+      .fields-label {
+        font-weight: bold;
+        color: #667eea;
+        margin-bottom: 8px;
+        display: block;
+      }
+      .field { 
+        display: inline-block; 
+        padding: 4px 8px; 
+        margin-right: 6px; 
+        margin-bottom: 5px; 
+        border-radius: 4px; 
+        color: white;
+        font-size: 11px;
+        font-weight: 500;
+      }
+      .field-string { background-color: #007bff; }
+      .field-number { background-color: #28a745; }
+      .field-boolean { background-color: #ffc107; color: #222; }
+      .field-date { background-color: #17a2b8; }
+      .field-array { background-color: #6f42c1; }
+      .field-object { background-color: #fd7e14; }
+      .field-enum { background-color: #20c997; }
+      .field-literal { background-color: #e83e8c; }
+      .field-union { background-color: #6c757d; }
+      .field-optional { opacity: 0.75; font-style: italic; }
+      .route-count {
+        display: inline-block;
+        background-color: #ffc107;
+        color: #222;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>📚 ERP API Routes Directory</h1>
+      <div class="modules-wrapper">
+  `;
+
+// Generate module sections
+sortedModules.forEach(moduleName => {
+  const routeCount = routesByModule[moduleName].length;
+
+  html += `
+      <div class="module-section">
+        <div class="module-header">
+          <h2>🔷 ${moduleName} <span class="route-count">${routeCount} routes</span></h2>
+        </div>
+        <div class="module-content">
+          <ul>
+    `;
+
+  routesByModule[moduleName].forEach(route => {
+    const getFieldHtml = (field) => {
+      const match = field.match(/(.+?)\s*\((.+?)\)/);
+      if (!match) return `<span class="field field-string">${field}</span>`;
+
+      const name = match[1].trim();
+      const type = match[2].toLowerCase();
+      const isOptional = type.includes('optional');
+      const baseType = type.replace(/\s*\(optional\)/i, '').trim();
+
+      const typeMap = {
+        'string': 'field-string',
+        'number': 'field-number',
+        'boolean': 'field-boolean',
+        'date': 'field-date',
+        'array': 'field-array',
+        'object': 'field-object',
+        'enum': 'field-enum',
+        'literal': 'field-literal',
+        'union': 'field-union',
+      };
+
+      const typeClass = typeMap[baseType] || 'field-string';
+      const optionalClass = isOptional ? 'field-optional' : '';
+
+      return `<span class="field ${typeClass} ${optionalClass}">${name} (${type})</span>`;
+    };
+
+    const authClass = route.auth === 'Protected' ? 'auth protected' : 'auth public';
+
+    html += `
+        <li>
+          <div class="route-line">
+            ${route.methods.map(m => `<span class="method ${m}">${m}</span>`).join('')}
+            <span class="path">${route.path}</span>
+            <span class="${authClass}">${route.auth}</span>
+          </div>
+          ${route.fields ? `<div class="fields"><span class="fields-label">📝 Parameters:</span>${route.fields.map(f => getFieldHtml(f)).join('')}</div>` : ''}
+        </li>
+      `;
+  });
+
+  html += `
+          </ul>
+        </div>
+      </div>
+    `;
+});
+
+html += `
+      </div>
+    </div>
+  </body>
+  </html>
+  `;
+
+res.send(html);
+});
+
+module.exports = router;

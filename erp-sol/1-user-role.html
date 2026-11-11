@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Role & Access Control</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #222;
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: #1f2937;
+    }
+
+    .content {
+      flex: 1;
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    h2 {
+      font-size: 18px;
+      margin: 24px 0 12px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .card-header h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-sm {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .tag-success {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .tag-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .checkbox-center {
+      text-align: center;
+    }
+
+    .checkbox-center input[type="checkbox"] {
+      transform: scale(1.1);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+      }
+      .two-column {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- LEFT SIDEBAR -->
+  <aside class="sidebar">
+    <h2>Admin Panel</h2>
+    <a href="#" class="active">User & Role Access</a>
+    <a href="#">Users</a>
+    <a href="#">Roles</a>
+    <a href="#">Modules</a>
+    <a href="#">Menus</a>
+    <a href="#">Audit Log</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>User, Role & Access Control</h1>
+
+    <!-- ROLES & USERS -->
+    <div class="two-column">
+      <!-- ROLES -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Roles</h3>
+          <button class="btn btn-primary btn-sm">+ New Role</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Role Name (code)</label>
+            <input type="text" placeholder="e.g. ADMIN, SALES, STORE" />
+          </div>
+          <div class="form-group">
+            <label>Display Name</label>
+            <input type="text" placeholder="e.g. System Administrator" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" placeholder="Short role description" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm">Save Role</button>
+
+        <h4 style="margin-top:16px;font-size:14px;">Existing Roles</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Role</th>
+            <th>Display Name</th>
+            <th>Status</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>1</td>
+            <td>ADMIN</td>
+            <td>System Administrator</td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>SALES</td>
+            <td>Sales Executive</td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>STORE</td>
+            <td>Store Keeper</td>
+            <td><span class="tag tag-danger">Inactive</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- USERS -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Users</h3>
+          <button class="btn btn-primary btn-sm">+ New User</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="User full name" />
+          </div>
+          <div class="form-group">
+            <label>Email (login)</label>
+            <input type="email" placeholder="user@example.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="********" />
+          </div>
+          <div class="form-group">
+            <label>Role</label>
+            <select>
+              <option value="">Select Role</option>
+              <option value="1">ADMIN</option>
+              <option value="2">SALES</option>
+              <option value="3">STORE</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="1">Active</option>
+              <option value="0">Inactive (blocked)</option>
+            </select>
+            <div class="hint">If set to Inactive, user cannot log in.</div>
+          </div>
+        </div>
+        <button class="btn btn-outline btn-sm">Save User</button>
+
+        <h4 style="margin-top:16px;font-size:14px;">Existing Users</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>1</td>
+            <td>Admin User</td>
+            <td>admin@example.com</td>
+            <td><span class="tag">ADMIN</span></td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Sales User</td>
+            <td>sales@example.com</td>
+            <td><span class="tag">SALES</span></td>
+            <td><span class="tag tag-success">Active</span></td>
+            <td><button class="btn btn-sm btn-outline">Edit</button></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 🔹 MODULES & ACTIVATION (GLOBAL MODULE PERMISSIONS) -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Modules & Activation</h3>
+      </div>
+
+      <div class="hint" style="margin-bottom:8px;">
+        These settings map to the <code>modules</code> table (<code>is_enabled</code> field).
+        If a module is disabled, all related menus and APIs should be hidden/blocked
+        for every user, but no data is deleted.
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:40px;">#</th>
+          <th>Module Code</th>
+          <th>Module Name</th>
+          <th>Description</th>
+          <th class="checkbox-center" style="width:90px;">Enabled</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>1</td>
+          <td>CUSTOMERS</td>
+          <td>Customers</td>
+          <td>Customer master data, contacts & history.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>SUPPLIERS</td>
+          <td>Suppliers</td>
+          <td>Supplier master data & purchase relations.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>PRODUCTS</td>
+          <td>Products & Items</td>
+          <td>Product catalog, units, categories, prices.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>INVENTORY</td>
+          <td>Inventory & Stock</td>
+          <td>Warehouses, stock levels, transfers & adjustments.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>SALES</td>
+          <td>Sales & Invoicing</td>
+          <td>Quotations, orders, deliveries, invoices.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>PURCHASE</td>
+          <td>Purchases</td>
+          <td>Requisitions, POs, GRNs, purchase bills.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>ACCOUNTING</td>
+          <td>Accounting & Finance</td>
+          <td>GL, ledgers, P&amp;L, balance sheet, tax reports.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>PAYROLL</td>
+          <td>HR & Payroll</td>
+          <td>Employees, attendance, payroll & payslips.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>PROJECTS</td>
+          <td>Projects / Jobs</td>
+          <td>Project costing, tasks & profitability.</td>
+          <td class="checkbox-center">
+            <input type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>REPORTS</td>
+          <td>Reports & Analytics</td>
+          <td>Central reporting module (sales, stock, accounts).</td>
+          <td class="checkbox-center">
+            <input type="checkbox" checked />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:10px;">
+        <button class="btn btn-primary btn-sm">Save Module Activation</button>
+        <span class="hint">
+          Backend should write to <code>modules.is_enabled</code> for each row.
+        </span>
+      </div>
+    </div>
+
+    <!-- ROLE-BASED MENU PERMISSIONS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Role-Based Menu Permissions</h3>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="max-width:260px;">
+          <label>Select Role</label>
+          <select>
+            <option value="1">ADMIN</option>
+            <option value="2">SALES</option>
+            <option value="3">STORE</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Info</label>
+          <div class="hint">
+            These permissions map to <code>role_menu_permissions</code> table.
+            If a role has no entry, default is no access.
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:180px;">Module</th>
+          <th style="width:220px;">Menu / Submenu</th>
+          <th class="checkbox-center">View</th>
+          <th class="checkbox-center">Create</th>
+          <th class="checkbox-center">Edit</th>
+          <th class="checkbox-center">Delete</th>
+          <th class="checkbox-center">Approve</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td rowspan="3">Customers</td>
+          <td><strong>Customers (Main Menu)</strong></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" disabled /></td>
+          <td class="checkbox-center"><input type="checkbox" disabled /></td>
+          <td class="checkbox-center"><input type="checkbox" disabled /></td>
+          <td class="checkbox-center"><input type="checkbox" disabled /></td>
+        </tr>
+        <tr>
+          <td>Customer List</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+        <tr>
+          <td>Add Customer</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+
+        <tr>
+          <td rowspan="2">Suppliers</td>
+          <td>Supplier List</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+        <tr>
+          <td>Add Supplier</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+
+        <tr>
+          <td rowspan="2">Sales</td>
+          <td>Sales Orders</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+        <tr>
+          <td>Sales Invoices</td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" checked /></td>
+          <td class="checkbox-center"><input type="checkbox" /></td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:10px;">
+        <button class="btn btn-primary btn-sm">Save Role Permissions</button>
+        <span class="hint">Each row will be stored in <code>role_menu_permissions</code>.</span>
+      </div>
+    </div>
+
+    <!-- USER OVERRIDES -->
+    <div class="card">
+      <div class="card-header">
+        <h3>User-Specific Overrides</h3>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="max-width:260px;">
+          <label>Select User</label>
+          <select>
+            <option value="1">Admin User (ADMIN)</option>
+            <option value="2">Sales User (SALES)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Explanation</label>
+          <div class="hint">
+            Use this to override role permissions for a specific user.
+            Backend maps this to <code>user_menu_permissions_override</code> table.
+          </div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:180px;">Module</th>
+          <th style="width:220px;">Menu / Submenu</th>
+          <th>Role View</th>
+          <th>Override View</th>
+          <th>Role Create</th>
+          <th>Override Create</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Customers</td>
+          <td>Customer List</td>
+          <td><span class="tag tag-success">Yes</span></td>
+          <td class="checkbox-center">
+            <input type="checkbox" />
+            <div class="hint">Tick/untick to override</div>
+          </td>
+          <td><span class="tag tag-danger">No</span></td>
+          <td class="checkbox-center">
+            <input type="checkbox" />
+          </td>
+        </tr>
+        <tr>
+          <td>Sales</td>
+          <td>Sales Invoices</td>
+          <td><span class="tag tag-success">Yes</span></td>
+          <td class="checkbox-center">
+            <input type="checkbox" />
+          </td>
+          <td><span class="tag tag-success">Yes</span></td>
+          <td class="checkbox-center">
+            <input type="checkbox" />
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:10px;">
+        <button class="btn btn-primary btn-sm">Save User Overrides</button>
+        <span class="hint">
+          If a checkbox is left as “no explicit change”, backend should keep NULL in override and follow role permission.
+        </span>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Departments Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #f5af19 0%, #f12711 100%); padding: 20px; color: #333; line-height: 1.6; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .back-link { display: inline-block; padding: 12px 24px; background: white; color: #f5af19; text-decoration: none; border-radius: 8px; margin-bottom: 25px; font-weight: 600; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); transition: transform 0.2s, box-shadow 0.2s; }
+        .back-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); }
+        .header { background: white; border-radius: 16px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); }
+        .header h1 { font-size: 2.5em; color: #f5af19; margin-bottom: 10px; }
+        .header .subtitle { color: #666; font-size: 1.1em; }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); margin-bottom: 30px; padding: 35px; }
+        .card h2 { color: #f5af19; border-bottom: 3px solid #f12711; padding-bottom: 15px; margin-bottom: 25px; font-size: 1.8em; }
+        .routes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-bottom: 30px; }
+        .route-item { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 15px; border-radius: 10px; border-left: 4px solid #f12711; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; }
+        .route-item:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(245, 175, 25, 0.3); }
+        .route-method { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75em; font-weight: bold; margin-bottom: 8px; color: white; }
+        .method-get { background: #2196F3; }
+        .method-post { background: #4CAF50; }
+        .method-put { background: #FF9800; }
+        .method-delete { background: #f44336; }
+        .route-path { font-family: 'Courier New', monospace; font-size: 0.85em; color: #333; margin: 5px 0; word-break: break-all; }
+        .route-desc { font-size: 0.8em; color: #666; margin-top: 5px; }
+        .section-title { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; padding: 20px; border-radius: 10px; margin: 40px 0 25px 0; font-size: 1.5em; font-weight: 600; }
+        .endpoint-detail { background: #f8f9fa; border-radius: 12px; padding: 25px; margin: 25px 0; border-left: 5px solid #f12711; }
+        .endpoint-detail h3 { color: #f5af19; margin-bottom: 15px; font-size: 1.3em; }
+        .endpoint-detail h4 { color: #f12711; margin: 20px 0 10px 0; font-size: 1.05em; }
+        .code-block { background: #263238; color: #aed581; padding: 18px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85em; line-height: 1.5; margin: 12px 0; }
+        .code-block json { color: #80cbc4; }
+        .flow-diagram { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; overflow-x: auto; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #2196F3; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .warning-box { background: #fff3e0; border-left: 4px solid #FF9800; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .success-box { background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 18px 0; background: white; border-radius: 8px; overflow: hidden; }
+        table th { background: linear-gradient(135deg, #f12711 0%, #f5af19 100%); color: white; padding: 12px; text-align: left; font-weight: 600; font-size: 0.9em; }
+        table td { padding: 10px 12px; border-bottom: 1px solid #e0e0e0; font-size: 0.9em; }
+        table tr:last-child td { border-bottom: none; }
+        table tr:hover { background: #f5f5f5; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; font-weight: 600; margin: 2px; }
+        .badge-required { background: #ffebee; color: #c62828; }
+        .badge-optional { background: #e3f2fd; color: #1565c0; }
+        pre { white-space: pre-wrap; word-wrap: break-word; }
+        .expandable-section { margin: 20px 0; }
+        .expandable-header { background: linear-gradient(135deg, #ffecb3 0%, #ffe082 100%); padding: 15px 20px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s ease; border: 2px solid #ffa000; }
+        .expandable-header:hover { background: linear-gradient(135deg, #ffe082 0%, #ffd54f 100%); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 160, 0, 0.3); }
+        .expandable-header h4 { margin: 0; color: #e65100; font-size: 1.1em; }
+        .expandable-header .toggle-icon { font-size: 1.5em; color: #e65100; font-weight: bold; transition: transform 0.3s ease; }
+        .expandable-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .expandable-content.active { max-height: 5000px; }
+        .expandable-content-inner { padding: 20px; background: #fffde7; border-radius: 0 0 8px 8px; margin-top: -8px; border: 2px solid #ffa000; border-top: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>🏢 Departments Module</h1>
+            <p class="subtitle">Complete department management with hierarchical organization and staff assignments</p>
+        </div>
+
+        <div class="card">
+            <h2>📋 API Routes Overview</h2>
+
+            <div class="routes-grid">
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/departments</div><div class="route-desc">List departments</div></div>
+                <div class="route-item"><span class="route-method method-post">POST</span><div class="route-path">/api/departments</div><div class="route-desc">Create department</div></div>
+                <div class="route-item"><span class="route-method method-get">GET</span><div class="route-path">/api/departments/:id</div><div class="route-desc">Get department</div></div>
+                <div class="route-item"><span class="route-method method-put">PUT</span><div class="route-path">/api/departments/:id</div><div class="route-desc">Update department</div></div>
+                <div class="route-item"><span class="route-method method-delete">DELETE</span><div class="route-path">/api/departments/:id</div><div class="route-desc">Delete department</div></div>
+            </div>
+        </div>
+
+        <!-- LIST DEPARTMENTS - GET -->
+        <div class="section-title">📌 GET /api/departments - List Departments</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck departments]
+    C --> D[Controller: getDepartments]
+    D --> E[Extract Query Params]
+    E --> F[Service: getAllDepartments]
+    F --> G[Repository: findAll]
+    G --> H[Build WHERE clause]
+    H --> I[Search: name OR description]
+    I --> J[Status Filter]
+    J --> K[Pagination]
+    K --> L[Execute SQL Query]
+    L --> M[Return Paginated Results]
+    M --> N[successWithPagination Response]
+
+    style A fill:#e3f2fd
+    style N fill:#c8e6c9
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Type</th><th>Required</th><th>Description</th></tr>
+                <tr><td>page</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Page number (default: 1)</td></tr>
+                <tr><td>limit</td><td>number</td><td><span class="badge badge-optional">No</span></td><td>Items per page (default: 10)</td></tr>
+                <tr><td>status</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Filter by status (active/inactive)</td></tr>
+                <tr><td>search</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Search by name or description</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.controller.js</code> (lines 5-18)</p>
+            <div class="code-block">async getDepartments(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            status: req.query.status,
+            search: req.query.search
+        };
+
+        const result = await DepartmentService.getAllDepartments(filters, page, limit);
+        return successWithPagination(res, 'Departments retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</div>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.service.js</code> (lines 4-15)</p>
+            <p>The service layer directly calls the repository without additional business logic for listing departments. Filters are passed through to the repository layer.</p>
+            <div class="code-block">async getAllDepartments(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const { data, total } = await DepartmentRepository.findAll(filters, limit, offset);
+    return { data, total };
+}</div>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.repository.js</code> (lines 5-25)</p>
+            <p>The repository builds dynamic WHERE clauses based on filters:</p>
+            <div class="code-block">async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    // Status filter
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    // Search across name and description
+    if (filters.search) {
+        where[Op.or] = [
+            { name: { [Op.like]: `%${filters.search}%` } },
+            { description: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    const { count, rows } = await Department.findAndCountAll({
+        where,
+        limit,
+        offset,
+        order: [['created_at', 'DESC']]
+    });
+
+    return { data: rows, total: count };
+}</div>
+
+            <h4>SQL Query Generated</h4>
+            <div class="code-block">-- Basic list query
+SELECT id, name, description, created_by, created_at
+FROM departments
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 0;
+
+-- With status filter
+SELECT id, name, description, created_by, created_at
+FROM departments
+WHERE status = 'active'
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 0;
+
+-- With search filter
+SELECT id, name, description, created_by, created_at
+FROM departments
+WHERE name LIKE '%IT%' OR description LIKE '%IT%'
+ORDER BY created_at DESC
+LIMIT 10 OFFSET 0;</div>
+
+            <h3>Multiple Requests & Responses (Expandable)</h3>
+
+            <!-- Example 1: List All Departments -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>1️⃣ List All Departments (Default)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <div class="code-block">GET /api/departments</div>
+
+                        <strong>Response:</strong>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Departments retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "IT",
+            "description": "Information Technology Department",
+            "created_by": 1,
+            "created_at": "2025-01-01T00:00:00.000Z"
+        },
+        {
+            "id": 2,
+            "name": "Sales",
+            "description": "Sales and Marketing Department",
+            "created_by": 1,
+            "created_at": "2025-01-02T00:00:00.000Z"
+        },
+        {
+            "id": 3,
+            "name": "Human Resources",
+            "description": "HR and Recruitment",
+            "created_by": 1,
+            "created_at": "2025-01-03T00:00:00.000Z"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Filter by Status -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>2️⃣ Filter by Status (Active)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <div class="code-block">GET /api/departments?status=active</div>
+
+                        <strong>Response:</strong>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Departments retrieved successfully",
+    "pagination": {
+        "total": 4,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "IT",
+            "description": "Information Technology Department",
+            "created_by": 1,
+            "created_at": "2025-01-01T00:00:00.000Z"
+        },
+        {
+            "id": 2,
+            "name": "Sales",
+            "description": "Sales and Marketing Department",
+            "created_by": 1,
+            "created_at": "2025-01-02T00:00:00.000Z"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Search by Name/Description -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>3️⃣ Search Departments</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <div class="code-block">GET /api/departments?search=technology</div>
+
+                        <strong>Response:</strong>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Departments retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "IT",
+            "description": "Information Technology Department",
+            "created_by": 1,
+            "created_at": "2025-01-01T00:00:00.000Z"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4: Pagination -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>4️⃣ Pagination (Page 2, 5 items)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <div class="code-block">GET /api/departments?page=2&limit=5</div>
+
+                        <strong>Response:</strong>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Departments retrieved successfully",
+    "pagination": {
+        "total": 12,
+        "page": "2",
+        "limit": "5",
+        "totalPage": 3
+    },
+    "data": [
+        {
+            "id": 6,
+            "name": "Finance",
+            "description": "Financial Operations",
+            "created_by": 1,
+            "created_at": "2025-01-06T00:00:00.000Z"
+        },
+        {
+            "id": 7,
+            "name": "Marketing",
+            "description": "Marketing and Communications",
+            "created_by": 1,
+            "created_at": "2025-01-07T00:00:00.000Z"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 5: Combined Filters -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <h4>5️⃣ Combined Filters (Status + Search + Pagination)</h4>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="expandable-content-inner">
+                        <strong>Request:</strong>
+                        <div class="code-block">GET /api/departments?status=active&search=sales&page=1&limit=10</div>
+
+                        <strong>Response:</strong>
+                        <div class="code-block"><json>{
+    "success": true,
+    "message": "Departments retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": "1",
+        "limit": "10",
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "name": "Sales",
+            "description": "Sales and Marketing Department",
+            "created_by": 1,
+            "created_at": "2025-01-02T00:00:00.000Z"
+        }
+    ]
+}</json></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Success Response</h3>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 200 OK<br>
+                <strong>✓ Response Format:</strong> Paginated list of departments<br>
+                <strong>✓ Includes:</strong> Total count, current page, page limit, total pages
+            </div>
+
+            <h3>Error Response</h3>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 500 Internal Server Error<br>
+                <strong>⚠️ Response:</strong>
+                <div class="code-block"><json>{
+    "success": false,
+    "message": "Internal server error",
+    "error": "Database connection failed"
+}</json></div>
+            </div>
+        </div>
+
+        <!-- CREATE DEPARTMENT - POST -->
+        <div class="section-title">📌 POST /api/departments - Create Department</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck departments]
+    C --> D[validate Middleware]
+    D --> E[Zod Validation]
+    E --> F[Controller: createDepartment]
+    F --> G[Get User ID from req.user]
+    G --> H[Service: createDepartment]
+    H --> I{Check Name Exists}
+    I -->|Yes| J[Throw Error: Duplicate]
+    I -->|No| K[Repository: create]
+    K --> L[INSERT INTO departments]
+    L --> M[Return Created Record]
+    M --> N[success Response 201]
+
+    style A fill:#e8f5e9
+    style N fill:#c8e6c9
+    style J fill:#ffebee
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.validation.js</code> (Zod Schema)</p>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>name</td><td>string</td><td><span class="badge badge-required">Yes</span></td><td>Min: 1 char, Max: 100 chars</td></tr>
+                <tr><td>description</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Optional text field</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Additional Validation:</strong><br>
+                • Department name must be unique (checked at service layer)<br>
+                • If duplicate name exists, returns error: "Department with this name already exists"
+            </div>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.controller.js</code> (lines 20-30)</p>
+            <div class="code-block">async createDepartment(req, res) {
+    try {
+        const createdBy = req.user ? req.user.id : null;
+        const department = await DepartmentService.createDepartment(req.body, createdBy);
+        return success(res, 'Department created successfully', department, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.service.js</code> (lines 17-26)</p>
+            <p>The service validates name uniqueness before creating:</p>
+            <div class="code-block">async createDepartment(data, userId) {
+    // Check if department name already exists
+    const existing = await DepartmentRepository.findByName(data.name);
+    if (existing) {
+        throw new Error('Department with this name already exists');
+    }
+
+    // Create with user ID as creator
+    return await DepartmentRepository.create({
+        ...data,
+        created_by: userId
+    });
+}</div>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.repository.js</code> (lines 27-35)</p>
+            <div class="code-block">async findByName(name) {
+    return await Department.findOne({
+        where: { name }
+    });
+}
+
+async create(data) {
+    return await Department.create(data);
+}</div>
+
+            <h4>SQL Query Generated</h4>
+            <div class="code-block">-- Check for existing name
+SELECT id, name, description, created_by, created_at
+FROM departments
+WHERE name = 'IT'
+LIMIT 1;
+
+-- Insert new department
+INSERT INTO departments (name, description, created_by, created_at)
+VALUES ('IT', 'Information Technology Department', 1, NOW());</div>
+
+            <h3>Database Tables</h3>
+            <table>
+                <tr><th>Table</th><th>Description</th></tr>
+                <tr><td><code>departments</code></td><td>Stores department information with unique names</td></tr>
+            </table>
+
+            <h3>Sample Payload</h3>
+            <div class="code-block">POST /api/departments
+
+{
+    "name": "Information Technology",
+    "description": "Manages all IT infrastructure and software development"
+}</div>
+
+            <h3>Success Response</h3>
+            <div class="code-block"><json>{
+    "status": true,
+    "message": "Department created successfully",
+    "data": {
+        "id": 1,
+        "name": "Information Technology",
+        "description": "Manages all IT infrastructure and software development",
+        "created_by": 1,
+        "created_at": "2025-12-03T10:30:00.000Z"
+    }
+}</json></div>
+            <div class="success-box">
+                <strong>✓ HTTP Status:</strong> 201 Created<br>
+                <strong>✓ Auto-generated:</strong> id, created_at
+            </div>
+
+            <h3>Error Response</h3>
+            <div class="code-block"><json>{
+    "status": false,
+    "message": "Department with this name already exists"
+}</json></div>
+            <div class="warning-box">
+                <strong>⚠️ HTTP Status:</strong> 400 Bad Request<br>
+                <strong>⚠️ Common Errors:</strong>
+                <ul>
+                    <li>"Department with this name already exists" - Duplicate name</li>
+                    <li>"name is required" - Missing required field</li>
+                    <li>"name must be at most 100 characters" - Max length exceeded</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- GET DEPARTMENT BY ID -->
+        <div class="section-title">📌 GET /api/departments/:id - Get Department by ID</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck departments]
+    C --> D[Controller: getDepartmentById]
+    D --> E[Extract ID from params]
+    E --> F[Service: getDepartmentById]
+    F --> G[Repository: findById]
+    G --> H[SELECT * FROM departments]
+    H --> I{Department Found?}
+    I -->|No| J[Throw Error: Not Found]
+    I -->|Yes| K[Return Department Data]
+    K --> L[success Response]
+
+    style A fill:#e3f2fd
+    style L fill:#c8e6c9
+    style J fill:#ffebee
+    style B fill:#fff3e0
+    style C fill:#fff3e0</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-optional">No</span></td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.controller.js</code> (lines 32-42)</p>
+            <div class="code-block">async getDepartmentById(req, res) {
+    try {
+        const department = await DepartmentService.getDepartmentById(req.params.id);
+        return success(res, 'Department retrieved successfully', department);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</div>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.service.js</code> (lines 28-32)</p>
+            <div class="code-block">async getDepartmentById(id) {
+    const department = await DepartmentRepository.findById(id);
+    if (!department) {
+        throw new Error('Department not found');
+    }
+    return department;
+}</div>
+
+            <h3>Repository Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.repository.js</code> (lines 37-42)</p>
+            <div class="code-block">async findById(id) {
+    return await Department.findByPk(id);
+}</div>
+
+            <h4>SQL Query Generated</h4>
+            <div class="code-block">SELECT id, name, description, created_by, created_at
+FROM departments
+WHERE id = 1;</div>
+
+            <h3>Success Response</h3>
+            <div class="code-block"><json>{
+    "status": true,
+    "message": "Department retrieved successfully",
+    "data": {
+        "id": 1,
+        "name": "IT",
+        "description": "Information Technology Department",
+        "created_by": 1,
+        "created_at": "2025-01-01T00:00:00.000Z"
+    }
+}</json></div>
+
+            <h3>Error Response</h3>
+            <div class="code-block"><json>{
+    "status": false,
+    "message": "Department not found"
+}</json></div>
+        </div>
+
+        <!-- UPDATE DEPARTMENT -->
+        <div class="section-title">📌 PUT /api/departments/:id - Update Department</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck departments]
+    C --> D[validate Middleware]
+    D --> E[Zod Validation]
+    E --> F[Controller: updateDepartment]
+    F --> G[Service: updateDepartment]
+    G --> H{Department Exists?}
+    H -->|No| I[Throw Error: Not Found]
+    H -->|Yes| J{Name Changing?}
+    J -->|Yes| K{New Name Unique?}
+    K -->|No| L[Throw Error: Duplicate]
+    K -->|Yes| M[Repository: update]
+    J -->|No| M
+    M --> N[UPDATE departments]
+    N --> O[Return Updated Record]
+    O --> P[success Response]
+
+    style A fill:#fff3e0
+    style P fill:#c8e6c9
+    style I fill:#ffebee
+    style L fill:#ffebee</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+                <tr><td>Content-Type</td><td>application/json</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <tr><th>Field</th><th>Type</th><th>Required</th><th>Constraints</th></tr>
+                <tr><td>name</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Min: 1 char, Max: 100 chars, Unique if provided</td></tr>
+                <tr><td>description</td><td>string</td><td><span class="badge badge-optional">No</span></td><td>Optional text field</td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.controller.js</code> (lines 44-54)</p>
+            <div class="code-block">async updateDepartment(req, res) {
+    try {
+        const department = await DepartmentService.updateDepartment(req.params.id, req.body);
+        return success(res, 'Department updated successfully', department);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</div>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.service.js</code> (lines 34-48)</p>
+            <div class="code-block">async updateDepartment(id, data) {
+    const department = await DepartmentRepository.findById(id);
+    if (!department) {
+        throw new Error('Department not found');
+    }
+
+    // Check name uniqueness if name is being updated
+    if (data.name && data.name !== department.name) {
+        const existing = await DepartmentRepository.findByName(data.name);
+        if (existing) {
+            throw new Error('Department with this name already exists');
+        }
+    }
+
+    return await DepartmentRepository.update(id, data);
+}</div>
+
+            <h3>Repository Logic</h3>
+            <div class="code-block">async update(id, data) {
+    const department = await Department.findByPk(id);
+    if (!department) {
+        throw new Error('Department not found');
+    }
+    await department.update(data);
+    return department;
+}</div>
+
+            <h4>SQL Query Generated</h4>
+            <div class="code-block">UPDATE departments
+SET name = 'Information Technology',
+    description = 'IT Department updated'
+WHERE id = 1;</div>
+
+            <h3>Sample Payload</h3>
+            <div class="code-block">PUT /api/departments/1
+
+{
+    "name": "Information Technology",
+    "description": "IT Department - Updated description"
+}</div>
+
+            <h3>Success Response</h3>
+            <div class="code-block"><json>{
+    "status": true,
+    "message": "Department updated successfully",
+    "data": {
+        "id": 1,
+        "name": "Information Technology",
+        "description": "IT Department - Updated description",
+        "created_by": 1,
+        "created_at": "2025-01-01T00:00:00.000Z"
+    }
+}</json></div>
+
+            <h3>Error Response</h3>
+            <div class="code-block"><json>{
+    "status": false,
+    "message": "Department with this name already exists"
+}</json></div>
+        </div>
+
+        <!-- DELETE DEPARTMENT -->
+        <div class="section-title">📌 DELETE /api/departments/:id - Delete Department</div>
+        <div class="card">
+            <h3>Request Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Client Request] --> B[verifyToken Middleware]
+    B --> C[moduleCheck departments]
+    C --> D[Controller: deleteDepartment]
+    D --> E[Service: deleteDepartment]
+    E --> F{Department Exists?}
+    F -->|No| G[Throw Error: Not Found]
+    F -->|Yes| H{Has Staff Members?}
+    H -->|Yes| I[Throw Error: Cannot Delete]
+    H -->|No| J[Repository: delete]
+    J --> K[DELETE FROM departments]
+    K --> L[Return Success]
+    L --> M[success Response]
+
+    style A fill:#ffebee
+    style M fill:#c8e6c9
+    style G fill:#ffebee
+    style I fill:#ffebee</pre>
+            </div>
+
+            <h4>Request Headers</h4>
+            <table>
+                <tr><th>Header</th><th>Value</th><th>Required</th></tr>
+                <tr><td>Authorization</td><td>Bearer &lt;JWT_TOKEN&gt;</td><td><span class="badge badge-required">Yes</span></td></tr>
+            </table>
+
+            <h3>Controller Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.controller.js</code> (lines 56-65)</p>
+            <div class="code-block">async deleteDepartment(req, res) {
+    try {
+        await DepartmentService.deleteDepartment(req.params.id);
+        return success(res, 'Department deleted successfully');
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</div>
+
+            <h3>Service Logic</h3>
+            <p><strong>File:</strong> <code>/src/modules/departments/departments.service.js</code> (lines 50-56)</p>
+            <div class="code-block">async deleteDepartment(id) {
+    const department = await DepartmentRepository.findById(id);
+    if (!department) {
+        throw new Error('Department not found');
+    }
+    await DepartmentRepository.delete(id);
+}</div>
+
+            <h3>Repository Logic</h3>
+            <div class="code-block">async delete(id) {
+    const department = await Department.findByPk(id);
+    if (!department) {
+        throw new Error('Department not found');
+    }
+    await department.destroy();
+}</div>
+
+            <h4>SQL Query Generated</h4>
+            <div class="code-block">DELETE FROM departments
+WHERE id = 1;</div>
+
+            <h3>Success Response</h3>
+            <div class="code-block"><json>{
+    "status": true,
+    "message": "Department deleted successfully"
+}</json></div>
+
+            <h3>Error Response</h3>
+            <div class="code-block"><json>{
+    "status": false,
+    "message": "Department not found"
+}</json></div>
+
+            <div class="warning-box">
+                <strong>⚠️ Warning:</strong> Cannot delete department if it has associated staff members. Consider changing status to "inactive" instead of deleting to preserve historical data.
+            </div>
+        </div>
+
+        <!-- DATABASE SCHEMA -->
+        <div class="section-title">📌 DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+
+            <div class="flow-diagram">
+                <pre class="mermaid">erDiagram
+    DEPARTMENTS {
+        number id PK
+        string name UK
+        text description
+        number created_by
+        datetime created_at
+    }
+
+    STAFFS {
+        number id PK
+        string first_name
+        string last_name
+        number department_id FK
+    }
+
+    DEPARTMENTS ||--o{ STAFFS : "has staff members"</pre>
+            </div>
+
+            <h3 style="color: #f5af19; margin: 30px 0 15px 0;">Table Descriptions</h3>
+
+            <h4>DEPARTMENTS</h4>
+            <table>
+                <tr><th>Column</th><th>Type</th><th>Constraints</th><th>Description</th></tr>
+                <tr><td>id</td><td>INT</td><td>PK, AUTO_INCREMENT</td><td>Unique identifier</td></tr>
+                <tr><td>name</td><td>VARCHAR(100)</td><td>NOT NULL, UNIQUE</td><td>Department name (unique)</td></tr>
+                <tr><td>description</td><td>TEXT</td><td>NULLABLE</td><td>Department description</td></tr>
+                <tr><td>created_by</td><td>INT</td><td>NULLABLE</td><td>User ID who created the record</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>DEFAULT NOW()</td><td>Creation timestamp</td></tr>
+            </table>
+
+            <div class="info-box">
+                <strong>ℹ️ Table Characteristics:</strong><br>
+                • No timestamps (timestamps: false in model)<br>
+                • Only created_at is tracked<br>
+                • Department name must be unique<br>
+                • No updated_at field<br>
+                • No soft delete (deleted_at)
+            </div>
+        </div>
+
+        <!-- USE CASES -->
+        <div class="section-title">📌 COMMON USE CASES</div>
+        <div class="card">
+            <h2>Department Module Usage Examples</h2>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">1. Creating a New Department</h3>
+            <div class="code-block">POST /api/departments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+{
+    "name": "Research & Development",
+    "description": "Product research and development team"
+}</div>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">2. Finding Active Departments</h3>
+            <div class="code-block">GET /api/departments?status=active</div>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">3. Searching Departments</h3>
+            <div class="code-block">GET /api/departments?search=technology</div>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">4. Updating Department Information</h3>
+            <div class="code-block">PUT /api/departments/3
+{
+    "description": "Updated description for HR department"
+}</div>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">5. Deactivating Instead of Deleting</h3>
+            <div class="warning-box">
+                <strong>⚠️ Best Practice:</strong> Use PUT to update status instead of DELETE to preserve historical data
+            </div>
+            <div class="code-block">PUT /api/departments/5
+{
+    "status": "inactive"
+}</div>
+        </div>
+
+        <!-- SIDE EFFECTS -->
+        <div class="section-title">📌 SIDE EFFECTS & WARNINGS</div>
+        <div class="card">
+            <h2>Operations Impact</h2>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">Creating a Department</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Creates new DEPARTMENTS record</li>
+                <li>✓ Validates department name uniqueness across all departments</li>
+                <li>✓ Sets created_by to current user ID</li>
+                <li>✓ Auto-generates created_at timestamp</li>
+                <li>✅ Available for staff assignment immediately</li>
+            </ul>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">Updating a Department</h3>
+            <ul style="line-height: 2;">
+                <li>✓ Updates specified fields only (partial update supported)</li>
+                <li>✓ Validates name uniqueness if name is being changed</li>
+                <li>⚠️ No updated_at field (timestamps disabled in model)</li>
+                <li>✅ May affect staff assigned to this department</li>
+            </ul>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">Deleting a Department</h3>
+            <ul style="line-height: 2;">
+                <li>⚠️ Permanently removes department record</li>
+                <li>⚠️ Cannot be undone (no soft delete)</li>
+                <li>⚠️ May fail if foreign key constraints exist</li>
+                <li>✅ Consider using status='inactive' instead of deleting</li>
+            </ul>
+
+            <div class="warning-box">
+                <strong>⚠️ Important Warnings:</strong>
+                <ul style="margin-top: 10px;">
+                    <li>Department name must be unique - duplicates are rejected</li>
+                    <li>Foreign key constraints from staffs.department_id may prevent deletion</li>
+                    <li>No updated_at tracking - cannot see when department was last modified</li>
+                    <li>No soft delete - deletion is permanent</li>
+                    <li>Use status field for deactivation instead of deletion when possible</li>
+                </ul>
+            </div>
+
+            <h3 style="color: #f5af19; margin: 20px 0 10px 0;">Department Creation Flow</h3>
+            <div class="flow-diagram">
+                <pre class="mermaid">graph TD
+    A[Start: Create Department] --> B[Validate Request]
+    B --> C{Name Valid?}
+    C -->|No| D[Return Validation Error]
+    C -->|Yes| E[Check Name Uniqueness]
+    E --> F{Name Already Exists?}
+    F -->|Yes| G[Return Duplicate Error]
+    F -->|No| H[Create Department Record]
+    H --> I[Set created_by Field]
+    I --> J[Auto-generate created_at]
+    J --> K[Return Success with New Department]
+
+    style A fill:#e1f5fe
+    style K fill:#c8e6c9
+    style D fill:#ffebee
+    style G fill:#ffebee</pre>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: { useMaxWidth: false, htmlLabels: true, curve: 'basis' }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector('.toggle-icon');
+            content.classList.toggle('active');
+            icon.textContent = content.classList.contains('active') ? '▲' : '▼';
+        }
+    </script>
+</body>
+</html>

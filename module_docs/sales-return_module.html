@@ -1,0 +1,1964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Returns Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #f5576c;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #f5576c;
+            border-bottom: 3px solid #f5576c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #f5576c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #fff5f8;
+            border-left: 4px solid #f5576c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f5576c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #e04658;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f5576c;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #f5576c;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-patch {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #17a2b8;
+            color: white;
+        }
+
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f5576c;
+        }
+
+        .request-item {
+            background: #fff5f8;
+            padding: 15px;
+            border-left: 3px solid #f5576c;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #ffe8ec;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #f5576c;
+            font-size: 13px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #f5576c;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-patch {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🔄 Sales Returns Module</h1>
+            <p>Complete sales return management system with refunds, credit notes, and inventory restoration</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <h3 style="color: #f5576c; margin-top: 0;">📌 Sales Returns Management</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns</span>
+                </h3>
+                <p class="route-desc">Get all sales returns with pagination and filtering</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/approved</span>
+                </h3>
+                <p class="route-desc">Get all approved sales returns</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed sales return information</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/returns</span>
+                </h3>
+                <p class="route-desc">Create a new sales return with items</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/sales/returns/:id</span>
+                </h3>
+                <p class="route-desc">Update sales return status and details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/sales/returns/:id</span>
+                </h3>
+                <p class="route-desc">Delete a sales return</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Sales Return Invoices (Credit Notes)</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/invoices</span>
+                </h3>
+                <p class="route-desc">Get all sales return invoices (credit notes)</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/invoices/:id</span>
+                </h3>
+                <p class="route-desc">Get sales return invoice details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/returns/invoices</span>
+                </h3>
+                <p class="route-desc">Create a credit note for a sales return</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-patch">PATCH</span>
+                    <span class="route-path">/api/sales/returns/invoices/:id</span>
+                </h3>
+                <p class="route-desc">Update sales return invoice status</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Refunds & Payments</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/payments</span>
+                </h3>
+                <p class="route-desc">Get all refund payments</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/returns/payments/:id</span>
+                </h3>
+                <p class="route-desc">Get refund payment details</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/returns/payments</span>
+                </h3>
+                <p class="route-desc">Record a refund payment for a sales return</p>
+            </div>
+        </div>
+
+        <!-- ==================== POST CREATE SALES RETURN ==================== -->
+        <div class="section-header">📌 CREATE SALES RETURN (POST)</div>
+
+        <div class="card">
+            <h2>POST /api/sales/returns <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Create a new sales return record with items and process inventory adjustments</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/sales/returns
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: createSalesReturn(req, res)
+    Controller->>Service: createSalesReturn(data, userId)
+    Service->>Service: Validate items array
+    Service->>Service: Generate return number
+    Service->>Service: Calculate totals & validate products
+    Service->>Repository: create(data, items)
+    Repository->>Database: INSERT sales_returns & items
+    Database->>Repository: Return created
+    Repository->>Service: Sales return object
+    Service->>Service: Update stock (if status='returned')
+    Service->>Service: Create stock movements
+    Service->>Controller: Return result
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Business Logic| Service[Sales Return Service]
+                Service -->|Data Access| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Sales Return Flow
+                subgraph "Create Sales Return Process"
+                CreateReturn[POST /api/sales/returns] --> Validate[Service - Validate Items]
+                Validate -->|Valid| GenNumber[Service - Generate Return Number]
+                GenNumber --> Calc[Service - Calculate Totals]
+                Calc -->|Validate products| Create[Repository - create]
+                Create -->|INSERT| ReturnsDB[(sales_returns + sales_return_items)]
+                ReturnsDB --> ReturnObj[Repository - Return Object]
+                ReturnObj --> CheckStatus[Check Status]
+                CheckStatus -->|returned| Stock[Service - Update Stock]
+                CheckStatus -->|other| DirectResponse[Controller - Direct Response]
+                Stock --> Movements[Service - Create Stock Movements]
+                Movements --> Response[Controller - Send Response - 201]
+                end
+            </div>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Rules</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>customer_id</td>
+                        <td>integer</td>
+                        <td>Required, Must exist in customers table</td>
+                    </tr>
+                    <tr>
+                        <td>sales_order_id</td>
+                        <td>integer</td>
+                        <td>Optional, Must exist in sales_orders if provided</td>
+                    </tr>
+                    <tr>
+                        <td>return_date</td>
+                        <td>date</td>
+                        <td>Optional, Default: today</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td>string</td>
+                        <td>Optional (pending, approved, returned, cancelled)</td>
+                    </tr>
+                    <tr>
+                        <td>items</td>
+                        <td>array</td>
+                        <td>Required, Min: 1 item</td>
+                    </tr>
+                    <tr>
+                        <td>items[].product_id</td>
+                        <td>integer</td>
+                        <td>Required, Must exist in products table</td>
+                    </tr>
+                    <tr>
+                        <td>items[].quantity</td>
+                        <td>integer</td>
+                        <td>Required, Min: 1</td>
+                    </tr>
+                    <tr>
+                        <td>items[].unit_price</td>
+                        <td>decimal</td>
+                        <td>Required, Min: 0</td>
+                    </tr>
+                    <tr>
+                        <td>items[].discount</td>
+                        <td>decimal</td>
+                        <td>Optional, Min: 0</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td>text</td>
+                        <td>Optional</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>Automatic Calculations:</strong> The system automatically calculates <code>total_amount</code>, <code>tax_amount</code> (based on product sales_tax), <code>discount_amount</code>, and <code>grand_total</code> from the items provided.
+            </div>
+
+            <div class="warning-box">
+                <strong>Inventory Side Effects:</strong> If <code>status='returned'</code>, the system automatically:
+                <ul style="margin: 5px 0 0 20px;">
+                    <li>Increases <code>products.stock_quantity</code> for returned items</li>
+                    <li>Creates <code>stock_movements</code> records for inventory tracking</li>
+                </ul>
+            </div>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: sales-return.controller.js:69
+async createSalesReturn(req, res) {
+    try {
+        const userId = req.user.id;
+        const result = await salesReturnService.createSalesReturn(req.body, userId);
+        res.status(201).json({
+            status: true,
+            message: 'Sales return created successfully',
+            data: result
+        });
+    } catch (error) {
+        res.status(400).json({ status: false, message: error.message });
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: sales-return.service.js:60
+async createSalesReturn(data, userId) {
+    let { items, ...returnInfo } = data;
+
+    // Validate items
+    if (!Array.isArray(items) || items.length === 0) {
+        throw new Error('Sales return must contain at least one item');
+    }
+
+    // Generate return number
+    const return_number = `SLSRTN-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+    let total_amount = 0;
+    let discount_amount = 0;
+    let tax_amount = 0;
+
+    // Fetch products and validate
+    const productIds = items.map(i => i.product_id);
+    const products = await ProductRepository.findByIds(productIds);
+    const productMap = new Map(products.map(p => [String(p.id), p]));
+
+    // Calculate totals
+    const processedItems = items.map(item => {
+        const quantity = Number(item.quantity) || 0;
+        const unit_price = Number(item.unit_price) || 0;
+        const discount = Number(item.discount) || 0;
+
+        if (quantity <= 0 || unit_price < 0) {
+            throw new Error('Invalid quantity or unit price');
+        }
+
+        const product = productMap.get(String(item.product_id));
+        if (!product) {
+            throw new Error(`Product not found: ${item.product_id}`);
+        }
+
+        const tax_percent = Number(product.sales_tax) || 0;
+        const line_subtotal = quantity * unit_price;
+        const line_total = Math.max(line_subtotal - discount, 0);
+        const item_tax_amount = (line_total * tax_percent) / 100;
+
+        discount_amount += discount;
+        total_amount += line_total;
+        tax_amount += item_tax_amount;
+
+        return {
+            ...item,
+            quantity,
+            unit_price,
+            discount,
+            tax_amount: item_tax_amount,
+            line_total: line_total
+        };
+    });
+
+    const returnData = {
+        ...returnInfo,
+        return_number,
+        total_amount,
+        discount_amount,
+        tax_amount,
+        grand_total: total_amount + tax_amount,
+        created_by: userId
+    };
+
+    const result = await SalesReturnRepository.create(returnData, processedItems);
+
+    // Update stock if status is 'returned'
+    if (returnData.status === 'returned') {
+        for (const item of processedItems) {
+            const product = await ProductRepository.findById(item.product_id);
+            if (product) {
+                const newStock = (Number(product.stock_quantity) || 0) + item.quantity;
+                await ProductRepository.update(item.product_id, { stock_quantity: newStock });
+
+                await StockMovement.create({
+                    product_id: item.product_id,
+                    movement_type: 'sales_return',
+                    quantity: item.quantity,
+                    reference_type: 'sales_return',
+                    reference_id: result.id,
+                    notes: `Stock increased from sales return ${return_number}`,
+                    created_by: userId
+                });
+            }
+        }
+    }
+
+    return result;
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: sales-return.repository.js
+async create(data, items) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        // Create sales return
+        const salesReturn = await SalesReturn.create(data, { transaction });
+
+        // Create return items
+        const itemsWithReturnId = items.map(item => ({
+            ...item,
+            sales_return_id: salesReturn.id
+        }));
+
+        await SalesReturnItem.bulkCreate(itemsWithReturnId, { transaction });
+
+        await transaction.commit();
+        return salesReturn;
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
+SQL Equivalent:
+BEGIN TRANSACTION;
+
+INSERT INTO sales_returns (
+    return_number, customer_id, sales_order_id, return_date,
+    status, total_amount, tax_amount, discount_amount, grand_total,
+    payment_status, notes, created_by
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO sales_return_items (
+    sales_return_id, product_id, quantity, unit_price,
+    discount, line_total, tax_amount
+)
+VALUES
+    (?, ?, ?, ?, ?, ?, ?),
+    (?, ?, ?, ?, ?, ?, ?);
+
+COMMIT;</code></pre>
+
+            <h3>Database Tables</h3>
+            <ul>
+                <li><code>sales_returns</code> - Main sales returns table</li>
+                <li><code>sales_return_items</code> - Line items for sales returns</li>
+                <li><code>products</code> - Stock quantity updates (if status='returned')</li>
+                <li><code>stock_movements</code> - Inventory movement records</li>
+            </ul>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block"><code>{
+    "customer_id": 1,
+    "sales_order_id": 100,
+    "return_date": "2025-01-28",
+    "status": "pending",
+    "items": [
+        {
+            "product_id": 1,
+            "quantity": 2,
+            "unit_price": 50.00,
+            "discount": 5.00
+        },
+        {
+            "product_id": 3,
+            "quantity": 1,
+            "unit_price": 100.00
+        }
+    ],
+    "notes": "Customer requested return due to defects"
+}</code></pre>
+
+            <h3>Success Response</h3>
+            <div class="response-box">
+                <strong>201 Created</strong>
+                <code>{
+    "status": true,
+    "message": "Sales return created successfully",
+    "data": {
+        "id": 1,
+        "return_number": "SLSRTN-1738150000000-XYZ",
+        "customer_id": 1,
+        "sales_order_id": 100,
+        "status": "pending",
+        "return_date": "2025-01-28T00:00:00.000Z",
+        "total_amount": 195.00,
+        "tax_amount": 19.00,
+        "discount_amount": 5.00,
+        "grand_total": 214.00,
+        "payment_status": "pending",
+        "notes": "Customer requested return due to defects",
+        "created_at": "2025-01-28T10:00:00.000Z",
+        "updated_at": "2025-01-28T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>400 Bad Request - No Items</strong>
+                <code>{
+    "status": false,
+    "message": "Sales return must contain at least one item"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Product Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Product not found: 999"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Invalid Quantity</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid quantity or unit price"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ALL SALES RETURNS ==================== -->
+        <div class="section-header">📌 GET ALL SALES RETURNS (GET)</div>
+
+        <div class="card">
+            <h2>GET /api/sales/returns <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all sales returns with pagination, filtering, and calculated refund totals</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/sales/returns?filters
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>Controller: getSalesReturns(req, res)
+    Controller->>Controller: Parse query params (page, limit, filters)
+    Controller->>Service: getAllSalesReturns(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with JOINs
+    Database->>Repository: { count, rows }
+    Repository->>Service: Raw returns data
+    Service->>Service: Calculate totals for each row
+    Service->>Service: Calculate refund amounts
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Parse Params| Parse[Parse Query Params]
+                Parse -->|page, limit, filters| Service[Sales Return Service]
+                Service -->|Calculate offset| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Sales Returns Flow
+                subgraph "Get All Sales Returns Process"
+                GetAll[GET /api/sales/returns] --> FindAll[Repository - findAll]
+                FindAll -->|SELECT + JOINs| ReturnsDB[(sales_returns + customers + orders)]
+                ReturnsDB --> Result[Repository - Count + Rows]
+                Result --> CalcTotals[Service - Calculate Totals]
+                CalcTotals -->|For each row| CalcRefund[Service - Calculate Refund Amounts]
+                CalcRefund --> Response[Controller - Send Paginated Response]
+                end
+            </div>
+
+            <h3>Request Headers</h3>
+            <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: sales-return.controller.js:5
+async getSalesReturns(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const { status, customer_id, search } = req.query;
+        const filters = { status, customer_id, search };
+
+        const result = await salesReturnService.getAllSalesReturns(filters, page, limit);
+
+        res.status(200).json({
+            success: true,
+            message: 'Sales returns retrieved successfully',
+            pagination: {
+                total: result.total,
+                page,
+                limit,
+                totalPage: Math.ceil(result.total / (limit || 10))
+            },
+            data: result.data
+        });
+    } catch (error) {
+        res.status(500).json({ status: false, message: error.message });
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: sales-return.service.js:6
+async getAllSalesReturns(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+
+    const result = await SalesReturnRepository.findAll(filters, limit, offset);
+
+    // Calculate totals for each return
+    const data = result.rows.map(row => {
+        const sr = row.get({ plain: true });
+        const totalAmount = parseFloat(sr.total_amount || 0);
+        const discountAmount = parseFloat(sr.discount_amount || 0);
+        const taxAmount = parseFloat(sr.tax_amount || 0);
+        const refunded = parseFloat(sr.total_refunded_amount || 0);
+
+        const grandTotal = totalAmount - discountAmount + taxAmount;
+        const dueRefund = grandTotal - refunded;
+
+        return {
+            ...sr,
+            grand_total: grandTotal,
+            total_refunded_amount: refunded,
+            due_refund_amount: dueRefund > 0 ? dueRefund : 0
+        };
+    });
+
+    return {
+        data,
+        total: result.count
+    };
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: sales-return.repository.js
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    // Apply filters
+    if (filters.status) {
+        where.status = filters.status;
+    }
+
+    if (filters.customer_id) {
+        where.customer_id = filters.customer_id;
+    }
+
+    if (filters.search) {
+        where.return_number = {
+            [Op.like]: `%${filters.search}%`
+        };
+    }
+
+    const { count, rows } = await SalesReturn.findAndCountAll({
+        where,
+        include: [
+            {
+                model: Customer,
+                as: 'customer',
+                attributes: ['id', 'name']
+            },
+            {
+                model: SalesReturnItem,
+                as: 'items',
+                include: [
+                    {
+                        model: Product,
+                        as: 'product',
+                        attributes: ['id', 'name', 'sku']
+                    }
+                ]
+            }
+        ],
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(amount), 0)
+                        FROM sales_return_payments
+                        WHERE sales_return_id = SalesReturn.id
+                        AND status = 'completed'
+                    )`),
+                    'total_refunded_amount'
+                ]
+            ]
+        },
+        limit,
+        offset,
+        order: [['created_at', 'DESC']]
+    });
+
+    return { count, rows };
+}
+
+SQL Equivalent:
+SELECT
+    sr.*,
+    (
+        SELECT COALESCE(SUM(amount), 0)
+        FROM sales_return_payments
+        WHERE sales_return_id = sr.id AND status = 'completed'
+    ) AS total_refunded_amount,
+    c.id AS customer.id, c.name AS customer.name
+FROM sales_returns AS sr
+LEFT JOIN customers AS c ON c.id = sr.customer_id
+LEFT JOIN sales_return_items AS sri ON sri.sales_return_id = sr.id
+WHERE sr.status = ?
+ORDER BY sr.created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+            <h3>Query Parameters</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>page</td>
+                        <td>integer</td>
+                        <td>1</td>
+                        <td>Page number</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>integer</td>
+                        <td>10</td>
+                        <td>Items per page</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Filter by status (pending, approved, returned, cancelled)</td>
+                    </tr>
+                    <tr>
+                        <td>customer_id</td>
+                        <td>integer</td>
+                        <td>-</td>
+                        <td>Filter by customer ID</td>
+                    </tr>
+                    <tr>
+                        <td>search</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Search by return number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Multiple Requests & Responses</h3>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>1. List All Sales Returns (Paginated)</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/sales/returns?page=1&limit=10</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Sales returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "SLSRTN-1738150000000-XYZ",
+            "customer_id": 1,
+            "status": "pending",
+            "return_date": "2025-01-28T00:00:00.000Z",
+            "total_amount": 195.00,
+            "tax_amount": 19.00,
+            "discount_amount": 5.00,
+            "grand_total": 209.00,
+            "payment_status": "pending",
+            "total_refunded_amount": 0,
+            "due_refund_amount": 209.00,
+            "notes": "Customer requested return",
+            "created_at": "2025-01-28T10:00:00.000Z",
+            "updated_at": "2025-01-28T10:00:00.000Z",
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>2. Filter by Status</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/sales/returns?status=approved</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Sales returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "return_number": "SLSRTN-1738150000100-ABC",
+            "customer_id": 1,
+            "status": "approved",
+            "grand_total": 150.00,
+            "total_refunded_amount": 0,
+            "due_refund_amount": 150.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>3. Filter by Customer</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/sales/returns?customer_id=1</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Sales returns retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "SLSRTN-1738150000000-XYZ",
+            "customer_id": 1,
+            "status": "pending",
+            "grand_total": 209.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        },
+        {
+            "id": 2,
+            "return_number": "SLSRTN-1738150000100-ABC",
+            "customer_id": 1,
+            "status": "approved",
+            "grand_total": 150.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>4. Search by Return Number</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/sales/returns?search=SLSRTN-1738150000000</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Sales returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "SLSRTN-1738150000000-XYZ",
+            "customer_id": 1,
+            "status": "pending",
+            "grand_total": 209.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>5. Combined Filters</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/sales/returns?status=approved&customer_id=1&page=1&limit=5</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Sales returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 5,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "return_number": "SLSRTN-1738150000100-ABC",
+            "customer_id": 1,
+            "status": "approved",
+            "grand_total": 150.00,
+            "total_refunded_amount": 75.00,
+            "due_refund_amount": 75.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>500 Internal Server Error</strong>
+                <code>{
+    "status": false,
+    "message": "Database connection failed"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET APPROVED RETURNS ==================== -->
+        <div class="section-header">📌 GET APPROVED SALES RETURNS</div>
+
+        <div class="card">
+            <h2>GET /api/sales/returns/approved <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all sales returns with status "approved"</p>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Filter: approved| Service[Sales Return Service]
+                Service -->|Data Access| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Approved Returns Flow
+                subgraph "Get Approved Returns Process"
+                GetApproved[GET /api/sales/returns/approved] --> Filter[Service - Filter by Status]
+                Filter -->|WHERE status = 'approved'| FindAll[Repository - findAll]
+                FindAll -->|SELECT + JOINs| ReturnsDB[(sales_returns + customers)]
+                ReturnsDB --> Result[Repository - Returns List]
+                Result --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/sales/returns/approved</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "success": true,
+    "message": "Approved sales returns retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "return_number": "SLSRTN-1738150000000-XYZ",
+            "status": "approved",
+            "grand_total": 105.00,
+            "total_refunded_amount": 0,
+            "due_refund_amount": 105.00,
+            "customer": {
+                "id": 1,
+                "name": "John Doe"
+            }
+        }
+    ]
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET RETURN BY ID ==================== -->
+        <div class="section-header">📌 GET SALES RETURN BY ID</div>
+
+        <div class="card">
+            <h2>GET /api/sales/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Extract id| Service[Sales Return Service]
+                Service -->|Data Access| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get Sales Return by ID Flow
+                subgraph "Get Sales Return by ID Process"
+                GetReturn[GET /api/sales/returns/:id] --> FindById[Repository - findById]
+                FindById -->|SELECT with JOINs| ReturnDB[(sales_returns + customers + items + invoices + payments)]
+                ReturnDB -->|Not found| NotFound[Service - Throw Error]
+                ReturnDB -->|Exists| ReturnObj[Repository - Return Object]
+                ReturnObj --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales return ID</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/sales/returns/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales return retrieved successfully",
+    "data": {
+        "id": 1,
+        "return_number": "SLSRTN-1738150000000-XYZ",
+        "customer_id": 1,
+        "sales_order_id": 100,
+        "status": "approved",
+        "return_date": "2025-01-28T00:00:00.000Z",
+        "total_amount": 195.00,
+        "tax_amount": 19.00,
+        "discount_amount": 5.00,
+        "grand_total": 209.00,
+        "payment_status": "partial",
+        "total_refunded_amount": 100.00,
+        "due_refund_amount": 109.00,
+        "notes": "Customer requested return due to defects",
+        "created_at": "2025-01-28T10:00:00.000Z",
+        "updated_at": "2025-01-28T11:00:00.000Z",
+        "customer": {
+            "id": 1,
+            "name": "John Doe",
+            "email": "john@example.com",
+            "phone": "+1234567890"
+        },
+        "items": [
+            {
+                "id": 1,
+                "product_id": 1,
+                "quantity": 2,
+                "unit_price": 50.00,
+                "discount": 5.00,
+                "line_total": 95.00,
+                "product": {
+                    "id": 1,
+                    "name": "Product A",
+                    "sku": "PRD-A-001"
+                }
+            }
+        ],
+        "invoices": [
+            {
+                "id": 1,
+                "invoice_number": "CRDT-1738150000000-XYZ",
+                "total_amount": 209.00,
+                "status": "issued",
+                "invoice_date": "2025-01-28T00:00:00.000Z"
+            }
+        ],
+        "payments": [
+            {
+                "id": 1,
+                "amount": 100.00,
+                "payment_method": "BANK_TRANSFER",
+                "reference_number": "REFUND-001",
+                "payment_date": "2025-01-28T11:00:00.000Z",
+                "status": "completed"
+            }
+        ],
+        "created_by": {
+            "id": 5,
+            "name": "Admin User"
+        },
+        "sales_order": {
+            "id": 100,
+            "so_number": "SO-100"
+        }
+    }
+}</code>
+            </div>
+
+            <h4>Error Response</h4>
+            <div class="error-box">
+                <strong>404 Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Sales return not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== UPDATE SALES RETURN ==================== -->
+        <div class="section-header">📌 UPDATE SALES RETURN</div>
+
+        <div class="card">
+            <h2>PUT /api/sales/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Extract id, data| Service[Sales Return Service]
+                Service -->|Data Access| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Update Sales Return Flow
+                subgraph "Update Sales Return Process"
+                Update[PUT /api/sales/returns/:id] --> Find[Repository - findById]
+                Find -->|SELECT| ReturnDB[(sales_returns table)]
+                ReturnDB -->|Not found| NotFound[Service - Throw Error]
+                ReturnDB -->|Exists| UpdateRepo[Repository - update]
+                UpdateRepo -->|UPDATE| Updated[(Updated return)]
+                Updated --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>New status (pending, approved, returned, cancelled)</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>text</td>
+                    <td>No</td>
+                    <td>Additional notes</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>PUT /api/sales/returns/1
+
+{
+    "status": "approved",
+    "notes": "Return approved - processing refund"
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales return updated successfully",
+    "data": {
+        "id": 1,
+        "return_number": "SLSRTN-1738150000000-XYZ",
+        "status": "approved",
+        "notes": "Return approved - processing refund",
+        "updated_at": "2025-01-28T12:00:00.000Z"
+    }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DELETE SALES RETURN ==================== -->
+        <div class="section-header">📌 DELETE SALES RETURN</div>
+
+        <div class="card">
+            <h2>DELETE /api/sales/returns/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP DELETE + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales Returns"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[Sales Return Controller]
+                Controller -->|Extract id| Service[Sales Return Service]
+                Service -->|Data Access| Repository[Sales Return Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Delete Sales Return Flow
+                subgraph "Delete Sales Return Process"
+                Delete[DELETE /api/sales/returns/:id] --> Find[Repository - findById]
+                Find -->|SELECT| ReturnDB[(sales_returns table)]
+                ReturnDB -->|Not found| NotFound[Service - Throw Error]
+                ReturnDB -->|Exists| Destroy[Repository - destroy]
+                Destroy -->|DELETE| Deleted[(Deleted return)]
+                Deleted --> Success[Service - Success]
+                Success --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>DELETE /api/sales/returns/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales return deleted successfully",
+    "data": null
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== CREDIT NOTES (INVOICES) ==================== -->
+        <div class="section-header">📌 CREDIT NOTES & INVOICES</div>
+
+        <div class="card">
+            <h2>Sales Return Invoices (Credit Notes)</h2>
+            <p>Credit notes are generated for approved sales returns to document the refund to customers.</p>
+
+            <h3>POST /api/sales/returns/invoices <span class="badge-protected">🔒 Protected</span></h3>
+            <p>Create a credit note for a sales return.</p>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>sales_return_id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales return ID</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>POST /api/sales/returns/invoices
+
+{
+    "sales_return_id": 1
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales return invoice created successfully",
+    "data": {
+        "id": 1,
+        "invoice_number": "CRDT-1738150000000-XYZ",
+        "sales_return_id": 1,
+        "total_amount": 209.00,
+        "status": "issued",
+        "invoice_date": "2025-01-28T00:00:00.000Z",
+        "created_at": "2025-01-28T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h4>Database Side Effects</h4>
+            <div class="error-box" style="border-left-color: #17a2b8; background: #e8f4f8;">
+                <strong>⚠️ Side Effects:</strong>
+                <ul style="margin: 5px 0 0 20px; font-size: 13px;">
+                    <li>Processes accounting transaction (SALES_RETURN)</li>
+                    <li>Records refund to customer</li>
+                    <li>Updates accounts receivable ledgers</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== REFUNDS & PAYMENTS ==================== -->
+        <div class="section-header">📌 REFUNDS & PAYMENTS</div>
+
+        <div class="card">
+            <h2>Refund & Credit Payments</h2>
+            <p>Record refund payments to customers for approved sales returns.</p>
+
+            <h3>POST /api/sales/returns/payments <span class="badge-protected">🔒 Protected</span></h3>
+            <p>Record a refund payment to a customer.</p>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>sales_return_id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Sales return ID</td>
+                </tr>
+                <tr>
+                    <td>amount</td>
+                    <td>decimal</td>
+                    <td>Yes</td>
+                    <td>Refund amount</td>
+                </tr>
+                <tr>
+                    <td>payment_method</td>
+                    <td>string</td>
+                    <td>Yes</td>
+                    <td>Payment method (CASH, BANK_TRANSFER, CHECK, etc.)</td>
+                </tr>
+                <tr>
+                    <td>invoice_id</td>
+                    <td>integer</td>
+                    <td>No</td>
+                    <td>Associated invoice ID</td>
+                </tr>
+                <tr>
+                    <td>reference_number</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>Reference/transaction number</td>
+                </tr>
+            </table>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>POST /api/sales/returns/payments
+
+{
+    "sales_return_id": 1,
+    "amount": 209.00,
+    "payment_method": "BANK_TRANSFER",
+    "reference_number": "REFUND-002",
+    "invoice_id": 1
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Sales return payment recorded successfully",
+    "data": {
+        "id": 1,
+        "sales_return_id": 1,
+        "amount": 209.00,
+        "payment_method": "BANK_TRANSFER",
+        "reference_number": "REFUND-002",
+        "payment_date": "2025-01-28T12:00:00.000Z",
+        "status": "completed"
+    }
+}</code>
+            </div>
+
+            <h4>Database Side Effects</h4>
+            <div class="error-box" style="border-left-color: #17a2b8; background: #e8f4f8;">
+                <strong>⚠️ Side Effects:</strong>
+                <ul style="margin: 5px 0 0 20px; font-size: 13px;">
+                    <li>Processes accounting transaction (PAYMENT_OUT)</li>
+                    <li>Decreases cash/bank balances in accounting</li>
+                    <li>Updates <code>payment_status</code> of sales return if fully refunded</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE REFERENCE ==================== -->
+        <div class="section-header">📌 DATABASE REFERENCE</div>
+
+        <div class="card">
+            <h2>Sales Return Status Reference</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>pending</strong></td>
+                        <td>Awaiting approval</td>
+                    </tr>
+                    <tr>
+                        <td><strong>approved</strong></td>
+                        <td>Approved for refund</td>
+                    </tr>
+                    <tr>
+                        <td><strong>returned</strong></td>
+                        <td>Items returned and stock updated</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cancelled</strong></td>
+                        <td>Return cancelled</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Payment Methods Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CASH</strong></td>
+                        <td>Cash refund</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BANK_TRANSFER</strong></td>
+                        <td>Bank transfer refund</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CHECK</strong></td>
+                        <td>Check refund</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CREDIT_NOTE</strong></td>
+                        <td>Credit note adjustment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#f5576c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#e04658',
+                lineColor: '#f5576c',
+                secondaryColor: '#f093fb',
+                tertiaryColor: '#f8f9fa',
+                background: '#f8f9fa',
+                mainBkg: '#f5576c',
+                nodeBorder: '#e04658',
+                clusterBkg: '#fff5f8',
+                clusterBorder: '#f5576c',
+                titleColor: '#f5576c',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#f093fb',
+                actorBorder: '#f5576c',
+                actorTextColor: '#fff',
+                actorLineColor: '#f5576c',
+                signalColor: '#f5576c',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#f093fb',
+                labelBoxBorderColor: '#f5576c',
+                labelTextColor: '#fff',
+                loopTextColor: '#333'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1770 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #f5576c;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #f5576c;
+            border-bottom: 3px solid #f5576c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #f5576c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f5576c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #e04658;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f5576c;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #f5576c;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #f5576c;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #f5576c;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .expandable-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .expandable-header {
+            background: #f5576c;
+            color: white;
+            padding: 12px 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .expandable-header:hover {
+            background: #e04658;
+        }
+
+        .expandable-content {
+            padding: 15px;
+            display: none;
+        }
+
+        .expandable-content.active {
+            display: block;
+        }
+
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>🛒 Sales Module</h1>
+            <p>Complete sales order management system with invoicing, payments, delivery tracking, warehouses, and sales routes</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <h3 style="color: #f5576c; margin-top: 0;">📌 Orders Management</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/orders</span>
+                </h3>
+                <p class="route-desc">Create a new sales order with line items. Auto-generates order_number and total_amount with stock deduction.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/orders</span>
+                </h3>
+                <p class="route-desc">Get all orders with pagination. Supports filtering by status, customer, date range, and search by order number.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/orders/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed order information by ID with customer, items, products, and delivery details.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/sales/orders/:id</span>
+                </h3>
+                <p class="route-desc">Update order details and status. Returns complete order data.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/sales/orders/:id</span>
+                </h3>
+                <p class="route-desc">Cancel/delete a sales order.</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Invoices & Payments</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/invoices</span>
+                </h3>
+                <p class="route-desc">Get all invoices with pagination.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/orders/:id/invoice</span>
+                </h3>
+                <p class="route-desc">Create an invoice for a specific order.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/orders/:id/pay</span>
+                </h3>
+                <p class="route-desc">Record a payment for an order (supports negative amounts for refunds).</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Deliveries</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/orders/:id/deliver</span>
+                </h3>
+                <p class="route-desc">Create a delivery record and update order status.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/sales/deliveries/:id</span>
+                </h3>
+                <p class="route-desc">Update delivery status and tracking information.</p>
+            </div>
+
+            <h3 style="color: #f5576c; margin-top: 25px;">📌 Routes & Warehouses</h3>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/routes</span>
+                </h3>
+                <p class="route-desc">Get all sales routes with assigned customers and orders.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/routes</span>
+                </h3>
+                <p class="route-desc">Create a new sales route with assigned sales representative.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/sales/warehouses</span>
+                </h3>
+                <p class="route-desc">Get all warehouses with pagination.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/sales/warehouses</span>
+                </h3>
+                <p class="route-desc">Create a new warehouse location.</p>
+            </div>
+        </div>
+
+        <!-- ==================== 1. POST CREATE ORDER ==================== -->
+        <div class="section-header">📌 ORDERS MANAGEMENT ENDPOINTS</div>
+
+        <div class="card">
+            <h2>1. POST /api/sales/orders - Create Order <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/sales/orders
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'sales' access
+    moduleCheck->>Router: Access Granted
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: createOrder(data, userId)
+    Service->>Service: Generate order number
+    Service->>Service: Calculate totals & tax
+    Service->>Service: Check product stock
+    Service->>Repository: create(orderData, items)
+    Repository->>Database: INSERT INTO orders, order_items
+    Database->>Repository: Order created
+    Repository->>Service: Order object
+    Service->>Service: Deduct product stock
+    Service->>Service: Record stock movements
+    Service->>Service: Create status history
+    Service->>Controller: Order result
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'sales' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Sales Controller]
+                Controller -->|Business Logic| Service[Sales Service]
+                Service -->|Data Access| Repository[Sales Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Order Flow
+                subgraph "Create Order Process"
+                CreateOrder[POST /api/sales/orders] --> GenOrder[Service: Generate Order Number]
+                GenOrder --> CalcTotals[Service: Calculate Totals and Tax]
+                CalcTotals --> CheckStock[Service: Check Product Stock]
+                CheckStock -->|Valid Stock| Create[Repository: create]
+                Create -->|INSERT orders + order_items| OrdersDB[(orders, order_items tables)]
+                OrdersDB --> OrderObj[Repository: Order Object]
+                OrderObj --> DeductStock[Service: Deduct Product Stock]
+                DeductStock --> StockMovements[Service: Record Stock Movements]
+                StockMovements --> StatusHistory[Service: Create Status History]
+                StatusHistory --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>customer_id</td>
+                    <td>integer</td>
+                    <td>required, must exist in customers table</td>
+                </tr>
+                <tr>
+                    <td>items</td>
+                    <td>array</td>
+                    <td>required, must contain at least one item</td>
+                </tr>
+                <tr>
+                    <td>items[].product_id</td>
+                    <td>integer</td>
+                    <td>required, must exist in products table</td>
+                </tr>
+                <tr>
+                    <td>items[].quantity</td>
+                    <td>integer</td>
+                    <td>required, must be > 0, sufficient stock required</td>
+                </tr>
+                <tr>
+                    <td>items[].unit_price</td>
+                    <td>decimal</td>
+                    <td>required, must be >= 0</td>
+                </tr>
+                <tr>
+                    <td>items[].discount</td>
+                    <td>decimal</td>
+                    <td>optional, default: 0</td>
+                </tr>
+                <tr>
+                    <td>items[].sales_tax</td>
+                    <td>decimal</td>
+                    <td>optional, uses product's default if not provided</td>
+                </tr>
+                <tr>
+                    <td>sales_tax_percent</td>
+                    <td>decimal</td>
+                    <td>optional, order-level tax percentage</td>
+                </tr>
+                <tr>
+                    <td>order_number</td>
+                    <td>string</td>
+                    <td>optional, auto-generated if not provided</td>
+                </tr>
+                <tr>
+                    <td>shipping_address</td>
+                    <td>string</td>
+                    <td>optional</td>
+                </tr>
+                <tr>
+                    <td>billing_address</td>
+                    <td>string</td>
+                    <td>optional</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>string</td>
+                    <td>optional</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.controller.js</code> <span class="file-badge">createOrder</span></p>
+            <pre class="code-block"><code>async createOrder(req, res) {
+  try {
+    const order = await SalesService.createOrder(req.body, req.user.id);
+    return success(res, 'Order created successfully', order, 201);
+  } catch (err) {
+    return error(res, err.message, 400);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.service.js</code> <span class="file-badge">createOrder</span></p>
+            <pre class="code-block"><code>async createOrder(data, userId) {
+  let { items, sales_tax_percent, ...orderInfo } = data;
+
+  // Generate a unique order number using prefix settings
+  let order_number = data.order_number;
+  if (!order_number) {
+    try {
+      const { generateNumber } = require('../settings/numbering.helper');
+      order_number = await generateNumber('order');
+    } catch (err) {
+      console.error('Error generating order number:', err);
+      order_number = `ORD-${Date.now()}`;
+    }
+  }
+
+  // Calculate total amount, discount amount, and tax amount
+  let total_amount = 0;
+  let discount_amount = 0;
+  let item_level_tax = 0; // Tax from individual products
+
+  if (items && Array.isArray(items)) {
+    const { ProductRepository } = require('../products/products.repository');
+
+    // Use Promise.all to handle async product fetching
+    items = await Promise.all(items.map(async (item) => {
+      const quantity = Number(item.quantity) || 0;
+      const unit_price = Number(item.unit_price) || 0;
+      const discount = Number(item.discount) || 0;
+
+      // Fetch product to get default sales_tax
+      const product = await ProductRepository.findById(item.product_id);
+      // Use provided tax rate from frontend (e.g. POS) or fallback to product's default
+      const sales_tax_rate = item.sales_tax !== undefined ? Number(item.sales_tax) :
+        (product && product.sales_tax ? Number(product.sales_tax) : 0);
+
+      const total_price = quantity * unit_price; // Before discount
+      const line_total = total_price - discount; // After discount
+
+      // Calculate item tax (from product's sales_tax) on line_total
+      const item_tax_amount = (line_total * sales_tax_rate) / 100;
+
+      discount_amount += discount;
+      total_amount += total_price; // Sum of total_price (before discount)
+      item_level_tax += item_tax_amount;
+
+      return {
+        ...item,
+        tax_amount: item_tax_amount,
+        sales_tax_percent: sales_tax_rate,  // Store the tax percentage
+        purchase_cost: product ? product.cost : 0 // Lock in the cost at time of sale
+      };
+    }));
+  }
+
+  // Calculate order-level tax if sales_tax_percent is provided
+  let order_level_tax = 0;
+  const tax_percent = sales_tax_percent ? Number(sales_tax_percent) : 0;
+
+  if (tax_percent > 0) {
+    // Apply order-level tax on total_amount (after item discounts)
+    order_level_tax = (total_amount * tax_percent) / 100;
+  }
+
+  // Total tax is sum of item-level tax and order-level tax
+  const tax_amount = item_level_tax + order_level_tax;
+
+  const orderData = {
+    ...orderInfo,
+    order_number,
+    total_amount,
+    discount_amount,
+    tax_amount,
+    sales_tax_percent: tax_percent,
+    status: 'pending', // Force status to pending (dummy order)
+    created_by: userId
+  };
+
+  const order = await OrderRepository.create(orderData, items || []);
+
+  // Record initial status in history
+  await OrderStatusHistoryRepository.create({
+    order_id: order.id,
+    status: order.status || 'pending',
+    changed_by: userId,
+    notes: 'Initial order creation'
+  });
+
+  // Deduct stock and record movements for each item
+  const StockMovement = require('../products/stock-movement.model');
+  const { ProductRepository: ProductRepo } = require('../products/products.repository');
+
+  if (items && Array.isArray(items)) {
+    for (const item of items) {
+      // Get current product stock
+      const product = await ProductRepo.findById(item.product_id);
+      if (!product) {
+        throw new Error(`Product with ID ${item.product_id} not found`);
+      }
+
+      // Check if sufficient stock
+      if (product.stock_quantity < item.quantity) {
+        throw new Error(`Insufficient stock for product ${product.name}. Available: ${product.stock_quantity}, Required: ${item.quantity}`);
+      }
+
+      // Deduct stock
+      const newStock = product.stock_quantity - item.quantity;
+      await ProductRepo.update(item.product_id, { stock_quantity: newStock });
+
+      // Record stock movement
+      await StockMovement.create({
+        product_id: item.product_id,
+        movement_type: 'sale',
+        quantity: -item.quantity, // Negative for stock out
+        reference_type: 'order',
+        reference_id: order.id,
+        notes: `Stock deducted for order ${order_number}`,
+        created_by: userId
+      });
+    }
+  }
+
+  return order;
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.repository.js</code> <span class="file-badge">OrderRepository.create</span></p>
+            <pre class="code-block"><code>async create(orderData, itemsData) {
+  const transaction = await sequelize.transaction();
+  try {
+    const order = await Order.create(orderData, { transaction });
+
+    const items = itemsData.map(item => {
+      const discount = item.discount || 0;
+      const total_price = item.quantity * item.unit_price; // Before discount
+      const line_total = item.line_total || (total_price - discount); // After discount
+
+      return {
+        ...item,
+        order_id: order.id,
+        discount: discount,
+        total_price: total_price,
+        line_total: line_total,
+        tax_amount: item.tax_amount || 0,
+        sales_tax_percent: item.sales_tax_percent || 0
+      };
+    });
+
+    if (items.length > 0) {
+      await OrderItem.bulkCreate(items, { transaction });
+    }
+
+    await transaction.commit();
+    return await this.findById(order.id);
+  } catch (error) {
+    await transaction.rollback();
+    throw error;
+  }
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert order
+INSERT INTO orders (order_number, customer_id, total_amount, discount_amount,
+                    tax_amount, sales_tax_percent, status, shipping_address,
+                    billing_address, notes, created_by)
+VALUES ('ORD-1733130000000', 1, 200.00, 5.00, 15.00, 10, 'pending',
+        '123 Main St', '123 Main St', 'Handle with care', 1);
+
+-- Insert order items
+INSERT INTO order_items (order_id, product_id, quantity, unit_price, discount,
+                          total_price, line_total, tax_amount, sales_tax_percent)
+VALUES
+  (1, 1, 2, 50.00, 5.00, 100.00, 95.00, 9.50, 10),
+  (1, 2, 1, 100.00, 0.00, 100.00, 100.00, 5.50, 5.5);
+
+-- Insert order status history
+INSERT INTO order_status_history (order_id, status, changed_by, notes)
+VALUES (1, 'pending', 1, 'Initial order creation');
+
+-- Update product stock
+UPDATE products
+SET stock_quantity = stock_quantity - 2
+WHERE id = 1;
+
+-- Record stock movements
+INSERT INTO stock_movements (product_id, movement_type, quantity,
+                             reference_type, reference_id, notes, created_by)
+VALUES
+  (1, 'sale', -2, 'order', 1, 'Stock deducted for order ORD-1733130000000', 1),
+  (2, 'sale', -1, 'order', 1, 'Stock deducted for order ORD-1733130000000', 1);</code></pre>
+
+            <h4>Sample Payload</h4>
+            <pre class="code-block"><code>{
+  "customer_id": 1,
+  "shipping_address": "123 Main St, New York, NY 10001",
+  "billing_address": "123 Main St, New York, NY 10001",
+  "notes": "Please deliver between 9 AM and 5 PM",
+  "sales_tax_percent": 10,
+  "items": [
+    {
+      "product_id": 1,
+      "quantity": 2,
+      "unit_price": 50.00,
+      "discount": 5.00,
+      "sales_tax": 10
+    },
+    {
+      "product_id": 2,
+      "quantity": 1,
+      "unit_price": 100.00,
+      "discount": 0,
+      "sales_tax": 5.5
+    }
+  ]
+}</code></pre>
+
+            <h4>Success Response (201 Created)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Order created successfully",
+  "data": {
+    "id": 1,
+    "order_number": "ORD-1733130000000",
+    "customer_id": 1,
+    "total_amount": "200.00",
+    "tax_amount": "15.00",
+    "discount_amount": "5.00",
+    "sales_tax_percent": 10,
+    "status": "pending",
+    "payment_status": "pending",
+    "shipping_address": "123 Main St, New York, NY 10001",
+    "billing_address": "123 Main St, New York, NY 10001",
+    "notes": "Please deliver between 9 AM and 5 PM",
+    "created_at": "2025-12-03T10:30:00.000Z",
+    "customer": {
+      "id": 1,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "phone": "+1234567890",
+      "company": "ABC Corp"
+    },
+    "items": [
+      {
+        "id": 1,
+        "quantity": 2,
+        "unit_price": 50.00,
+        "discount": 5.00,
+        "total_price": 100.00,
+        "line_total": 95.00,
+        "tax_amount": 9.50,
+        "sales_tax_percent": 10,
+        "product": {
+          "id": 1,
+          "name": "Wireless Mouse",
+          "sku": "MOU-001",
+          "price": 29.99
+        }
+      }
+    ],
+    "payments": [],
+    "delivery": null
+  }
+}</code>
+            </div>
+
+            <h4>Error Responses</h4>
+            <div class="error-box">
+                <p><strong>400 Bad Request - Missing Required Fields:</strong></p>
+                <code>{
+  "status": false,
+  "message": "customer_id is required"
+}</code>
+            </div>
+            <div class="error-box">
+                <p><strong>400 Bad Request - Invalid Customer:</strong></p>
+                <code>{
+  "status": false,
+  "message": "Customer not found"
+}</code>
+            </div>
+            <div class="error-box">
+                <p><strong>400 Bad Request - Insufficient Stock:</strong></p>
+                <code>{
+  "status": false,
+  "message": "Insufficient stock for product Wireless Mouse. Available: 5, Required: 10"
+}</code>
+            </div>
+            <div class="error-box">
+                <p><strong>400 Bad Request - Invalid Product:</strong></p>
+                <code>{
+  "status": false,
+  "message": "Product with ID 999 not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 2. GET ALL ORDERS ==================== -->
+        <div class="card">
+            <h2>2. GET /api/sales/orders - Get All Orders <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/sales/orders
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'sales' access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getAllOrders(filters, page, limit)
+    Service->>Service: Parse pagination params
+    Service->>Service: Build filters object
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with joins
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with calculated fields
+    Service->>Service: Transform deliveries array to object
+    Service->>Service: Calculate payment totals
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'sales' access]
+                ModuleCheck -->|Access OK| Controller[Sales Controller]
+                Controller -->|Business Logic| Service[Sales Service]
+                Service -->|Data Access| Repository[Sales Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Orders Flow
+                subgraph "Get All Orders Process"
+                GetAll[GET /api/sales/orders] --> Parse[Service: Parse Pagination]
+                Parse -->|page, limit| BuildFilters[Service: Build Filters]
+                BuildFilters -->|status, customer_id, search| FindAll[Repository: findAll]
+                FindAll -->|SELECT + joins| OrdersDB[(orders + customers + products)]
+                OrdersDB --> Result[Repository: Count + Rows]
+                Result --> Transform[Service: Transform Results]
+                Transform --> Deliveries[Service: Deliveries Array to Object]
+                Deliveries --> Payments[Service: Calculate Payment Totals]
+                Payments --> Response[Controller: Send Paginated Response]
+                end
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>{
+  "Authorization": "Bearer YOUR_JWT_TOKEN"
+}</code></pre>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Default</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>page</td>
+                    <td>integer</td>
+                    <td>1</td>
+                    <td>Page number</td>
+                </tr>
+                <tr>
+                    <td>limit</td>
+                    <td>integer</td>
+                    <td>10</td>
+                    <td>Items per page</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>string</td>
+                    <td>-</td>
+                    <td>Filter by order status (pending, confirmed, in_transit, delivered, cancelled, returned)</td>
+                </tr>
+                <tr>
+                    <td>customer_id</td>
+                    <td>integer</td>
+                    <td>-</td>
+                    <td>Filter by customer ID</td>
+                </tr>
+                <tr>
+                    <td>search</td>
+                    <td>string</td>
+                    <td>-</td>
+                    <td>Search by order number</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.controller.js</code> <span class="file-badge">getAllOrders</span></p>
+            <pre class="code-block"><code>async getAllOrders(req, res) {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const filters = {
+      status: req.query.status,
+      customer_id: req.query.customer_id,
+      search: req.query.search
+    };
+
+    const result = await SalesService.getAllOrders(filters, page, limit);
+    return successWithPagination(res, 'Orders retrieved successfully', result.data, {
+      total: result.total,
+      page,
+      limit
+    });
+  } catch (err) {
+    return error(res, err.message, 500);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.service.js</code> <span class="file-badge">getAllOrders</span></p>
+            <pre class="code-block"><code>async getAllOrders(filters = {}, page = 1, limit = 10) {
+  const offset = (page - 1) * limit;
+  const result = await OrderRepository.findAll(filters, limit, offset);
+
+  // Transform deliveries array to single delivery object
+  const transformedRows = result.rows.map(order => {
+    const orderData = order.toJSON();
+
+    // Convert deliveries array to single delivery object (latest one)
+    orderData.delivery = orderData.deliveries && orderData.deliveries.length > 0
+      ? orderData.deliveries[0]
+      : null;
+
+    // Add delivery_status field
+    orderData.delivery_status = orderData.delivery ? orderData.delivery.status : null;
+
+    delete orderData.deliveries;
+
+    // Calculate Payment Totals
+    const payments = orderData.payments || [];
+    const grossPaid = payments.reduce((sum, p) => {
+      const amt = parseFloat(p.amount);
+      return amt > 0 ? sum + amt : sum;
+    }, 0);
+    const refunded = payments.reduce((sum, p) => {
+      const amt = parseFloat(p.amount);
+      return amt < 0 ? sum + Math.abs(amt) : sum;
+    }, 0);
+    const netPaid = grossPaid - refunded;
+
+    orderData.gross_paid_amount = grossPaid;
+    orderData.refunded_amount = refunded;
+    orderData.total_paid_amount = netPaid;
+    orderData.total_payable_amount = parseFloat(orderData.total_amount)
+      - parseFloat(orderData.discount_amount || 0)
+      + parseFloat(orderData.tax_amount || 0);
+
+    return orderData;
+  });
+
+  return {
+    data: transformedRows,
+    total: result.count
+  };
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/sales/sales.repository.js</code> <span class="file-badge">OrderRepository.findAll</span></p>
+            <pre class="code-block"><code>async findAll(filters = {}, limit = 10, offset = 0) {
+  const where = {};
+  if (filters.status) {
+    if (filters.status === 'in_transit') {
+      where.status = { [Op.or]: ['in_transit', 'shipped'] };
+    } else {
+      where.status = filters.status;
+    }
+  }
+  if (filters.customer_id) where.customer_id = filters.customer_id;
+
+  if (filters.search) {
+    where[Op.or] = [
+      { order_number: { [Op.like]: `%${filters.search}%` } }
+    ];
+  }
+
+  return await Order.findAndCountAll({
+    where,
+    limit,
+    offset,
+    include: [
+      {
+        model: Customer,
+        as: 'customer',
+        attributes: ['id', 'name', 'email', 'phone', 'company']
+      },
+      {
+        model: OrderItem,
+        as: 'items',
+        include: [
+          {
+            model: Product,
+            as: 'product',
+            attributes: ['id', 'name', 'sku', 'price', 'image_url', 'specification']
+          }
+        ]
+      },
+      {
+        model: Delivery,
+        as: 'deliveries',
+        limit: 1,
+        order: [['created_at', 'DESC']],
+        separate: true
+      },
+      {
+        model: Payment,
+        as: 'payments',
+        separate: true
+      }
+    ],
+    order: [['created_at', 'DESC']],
+    distinct: true
+  });
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Query orders with relationships
+SELECT
+  o.id, o.order_number, o.customer_id, o.order_date,
+  o.status, o.total_amount, o.tax_amount, o.discount_amount,
+  o.shipping_address, o.billing_address, o.payment_status,
+  o.notes, o.due_date, o.delivery_date, o.created_at,
+  c.id as customer_id, c.name as customer_name, c.email, c.phone,
+  p.id as payment_id, p.amount, p.payment_method, p.reference_number,
+  d.id as delivery_id, d.delivery_number, d.delivery_date, d.status as delivery_status
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.id
+LEFT JOIN payments p ON o.id = p.order_id
+LEFT JOIN deliveries d ON o.id = d.order_id
+WHERE o.status = ?
+ORDER BY o.created_at DESC
+LIMIT 10 OFFSET 0;</code></pre>
+
+            <h4>Multiple Requests & Responses Examples</h4>
+
+            <!-- Example 1: List All Orders -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1️⃣ List All Orders (Default Pagination)</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h4>Request</h4>
+                    <pre class="code-block"><code>GET /api/sales/orders?page=1&limit=10
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                    <h4>Response (200)</h4>
+                    <div class="response-box">
+                        <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 10,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "order_number": "ORD-1733130000000",
+      "customer_id": 1,
+      "total_amount": "150.00",
+      "tax_amount": "0.00",
+      "discount_amount": "5.00",
+      "status": "pending",
+      "payment_status": "pending",
+      "delivery_status": null,
+      "notes": "Please deliver between 9 AM and 5 PM",
+      "due_date": "2025-12-15",
+      "created_at": "2025-12-03T05:00:00.000Z",
+      "customer": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "phone": "+1234567890",
+        "company": "ABC Corp"
+      },
+      "items": [
+        {
+          "id": 1,
+          "quantity": 2,
+          "unit_price": 50.00,
+          "line_total": 95.00,
+          "product": {
+            "id": 1,
+            "name": "Wireless Mouse",
+            "sku": "MOU-001",
+            "price": 29.99
+          }
+        }
+      ],
+      "payments": [],
+      "delivery": null,
+      "gross_paid_amount": 0,
+      "refunded_amount": 0,
+      "total_paid_amount": 0,
+      "total_payable_amount": 145.00
+    }
+  ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 2: Filter by Status -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2️⃣ Filter by Status (Pending Orders)</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h4>Request</h4>
+                    <pre class="code-block"><code>GET /api/sales/orders?status=pending&page=1&limit=10
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                    <h4>Response (200)</h4>
+                    <div class="response-box">
+                        <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 5,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "order_number": "ORD-1733130000000",
+      "status": "pending",
+      "customer": { "name": "John Doe" },
+      "total_amount": "150.00",
+      "payment_status": "pending"
+    }
+  ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 3: Filter by Customer -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3️⃣ Filter by Customer ID</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h4>Request</h4>
+                    <pre class="code-block"><code>GET /api/sales/orders?customer_id=1&page=1&limit=10
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                    <h4>Response (200)</h4>
+                    <div class="response-box">
+                        <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 3,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "order_number": "ORD-1733130000000",
+      "customer_id": 1,
+      "customer": { "name": "John Doe" },
+      "total_amount": "150.00",
+      "status": "pending"
+    }
+  ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 4: Search by Order Number -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4️⃣ Search by Order Number</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h4>Request</h4>
+                    <pre class="code-block"><code>GET /api/sales/orders?search=ORD-173313&page=1&limit=10
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                    <h4>Response (200)</h4>
+                    <div class="response-box">
+                        <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 1,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 1,
+      "order_number": "ORD-1733130000000",
+      "customer": { "name": "John Doe" },
+      "total_amount": "150.00",
+      "status": "pending"
+    }
+  ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Example 5: Combined Filters -->
+            <div class="expandable-section">
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>5️⃣ Combined Filters (Status + Customer + Search)</span>
+                    <span class="expandable-toggle">▼</span>
+                </div>
+                <div class="expandable-content">
+                    <h4>Request</h4>
+                    <pre class="code-block"><code>GET /api/sales/orders?status=delivered&customer_id=1&page=1&limit=10
+Authorization: Bearer YOUR_JWT_TOKEN</code></pre>
+
+                    <h4>Response (200)</h4>
+                    <div class="response-box">
+                        <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 2,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [
+    {
+      "id": 5,
+      "order_number": "ORD-1733130000005",
+      "customer_id": 1,
+      "customer": { "name": "John Doe" },
+      "total_amount": "250.00",
+      "status": "delivered",
+      "delivery_status": "delivered",
+      "delivery": {
+        "id": 3,
+        "delivery_number": "DEL-1733130000003",
+        "status": "delivered"
+      }
+    }
+  ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "success": true,
+  "message": "Orders retrieved successfully",
+  "pagination": {
+    "total": 10,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 1
+  },
+  "data": [...]
+}</code>
+            </div>
+
+            <h4>Error Responses</h4>
+            <div class="error-box">
+                <p><strong>401 Unauthorized - Invalid Token:</strong></p>
+                <code>{
+  "status": false,
+  "message": "Invalid token"
+}</code>
+            </div>
+            <div class="error-box">
+                <p><strong>500 Internal Server Error:</strong></p>
+                <code>{
+  "status": false,
+  "message": "Internal server error"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 3. PAYMENT & DELIVERY ENDPOINTS ==================== -->
+        <div class="section-header">📌 PAYMENT & DELIVERY ENDPOINTS</div>
+
+        <div class="card">
+            <h2>3. POST /api/sales/orders/:id/pay - Record Payment <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'sales' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Sales Controller]
+                Controller -->|Business Logic| Service[Sales Service]
+                Service -->|Data Access| Repository[Sales Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Record Payment Flow
+                subgraph "Record Payment Process"
+                RecordPay[POST /api/sales/orders/:id/pay] --> FindOrder[Service: Find Order]
+                FindOrder -->|SELECT| OrderDB[(orders table)]
+                OrderDB -->|Not found| NotFound[Service: Throw Error]
+                OrderDB -->|Exists| ValidateAmount[Service: Validate Amount]
+                ValidateAmount -->|Valid| CreatePay[Repository: create Payment]
+                CreatePay -->|INSERT| PayDB[(order_payments table)]
+                PayDB --> Payment[Repository: Payment Object]
+                Payment --> UpdateStatus[Service: Update Order Status]
+                UpdateStatus -->|UPDATE| Updated[(orders table)]
+                Updated --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "invoice_id": 5,
+  "amount": 150.00,
+  "payment_method": "cash",
+  "reference_number": "REF-123456",
+  "notes": "Full payment received"
+}</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Payment recorded successfully",
+  "data": {
+    "id": 10,
+    "order_id": 1,
+    "invoice_id": 5,
+    "amount": 150.00,
+    "payment_method": "cash",
+    "reference_number": "REF-123456",
+    "status": "completed",
+    "payment_date": "2025-12-03T10:30:00.000Z"
+  }
+}</code>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>4. POST /api/sales/orders/:id/deliver - Create Delivery <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Sales"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'sales' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Sales Controller]
+                Controller -->|Business Logic| Service[Sales Service]
+                Service -->|Data Access| Repository[Sales Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Delivery Flow
+                subgraph "Create Delivery Process"
+                CreateDel[POST /api/sales/orders/:id/deliver] --> FindOrder[Service: Find Order]
+                FindOrder -->|SELECT| OrderDB[(orders table)]
+                OrderDB -->|Not found| NotFound[Service: Throw Error]
+                OrderDB -->|Exists| CreateDel[Repository: create Delivery]
+                CreateDel -->|INSERT| DelDB[(order_deliveries table)]
+                DelDB --> Delivery[Repository: Delivery Object]
+                Delivery --> UpdateStatus[Service: Update Order Status]
+                UpdateStatus -->|UPDATE to 'delivered'| Updated[(orders table)]
+                Updated --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "delivery_date": "2025-12-10",
+  "delivery_address": "123 Main St, New York, NY 10001",
+  "delivery_person_name": "John Driver",
+  "delivery_person_phone": "+1234567890",
+  "tracking_number": "TRACK-123456",
+  "status": "in_transit",
+  "notes": "Handle with care"
+}</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "Delivery created successfully",
+  "data": {
+    "id": 5,
+    "order_id": 1,
+    "delivery_number": "DEL-1733130000000",
+    "status": "in_transit",
+    "delivery_date": "2025-12-10",
+    "tracking_number": "TRACK-123456"
+  }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="card">
+            <h2>🗄️ Database Schema (ER Diagram)</h2>
+            <div class="mermaid">
+                erDiagram
+                ORDERS {
+                int id PK
+                string order_number UK
+                int customer_id FK
+                datetime order_date
+                enum status
+                decimal total_amount
+                decimal tax_amount
+                decimal discount_amount
+                text shipping_address
+                text billing_address
+                enum payment_status
+                text notes
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                ORDER_ITEMS {
+                int id PK
+                int order_id FK
+                int product_id FK
+                int quantity
+                decimal unit_price
+                decimal discount
+                decimal line_total
+                text notes
+                text remark
+                datetime created_at
+                }
+                INVOICES {
+                int id PK
+                string invoice_number UK
+                int order_id FK
+                datetime invoice_date
+                date due_date
+                decimal total_amount
+                enum status
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                PAYMENTS {
+                int id PK
+                int invoice_id FK
+                int order_id FK
+                decimal amount
+                datetime payment_date
+                string payment_method
+                string reference_number
+                enum status
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                DELIVERIES {
+                int id PK
+                string delivery_number UK
+                int order_id FK
+                date delivery_date
+                text delivery_address
+                string delivery_person_name
+                string delivery_person_phone
+                string tracking_number
+                enum status
+                text notes
+                datetime delivered_at
+                text signature
+                int created_by FK
+                datetime created_at
+                datetime updated_at
+                }
+                WAREHOUSES {
+                int id PK
+                string name
+                string location
+                int capacity
+                string manager_name
+                string contact_number
+                boolean is_active
+                datetime created_at
+                datetime updated_at
+                }
+                SALES_ROUTES {
+                int id PK
+                string route_name UK
+                text description
+                int assigned_sales_rep_id FK
+                string start_location
+                string end_location
+                boolean is_active
+                decimal zoom_level
+                decimal center_lat
+                decimal center_lng
+                string country
+                string state
+                string city
+                datetime created_at
+                datetime updated_at
+                }
+                CUSTOMERS {
+                int id PK
+                string name
+                string email UK
+                string phone
+                string company
+                string address
+                string city
+                string state
+                string country
+                string postal_code
+                datetime created_at
+                }
+                PRODUCTS {
+                int id PK
+                string name
+                string sku
+                decimal price
+                int stock_quantity
+                string image_url
+                datetime created_at
+                }
+
+                CUSTOMERS ||--o{ ORDERS : "places"
+                ORDERS ||--|{ ORDER_ITEMS : "contains"
+                ORDER_ITEMS }|--|| PRODUCTS : "refers to"
+                ORDERS ||--|| INVOICES : "generates"
+                ORDERS ||--o{ PAYMENTS : "paid by"
+                INVOICES ||--o{ PAYMENTS : "paid by"
+                ORDERS ||--o{ DELIVERIES : "shipped via"
+                USERS ||--o{ ORDERS : "creates"
+                USERS ||--o{ DELIVERIES : "delivers"
+                USERS ||--o{ PAYMENTS : "records"
+                USERS ||--o{ INVOICES : "generates"
+                USERS ||--o{ WAREHOUSES : "manages"
+                SALES_ROUTES ||--o{ USERS : "assigned to"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tables Used</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>orders</strong></td>
+                        <td>Main sales order records</td>
+                        <td>id, order_number, customer_id, status, total_amount, payment_status</td>
+                    </tr>
+                    <tr>
+                        <td><strong>order_items</strong></td>
+                        <td>Line items for each order (products)</td>
+                        <td>id, order_id, product_id, quantity, unit_price, line_total</td>
+                    </tr>
+                    <tr>
+                        <td><strong>invoices</strong></td>
+                        <td>Invoice records generated from orders</td>
+                        <td>id, invoice_number, order_id, total_amount, status, due_date</td>
+                    </tr>
+                    <tr>
+                        <td><strong>payments</strong></td>
+                        <td>Payment transactions (supports refunds)</td>
+                        <td>id, order_id, invoice_id, amount, payment_method, reference_number, status</td>
+                    </tr>
+                    <tr>
+                        <td><strong>deliveries</strong></td>
+                        <td>Delivery tracking information</td>
+                        <td>id, order_id, delivery_number, delivery_date, status, tracking_number</td>
+                    </tr>
+                    <tr>
+                        <td><strong>warehouses</strong></td>
+                        <td>Warehouse/inventory locations</td>
+                        <td>id, name, location, capacity, manager_name, is_active</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sales_routes</strong></td>
+                        <td>Sales territory routes for deliveries</td>
+                        <td>id, route_name, description, assigned_sales_rep_id, center_lat, center_lng</td>
+                    </tr>
+                    <tr>
+                        <td><strong>customers</strong></td>
+                        <td>Customer information (referenced)</td>
+                        <td>id, name, email, phone, company, address</td>
+                    </tr>
+                    <tr>
+                        <td><strong>products</strong></td>
+                        <td>Product catalog (referenced)</td>
+                        <td>id, name, sku, price, stock_quantity</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Quick Testing</h2>
+
+            <h4>Create Order</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/sales/orders \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "customer_id": 1,
+    "shipping_address": "123 Main St, New York, NY",
+    "items": [
+      {
+        "product_id": 1,
+        "quantity": 2,
+        "unit_price": 50.00,
+        "line_total": 100.00
+      }
+    ]
+  }'</code></pre>
+
+            <h4>Get All Orders</h4>
+            <pre class="code-block"><code>curl -X GET "http://localhost:5000/api/sales/orders?page=1&limit=10&status=pending" \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+            <h4>Record Payment</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/sales/orders/1/pay \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "amount": 150.00,
+    "payment_method": "cash",
+    "reference_number": "REF-123456"
+  }'</code></pre>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                toggle.textContent = '▼';
+            } else {
+                content.classList.add('active');
+                toggle.textContent = '▲';
+            }
+        }
+    </script>
+</body>
+
+</html>

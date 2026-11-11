@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Purchase Management</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .badge-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+    .badge-dot-green  { background: #22c55e; }
+    .badge-dot-red    { background: #ef4444; }
+    .badge-dot-yellow { background: #eab308; }
+    .badge-dot-blue   { background: #2563eb; }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#" class="active">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Purchase Management</h1>
+    <div class="subtitle">
+      Full procure-to-pay cycle: requisitions, RFQs, supplier quotes, POs, GRNs, bills, returns, approvals, price history and landed cost.
+    </div>
+
+    <!-- OVERVIEW -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Procure-to-Pay Overview</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">This Quarter</div>
+          <div class="pill-filter">This Year</div>
+        </div>
+      </div>
+
+      <div class="three-column">
+        <div>
+          <label>Open Purchase Requisitions</label>
+          <div style="font-size:20px;font-weight:600;">12</div>
+          <div class="hint">From <code>purchase_requisitions</code></div>
+        </div>
+        <div>
+          <label>Open Purchase Orders</label>
+          <div style="font-size:20px;font-weight:600;">8</div>
+          <div class="hint">Awaiting delivery</div>
+        </div>
+        <div>
+          <label>Unbilled GRNs</label>
+          <div style="font-size:20px;font-weight:600;">5</div>
+          <div class="hint">GRNs not fully invoiced</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PR + RFQ -->
+    <div class="two-column">
+      <!-- Purchase Requisitions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Requisitions (Internal)</h3>
+          <button class="btn btn-primary btn-sm">+ New Requisition</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Requester / Department</label>
+            <input type="text" placeholder="Search requester / department" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>SUBMITTED</option>
+              <option>APPROVED</option>
+              <option>REJECTED</option>
+              <option>CONVERTED_TO_RFQ</option>
+              <option>CONVERTED_TO_PO</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">PR No</th>
+            <th>Requester</th>
+            <th style="width:100px;">Dept</th>
+            <th style="width:90px;">Req. Date</th>
+            <th style="width:90px;">Needed By</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PR-2025-010</td>
+            <td>Mr. Ali</td>
+            <td>Production</td>
+            <td>2025-01-05</td>
+            <td>2025-01-15</td>
+            <td><span class="tag-info tag">SUBMITTED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Convert → RFQ</button>
+            </td>
+          </tr>
+          <tr>
+            <td>PR-2025-011</td>
+            <td>Ms. Tan</td>
+            <td>Maintenance</td>
+            <td>2025-01-06</td>
+            <td>2025-01-20</td>
+            <td><span class="tag-success tag">APPROVED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Convert → PO</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>purchase_requisitions</code>, lines in <code>purchase_requisition_items</code>.
+        </div>
+      </div>
+
+      <!-- RFQ & Supplier Quotations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>RFQ & Supplier Quotations</h3>
+          <button class="btn btn-outline btn-sm">+ New RFQ</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>RFQ No / Supplier</label>
+            <input type="text" placeholder="Search RFQ / supplier" />
+          </div>
+          <div class="form-group">
+            <label>RFQ Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>ISSUED</option>
+              <option>CLOSED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">RFQ No</th>
+            <th>Linked PR</th>
+            <th style="width:140px;">Suppliers</th>
+            <th style="width:90px;">RFQ Date</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>RFQ-2025-005</td>
+            <td>PR-2025-010</td>
+            <td>3 Suppliers</td>
+            <td>2025-01-07</td>
+            <td><span class="tag-info tag">ISSUED</span></td>
+            <td><button class="btn btn-sm btn-outline">Compare Quotes</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:14px;margin-top:12px;margin-bottom:6px;">Supplier Quotations (Optional)</h4>
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Quote No</th>
+            <th>Supplier</th>
+            <th style="width:90px;">RFQ No</th>
+            <th style="width:100px;">Total</th>
+            <th style="width:90px;">Validity</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>SPQ-2025-020</td>
+            <td>Global Chem Sdn Bhd</td>
+            <td>RFQ-2025-005</td>
+            <td>18,500</td>
+            <td>2025-02-01</td>
+            <td><span class="tag-success tag">SELECTED</span></td>
+            <td><button class="btn btn-sm btn-outline">Convert → PO</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          RFQ in <code>purchase_rfqs</code>, invited suppliers in <code>purchase_rfq_suppliers</code>,  
+          supplier quotes in <code>supplier_quotations</code> + <code>supplier_quotation_items</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- POs + GRNs -->
+    <div class="two-column">
+      <!-- Purchase Orders -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Orders</h3>
+          <button class="btn btn-primary btn-sm">+ New PO</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Supplier</label>
+            <input type="text" placeholder="Search supplier" />
+          </div>
+          <div class="form-group">
+            <label>PO Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>APPROVED</option>
+              <option>PARTIALLY_RECEIVED</option>
+              <option>RECEIVED</option>
+              <option>CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">PO No</th>
+            <th>Supplier</th>
+            <th style="width:90px;">PO Date</th>
+            <th style="width:90px;">Expected</th>
+            <th style="width:100px;">PO Value</th>
+            <th style="width:100px;">Received</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PO-2025-030</td>
+            <td>Global Chem Sdn Bhd</td>
+            <td>2025-01-08</td>
+            <td>2025-01-20</td>
+            <td>25,000</td>
+            <td>10,000</td>
+            <td><span class="tag-warning tag">PARTIAL</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Receive</button>
+              <button class="btn btn-sm btn-outline">Bill</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>purchase_orders</code>, lines in <code>purchase_order_items</code>.
+        </div>
+      </div>
+
+      <!-- GRN -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Goods Receipt Notes (GRN)</h3>
+          <button class="btn btn-outline btn-sm">+ New GRN</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option>All</option>
+              <option>WH-01 Main</option>
+              <option>WH-02 FG</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>GRN Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>POSTED</option>
+              <option>CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">GRN No</th>
+            <th>Supplier</th>
+            <th style="width:90px;">GRN Date</th>
+            <th style="width:90px;">PO No</th>
+            <th style="width:120px;">Warehouse</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>GRN-2025-015</td>
+            <td>Global Chem Sdn Bhd</td>
+            <td>2025-01-12</td>
+            <td>PO-2025-030</td>
+            <td>WH-01 Main</td>
+            <td><span class="tag-success tag">POSTED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Bill</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>goods_receipts</code>, lines in <code>goods_receipt_items</code>,  
+          posting stock IN via <code>stock_transactions</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- BILLS + RETURNS -->
+    <div class="two-column">
+      <!-- Purchase Invoices / Bills -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Invoices / Bills</h3>
+          <button class="btn btn-primary btn-sm">+ New Bill</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Supplier</label>
+            <input type="text" placeholder="Search supplier" />
+          </div>
+          <div class="form-group">
+            <label>Bill Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>POSTED</option>
+              <option>PARTIALLY_PAID</option>
+              <option>PAID</option>
+              <option>VOID</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Payment Status</label>
+            <select>
+              <option>All</option>
+              <option>Outstanding</option>
+              <option>Overdue</option>
+              <option>Paid</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Bill No</th>
+            <th>Supplier</th>
+            <th style="width:90px;">Bill Date</th>
+            <th style="width:90px;">Due Date</th>
+            <th style="width:100px;">Total</th>
+            <th style="width:100px;">Outstanding</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>BILL-2025-060</td>
+            <td>Global Chem Sdn Bhd</td>
+            <td>2025-01-13</td>
+            <td>2025-02-12</td>
+            <td>25,000</td>
+            <td>10,000</td>
+            <td><span class="tag-warning tag">PARTIAL</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Pay</button>
+              <button class="btn btn-sm btn-outline">View</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>purchase_invoices</code>, lines in <code>purchase_invoice_items</code>.
+        </div>
+      </div>
+
+      <!-- Purchase Returns / Debit Notes -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Returns / Debit Notes</h3>
+          <button class="btn btn-outline btn-sm">+ New Debit Note</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Supplier</label>
+            <input type="text" placeholder="Search supplier" />
+          </div>
+          <div class="form-group">
+            <label>Linked Bill</label>
+            <input type="text" placeholder="Bill No" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:100px;">DN No</th>
+            <th>Supplier</th>
+            <th style="width:90px;">DN Date</th>
+            <th style="width:90px;">Bill No</th>
+            <th style="width:100px;">Amount</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>DN-2025-008</td>
+            <td>Global Chem Sdn Bhd</td>
+            <td>2025-01-16</td>
+            <td>BILL-2025-060</td>
+            <td>2,000</td>
+            <td><span class="tag-info tag">POSTED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Apply</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Returns & debit notes in <code>purchase_returns</code> + <code>purchase_return_items</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- APPROVALS + PRICE HISTORY + LANDED COST -->
+    <div class="two-column">
+      <!-- Purchase Approvals -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Purchase Approvals (Workflow)</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:100px;">Request ID</th>
+            <th>Type</th>
+            <th style="width:90px;">Ref No</th>
+            <th style="width:100px;">Requested By</th>
+            <th style="width:100px;">Amount</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:140px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PAPR-1010</td>
+            <td>PO Approval</td>
+            <td>PO-2025-030</td>
+            <td>Procurement Officer</td>
+            <td>25,000</td>
+            <td><span class="tag-info tag">PENDING</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Approve</button>
+              <button class="btn btn-sm btn-outline">Reject</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Rules in <code>purchase_approval_rules</code>, requests in <code>purchase_approval_requests</code>.
+        </div>
+      </div>
+
+      <!-- Supplier Price History + Landed Cost -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Supplier Price History & Landed Cost Allocation</h3>
+        </div>
+
+        <h4 style="font-size:14px;margin-bottom:6px;">Supplier Price History</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Supplier</label>
+            <input type="text" placeholder="Search supplier" />
+          </div>
+          <div class="form-group">
+            <label>Product</label>
+            <input type="text" placeholder="Search product" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Product</th>
+            <th style="width:120px;">Supplier</th>
+            <th style="width:90px;">From</th>
+            <th style="width:90px;">To</th>
+            <th style="width:90px;">Price</th>
+            <th style="width:80px;">Currency</th>
+            <th style="width:90px;">Source</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>Global Chem</td>
+            <td>2024-11-01</td>
+            <td>2025-01-01</td>
+            <td>12.90</td>
+            <td>MYR</td>
+            <td>PO-2024-220</td>
+          </tr>
+          <tr>
+            <td>Industrial Cleaner 5L</td>
+            <td>Global Chem</td>
+            <td>2025-01-02</td>
+            <td>-</td>
+            <td>13.50</td>
+            <td>MYR</td>
+            <td>PO-2025-030</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Stored in <code>supplier_price_history</code>, updated from POs / Bills.
+        </div>
+
+        <h4 style="font-size:14px;margin-top:14px;margin-bottom:6px;">Landed Cost Allocation (Optional)</h4>
+        <table>
+          <thead>
+          <tr>
+            <th style="width:100px;">Landed Cost No</th>
+            <th>Reference</th>
+            <th style="width:100px;">Base Doc</th>
+            <th style="width:90px;">Total Cost</th>
+            <th style="width:120px;">Allocation Basis</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>LC-2025-002</td>
+            <td>Shipment #SH-7788</td>
+            <td>GRN-2025-015</td>
+            <td>3,500</td>
+            <td>By Value</td>
+            <td><span class="tag-success tag">APPLIED</span></td>
+            <td><button class="btn btn-sm btn-outline">View Allocation</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>landed_cost_allocations</code>, lines in <code>landed_cost_allocation_lines</code>  
+          & <code>landed_cost_charges</code>.
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sales & Order Management</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .badge-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      margin-right: 4px;
+    }
+    .badge-dot-green  { background: #22c55e; }
+    .badge-dot-red    { background: #ef4444; }
+    .badge-dot-yellow { background: #eab308; }
+    .badge-dot-blue   { background: #2563eb; }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#" class="active">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Sales & Order Management</h1>
+    <div class="subtitle">
+      Manage the full sales cycle: enquiries, quotations, orders, deliveries, invoices, POS, returns, receipts, approvals and templates.
+    </div>
+
+    <!-- SALES PIPELINE SUMMARY -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Sales Pipeline Overview</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">This Quarter</div>
+          <div class="pill-filter">This Year</div>
+        </div>
+      </div>
+
+      <div class="three-column">
+        <div>
+          <label>Open Enquiries / Leads</label>
+          <div style="font-size:20px;font-weight:600;">24</div>
+          <div class="hint">From <code>sales_leads</code></div>
+        </div>
+        <div>
+          <label>Open Quotations</label>
+          <div style="font-size:20px;font-weight:600;">15</div>
+          <div class="hint">Total value: 125,000</div>
+        </div>
+        <div>
+          <label>Open Sales Orders</label>
+          <div style="font-size:20px;font-weight:600;">9</div>
+          <div class="hint">To be delivered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENQUIRIES / LEADS + QUOTATIONS -->
+    <div class="two-column">
+      <!-- Sales Enquiries / Leads -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Enquiries / Leads</h3>
+          <button class="btn btn-outline btn-sm">+ New Lead</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Search</label>
+            <input type="text" placeholder="Customer / contact / ref no" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option value="">All</option>
+              <option>New</option>
+              <option>In Progress</option>
+              <option>Won</option>
+              <option>Lost</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Owner</label>
+            <select>
+              <option value="">All</option>
+              <option>Sales Rep 1</option>
+              <option>Sales Rep 2</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Lead No</th>
+            <th>Customer / Contact</th>
+            <th style="width:120px;">Stage</th>
+            <th style="width:100px;">Expected Value</th>
+            <th style="width:100px;">Expected Close</th>
+            <th style="width:80px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>L-2025-001</td>
+            <td>ABC Industries / Mr. Ali</td>
+            <td><span class="tag-info tag"><span class="badge-dot badge-dot-blue"></span>In Progress</span></td>
+            <td>25,000</td>
+            <td>2025-02-05</td>
+            <td><button class="btn btn-sm btn-outline">Convert → Quote</button></td>
+          </tr>
+          <tr>
+            <td>L-2025-002</td>
+            <td>XYZ Hospital / Ms. Tan</td>
+            <td><span class="tag-success tag"><span class="badge-dot badge-dot-green"></span>Won</span></td>
+            <td>18,000</td>
+            <td>2025-01-20</td>
+            <td><button class="btn btn-sm btn-outline">View</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Maps to <code>sales_leads</code> (optional module).
+        </div>
+      </div>
+
+      <!-- Sales Quotations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Quotations / Proposals</h3>
+          <button class="btn btn-primary btn-sm">+ New Quotation</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>SENT</option>
+              <option>ACCEPTED</option>
+              <option>REJECTED</option>
+              <option>EXPIRED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Date Range</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Quote No</th>
+            <th>Customer</th>
+            <th style="width:100px;">Quote Date</th>
+            <th style="width:100px;">Expiry</th>
+            <th style="width:100px;">Total</th>
+            <th style="width:100px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Q-2025-001</td>
+            <td>ABC Industries</td>
+            <td>2025-01-03</td>
+            <td>2025-01-17</td>
+            <td>15,800</td>
+            <td><span class="tag-info tag">SENT</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Edit</button>
+              <button class="btn btn-sm btn-outline">Convert → SO</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Q-2025-002</td>
+            <td>XYZ Hospital</td>
+            <td>2025-01-05</td>
+            <td>2025-01-20</td>
+            <td>18,000</td>
+            <td><span class="tag-success tag">ACCEPTED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Convert → SO</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header uses <code>sales_quotations</code>, lines in <code>sales_quotation_items</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- SALES ORDERS + DELIVERY ORDERS -->
+    <div class="two-column">
+      <!-- Sales Orders -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Orders</h3>
+          <button class="btn btn-primary btn-sm">+ New Sales Order</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>CONFIRMED</option>
+              <option>PARTIALLY_DELIVERED</option>
+              <option>DELIVERED</option>
+              <option>CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">SO No</th>
+            <th>Customer</th>
+            <th style="width:90px;">SO Date</th>
+            <th style="width:100px;">Order Value</th>
+            <th style="width:100px;">Delivered</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>SO-2025-010</td>
+            <td>ABC Industries</td>
+            <td>2025-01-06</td>
+            <td>22,500</td>
+            <td>10,000</td>
+            <td><span class="tag-warning tag">PARTIAL</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Deliver</button>
+              <button class="btn btn-sm btn-outline">Invoice</button>
+            </td>
+          </tr>
+          <tr>
+            <td>SO-2025-011</td>
+            <td>XYZ Hospital</td>
+            <td>2025-01-07</td>
+            <td>18,000</td>
+            <td>0</td>
+            <td><span class="tag-info tag">CONFIRMED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Deliver</button>
+              <button class="btn btn-sm btn-outline">Cancel</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>sales_orders</code>, lines in <code>sales_order_items</code>.  
+          Fulfilment links to delivery orders and invoices.
+        </div>
+      </div>
+
+      <!-- Delivery Orders / Dispatch Notes -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Delivery Orders / Dispatch Notes</h3>
+          <button class="btn btn-outline btn-sm">+ New Delivery</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Warehouse</label>
+            <select>
+              <option>All</option>
+              <option>WH-01 Main</option>
+              <option>WH-02 Finished Goods</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Delivery Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>SHIPPED</option>
+              <option>DELIVERED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">DO No</th>
+            <th>Customer</th>
+            <th style="width:90px;">DO Date</th>
+            <th style="width:90px;">SO No</th>
+            <th style="width:120px;">Warehouse</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:100px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>DO-2025-020</td>
+            <td>ABC Industries</td>
+            <td>2025-01-08</td>
+            <td>SO-2025-010</td>
+            <td>WH-01 Main</td>
+            <td><span class="tag-info tag">SHIPPED</span></td>
+            <td><button class="btn btn-sm btn-outline">Mark Delivered</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>delivery_orders</code>, lines in <code>delivery_order_items</code>;  
+          posting to <code>stock_transactions</code> for inventory.
+        </div>
+      </div>
+    </div>
+
+    <!-- INVOICES + RETURNS / CREDIT NOTES -->
+    <div class="two-column">
+      <!-- Sales Invoices -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Invoices</h3>
+          <button class="btn btn-primary btn-sm">+ New Invoice</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Invoice Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>POSTED</option>
+              <option>PARTIALLY_PAID</option>
+              <option>PAID</option>
+              <option>VOID</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Payment Status</label>
+            <select>
+              <option>All</option>
+              <option>Outstanding</option>
+              <option>Overdue</option>
+              <option>Paid</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Inv No</th>
+            <th>Customer</th>
+            <th style="width:90px;">Inv Date</th>
+            <th style="width:90px;">Due Date</th>
+            <th style="width:100px;">Total</th>
+            <th style="width:100px;">Outstanding</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>INV-2025-050</td>
+            <td>ABC Industries</td>
+            <td>2025-01-08</td>
+            <td>2025-02-07</td>
+            <td>22,500</td>
+            <td>10,000</td>
+            <td><span class="tag-warning tag">PARTIAL</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Receipt</button>
+            </td>
+          </tr>
+          <tr>
+            <td>INV-2025-051</td>
+            <td>XYZ Hospital</td>
+            <td>2025-01-09</td>
+            <td>2025-02-08</td>
+            <td>18,000</td>
+            <td>0</td>
+            <td><span class="tag-success tag">PAID</span></td>
+            <td><button class="btn btn-sm btn-outline">View</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>sales_invoices</code>, lines in <code>sales_invoice_items</code>.  
+          Payments allocated via <code>ar_receipts</code> + <code>ar_receipt_allocations</code>.
+        </div>
+      </div>
+
+      <!-- Sales Returns / Credit Notes -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Returns / Credit Notes</h3>
+          <button class="btn btn-outline btn-sm">+ New Credit Note</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Linked Invoice</label>
+            <input type="text" placeholder="Invoice No" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">CN No</th>
+            <th>Customer</th>
+            <th style="width:90px;">CN Date</th>
+            <th style="width:90px;">Invoice No</th>
+            <th style="width:100px;">Credit Amount</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>CN-2025-005</td>
+            <td>ABC Industries</td>
+            <td>2025-01-10</td>
+            <td>INV-2025-050</td>
+            <td>2,500</td>
+            <td><span class="tag-info tag">POSTED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Apply</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Returns & credit notes in <code>sales_returns</code> + <code>sales_return_items</code>,  
+          with AR impact in accounting.
+        </div>
+      </div>
+    </div>
+
+    <!-- POS + CUSTOMER RECEIPTS -->
+    <div class="two-column">
+      <!-- POS Interface (Optional) -->
+      <div class="card">
+        <div class="card-header">
+          <h3>POS (Point-of-Sale) Interface</h3>
+          <button class="btn btn-primary btn-sm">Open POS Session</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>POS Terminal</label>
+            <select>
+              <option>Terminal 1</option>
+              <option>Terminal 2</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cashier</label>
+            <select>
+              <option>Current User</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Item</th>
+            <th style="width:80px;">Qty</th>
+            <th style="width:90px;">Price</th>
+            <th style="width:90px;">Line Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Disposable Mask Box 50s</td>
+            <td>2</td>
+            <td>25.00</td>
+            <td>50.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="form-row" style="margin-top:10px;">
+          <div class="form-group">
+            <label>Payment Method</label>
+            <select>
+              <option>CASH</option>
+              <option>CARD</option>
+              <option>EWALLET</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Amount Received</label>
+            <input type="number" step="0.01" placeholder="50.00" />
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-sm">Complete Sale</button>
+
+        <div class="hint">
+          POS sessions in <code>pos_sessions</code>; POS sales in <code>pos_sales</code> + <code>pos_sale_items</code>,  
+          linked to <code>sales_invoices</code> for accounting.
+        </div>
+      </div>
+
+      <!-- Customer Receipts -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Customer Receipts (Payment Collection)</h3>
+          <button class="btn btn-outline btn-sm">+ New Receipt</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Method</label>
+            <select>
+              <option>All</option>
+              <option>CASH</option>
+              <option>BANK_TRANSFER</option>
+              <option>CARD</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Receipt No</th>
+            <th>Customer</th>
+            <th style="width:90px;">Date</th>
+            <th style="width:100px;">Amount</th>
+            <th style="width:100px;">Allocated</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>RC-2025-020</td>
+            <td>ABC Industries</td>
+            <td>2025-01-09</td>
+            <td>12,500</td>
+            <td>10,000</td>
+            <td><span class="tag-warning tag">PARTIAL</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Allocate</button>
+              <button class="btn btn-sm btn-outline">Print</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>ar_receipts</code>, allocations in <code>ar_receipt_allocations</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- RECURRING INVOICES + APPROVALS + TEMPLATES -->
+    <div class="two-column">
+      <!-- Recurring Invoices -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Recurring Invoices (Subscriptions)</h3>
+          <button class="btn btn-outline btn-sm">+ New Recurring Invoice</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Customer</label>
+            <input type="text" placeholder="Search customer" />
+          </div>
+          <div class="form-group">
+            <label>Frequency</label>
+            <select>
+              <option>All</option>
+              <option>MONTHLY</option>
+              <option>QUARTERLY</option>
+              <option>YEARLY</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Code</th>
+            <th>Customer</th>
+            <th style="width:100px;">Frequency</th>
+            <th style="width:90px;">Next Run</th>
+            <th style="width:100px;">Amount</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>SUB-001</td>
+            <td>XYZ Hospital</td>
+            <td>MONTHLY</td>
+            <td>2025-02-01</td>
+            <td>5,000</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+            <td><button class="btn btn-sm btn-outline">View</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Header in <code>recurring_invoices</code>, lines in <code>recurring_invoice_items</code>,  
+          generating <code>sales_invoices</code> on schedule.
+        </div>
+      </div>
+
+      <!-- Approvals & Document Templates -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Sales Approvals & Document Templates</h3>
+        </div>
+
+        <h4 style="font-size:14px;margin-bottom:6px;">Sales Approvals (Optional)</h4>
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Request ID</th>
+            <th>Type</th>
+            <th style="width:90px;">Ref No</th>
+            <th style="width:100px;">Requested By</th>
+            <th style="width:100px;">Amount</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>APR-1001</td>
+            <td>Discount Approval</td>
+            <td>Q-2025-001</td>
+            <td>Sales Rep 1</td>
+            <td>15,800</td>
+            <td><span class="tag-info tag">PENDING</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Approve</button>
+              <button class="btn btn-sm btn-outline">Reject</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Rules in <code>sales_approval_rules</code>, requests in <code>sales_approval_requests</code>.
+        </div>
+
+        <h4 style="font-size:14px;margin-top:14px;margin-bottom:6px;">Sales Document Templates</h4>
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Template ID</th>
+            <th>Type</th>
+            <th>Name</th>
+            <th style="width:90px;">Default</th>
+            <th style="width:120px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>TPL-01</td>
+            <td>QUOTE</td>
+            <td>Standard Quotation Template</td>
+            <td><span class="tag-success tag">Yes</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Edit</button>
+              <button class="btn btn-sm btn-outline">Preview</button>
+            </td>
+          </tr>
+          <tr>
+            <td>TPL-02</td>
+            <td>INVOICE</td>
+            <td>Standard Invoice Template</td>
+            <td><span class="tag-success tag">Yes</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Edit</button>
+              <button class="btn btn-sm btn-outline">Preview</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Templates stored in <code>sales_document_templates</code> (HTML / placeholders).
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

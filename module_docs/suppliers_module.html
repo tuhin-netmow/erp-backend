@@ -1,0 +1,2255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppliers Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #00695c;
+        }
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00695c;
+            border-bottom: 3px solid #00695c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .card h3 {
+            color: #00695c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .endpoint-section {
+            background: #e8f5f3;
+            border-left: 4px solid #00695c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #e8f5f3;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #00695c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .back-link:hover {
+            background: #004d40;
+        }
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #00695c;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        table th {
+            background: #00695c;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tr:hover {
+            background: #f8f9fa;
+        }
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00695c;
+        }
+        .request-item {
+            background: #f0f9f8;
+            padding: 15px;
+            border-left: 3px solid #00695c;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #e8f5f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #00695c;
+            font-size: 13px;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .nav-menu {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-menu li {
+            margin: 8px 0;
+        }
+        .nav-menu a {
+            color: #00695c;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .nav-menu a:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>Suppliers Module Documentation</h1>
+            <p>Complete supplier management system with purchase order tracking and payment analytics</p>
+            <p><strong>Base URL:</strong> /api/suppliers</p>
+            <p><strong>Middleware:</strong> <span class="badge-protected">verifyToken</span> <span class="badge-admin">moduleCheck('suppliers')</span></p>
+        </div>
+
+        <div class="nav-menu">
+            <h3 style="margin-top: 0; color: #00695c;">Quick Navigation</h3>
+            <ul>
+                <li><a href="#database">Database Schema</a></li>
+                <li><a href="#endpoints">API Endpoints</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </div>
+
+        <!-- Database Schema Section -->
+        <div class="card" id="database">
+            <h2>📊 Database Schema</h2>
+
+            <h3>ER Diagram</h3>
+            <div class="mermaid">
+erDiagram
+    Supplier ||--o{ PurchaseOrder : "places"
+    Supplier ||--o{ PurchasePayment : "receives"
+
+    Supplier {
+        int id PK
+        string name
+        string code UK
+        string contact_person
+        string email UK
+        string phone
+        text address
+        string city
+        string state
+        string country
+        string postal_code
+        decimal latitude
+        decimal longitude
+        string tax_id
+        string website
+        string payment_terms
+        text notes
+        string thumb_url
+        json gallery_items
+        boolean is_active
+        int created_by FK
+        date created_at
+        date updated_at
+    }
+
+    PurchaseOrder {
+        int id PK
+        int supplier_id FK
+        decimal total_amount
+        enum status
+    }
+
+    PurchasePayment {
+        int id PK
+        int purchase_order_id FK
+        decimal amount
+        enum status
+    }
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Column</th>
+                        <th>Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>INTEGER</td>
+                        <td>PK, AUTO_INCREMENT</td>
+                        <td>Unique identifier</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>STRING(255)</td>
+                        <td>NOT NULL</td>
+                        <td>Supplier name</td>
+                    </tr>
+                    <tr>
+                        <td>code</td>
+                        <td>STRING(50)</td>
+                        <td>UNIQUE</td>
+                        <td>Supplier code (auto-generated if not provided)</td>
+                    </tr>
+                    <tr>
+                        <td>contact_person</td>
+                        <td>STRING(255)</td>
+                        <td></td>
+                        <td>Primary contact name</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>STRING(255)</td>
+                        <td>UNIQUE</td>
+                        <td>Contact email</td>
+                    </tr>
+                    <tr>
+                        <td>phone</td>
+                        <td>STRING(50)</td>
+                        <td></td>
+                        <td>Contact phone</td>
+                    </tr>
+                    <tr>
+                        <td>address</td>
+                        <td>TEXT</td>
+                        <td></td>
+                        <td>Street address</td>
+                    </tr>
+                    <tr>
+                        <td>city</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>City name</td>
+                    </tr>
+                    <tr>
+                        <td>state</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>State/Province</td>
+                    </tr>
+                    <tr>
+                        <td>country</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>Country name</td>
+                    </tr>
+                    <tr>
+                        <td>postal_code</td>
+                        <td>STRING(20)</td>
+                        <td></td>
+                        <td>ZIP/Postal code</td>
+                    </tr>
+                    <tr>
+                        <td>latitude</td>
+                        <td>DECIMAL(10,8)</td>
+                        <td></td>
+                        <td>GPS latitude</td>
+                    </tr>
+                    <tr>
+                        <td>longitude</td>
+                        <td>DECIMAL(11,8)</td>
+                        <td></td>
+                        <td>GPS longitude</td>
+                    </tr>
+                    <tr>
+                        <td>tax_id</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>Tax registration number</td>
+                    </tr>
+                    <tr>
+                        <td>website</td>
+                        <td>STRING(255)</td>
+                        <td></td>
+                        <td>Company website URL</td>
+                    </tr>
+                    <tr>
+                        <td>payment_terms</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>Payment terms (e.g., Net 30, Net 60)</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td>TEXT</td>
+                        <td></td>
+                        <td>Additional notes</td>
+                    </tr>
+                    <tr>
+                        <td>thumb_url</td>
+                        <td>STRING(255)</td>
+                        <td></td>
+                        <td>Logo/thumbnail URL</td>
+                    </tr>
+                    <tr>
+                        <td>gallery_items</td>
+                        <td>JSON</td>
+                        <td></td>
+                        <td>Array of gallery images</td>
+                    </tr>
+                    <tr>
+                        <td>is_active</td>
+                        <td>BOOLEAN</td>
+                        <td>Default: true</td>
+                        <td>Active status</td>
+                    </tr>
+                    <tr>
+                        <td>created_by</td>
+                        <td>INTEGER</td>
+                        <td>FK</td>
+                        <td>User who created the record</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td>DATE</td>
+                        <td>Default: NOW</td>
+                        <td>Creation timestamp</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td>DATE</td>
+                        <td>Default: NOW</td>
+                        <td>Last update timestamp</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Calculated Fields (in GET requests)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Description</th>
+                        <th>Calculation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>total_purchase_amount</code></td>
+                        <td>Total value of all purchase orders</td>
+                        <td>SUM(purchase_orders.total_amount) WHERE status != 'cancelled'</td>
+                    </tr>
+                    <tr>
+                        <td><code>total_paid_amount</code></td>
+                        <td>Total amount paid</td>
+                        <td>SUM(purchase_payments.amount) WHERE status = 'completed'</td>
+                    </tr>
+                    <tr>
+                        <td><code>total_due_amount</code></td>
+                        <td>Outstanding balance</td>
+                        <td>total_purchase_amount - total_paid_amount</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- API Endpoints Section -->
+        <div class="card" id="endpoints">
+            <h2>🔌 API Endpoints</h2>
+
+            <!-- POST / - Create Supplier -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> / <span class="file-badge">suppliers.routes.js:79</span></h3>
+                <p>Create a new supplier record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate(createSupplier)
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/suppliers
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'suppliers' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate(createSupplier): Validate Request Body
+    validate(createSupplier)->>Controller: Validation Passed
+    Controller->>Service: createSupplier(data, userId)
+    Service->>Service: Check if code exists
+    Service->>Service: Generate code if not provided
+    Service->>Service: Check if email exists
+    Service->>Repository: create(data)
+    Repository->>Database: INSERT INTO suppliers
+    Database->>Repository: Supplier created
+    Repository->>Service: Supplier object
+    Service->>Controller: Supplier result
+    Controller->>Client: 201 Success Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Suppliers Controller]
+    Controller -->|createSupplier| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Create Supplier"
+    CreateSupplier[POST /api/suppliers] -->|Request Body| CheckCode[Service - Check Code]
+    CheckCode -->|Generate if not provided| CheckEmail[Service - Check Email]
+    CheckEmail -->|Validate uniqueness| CreateRecord[Repository - Create]
+    CreateRecord -->|INSERT INTO suppliers| DB[(MySQL Database)]
+
+    DB -->|New Supplier| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td>Required, Min 1 char, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>code</td>
+                            <td>string</td>
+                            <td>Optional, Max 50 chars, Unique</td>
+                        </tr>
+                        <tr>
+                            <td>contact_person</td>
+                            <td>string</td>
+                            <td>Optional, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td>Optional, Valid email, Max 255 chars, Unique</td>
+                        </tr>
+                        <tr>
+                            <td>phone</td>
+                            <td>string</td>
+                            <td>Optional, Max 50 chars</td>
+                        </tr>
+                        <tr>
+                            <td>address</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>city</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>state</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>country</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>postal_code</td>
+                            <td>string</td>
+                            <td>Optional, Max 20 chars</td>
+                        </tr>
+                        <tr>
+                            <td>latitude</td>
+                            <td>number</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>longitude</td>
+                            <td>number</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>tax_id</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>website</td>
+                            <td>string</td>
+                            <td>Optional, Valid URL or empty string</td>
+                        </tr>
+                        <tr>
+                            <td>payment_terms</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>notes</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>thumb_url</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>gallery_items</td>
+                            <td>array</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Optional, Default: true</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>Automatic Code Generation:</strong> If <code>code</code> is not provided, the system will automatically generate one using the numbering settings (e.g., SUPP-1234567890).
+                </div>
+
+                <div class="warning-box">
+                    <strong>Uniqueness Validation:</strong> The <code>code</code> and <code>email</code> fields must be unique across all suppliers.
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:35
+async createSupplier(req, res) {
+    try {
+        const supplier = await SupplierService.createSupplier(req.body, req.user.id);
+        return success(res, 'Supplier created successfully', supplier, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:35
+async createSupplier(data, userId) {
+    // Handle automatic code generation if not provided
+    if (!data.code) {
+        try {
+            const { generateNumber } = require('../settings/numbering.helper');
+            data.code = await generateNumber('supplier');
+        } catch (err) {
+            console.error('Error generating automatic supplier code:', err);
+            // Fallback to timestamp if settings fetch fails
+            data.code = `SUPP-${Date.now()}`;
+        }
+    }
+    else {
+        // Check if code already exists
+        const existing = await SupplierRepository.findByCode(data.code);
+        if (existing) {
+            throw new Error('Supplier with this code already exists');
+        }
+    }
+
+    // Check if email already exists (if provided)
+    if (data.email) {
+        const existing = await SupplierRepository.findByEmail(data.email);
+        if (existing) {
+            throw new Error('Supplier with this email already exists');
+        }
+    }
+
+    return await SupplierRepository.create({ ...data, created_by: userId });
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:89
+async create(data) {
+    return await Supplier.create(data);
+}
+
+SQL Equivalent:
+INSERT INTO suppliers (
+    name, code, contact_person, email, phone, address, city, state, country,
+    postal_code, latitude, longitude, tax_id, website, payment_terms, notes,
+    thumb_url, gallery_items, is_active, created_by
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);</code></pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><code>suppliers</code> - Main table for supplier records</li>
+                </ul>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "name": "Office Supplies Co",
+    "code": "SUP-002",
+    "contact_person": "Bob Smith",
+    "email": "bob@officesupplies.com",
+    "phone": "+1987654321",
+    "address": "456 Market St",
+    "city": "Chicago",
+    "state": "Illinois",
+    "country": "USA",
+    "postal_code": "60601",
+    "latitude": 41.8781,
+    "longitude": -87.6298,
+    "tax_id": "12-3456789",
+    "website": "https://officesupplies.com",
+    "payment_terms": "Net 30",
+    "notes": "Preferred vendor for office supplies",
+    "thumb_url": "https://example.com/logo.png",
+    "gallery_items": [
+        {
+            "url": "https://example.com/img1.png",
+            "caption": "Office Warehouse"
+        }
+    ],
+    "is_active": true
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Supplier created successfully",
+    "data": {
+        "id": 2,
+        "name": "Office Supplies Co",
+        "code": "SUP-002",
+        "contact_person": "Bob Smith",
+        "email": "bob@officesupplies.com",
+        "phone": "+1987654321",
+        "address": "456 Market St",
+        "city": "Chicago",
+        "state": "Illinois",
+        "country": "USA",
+        "postal_code": "60601",
+        "latitude": 41.8781,
+        "longitude": -87.6298,
+        "tax_id": "12-3456789",
+        "website": "https://officesupplies.com",
+        "payment_terms": "Net 30",
+        "notes": "Preferred vendor for office supplies",
+        "thumb_url": "https://example.com/logo.png",
+        "gallery_items": [
+            {
+                "url": "https://example.com/img1.png",
+                "caption": "Office Warehouse"
+            }
+        ],
+        "is_active": true,
+        "created_by": 1,
+        "updated_at": "2026-03-11T10:30:00.000Z",
+        "created_at": "2026-03-11T10:30:00.000Z"
+    }
+}</code>
+                </div>
+
+                <h4>Error Responses</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request - Duplicate Email</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier with this email already exists"
+}</code>
+                </div>
+
+                <div class="error-box">
+                    <strong>400 Bad Request - Duplicate Code</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier with this code already exists"
+}</code>
+                </div>
+
+                <div class="error-box">
+                    <strong>400 Bad Request - Validation Error</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier name is required"
+}</code>
+                </div>
+            </div>
+
+            <!-- PUT /:id - Update Supplier -->
+            <div class="endpoint-section">
+                <h3><span class="badge-put">PUT</span> /:id <span class="file-badge">suppliers.routes.js:200</span></h3>
+                <p>Update an existing supplier record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate(updateSupplier)
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /api/suppliers/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'suppliers' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate(updateSupplier): Validate Request Body
+    validate(updateSupplier)->>Controller: Validation Passed
+    Controller->>Service: updateSupplier(id, data)
+    Service->>Service: Check code uniqueness
+    Service->>Service: Check email uniqueness
+    Service->>Repository: update(id, data)
+    Repository->>Database: UPDATE suppliers SET ...
+    Database->>Repository: Updated supplier
+    Repository->>Service: Supplier object
+    Service->>Controller: Supplier result
+    Controller->>Client: 200 Success Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Suppliers Controller]
+    Controller -->|updateSupplier| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Update Supplier"
+    UpdateSupplier[PUT /api/suppliers/:id] -->|Extract id and body| CheckCode[Service - Check Code Uniqueness]
+    CheckCode -->|Validate unique| CheckEmail[Service - Check Email Uniqueness]
+    CheckEmail -->|Validate unique| UpdateRecord[Repository - Update]
+    UpdateRecord -->|UPDATE suppliers| DB[(MySQL Database)]
+
+    DB -->|Updated Supplier| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td>Optional, Min 1 char, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>code</td>
+                            <td>string</td>
+                            <td>Optional, Max 50 chars</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td>Optional, Valid email, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>All other fields...</td>
+                            <td>various</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:44
+async updateSupplier(req, res) {
+    try {
+        const supplier = await SupplierService.updateSupplier(req.params.id, req.body);
+        return success(res, 'Supplier updated successfully', supplier);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:66
+async updateSupplier(id, data) {
+    // If code is being updated, check for duplicates
+    if (data.code) {
+        const existing = await SupplierRepository.findByCode(data.code);
+        if (existing && existing.id !== parseInt(id)) {
+            throw new Error('Supplier with this code already exists');
+        }
+    }
+
+    // If email is being updated, check for duplicates
+    if (data.email) {
+        const existing = await SupplierRepository.findByEmail(data.email);
+        if (existing && existing.id !== parseInt(id)) {
+            throw new Error('Supplier with this email already exists');
+        }
+    }
+
+    const supplier = await SupplierRepository.update(id, data);
+    if (!supplier) {
+        throw new Error('Supplier not found');
+    }
+    return supplier;
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:93
+async update(id, data) {
+    const supplier = await Supplier.findByPk(id);
+    if (!supplier) return null;
+    return await supplier.update(data);
+}
+
+SQL Equivalent:
+UPDATE suppliers
+SET name = ?, code = ?, email = ?, phone = ?, address = ?, city = ?,
+    state = ?, country = ?, postal_code = ?, latitude = ?, longitude = ?,
+    tax_id = ?, website = ?, payment_terms = ?, notes = ?,
+    thumb_url = ?, gallery_items = ?, is_active = ?
+WHERE id = ?;</code></pre>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "name": "Global Electronics Inc",
+    "contact_person": "Alice Smith",
+    "payment_terms": "Net 45",
+    "thumb_url": "https://example.com/new-logo.png"
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>200 OK</strong>
+                    <code>{
+    "status": true,
+    "message": "Supplier updated successfully",
+    "data": {
+        "id": 1,
+        "name": "Global Electronics Inc",
+        "code": "SUP-003",
+        "contact_person": "Alice Smith",
+        "payment_terms": "Net 45",
+        "thumb_url": "https://example.com/new-logo.png",
+        "updated_at": "2026-03-11T11:00:00.000Z"
+    }
+}</code>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request - Supplier Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier not found"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET / - List Suppliers -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> / <span class="file-badge">suppliers.routes.js:19</span></h3>
+                <p>Retrieve all suppliers with pagination and filtering</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/suppliers
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'suppliers' access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getAllSuppliers(filters, page, limit)
+    Service->>Service: Parse pagination params
+    Service->>Service: Build filters object
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with subqueries for totals
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with calculated fields
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Controller[Suppliers Controller]
+    Controller -->|getAllSuppliers| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Get All Suppliers"
+    GetSuppliers[GET /api/suppliers] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit, filters| BuildFilters[Service - Build Filters]
+    BuildFilters -->|is_active, search, sort| FindAll[Repository - FindAll]
+    FindAll -->|SELECT with subqueries| DB[(MySQL Database)]
+
+    DB -->|Suppliers Array| CalculateFields[Service - Calculate Fields]
+    CalculateFields -->|total_purchases, paid_amount, due_amount| Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Request Headers</h4>
+                <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:5
+async getAllSuppliers(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            is_active: req.query.is_active,
+            search: req.query.search,
+            sort: req.query.sort
+        };
+
+        const result = await SupplierService.getAllSuppliers(filters, page, limit);
+        return successWithPagination(res, 'Suppliers retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:4
+async getAllSuppliers(filters = {}, page = 1, limit = 10) {
+    try {
+        const offset = (page - 1) * limit;
+        const result = await SupplierRepository.findAll(filters, limit, offset);
+        return {
+            data: result.rows,
+            total: result.count
+        };
+    } catch (err) {
+        throw new Error(`Failed to get suppliers: ${err.message}`);
+    }
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:7
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    if (filters.is_active !== undefined) {
+        where.is_active = filters.is_active;
+    }
+
+    if (filters.search) {
+        where[Op.or] = [
+            { name: { [Op.like]: `%${filters.search}%` } },
+            { code: { [Op.like]: `%${filters.search}%` } },
+            { email: { [Op.like]: `%${filters.search}%` } },
+            { contact_person: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    let order = [['created_at', 'DESC']];
+
+    if (filters.sort === 'top_purchase') {
+        order = [[sequelize.literal('total_purchase_amount'), 'DESC']];
+    } else if (filters.sort === 'low_purchase') {
+        order = [[sequelize.literal('total_purchase_amount'), 'ASC']];
+    }
+
+    return await Supplier.findAndCountAll({
+        where,
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(total_amount), 0)
+                        FROM purchase_orders AS po
+                        WHERE po.supplier_id = Supplier.id
+                        AND po.status != 'cancelled'
+                    )`),
+                    'total_purchase_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(pp.amount), 0)
+                        FROM purchase_payments AS pp
+                        INNER JOIN purchase_orders AS po ON po.id = pp.purchase_order_id
+                        WHERE po.supplier_id = Supplier.id
+                        AND pp.status = 'completed'
+                    )`),
+                    'total_paid_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        (SELECT COALESCE(SUM(total_amount), 0)
+                        FROM purchase_orders AS po
+                        WHERE po.supplier_id = Supplier.id
+                        AND po.status != 'cancelled')
+                        -
+                        (SELECT COALESCE(SUM(pp.amount), 0)
+                        FROM purchase_payments AS pp
+                        INNER JOIN purchase_orders AS po ON po.id = pp.purchase_order_id
+                        WHERE po.supplier_id = Supplier.id
+                        AND pp.status = 'completed')
+                    )`),
+                    'total_due_amount'
+                ]
+            ]
+        },
+        limit,
+        offset,
+        order
+    });
+}
+
+SQL Equivalent:
+SELECT
+    s.*,
+    (
+        SELECT COALESCE(SUM(total_amount), 0)
+        FROM purchase_orders AS po
+        WHERE po.supplier_id = s.id AND po.status != 'cancelled'
+    ) AS total_purchase_amount,
+    (
+        SELECT COALESCE(SUM(pp.amount), 0)
+        FROM purchase_payments AS pp
+        INNER JOIN purchase_orders AS po ON po.id = pp.purchase_order_id
+        WHERE po.supplier_id = s.id AND pp.status = 'completed'
+    ) AS total_paid_amount,
+    (
+        (
+            SELECT COALESCE(SUM(total_amount), 0)
+            FROM purchase_orders AS po
+            WHERE po.supplier_id = s.id AND po.status != 'cancelled'
+        )
+        -
+        (
+            SELECT COALESCE(SUM(pp.amount), 0)
+            FROM purchase_payments AS pp
+            INNER JOIN purchase_orders AS po ON po.id = pp.purchase_order_id
+            WHERE po.supplier_id = s.id AND pp.status = 'completed'
+        )
+    ) AS total_due_amount
+FROM suppliers AS s
+WHERE s.is_active = ?
+ORDER BY s.created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+                <h4>Query Parameters</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>page</td>
+                            <td>integer</td>
+                            <td>Page number (default: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>integer</td>
+                            <td>Items per page (default: 10)</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Filter by active status (true/false)</td>
+                        </tr>
+                        <tr>
+                            <td>search</td>
+                            <td>string</td>
+                            <td>Search by name, code, email, or contact person</td>
+                        </tr>
+                        <tr>
+                            <td>sort</td>
+                            <td>string</td>
+                            <td>Sort by: top_purchase, low_purchase</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Multiple Requests & Responses</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. List All Suppliers (Paginated)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Suppliers retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Tech Supplies Inc",
+            "code": "SUP-001",
+            "contact_person": "John Smith",
+            "email": "john@techsupplies.com",
+            "phone": "+1234567890",
+            "address": "123 Tech Park",
+            "city": "San Francisco",
+            "state": "CA",
+            "country": "USA",
+            "postal_code": "94102",
+            "latitude": 37.7749,
+            "longitude": -122.4194,
+            "tax_id": "12-3456789",
+            "website": "https://techsupplies.com",
+            "payment_terms": "Net 30",
+            "notes": "Primary tech supplier",
+            "thumb_url": "https://example.com/tech-logo.png",
+            "gallery_items": [],
+            "is_active": true,
+            "created_by": 1,
+            "created_at": "2026-03-01T10:00:00.000Z",
+            "updated_at": "2026-03-01T10:00:00.000Z",
+            "total_purchase_amount": 50000.00,
+            "total_paid_amount": 45000.00,
+            "total_due_amount": 5000.00
+        },
+        {
+            "id": 2,
+            "name": "Office Supplies Co",
+            "code": "SUP-002",
+            "contact_person": "Bob Smith",
+            "email": "bob@officesupplies.com",
+            "phone": "+1987654321",
+            "is_active": true,
+            "created_at": "2026-03-05T10:00:00.000Z",
+            "updated_at": "2026-03-05T10:00:00.000Z",
+            "total_purchase_amount": 15000.00,
+            "total_paid_amount": 15000.00,
+            "total_due_amount": 0.00
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Filter by Active Status</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers?is_active=true</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Suppliers retrieved successfully",
+    "pagination": {
+        "total": 4,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Tech Supplies Inc",
+            "code": "SUP-001",
+            "contact_person": "John Smith",
+            "email": "john@techsupplies.com",
+            "is_active": true,
+            "created_at": "2026-03-01T10:00:00.000Z",
+            "updated_at": "2026-03-01T10:00:00.000Z",
+            "total_purchase_amount": 50000.00,
+            "total_paid_amount": 45000.00,
+            "total_due_amount": 5000.00
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Search Suppliers</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers?search=tech</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Suppliers retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Tech Supplies Inc",
+            "code": "SUP-001",
+            "contact_person": "John Smith",
+            "email": "john@techsupplies.com",
+            "is_active": true,
+            "created_at": "2026-03-01T10:00:00.000Z",
+            "updated_at": "2026-03-01T10:00:00.000Z",
+            "total_purchase_amount": 50000.00,
+            "total_paid_amount": 45000.00,
+            "total_due_amount": 5000.00
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4. Sort by Purchase Amount (Highest)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers?sort=top_purchase</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Suppliers retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "Tech Supplies Inc",
+            "code": "SUP-001",
+            "is_active": true,
+            "created_at": "2026-03-01T10:00:00.000Z",
+            "updated_at": "2026-03-01T10:00:00.000Z",
+            "total_purchase_amount": 50000.00,
+            "total_paid_amount": 45000.00,
+            "total_due_amount": 5000.00
+        },
+        {
+            "id": 2,
+            "name": "Office Supplies Co",
+            "code": "SUP-002",
+            "is_active": true,
+            "created_at": "2026-03-05T10:00:00.000Z",
+            "updated_at": "2026-03-05T10:00:00.000Z",
+            "total_purchase_amount": 15000.00,
+            "total_paid_amount": 15000.00,
+            "total_due_amount": 0.00
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>5. Sort by Purchase Amount (Lowest)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers?sort=low_purchase</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Suppliers retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 5,
+            "name": "New Supplier Ltd",
+            "code": "SUP-005",
+            "is_active": true,
+            "created_at": "2026-03-10T10:00:00.000Z",
+            "updated_at": "2026-03-10T10:00:00.000Z",
+            "total_purchase_amount": 0.00,
+            "total_paid_amount": 0.00,
+            "total_due_amount": 0.00
+        },
+        {
+            "id": 4,
+            "name": "Industrial Parts Inc",
+            "code": "SUP-004",
+            "is_active": true,
+            "created_at": "2026-03-08T10:00:00.000Z",
+            "updated_at": "2026-03-08T10:00:00.000Z",
+            "total_purchase_amount": 2500.00,
+            "total_paid_amount": 0.00,
+            "total_due_amount": 2500.00
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>500 Internal Server Error</strong>
+                    <code>{
+    "status": false,
+    "message": "Failed to get suppliers: Database connection error"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /:id - Get Supplier by ID -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /:id <span class="file-badge">suppliers.routes.js:156</span></h3>
+                <p>Retrieve detailed information about a specific supplier</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/suppliers/:id
+    Router->>verifyToken: Verify JWT
+    verifyToken->>Router: Valid
+    Router->>moduleCheck: Check Access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getSupplierById(id)
+    Service->>Repository: findById(id)
+    Repository->>Database: SELECT * FROM suppliers WHERE id = ?
+    Database->>Repository: Supplier or null
+    Repository->>Service: Supplier object
+    Service->>Service: Parse latitude/longitude
+    Service->>Controller: Enhanced supplier
+    Controller->>Client: Supplier details
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Controller[Suppliers Controller]
+    Controller -->|getSupplierById| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Get Supplier By ID"
+    GetByID[GET /api/suppliers/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindSupplier[Repository - FindById]
+    FindSupplier -->|SELECT FROM suppliers| DB[(MySQL Database)]
+
+    DB -->|Supplier or Null| CheckExists[Service - Check Exists]
+    CheckExists -->|Supplier found| ParseCoords[Service - Parse Coordinates]
+    ParseCoords -->|Parse latitude/longitude| Response[Controller - Send Response]
+    CheckExists -->|Not found| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:26
+async getSupplierById(req, res) {
+    try {
+        const supplier = await SupplierService.getSupplierById(req.params.id);
+        return success(res, 'Supplier retrieved successfully', supplier);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:17
+async getSupplierById(id) {
+    const supplier = await SupplierRepository.findById(id);
+    if (!supplier) {
+        throw new Error('Supplier not found');
+    }
+
+    const supplierData = supplier.toJSON ? supplier.toJSON() : supplier;
+
+    if (supplierData.latitude) {
+        supplierData.latitude = parseFloat(supplierData.latitude);
+    }
+    if (supplierData.longitude) {
+        supplierData.longitude = parseFloat(supplierData.longitude);
+    }
+
+    return supplierData;
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:77
+async findById(id) {
+    return await Supplier.findByPk(id);
+}
+
+SQL Equivalent:
+SELECT * FROM suppliers WHERE id = ?;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Supplier by ID</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers/1</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Supplier retrieved successfully",
+    "data": {
+        "id": 1,
+        "name": "Global Electronics Ltd",
+        "code": "SUP-003",
+        "contact_person": "Alice Johnson",
+        "email": "alice@globalelectronics.com",
+        "phone": "+1234567890",
+        "address": "789 Tech Park",
+        "city": "San Jose",
+        "state": "CA",
+        "country": "USA",
+        "postal_code": "95101",
+        "latitude": 37.3382,
+        "longitude": -121.8863,
+        "tax_id": "98-7654321",
+        "website": "https://globalelectronics.com",
+        "payment_terms": "Net 60",
+        "notes": "Long-term partner for electronic components",
+        "thumb_url": "https://example.com/global-logo.png",
+        "gallery_items": [
+            {
+                "url": "https://example.com/warehouse1.jpg",
+                "caption": "Main Warehouse"
+            },
+            {
+                "url": "https://example.com/office.jpg",
+                "caption": "Corporate Office"
+            }
+        ],
+        "is_active": true,
+        "created_by": 1,
+        "created_at": "2026-02-15T10:00:00.000Z",
+        "updated_at": "2026-03-01T14:30:00.000Z"
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>404 Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier not found"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /stats - Get Supplier Statistics -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /stats <span class="file-badge">suppliers.routes.js:137</span></h3>
+                <p>Retrieve supplier statistics summary with financial metrics</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /api/suppliers/stats
+    Controller->>Service: getSupplierStats()
+    Service->>Repository: getStats()
+    Repository->>Database: Multiple COUNT queries
+    Repository->>Database: Financial totals query
+    Database->>Repository: Aggregated results
+    Repository->>Service: Raw stats
+    Service->>Service: Format to UI structure
+    Service->>Controller: Formatted stats array
+    Controller->>Client: Stats response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Controller[Suppliers Controller]
+    Controller -->|getSupplierStats| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Get Supplier Statistics"
+    GetStats[GET /api/suppliers/stats] -->|No params| QueryStats[Repository - Get Stats]
+    QueryStats -->|Multiple COUNT queries| DB[(MySQL Database)]
+
+    DB -->|Aggregated Results| FormatStats[Service - Format Stats]
+    FormatStats -->|Build UI structure| Active[All Active Suppliers]
+    FormatStats -->|Build UI structure| Total[Total Suppliers]
+    FormatStats -->|Build UI structure| New[New Suppliers]
+    FormatStats -->|Build UI structure| Inactive[Inactive Suppliers]
+    FormatStats -->|Build UI structure| Purchase[Total Purchase Amount]
+    FormatStats -->|Build UI structure| Paid[Total Paid]
+    FormatStats -->|Build UI structure| Due[Total Due]
+
+    Active --> Response[Controller - Send Response]
+    Total --> Response
+    New --> Response
+    Inactive --> Response
+    Purchase --> Response
+    Paid --> Response
+    Due --> Response
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:62
+async getSupplierStats(req, res) {
+    try {
+        const stats = await SupplierService.getSupplierStats();
+        return success(res, 'Supplier statistics retrieved successfully', stats);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:98
+async getSupplierStats() {
+    const stats = await SupplierRepository.getStats();
+
+    // Format to match customer request
+    return [
+        {
+            label: "All Active Suppliers",
+            value: stats.activeSuppliers,
+            color: "bg-emerald-600"
+        },
+        {
+            label: "Total Suppliers",
+            value: stats.totalSuppliers,
+            color: "bg-blue-600"
+        },
+        {
+            label: "New Suppliers",
+            value: stats.newSuppliers,
+            color: "bg-violet-600"
+        },
+        {
+            label: "Inactive Suppliers",
+            value: stats.inactiveSuppliers,
+            color: "bg-rose-600"
+        },
+        {
+            label: "Total Purchase Amount",
+            value: stats.totalPurchase,
+            color: "bg-indigo-600",
+            isCurrency: true
+        },
+        {
+            label: "Total Paid",
+            value: stats.totalPaid,
+            color: "bg-emerald-600",
+            isCurrency: true
+        },
+        {
+            label: "Total Due",
+            value: stats.totalDue,
+            color: "bg-rose-600",
+            isCurrency: true
+        }
+    ];
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:117
+async getStats() {
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const [activeSuppliers, totalSuppliers, newSuppliers, inactiveSuppliers, financialResult] = await Promise.all([
+        // Active Suppliers
+        Supplier.count({ where: { is_active: true } }),
+
+        // Total Suppliers
+        Supplier.count(),
+
+        // New Suppliers (This Month)
+        Supplier.count({
+            where: {
+                created_at: {
+                    [Op.gte]: startOfMonth
+                }
+            }
+        }),
+
+        // Inactive Suppliers
+        Supplier.count({ where: { is_active: false } }),
+
+        // Financial Totals
+        sequelize.query(
+            `SELECT
+                (SELECT COALESCE(SUM(total_amount), 0) FROM purchase_orders WHERE status != 'cancelled') as totalPurchase,
+                (SELECT COALESCE(SUM(amount), 0) FROM purchase_payments WHERE status = 'completed') as totalPaid,
+                ((SELECT COALESCE(SUM(total_amount), 0) FROM purchase_orders WHERE status != 'cancelled') -
+                 (SELECT COALESCE(SUM(amount), 0) FROM purchase_payments WHERE status = 'completed')) as totalDue`,
+            { type: sequelize.QueryTypes.SELECT }
+        )
+    ]);
+
+    const financial = financialResult[0] || { totalPurchase: 0, totalPaid: 0, totalDue: 0 };
+
+    return {
+        activeSuppliers,
+        totalSuppliers,
+        newSuppliers,
+        inactiveSuppliers,
+        totalPurchase: parseFloat(financial.totalPurchase),
+        totalPaid: parseFloat(financial.totalPaid),
+        totalDue: parseFloat(financial.totalDue)
+    };
+}
+
+SQL Equivalent:
+-- Active Suppliers
+SELECT COUNT(*) FROM suppliers WHERE is_active = true;
+
+-- Total Suppliers
+SELECT COUNT(*) FROM suppliers;
+
+-- New Suppliers (This Month)
+SELECT COUNT(*) FROM suppliers WHERE created_at >= '2026-03-01 00:00:00';
+
+-- Inactive Suppliers
+SELECT COUNT(*) FROM suppliers WHERE is_active = false;
+
+-- Financial Totals
+SELECT
+    (SELECT COALESCE(SUM(total_amount), 0) FROM purchase_orders WHERE status != 'cancelled') as totalPurchase,
+    (SELECT COALESCE(SUM(amount), 0) FROM purchase_payments WHERE status = 'completed') as totalPaid,
+    ((SELECT COALESCE(SUM(total_amount), 0) FROM purchase_orders WHERE status != 'cancelled') -
+     (SELECT COALESCE(SUM(amount), 0) FROM purchase_payments WHERE status = 'completed')) as totalDue;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Supplier Statistics</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/suppliers/stats</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Supplier statistics retrieved successfully",
+    "data": [
+        {
+            "label": "All Active Suppliers",
+            "value": 10,
+            "color": "bg-emerald-600"
+        },
+        {
+            "label": "Total Suppliers",
+            "value": 12,
+            "color": "bg-blue-600"
+        },
+        {
+            "label": "New Suppliers",
+            "value": 3,
+            "color": "bg-violet-600"
+        },
+        {
+            "label": "Inactive Suppliers",
+            "value": 2,
+            "color": "bg-rose-600"
+        },
+        {
+            "label": "Total Purchase Amount",
+            "value": 125000.50,
+            "color": "bg-indigo-600",
+            "isCurrency": true
+        },
+        {
+            "label": "Total Paid",
+            "value": 98500.00,
+            "color": "bg-emerald-600",
+            "isCurrency": true
+        },
+        {
+            "label": "Total Due",
+            "value": 26500.50,
+            "color": "bg-rose-600",
+            "isCurrency": true
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELETE /:id - Delete Supplier -->
+            <div class="endpoint-section">
+                <h3><span class="badge-delete">DELETE</span> /:id <span class="file-badge">suppliers.routes.js:243</span></h3>
+                <p>Delete a supplier record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: DELETE /api/suppliers/:id
+    Controller->>Service: deleteSupplier(id)
+    Service->>Repository: delete(id)
+    Repository->>Database: SELECT * FROM suppliers WHERE id = ?
+    Database->>Repository: Supplier or null
+    Repository->>Database: DELETE FROM suppliers WHERE id = ?
+    Database->>Repository: Deleted supplier
+    Repository->>Service: Supplier object
+    Service->>Controller: Supplier result
+    Controller->>Client: 200 Success
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+    subgraph "Module Layer - Suppliers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check suppliers access| Controller[Suppliers Controller]
+    Controller -->|deleteSupplier| Service[Supplier Service]
+    Service -->|Data Access| Repository[Supplier Repository]
+    end
+
+    subgraph "Delete Supplier"
+    DeleteSupplier[DELETE /api/suppliers/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindSupplier[Repository - Find Supplier]
+    FindSupplier -->|SELECT FROM suppliers| DB[(MySQL Database)]
+
+    DB -->|Supplier or Null| CheckExists[Service - Check Exists]
+    CheckExists -->|Supplier found| DeleteRecord[Repository - Delete]
+    DeleteRecord -->|DELETE FROM suppliers| Response[Controller - Send Response]
+    CheckExists -->|Not found| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: suppliers.controller.js:53
+async deleteSupplier(req, res) {
+    try {
+        await SupplierService.deleteSupplier(req.params.id);
+        return success(res, null, 'Supplier deleted successfully');
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: suppliers.service.js:90
+async deleteSupplier(id) {
+    const supplier = await SupplierRepository.delete(id);
+    if (!supplier) {
+        throw new Error('Supplier not found');
+    }
+    return supplier;
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: suppliers.repository.js:99
+async delete(id) {
+    const supplier = await Supplier.findByPk(id);
+    if (!supplier) return null;
+    await supplier.destroy();
+    return supplier;
+}
+
+SQL Equivalent:
+DELETE FROM suppliers WHERE id = ?;</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>200 OK</strong>
+                    <code>{
+    "status": true,
+    "message": "Supplier deleted successfully"
+}</code>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Warning:</strong> Deleting a supplier may affect existing purchase_orders. Check foreign key constraints before deletion.
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>404 Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Supplier not found"
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- References Section -->
+        <div class="card" id="references">
+            <h2>📖 References</h2>
+
+            <h3>Payment Terms Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Term</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Net 15</td>
+                        <td>Payment due within 15 days</td>
+                    </tr>
+                    <tr>
+                        <td>Net 30</td>
+                        <td>Payment due within 30 days</td>
+                    </tr>
+                    <tr>
+                        <td>Net 45</td>
+                        <td>Payment due within 45 days</td>
+                    </tr>
+                    <tr>
+                        <td>Net 60</td>
+                        <td>Payment due within 60 days</td>
+                    </tr>
+                    <tr>
+                        <td>Due on Receipt</td>
+                        <td>Payment due immediately</td>
+                    </tr>
+                    <tr>
+                        <td>COD</td>
+                        <td>Cash on Delivery</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Supplier Status Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>is_active = true</strong></td>
+                        <td>Active supplier - Can be selected for new purchase orders</td>
+                    </tr>
+                    <tr>
+                        <td><strong>is_active = false</strong></td>
+                        <td>Inactive supplier - Hidden from selection, preserved for history</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Sorting Options</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>top_purchase</code></td>
+                        <td>Sort by highest total purchase amount (descending)</td>
+                    </tr>
+                    <tr>
+                        <td><code>low_purchase</code></td>
+                        <td>Sort by lowest total purchase amount (ascending)</td>
+                    </tr>
+                    <tr>
+                        <td><code>(default)</code></td>
+                        <td>Sort by creation date (newest first)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#00695c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#004d40',
+                lineColor: '#00695c',
+                secondaryColor: '#30cfd0',
+                tertiaryColor: '#e8f5f3',
+                background: '#e8f5f3',
+                mainBkg: '#00695c',
+                nodeBorder: '#004d40',
+                clusterBkg: '#f0f9f8',
+                clusterBorder: '#00695c',
+                titleColor: '#00695c',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#30cfd0',
+                actorBorder: '#00695c',
+                actorTextColor: '#fff',
+                actorLineColor: '#00695c',
+                signalColor: '#00695c',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#30cfd0',
+                labelBoxBorderColor: '#00695c',
+                labelTextColor: '#fff',
+                loopTextColor: '#00695c',
+                noteBorderColor: '#00695c',
+                noteBkgColor: '#fff3cd',
+                noteTextColor: '#333',
+                activationBorderColor: '#00695c',
+                activationBkgColor: '#e8f5f3',
+                sequenceNumberColor: '#00695c'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            color: #667eea;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #5568d3;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>👥 Users Module</h1>
+            <p>Complete user account management system with CRUD operations, role-based access control, and department integration</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/users</span>
+                </h3>
+                <p class="route-desc">Get all users with pagination. Supports filtering by role, department, status, and text search.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-post">POST</span>
+                    <span class="route-path">/api/users/add</span>
+                </h3>
+                <p class="route-desc">Create a new user account with automatic password hashing and email validation.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-get">GET</span>
+                    <span class="route-path">/api/users/get/:id</span>
+                </h3>
+                <p class="route-desc">Get detailed user information by ID with role and department data.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-put">PUT</span>
+                    <span class="route-path">/api/users/update/:id</span>
+                </h3>
+                <p class="route-desc">Update user information. Supports partial updates and password rehashing.</p>
+            </div>
+
+            <div class="route-item">
+                <h3>
+                    <span class="route-method method-delete">DELETE</span>
+                    <span class="route-path">/api/users/delete/:id</span>
+                </h3>
+                <p class="route-desc">Delete a user account (soft delete supported).</p>
+            </div>
+        </div>
+
+        <!-- ==================== 1. GET ALL USERS ==================== -->
+        <div class="card">
+            <h2>1. GET /api/users - Get All Users <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/users with filters
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'users' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request with filters
+    Controller->>Service: getAllUsers(filters, page, limit)
+    Service->>Service: Parse pagination params
+    Service->>Service: Build filter conditions
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT users with role & department
+    Database->>Repository: User list with count
+    Repository->>Service: Users data
+    Service->>Controller: Result with total
+    Controller->>Client: 200 Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Users"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'users' access]
+                ModuleCheck -->|Access Granted| Controller[User Controller]
+                Controller -->|Business Logic| Service[User Service]
+                Service -->|Data Access| Repository[User Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Users Flow
+                subgraph "Get All Users Process"
+                GetAll[GET /api/users] --> Parse[Service: Parse Pagination]
+                Parse -->|page, limit| BuildFilter[Service: Build Filters]
+                BuildFilter -->|role_id, dept, status, search| FindAll[Repository: findAll]
+                FindAll -->|WHERE + OFFSET + LIMIT| UsersDB[(users + roles tables)]
+                UsersDB --> UserData[Repository: Users List + Count]
+                UserData --> Result[Service: Paginated Result]
+                Result --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Query Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>page</td>
+                    <td>integer</td>
+                    <td>Page number (default: 1)</td>
+                </tr>
+                <tr>
+                    <td>limit</td>
+                    <td>integer</td>
+                    <td>Items per page (default: 10)</td>
+                </tr>
+                <tr>
+                    <td>role_id</td>
+                    <td>integer</td>
+                    <td>Filter by role ID</td>
+                </tr>
+                <tr>
+                    <td>department_id</td>
+                    <td>integer</td>
+                    <td>Filter by department ID</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>string</td>
+                    <td>Filter by status (active/inactive/terminated/on_leave)</td>
+                </tr>
+                <tr>
+                    <td>search</td>
+                    <td>string</td>
+                    <td>Search in name, first_name, last_name, email</td>
+                </tr>
+            </table>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.controller.js</code> <span class="file-badge">getAllUsers</span></p>
+            <pre class="code-block"><code>async getAllUsers(req, res) {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const filters = {
+      role_id: req.query.role_id,
+      department_id: req.query.department_id,
+      status: req.query.status,
+      search: req.query.search
+    };
+
+    const result = await UserService.getAllUsers(filters, page, limit);
+    return successWithPagination(res, 'Users retrieved successfully', result.data, {
+      total: result.total,
+      page,
+      limit
+    });
+  } catch (err) {
+    return error(res, err.message, 500);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.service.js</code> <span class="file-badge">getAllUsers</span></p>
+            <pre class="code-block"><code>async getAllUsers(filters = {}, page = 1, limit = 10) {
+  const offset = (page - 1) * limit;
+  const result = await UserRepository.findAll(filters, limit, offset);
+  return {
+    data: result.rows,
+    total: result.count
+  };
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.repository.js</code> <span class="file-badge">findAll</span></p>
+            <pre class="code-block"><code>async findAll(filters = {}, limit = 10, offset = 0) {
+  const where = {};
+
+  // Build filters
+  if (filters.role_id) where.role_id = filters.role_id;
+  if (filters.department_id) where.department_id = filters.department_id;
+  if (filters.status) where.status = filters.status;
+
+  // Search across multiple fields
+  if (filters.search) {
+    where[Op.or] = [
+      { name: { [Op.like]: `%${filters.search}%` } },
+      { first_name: { [Op.like]: `%${filters.search}%` } },
+      { last_name: { [Op.like]: `%${filters.search}%` } },
+      { email: { [Op.like]: `%${filters.search}%` } }
+    ];
+  }
+
+  return await User.findAndCountAll({
+    where,
+    limit,
+    offset,
+    include: [
+      { model: Role, as: 'role', attributes: ['id', 'name'] },
+      { model: Department, as: 'department', attributes: ['id', 'name'] }
+    ],
+    attributes: { exclude: ['password'] },
+    order: [['created_at', 'DESC']]
+  });
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Query users with role and department
+SELECT
+  u.id, u.name, u.email, u.status, u.role_id, u.department_id,
+  r.id as role_id, r.name as role_name,
+  d.id as department_id, d.name as department_name
+FROM users u
+LEFT JOIN roles r ON u.role_id = r.id
+LEFT JOIN departments d ON u.department_id = d.id
+WHERE u.status = 'active'
+ORDER BY u.created_at DESC
+LIMIT 10 OFFSET 0;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "success": true,
+  "message": "Users retrieved successfully",
+  "pagination": {
+    "total": 25,
+    "page": "1",
+    "limit": "10",
+    "totalPage": 3
+  },
+  "data": [
+    {
+      "id": 1,
+      "name": "Admin User",
+      "email": "admin@erp.com",
+      "role_id": 1,
+      "department_id": null,
+      "status": "active",
+      "role": { "id": 1, "name": "Admin" },
+      "department": null,
+      "created_at": "2025-12-03T05:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "John Doe",
+      "email": "john@example.com",
+      "role_id": 2,
+      "department_id": 1,
+      "status": "active",
+      "role": { "id": 2, "name": "Manager" },
+      "department": { "id": 1, "name": "IT" },
+      "created_at": "2025-12-02T10:00:00.000Z"
+    }
+  ]
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 2. GET USER BY ID ==================== -->
+        <div class="card">
+            <h2>2. GET /api/users/get/:id - Get User by ID <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/users/get/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'users' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request with user ID
+    Controller->>Service: getUserById(id)
+    Service->>Repository: findById(id)
+    Repository->>Database: SELECT user with role & department
+    Database->>Repository: User data
+    Repository->>Service: User object
+    Service->>Service: Remove password from response
+    Service->>Controller: User details without password
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Users"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| Controller[User Controller]
+                Controller -->|Business Logic| Service[User Service]
+                Service -->|Data Access| Repository[User Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get User by ID Flow
+                subgraph "Get User by ID Process"
+                GetUser[GET /api/users/get/:id] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| GetById[Service: getUserById]
+                GetById --> Find[Repository: findById]
+                Find -->|findByPk with includes| UserDB[(users + roles + departments)]
+                UserDB --> UserData[Repository: User Object]
+                UserData --> RemovePass[Service: Remove Password]
+                RemovePass --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.controller.js</code> <span class="file-badge">getUserById</span></p>
+            <pre class="code-block"><code>async getUserById(req, res) {
+  try {
+    const user = await UserService.getUserById(req.params.id);
+    return success(res, 'User retrieved successfully', user);
+  } catch (err) {
+    return error(res, err.message, 404);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.service.js</code> <span class="file-badge">getUserById</span></p>
+            <pre class="code-block"><code>async getUserById(id) {
+  const user = await UserRepository.findById(id);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  // Remove password from response
+  const { password, ...userWithoutPassword } = user.toJSON();
+  return userWithoutPassword;
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.repository.js</code> <span class="file-badge">findById</span></p>
+            <pre class="code-block"><code>async findById(id) {
+  return await User.findByPk(id, {
+    include: [
+      {
+        model: Role,
+        as: 'role',
+        attributes: ['id', 'name']
+      },
+      {
+        model: Department,
+        as: 'department',
+        attributes: ['id', 'name']
+      }
+    ]
+  });
+}</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User retrieved successfully",
+  "data": {
+    "id": 1,
+    "name": "Admin User",
+    "email": "admin@example.com",
+    "role_id": 1,
+    "department_id": null,
+    "status": "active",
+    "phone": "+1234567890",
+    "position": "System Administrator",
+    "role": {
+      "id": 1,
+      "name": "Admin"
+    },
+    "department": null,
+    "created_at": "2025-12-01T00:00:00.000Z",
+    "updated_at": "2025-12-03T10:30:00.000Z"
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (404)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "User not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 3. CREATE USER ==================== -->
+        <div class="card">
+            <h2>3. POST /api/users/add - Create User <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/users/add
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'users' access
+    moduleCheck->>Router: Access Granted
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: createUser(data, userId)
+    Service->>Repository: findByEmail(email)
+    Repository->>Database: SELECT user by email
+    Database->>Repository: User or null
+    Repository->>Service: Existing user check
+    Service->>Service: Hash password with bcrypt (10 rounds)
+    Service->>Repository: create(userData)
+    Repository->>Database: INSERT INTO users
+    Database->>Repository: New user created
+    Repository->>Service: User object
+    Service->>Service: Remove password from response
+    Service->>Controller: User without password
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Users"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'users' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[User Controller]
+                Controller -->|Business Logic| Service[User Service]
+                Service -->|Data Access| Repository[User Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create User Flow
+                subgraph "Create User Process"
+                CreateUser[POST /api/users/add] --> CheckEmail[Service: Check Email]
+                CheckEmail --> FindEmail[Repository: findByEmail]
+                FindEmail -->|SELECT| UserDB[(users table)]
+                UserDB -->|Email exists| Error[Service: Throw Error]
+                UserDB -->|Email unique| HashPass[Service: Hash Password]
+                HashPass -->|bcrypt 10 rounds| Create[Service: Create User]
+                Create --> Insert[Repository: create]
+                Insert -->|INSERT| NewUser[(New user)]
+                NewUser --> UserObj[Repository: User Object]
+                UserObj --> RemovePass[Service: Remove Password]
+                RemovePass --> Response[Controller: Send Response - 201]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "name": "John Doe",
+  "first_name": "John",
+  "last_name": "Doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "role_id": 2,
+  "department_id": 1,
+  "phone": "+1234567890",
+  "position": "Software Engineer",
+  "status": "active"
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>name OR first_name + last_name</td>
+                    <td>required (one or the other)</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>required, email format, must be unique</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>required, min 4 characters</td>
+                </tr>
+                <tr>
+                    <td>role_id</td>
+                    <td>optional, must exist in roles table</td>
+                </tr>
+                <tr>
+                    <td>department_id</td>
+                    <td>optional, must exist in departments table</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>optional, enum: active, inactive, terminated, on_leave</td>
+                </tr>
+                <tr>
+                    <td>phone, position, address, etc.</td>
+                    <td>optional, string with max length</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.controller.js</code> <span class="file-badge">createUser</span></p>
+            <pre class="code-block"><code>async createUser(req, res) {
+  try {
+    const user = await UserService.createUser(req.body, req.user?.id);
+    return success(res, 'User created successfully', user, 201);
+  } catch (err) {
+    return error(res, err.message, 400);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.service.js</code> <span class="file-badge">createUser</span></p>
+            <pre class="code-block"><code>async createUser(data, userId) {
+  // 1. Check if email already exists
+  const existing = await UserRepository.findByEmail(data.email);
+  if (existing) {
+    throw new Error('User with this email already exists');
+  }
+
+  // 2. Hash password with bcrypt (10 salt rounds)
+  const hashedPassword = await bcrypt.hash(data.password, 10);
+  const userData = { ...data, password: hashedPassword, created_by: userId };
+
+  // 3. Create user
+  const user = await UserRepository.create(userData);
+  const { password, ...userWithoutPassword } = user.toJSON();
+  return userWithoutPassword;
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.repository.js</code> <span class="file-badge">create</span></p>
+            <pre class="code-block"><code>async create(data) {
+  return await User.create(data);
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Insert into users
+INSERT INTO users (
+    name, first_name, last_name, email, password,
+    role_id, department_id, phone, position, status,
+    created_by, created_at
+) VALUES (
+    'John Doe', 'John', 'Doe', 'john.doe@example.com',
+    '$2b$10$abcdefghijklmnopqrstuvwxyz123456',
+    2, 1, '+1234567890', 'Software Engineer', 'active',
+    1, NOW()
+);
+
+-- Returns: new user id (last_insert_id)</code></pre>
+
+            <h4>Success Response (201)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User created successfully",
+  "data": {
+    "id": 15,
+    "name": "John Doe",
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@example.com",
+    "role_id": 2,
+    "department_id": 1,
+    "phone": "+1234567890",
+    "position": "Software Engineer",
+    "status": "active",
+    "created_by": 1,
+    "created_at": "2025-12-02T10:00:00.000Z"
+  },
+  "code": 201
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "User with this email already exists"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 4. UPDATE USER ==================== -->
+        <div class="card">
+            <h2>4. PUT /api/users/update/:id - Update User <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validateRequest
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /api/users/update/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'users' access
+    moduleCheck->>Router: Access Granted
+    Router->>validateRequest: Validate Request Body
+    validateRequest->>Controller: Validation Passed
+    Controller->>Service: updateUser(id, data)
+    Service->>Repository: findByEmail(email) if email changed
+    Repository->>Database: SELECT user by email
+    Database->>Repository: User or null
+    Repository->>Service: Email uniqueness check
+    Service->>Service: Hash password if provided (bcrypt 10 rounds)
+    Service->>Repository: update(id, data)
+    Repository->>Database: SELECT user by id
+    Database->>Repository: User data
+    Repository->>Database: UPDATE users
+    Database->>Repository: Updated user
+    Repository->>Service: User object
+    Service->>Service: Remove password from response
+    Service->>Controller: User without password
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Users"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'users' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[User Controller]
+                Controller -->|Business Logic| Service[User Service]
+                Service -->|Data Access| Repository[User Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Update User Flow
+                subgraph "Update User Process"
+                Update[PUT /api/users/update/:id] --> CheckEmail[Service: Check Email if Changed]
+                CheckEmail -->|Email changed| FindEmail[Repository: findByEmail]
+                FindEmail -->|SELECT| UserDB[(users table)]
+                UserDB -->|Email exists| Error[Service: Throw Error]
+                UserDB -->|Email unique or not changed| HashPass{Password Provided?}
+                HashPass -->|Yes| Hash[Service: Hash Password]
+                HashPass -->|No| FindUser[Repository: findById]
+                Hash -->|bcrypt| FindUser
+                FindUser -->|SELECT| UserDB2[(users table)]
+                UserDB2 --> UpdateDB[Repository: update]
+                UpdateDB -->|UPDATE| Updated[(Updated user)]
+                Updated --> UserObj[Repository: User Object]
+                UserObj --> RemovePass[Service: Remove Password]
+                RemovePass --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Schema</h4>
+            <pre class="code-block"><code>{
+  "name": "John Smith",
+  "email": "john.smith@example.com",
+  "password": "newSecurePassword123",
+  "role_id": 3,
+  "department_id": 2,
+  "phone": "+9876543210",
+  "position": "Senior Manager",
+  "salary": 85000,
+  "status": "active"
+}</code></pre>
+
+            <h4>Validation Rules</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Rules</th>
+                </tr>
+                <tr>
+                    <td>name, first_name, last_name</td>
+                    <td>optional, string with min/max length</td>
+                </tr>
+                <tr>
+                    <td>email</td>
+                    <td>optional, email format, must be unique</td>
+                </tr>
+                <tr>
+                    <td>password</td>
+                    <td>optional, min 4 characters</td>
+                </tr>
+                <tr>
+                    <td>role_id, department_id</td>
+                    <td>optional, must exist in reference table</td>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>optional, enum: active, inactive, terminated, on_leave</td>
+                </tr>
+                <tr>
+                    <td>salary</td>
+                    <td>optional, number >= 0</td>
+                </tr>
+            </table>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.controller.js</code> <span class="file-badge">updateUser</span></p>
+            <pre class="code-block"><code>async updateUser(req, res) {
+  try {
+    const user = await UserService.updateUser(req.params.id, req.body);
+    return success(res, 'User updated successfully', user);
+  } catch (err) {
+    return error(res, err.message, 400);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.service.js</code> <span class="file-badge">updateUser</span></p>
+            <pre class="code-block"><code>async updateUser(id, data) {
+  // 1. If email is being updated, check for duplicates
+  if (data.email) {
+    const existing = await UserRepository.findByEmail(data.email);
+    if (existing && existing.id !== parseInt(id)) {
+      throw new Error('User with this email already exists');
+    }
+  }
+
+  // 2. Hash password if being updated
+  if (data.password) {
+    data.password = await bcrypt.hash(data.password, 10);
+  }
+
+  // 3. Update user
+  const user = await UserRepository.update(id, data);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  const { password, ...userWithoutPassword } = user.toJSON();
+  return userWithoutPassword;
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.repository.js</code> <span class="file-badge">update</span></p>
+            <pre class="code-block"><code>async update(id, data) {
+  const user = await User.findByPk(id);
+  if (!user) return null;
+  return await user.update(data);
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Update user record
+UPDATE users
+SET name = ?,
+    email = ?,
+    password = ?,
+    role_id = ?,
+    department_id = ?,
+    phone = ?,
+    position = ?,
+    salary = ?,
+    status = ?,
+    updated_at = NOW()
+WHERE id = ?;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User updated successfully",
+  "data": {
+    "id": 15,
+    "name": "John Smith",
+    "email": "john.smith@example.com",
+    "role_id": 3,
+    "department_id": 2,
+    "phone": "+9876543210",
+    "position": "Senior Manager",
+    "salary": 85000,
+    "status": "active",
+    "updated_at": "2025-12-02T10:05:00.000Z"
+  }
+}</code>
+            </div>
+
+            <h4>Error Response (400)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "User with this email already exists"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== 5. DELETE USER ==================== -->
+        <div class="card">
+            <h2>5. DELETE /api/users/delete/:id - Delete User <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: DELETE /api/users/delete/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'users' access
+    moduleCheck->>Router: Access Granted
+    Router->>Controller: Pass request with user ID
+    Controller->>Service: deleteUser(id)
+    Service->>Repository: delete(id)
+    Repository->>Database: SELECT user by id
+    Database->>Repository: User data
+    Repository->>Repository: Check if user exists
+    Repository->>Database: DELETE/Soft delete user
+    Database->>Repository: User deleted
+    Repository->>Service: Success
+    Service->>Controller: Success confirmation
+    Controller->>Client: 200 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP DELETE + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Users"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'users' access]
+                ModuleCheck -->|Access Granted| Controller[User Controller]
+                Controller -->|Business Logic| Service[User Service]
+                Service -->|Data Access| Repository[User Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Delete User Flow
+                subgraph "Delete User Process"
+                Delete[DELETE /api/users/delete/:id] --> Auth[Router: Verify JWT]
+                Auth -->|Extract userId| DeleteSvc[Service: deleteUser]
+                DeleteSvc --> Find[Repository: findById]
+                Find -->|SELECT| UserDB[(users table)]
+                UserDB -->|Not found| Error[Service: Throw Error]
+                UserDB -->|Exists| DeleteDB[Repository: destroy]
+                DeleteDB -->|DELETE / Soft Delete| Deleted[(User deleted)]
+                Deleted --> Success[Service: Success]
+                Success --> Response[Controller: Send Response]
+                end
+            </div>
+
+            <h4>Request Headers</h4>
+            <pre class="code-block"><code>Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code></pre>
+
+            <h4>Controller Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.controller.js</code> <span class="file-badge">deleteUser</span></p>
+            <pre class="code-block"><code>async deleteUser(req, res) {
+  try {
+    await UserService.deleteUser(req.params.id);
+    return success(res, 'User deleted successfully', null);
+  } catch (err) {
+    return error(res, err.message, 404);
+  }
+}</code></pre>
+
+            <h4>Service Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.service.js</code> <span class="file-badge">deleteUser</span></p>
+            <pre class="code-block"><code>async deleteUser(id) {
+  const user = await UserRepository.delete(id);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  return user;
+}</code></pre>
+
+            <h4>Repository Logic</h4>
+            <p><strong>File:</strong> <code>src/modules/users/user.repository.js</code> <span class="file-badge">delete</span></p>
+            <pre class="code-block"><code>async delete(id) {
+  const user = await User.findByPk(id);
+  if (!user) return null;
+  await user.destroy();
+  return user;
+}</code></pre>
+
+            <h4>Database Tables</h4>
+            <pre class="sql-block"><code>-- Delete user (soft delete with paranoid)
+-- Sets deleted_at timestamp instead of actual deletion
+UPDATE users
+SET deleted_at = NOW()
+WHERE id = ? AND deleted_at IS NULL;
+
+-- Or hard delete (if paranoid not enabled)
+DELETE FROM users
+WHERE id = ?;</code></pre>
+
+            <h4>Success Response (200)</h4>
+            <div class="response-box">
+                <code>{
+  "status": true,
+  "message": "User deleted successfully",
+  "data": null
+}</code>
+            </div>
+
+            <h4>Error Response (404)</h4>
+            <div class="error-box">
+                <code>{
+  "status": false,
+  "message": "User not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE SCHEMA ==================== -->
+        <div class="card">
+            <h2>🗄️ Database Schema (ER Diagram)</h2>
+            <div class="mermaid">
+                erDiagram
+                USERS {
+                int id PK
+                string name
+                string first_name
+                string last_name
+                string email UK
+                string password
+                string phone
+                string position
+                int role_id FK
+                int department_id FK
+                enum status
+                decimal salary
+                string address
+                string city
+                string state
+                string country
+                string postal_code
+                string thumb_url
+                text gallery_items
+                text notes
+                int created_by
+                datetime created_at
+                datetime updated_at
+                datetime deleted_at
+                }
+                ROLES {
+                int id PK
+                string name UK
+                string display_name
+                string description
+                enum status
+                json permissions
+                datetime created_at
+                datetime updated_at
+                }
+                DEPARTMENTS {
+                int id PK
+                string name
+                string description
+                int manager_id
+                datetime created_at
+                datetime updated_at
+                }
+
+                USERS ||--o| ROLES : "has role"
+                USERS ||--o| DEPARTMENTS : "belongs to"
+                DEPARTMENTS }o--o| USERS : "managed by"
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Tables Used</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Table Name</th>
+                        <th>Purpose</th>
+                        <th>Key Fields</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>users</strong></td>
+                        <td>Stores user account information and credentials</td>
+                        <td>id, name, email, password, role_id, department_id, status, phone, position</td>
+                    </tr>
+                    <tr>
+                        <td><strong>roles</strong></td>
+                        <td>Defines user roles with permissions</td>
+                        <td>id, name, display_name, status, permissions (JSON)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>departments</strong></td>
+                        <td>Organizational department structure</td>
+                        <td>id, name, description, manager_id</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>🔐 User Status Flow</h2>
+            <h3>Status Values</h3>
+            <ul style="line-height: 2;">
+                <li>✅ <strong>active</strong> - User is active and can access the system</li>
+                <li>⚠️ <strong>inactive</strong> - User account is temporarily disabled</li>
+                <li>❌ <strong>terminated</strong> - User employment has ended</li>
+                <li>🏖️ <strong>on_leave</strong> - User is currently on leave</li>
+            </ul>
+
+            <h3>Security Features</h3>
+            <ul style="line-height: 2;">
+                <li>✅ <strong>Password Hashing</strong> - All passwords hashed using bcrypt (10 rounds)</li>
+                <li>✅ <strong>Email Uniqueness</strong> - Email addresses must be unique across all users</li>
+                <li>✅ <strong>Password Exclusion</strong> - Password never returned in API responses</li>
+                <li>✅ <strong>Soft Delete</strong> - Users can be soft deleted with deleted_at timestamp</li>
+                <li>✅ <strong>JWT Authentication</strong> - All endpoints protected with verifyToken middleware</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Quick Testing</h2>
+
+            <h4>Get All Users</h4>
+            <pre class="code-block"><code>curl -X GET "http://localhost:5000/api/users?page=1&limit=10&status=active" \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+
+            <h4>Create User</h4>
+            <pre class="code-block"><code>curl -X POST http://localhost:5000/api/users/add \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Alice Wonder",
+    "email": "alice@example.com",
+    "password": "SecurePass123!",
+    "role_id": 2,
+    "department_id": 1
+  }'</code></pre>
+
+            <h4>Update User</h4>
+            <pre class="code-block"><code>curl -X PUT http://localhost:5000/api/users/update/15 \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -d '{
+    "name": "Alice W.",
+    "position": "Senior Developer"
+  }'</code></pre>
+
+            <h4>Delete User</h4>
+            <pre class="code-block"><code>curl -X DELETE http://localhost:5000/api/users/delete/15 \
+  -H "Authorization: Bearer YOUR_TOKEN"</code></pre>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: true, theme: 'default' });
+    </script>
+</body>
+
+</html>

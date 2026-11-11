@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HR & Payroll</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 1.5fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#" class="active">HR & Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>HR & Payroll</h1>
+    <div class="subtitle">
+      Employee master, departments/designations, attendance, leave, payroll setup, salary processing, payslips and statutory contributions.
+    </div>
+
+    <!-- OVERVIEW KPIs -->
+    <div class="card">
+      <div class="card-header">
+        <h3>HR & Payroll Snapshot</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">Last Month</div>
+          <div class="pill-filter">This Year</div>
+        </div>
+      </div>
+      <div class="three-column">
+        <div>
+          <label>Total Employees</label>
+          <div style="font-size:20px;font-weight:600;">58</div>
+          <div class="hint">Active employees in <code>employees</code></div>
+        </div>
+        <div>
+          <label>Payroll Cost (This Month)</label>
+          <div style="font-size:20px;font-weight:600;">95,200.00</div>
+          <div class="hint">Gross salary + employer contributions</div>
+        </div>
+        <div>
+          <label>Pending Leave Requests</label>
+          <div style="font-size:20px;font-weight:600;">7</div>
+          <div class="hint">Status PENDING in <code>leave_requests</code></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPLOYEE MASTER + DEPTS/DESIGNATIONS -->
+    <div class="two-column">
+      <!-- Employee Master -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Employee Master</h3>
+          <button class="btn btn-primary btn-sm">+ New Employee</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Search Employee</label>
+            <input type="text" placeholder="Name / code / email" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>ACTIVE</option>
+              <option>INACTIVE</option>
+              <option>ON_LEAVE</option>
+              <option>RESIGNED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Department</label>
+            <select>
+              <option>All</option>
+              <option>Sales</option>
+              <option>HR</option>
+              <option>Production</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Emp Code</th>
+            <th>Name</th>
+            <th style="width:110px;">Department</th>
+            <th style="width:110px;">Designation</th>
+            <th style="width:90px;">Join Date</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:110px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>EMP-001</td>
+            <td>Md. Abdullah</td>
+            <td>Sales</td>
+            <td>Head of Sales</td>
+            <td>2021-01-16</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">View</button>
+              <button class="btn btn-sm btn-outline">Payroll</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Employee personal & contact details from <code>employees</code>.
+        </div>
+      </div>
+
+      <!-- Departments / Designations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Departments & Designations</h3>
+          <button class="btn btn-outline btn-sm">+ New Department</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Department Name</label>
+            <input type="text" placeholder="Search department" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Department</th>
+            <th style="width:140px;">Head</th>
+            <th style="width:70px;">Employees</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Sales</td>
+            <td>Md. Abdullah</td>
+            <td>12</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td>HR</td>
+            <td>Nur Aisyah</td>
+            <td>4</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:14px;margin-top:12px;margin-bottom:6px;">Designations</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Designation</th>
+            <th style="width:140px;">Department</th>
+            <th style="width:90px;">Grade</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Head of Sales</td>
+            <td>Sales</td>
+            <td>M5</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td>Sales Executive</td>
+            <td>Sales</td>
+            <td>E2</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Stored in <code>departments</code> & <code>designations</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPLOYMENT DETAILS & ATTENDANCE -->
+    <div class="two-column">
+      <!-- Employment Details (per employee) -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Employment Details</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Employee</label>
+            <input type="text" placeholder="Select employee" />
+          </div>
+          <div class="form-group">
+            <label>Employment Type</label>
+            <select>
+              <option>PERMANENT</option>
+              <option>CONTRACT</option>
+              <option>PART_TIME</option>
+              <option>INTERN</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Joining Date</label>
+            <input type="date" />
+          </div>
+          <div class="form-group">
+            <label>Probation End</label>
+            <input type="date" />
+          </div>
+          <div class="form-group">
+            <label>Current Status</label>
+            <select>
+              <option>ACTIVE</option>
+              <option>ON_LEAVE</option>
+              <option>SUSPENDED</option>
+              <option>RESIGNED</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Salary Structure</label>
+            <select>
+              <option>Standard Staff</option>
+              <option>Sales Commission</option>
+              <option>Management</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Basic Salary</label>
+            <input type="number" placeholder="0.00" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Employment info in <code>employee_employment_details</code>, salary link to <code>salary_structures</code>.
+        </div>
+      </div>
+
+      <!-- Attendance -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Attendance</h3>
+          <button class="btn btn-outline btn-sm">+ Manual Entry</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" />
+          </div>
+          <div class="form-group">
+            <label>Employee</label>
+            <input type="text" placeholder="Name / code" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>PRESENT</option>
+              <option>ABSENT</option>
+              <option>LATE</option>
+              <option>ON_LEAVE</option>
+              <option>HOLIDAY</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Date</th>
+            <th>Employee</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:110px;">Check-In</th>
+            <th style="width:110px;">Check-Out</th>
+            <th style="width:80px;">Hours</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-15</td>
+            <td>Md. Abdullah</td>
+            <td><span class="tag-success tag">PRESENT</span></td>
+            <td>09:05</td>
+            <td>18:10</td>
+            <td>8.5</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Manual entries in <code>attendance_records</code>. Later you can integrate device logs.
+        </div>
+      </div>
+    </div>
+
+    <!-- LEAVE TYPES & LEAVE REQUESTS -->
+    <div class="two-column">
+      <!-- Leave Types -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Leave Types</h3>
+          <button class="btn btn-outline btn-sm">+ New Leave Type</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th style="width:80px;">Code</th>
+            <th style="width:80px;">Annual Days</th>
+            <th style="width:90px;">Carry Forward</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Annual Leave</td>
+            <td>AL</td>
+            <td>14</td>
+            <td>Yes</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td>Sick Leave</td>
+            <td>SL</td>
+            <td>10</td>
+            <td>No</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Stored in <code>leave_types</code> with rules.
+        </div>
+      </div>
+
+      <!-- Leave Requests -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Leave Requests</h3>
+          <button class="btn btn-outline btn-sm">+ New Leave Request</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Employee</label>
+            <input type="text" placeholder="Name / code" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>PENDING</option>
+              <option>APPROVED</option>
+              <option>REJECTED</option>
+              <option>CANCELLED</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Req No</th>
+            <th>Employee</th>
+            <th style="width:90px;">Type</th>
+            <th style="width:90px;">From</th>
+            <th style="width:90px;">To</th>
+            <th style="width:70px;">Days</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:110px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>LR-2025-015</td>
+            <td>John Lim</td>
+            <td>AL</td>
+            <td>2025-01-20</td>
+            <td>2025-01-22</td>
+            <td>3</td>
+            <td><span class="tag-info tag">PENDING</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Approve</button>
+              <button class="btn btn-sm btn-outline">Reject</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Leave requests in <code>leave_requests</code> with approval workflow.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYROLL COMPONENTS & SALARY STRUCTURES -->
+    <div class="two-column">
+      <!-- Payroll Components -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Payroll Components</h3>
+          <button class="btn btn-outline btn-sm">+ New Component</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th style="width:80px;">Code</th>
+            <th style="width:110px;">Type</th>
+            <th style="width:120px;">Calculation</th>
+            <th style="width:90px;">Taxable</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Basic Salary</td>
+            <td>BASIC</td>
+            <td>ALLOWANCE</td>
+            <td>Fixed</td>
+            <td>Yes</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td>EPF Employee</td>
+            <td>EPF_EE</td>
+            <td>DEDUCTION</td>
+            <td>% of BASIC</td>
+            <td>No</td>
+            <td><span class="tag-success tag">ACTIVE</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Stored in <code>payroll_components</code> (allowances, deductions, contributions).
+        </div>
+      </div>
+
+      <!-- Payroll Setup (Salary Structures) -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Payroll Setup – Salary Structures</h3>
+          <button class="btn btn-outline btn-sm">+ New Structure</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Structure Name</label>
+            <input type="text" placeholder="e.g. Standard Staff" />
+          </div>
+          <div class="form-group">
+            <label>Pay Frequency</label>
+            <select>
+              <option>MONTHLY</option>
+              <option>WEEKLY</option>
+              <option>BIWEEKLY</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Structure</th>
+            <th style="width:90px;">Frequency</th>
+            <th style="width:150px;">Components</th>
+            <th style="width:80px;">Employees</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Standard Staff</td>
+            <td>MONTHLY</td>
+            <td>BASIC, EPF_EE, EPF_ER, SOCSO, ALLOW_TRANSPORT</td>
+            <td>32</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Structures in <code>salary_structures</code>, links to components in <code>salary_structure_components</code>, and to employees in <code>employee_salary_structures</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYROLL RUN & PAYSLIPS -->
+    <div class="two-column">
+      <!-- Payroll Run -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Payroll Run / Salary Processing</h3>
+          <button class="btn btn-primary btn-sm">+ New Payroll Run</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Payroll Period</label>
+            <input type="text" placeholder="Jan 2025" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>DRAFT</option>
+              <option>CALCULATED</option>
+              <option>APPROVED</option>
+              <option>PAID</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:110px;">Run Code</th>
+            <th>Period</th>
+            <th style="width:80px;">Employees</th>
+            <th style="width:110px;">Gross</th>
+            <th style="width:110px;">Net</th>
+            <th style="width:90px;">Status</th>
+            <th style="width:140px;">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PR-2025-01</td>
+            <td>Jan 2025</td>
+            <td>58</td>
+            <td>98,500.00</td>
+            <td>79,200.00</td>
+            <td><span class="tag-info tag">CALCULATED</span></td>
+            <td>
+              <button class="btn btn-sm btn-outline">Review</button>
+              <button class="btn btn-sm btn-outline">Approve</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Runs in <code>payroll_runs</code>, employee-level amounts in <code>payroll_run_items</code>.
+        </div>
+      </div>
+
+      <!-- Payslips -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Payslips</h3>
+          <button class="btn btn-outline btn-sm">Bulk Download PDF</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Payroll Run</label>
+            <select>
+              <option>PR-2025-01 (Jan 2025)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Employee</label>
+            <input type="text" placeholder="Name / code" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Emp Code</th>
+            <th>Employee</th>
+            <th style="width:110px;">Gross</th>
+            <th style="width:110px;">Net</th>
+            <th style="width:90px;">Payslip</th>
+            <th style="width:90px;">Email</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>EMP-001</td>
+            <td>Md. Abdullah</td>
+            <td>8,500.00</td>
+            <td>6,750.00</td>
+            <td><button class="btn btn-sm btn-outline">PDF</button></td>
+            <td><button class="btn btn-sm btn-outline">Send</button></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Payslip header in <code>payslips</code>, breakdown in <code>payslip_lines</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- STATUTORY & PAYROLL REPORTS -->
+    <div class="two-column">
+      <!-- Statutory Contributions -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Statutory Contributions (EPF / SOCSO / Tax)</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Payroll Run</label>
+            <select>
+              <option>PR-2025-01 (Jan 2025)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Statutory Scheme</label>
+            <select>
+              <option>All</option>
+              <option>EPF</option>
+              <option>SOCSO</option>
+              <option>Income Tax</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Scheme</th>
+            <th style="width:130px;">Employee Amount</th>
+            <th style="width:130px;">Employer Amount</th>
+            <th style="width:130px;">Total</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>EPF</td>
+            <td>7,200.00</td>
+            <td>8,400.00</td>
+            <td>15,600.00</td>
+            <td><span class="tag-warning tag">PENDING</span></td>
+          </tr>
+          <tr>
+            <td>SOCSO</td>
+            <td>1,100.00</td>
+            <td>1,500.00</td>
+            <td>2,600.00</td>
+            <td><span class="tag-warning tag">PENDING</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Schemes in <code>statutory_schemes</code>, per employee per run in <code>payroll_statutory_contributions</code>.
+        </div>
+      </div>
+
+      <!-- Payroll Reports -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Payroll Reports</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Report Type</label>
+            <select>
+              <option>By Month</option>
+              <option>By Employee</option>
+              <option>By Department</option>
+              <option>Year-to-Date Summary</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="e.g. Jan 2025" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Dimension</th>
+            <th style="width:110px;">Gross</th>
+            <th style="width:110px;">Net</th>
+            <th style="width:130px;">Employer Contributions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Sales Department</td>
+            <td>35,000.00</td>
+            <td>27,800.00</td>
+            <td>5,600.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          These reports read from <code>payroll_run_items</code>, grouped by month/employee/department.
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

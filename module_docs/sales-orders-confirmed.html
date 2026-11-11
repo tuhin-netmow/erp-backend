@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmed Sales Orders Module Documentation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { background: white; border-radius: 15px; padding: 40px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
+        .header h1 { color: #1976d2; font-size: 2.5em; margin-bottom: 10px; }
+        .back-link { display: inline-flex; align-items: center; color: #1976d2; text-decoration: none; padding: 10px 20px; background: #f0f0f0; border-radius: 8px; margin-bottom: 20px; font-weight: 500; }
+        .section { background: white; border-radius: 15px; padding: 30px; margin-bottom: 30px; box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); }
+        .section-title { color: #1976d2; font-size: 1.8em; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 3px solid #1565c0; }
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 18px; border-radius: 12px; overflow-x: auto; font-family: 'Consolas', monospace; font-size: 0.9em; }
+        .info-box { background: #e3f2fd; border-left: 4px solid #1976d2; padding: 15px; border-radius: 6px; margin: 15px 0; }
+        .endpoint { background: #f8f9fa; border-left: 4px solid #1976d2; padding: 15px; margin: 10px 0; border-radius: 6px; font-family: 'Courier New', monospace; }
+        .method { display: inline-block; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 0.85em; margin-right: 8px; }
+        .method.get { background: #e3f2fd; color: #1976d2; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+        <div class="header">
+            <h1>✅ Confirmed Sales Orders Module</h1>
+            <p>View and Manage Confirmed Sales Orders</p>
+        </div>
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>View all confirmed sales orders that are ready for processing and delivery. Track confirmed orders and prepare them for shipment.</p>
+            <div class="info-box"><strong>📌 Base URL:</strong> <code>/api/sales/orders</code></div>
+        </div>
+        <div class="section">
+            <h2 class="section-title">API Integration</h2>
+            <div class="endpoint"><span class="method.get">GET</span> /api/sales/orders?status=confirmed</div>
+            <div class="code-block"><span style="color: #569cd6;">const</span> fetchConfirmedOrders = <span style="color: #569cd6;">async</span> () => {
+  <span style="color: #569cd6;">const</span> token = <span style="color: #9cdcfe;">localStorage</span>.<span style="color: #dcdcaa;">getItem</span>(<span style="color: #ce9178;">'token'</span>);
+  <span style="color: #569cd6;">const</span> response = <span style="color: #569cd6;">await</span> <span style="color: #dcdcaa;">fetch</span>(<span style="color: #ce9178;">`/api/sales/orders?status=confirmed`</span>, {
+    headers: { <span style="color: #ce9178;">'Authorization'</span>: <span style="color: #ce9178;">`Bearer ${token}`</span> }
+  });
+  <span style="color: #569cd6;">return await</span> response.<span style="color: #dcdcaa;">json</span>();
+};</div>
+        </div>
+        <div class="section">
+            <h2 class="section-title">Permissions</h2>
+            <div class="info-box"><strong>✅ Required Permission:</strong> <code>sales.orders.view</code></div>
+        </div>
+    </div>
+</body>
+</html>

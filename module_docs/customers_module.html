@@ -1,0 +1,2829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #00695c;
+        }
+        .header p {
+            margin: 0;
+            color: #666;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+        .card h2 {
+            margin-top: 0;
+            color: #00695c;
+            border-bottom: 3px solid #00695c;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        .card h3 {
+            color: #00695c;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .card h4 {
+            color: #333;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .endpoint-section {
+            background: #e8f5f3;
+            border-left: 4px solid #00695c;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #e8f5f3;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #00695c;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .back-link:hover {
+            background: #004d40;
+        }
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #00695c;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+        table th {
+            background: #00695c;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        table tr:hover {
+            background: #f8f9fa;
+        }
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00695c;
+        }
+        .request-item {
+            background: #f0f9f8;
+            padding: 15px;
+            border-left: 3px solid #00695c;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #e8f5f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #00695c;
+            font-size: 13px;
+        }
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+        .nav-menu {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .nav-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .nav-menu li {
+            margin: 8px 0;
+        }
+        .nav-menu a {
+            color: #00695c;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+        .nav-menu a:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>Customers Module Documentation</h1>
+            <p>Complete customer management system with order tracking and payment analytics</p>
+            <p><strong>Base URL:</strong> /api/customers</p>
+            <p><strong>Middleware:</strong> <span class="badge-protected">verifyToken</span> <span class="badge-admin">moduleCheck('customers')</span></p>
+        </div>
+
+        <div class="nav-menu">
+            <h3 style="margin-top: 0; color: #00695c;">Quick Navigation</h3>
+            <ul>
+                <li><a href="#database">Database Schema</a></li>
+                <li><a href="#endpoints">API Endpoints</a></li>
+                <li><a href="#references">References</a></li>
+            </ul>
+        </div>
+
+        <!-- Database Schema Section -->
+        <div class="card" id="database">
+            <h2>📊 Database Schema</h2>
+
+            <h3>ER Diagram</h3>
+            <div class="mermaid">
+erDiagram
+    Customer ||--o{ CustomerImage : "has"
+    Customer ||--o{ CustomerContact : "has"
+    Customer ||--o{ Order : "places"
+    Customer ||--o{ Payment : "makes"
+
+    Customer {
+        int id PK
+        string name
+        string company
+        string email UK
+        string phone
+        text address
+        string city
+        string state
+        string country
+        string postal_code
+        decimal latitude
+        decimal longitude
+        string tax_id
+        decimal credit_limit
+        decimal outstanding_balance
+        enum customer_type
+        int sales_route_id FK
+        int created_by FK
+        boolean is_active
+        date created_at
+        date updated_at
+    }
+
+    CustomerImage {
+        int id PK
+        int customer_id FK
+        string image_url
+        boolean is_primary
+        int sort_order
+        string caption
+    }
+
+    CustomerContact {
+        int id PK
+        int customer_id FK
+        string name
+        string phone
+        string email
+        string role
+        boolean is_primary
+    }
+
+    Order {
+        int id PK
+        int customer_id FK
+        decimal total_amount
+        enum status
+    }
+
+    Payment {
+        int id PK
+        int order_id FK
+        decimal amount
+        enum status
+    }
+            </div>
+
+            <h3>Tables</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Column</th>
+                        <th>Type</th>
+                        <th>Constraints</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>id</td>
+                        <td>INTEGER</td>
+                        <td>PK, AUTO_INCREMENT</td>
+                        <td>Unique identifier</td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>STRING(255)</td>
+                        <td></td>
+                        <td>Contact person name</td>
+                    </tr>
+                    <tr>
+                        <td>company</td>
+                        <td>STRING(255)</td>
+                        <td>NOT NULL</td>
+                        <td>Company name</td>
+                    </tr>
+                    <tr>
+                        <td>email</td>
+                        <td>STRING(255)</td>
+                        <td>UNIQUE</td>
+                        <td>Contact email</td>
+                    </tr>
+                    <tr>
+                        <td>phone</td>
+                        <td>STRING(50)</td>
+                        <td></td>
+                        <td>Contact phone</td>
+                    </tr>
+                    <tr>
+                        <td>address</td>
+                        <td>TEXT</td>
+                        <td></td>
+                        <td>Street address</td>
+                    </tr>
+                    <tr>
+                        <td>city</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>City name</td>
+                    </tr>
+                    <tr>
+                        <td>state</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>State/Province</td>
+                    </tr>
+                    <tr>
+                        <td>country</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>Country name</td>
+                    </tr>
+                    <tr>
+                        <td>postal_code</td>
+                        <td>STRING(20)</td>
+                        <td></td>
+                        <td>ZIP/Postal code</td>
+                    </tr>
+                    <tr>
+                        <td>latitude</td>
+                        <td>DECIMAL(10,8)</td>
+                        <td></td>
+                        <td>GPS latitude</td>
+                    </tr>
+                    <tr>
+                        <td>longitude</td>
+                        <td>DECIMAL(11,8)</td>
+                        <td></td>
+                        <td>GPS longitude</td>
+                    </tr>
+                    <tr>
+                        <td>tax_id</td>
+                        <td>STRING(100)</td>
+                        <td></td>
+                        <td>Tax registration number</td>
+                    </tr>
+                    <tr>
+                        <td>credit_limit</td>
+                        <td>DECIMAL(10,2)</td>
+                        <td>Default: 0.00</td>
+                        <td>Credit limit</td>
+                    </tr>
+                    <tr>
+                        <td>outstanding_balance</td>
+                        <td>DECIMAL(10,2)</td>
+                        <td>Default: 0.00</td>
+                        <td>Outstanding balance</td>
+                    </tr>
+                    <tr>
+                        <td>customer_type</td>
+                        <td>ENUM</td>
+                        <td>Default: 'individual'</td>
+                        <td>Customer type (individual/company)</td>
+                    </tr>
+                    <tr>
+                        <td>sales_route_id</td>
+                        <td>INTEGER</td>
+                        <td>FK</td>
+                        <td>Sales route reference</td>
+                    </tr>
+                    <tr>
+                        <td>is_active</td>
+                        <td>BOOLEAN</td>
+                        <td>Default: true</td>
+                        <td>Active status</td>
+                    </tr>
+                    <tr>
+                        <td>created_by</td>
+                        <td>INTEGER</td>
+                        <td>FK</td>
+                        <td>User who created the record</td>
+                    </tr>
+                    <tr>
+                        <td>created_at</td>
+                        <td>DATE</td>
+                        <td>Default: NOW</td>
+                        <td>Creation timestamp</td>
+                    </tr>
+                    <tr>
+                        <td>updated_at</td>
+                        <td>DATE</td>
+                        <td>Default: NOW</td>
+                        <td>Last update timestamp</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Calculated Fields (in GET requests)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Description</th>
+                        <th>Calculation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>total_sales</code></td>
+                        <td>Total value of all orders</td>
+                        <td>SUM(orders.total_amount) WHERE status != 'cancelled'</td>
+                    </tr>
+                    <tr>
+                        <td><code>purchase_amount</code></td>
+                        <td>Total purchase amount</td>
+                        <td>SUM(orders.total_amount) WHERE status != 'cancelled'</td>
+                    </tr>
+                    <tr>
+                        <td><code>paid_amount</code></td>
+                        <td>Total amount paid</td>
+                        <td>SUM(payments.amount) WHERE status = 'completed'</td>
+                    </tr>
+                    <tr>
+                        <td><code>due_amount</code></td>
+                        <td>Outstanding balance</td>
+                        <td>total_sales - paid_amount</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- API Endpoints Section -->
+        <div class="card" id="endpoints">
+            <h2>🔌 API Endpoints</h2>
+
+            <!-- POST / - Create Customer -->
+            <div class="endpoint-section">
+                <h3><span class="badge-post">POST</span> / <span class="file-badge">customers.routes.js:78</span></h3>
+                <p>Create a new customer record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate(createCustomer)
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/customers
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'customers' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate(createCustomer): Validate Request Body
+    validate(createCustomer)->>Controller: Validation Passed
+    Controller->>Service: createCustomer(data, userId)
+    Service->>Service: Convert empty email to null
+    Service->>Service: Check if email exists
+    Service->>Service: Map thumb_url to image_url
+    Service->>Service: Map gallery_items to images
+    Service->>Repository: create(data)
+    Repository->>Database: BEGIN TRANSACTION
+    Database->>Repository: Transaction Started
+    Repository->>Database: INSERT INTO customers
+    Database->>Repository: Customer created
+    Repository->>Database: INSERT INTO customer_images
+    Repository->>Database: INSERT INTO customer_contacts
+    Repository->>Database: COMMIT
+    Repository->>Service: Created customer with relations
+    Service->>Service: Transform customer data
+    Service->>Controller: Transformed customer result
+    Controller->>Client: 201 Success Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Customers Controller]
+    Controller -->|createCustomer| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Create Customer"
+    CreateCustomer[POST /api/customers] -->|Request Body| ProcessData[Service - Process Data]
+    ProcessData -->|Convert email to null| CheckEmail[Service - Check Email]
+    CheckEmail -->|Validate uniqueness| MapFields[Service - Map Fields]
+    MapFields -->|thumb_url to image_url| StartTrans[Repository - START TRANSACTION]
+    StartTrans --> CreateRecord[Repository - Create Customer]
+    CreateRecord -->|INSERT INTO customers| DB[(MySQL Database)]
+
+    DB -->|Customer ID| CreateImages[Repository - Create Images]
+    CreateImages -->|INSERT customer_images| DBImages[(MySQL - customer_images)]
+
+    DBImages --> CreateContacts[Repository - Create Contacts]
+    CreateContacts -->|INSERT customer_contacts| DBContacts[(MySQL - customer_contacts)]
+
+    DBContacts --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> TransformData[Service - Transform Data]
+    TransformData --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td>Optional, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>company</td>
+                            <td>string</td>
+                            <td>Optional, Min 1 char, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td>Optional, Valid email or empty string, Unique</td>
+                        </tr>
+                        <tr>
+                            <td>phone</td>
+                            <td>string</td>
+                            <td>Optional, Max 50 chars</td>
+                        </tr>
+                        <tr>
+                            <td>address</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>city</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>state</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>country</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>postal_code</td>
+                            <td>string</td>
+                            <td>Optional, Max 20 chars</td>
+                        </tr>
+                        <tr>
+                            <td>latitude</td>
+                            <td>number</td>
+                            <td>Optional, Min -90, Max 90</td>
+                        </tr>
+                        <tr>
+                            <td>longitude</td>
+                            <td>number</td>
+                            <td>Optional, Min -180, Max 180</td>
+                        </tr>
+                        <tr>
+                            <td>tax_id</td>
+                            <td>string</td>
+                            <td>Optional, Max 100 chars</td>
+                        </tr>
+                        <tr>
+                            <td>credit_limit</td>
+                            <td>number</td>
+                            <td>Optional, Min 0</td>
+                        </tr>
+                        <tr>
+                            <td>outstanding_balance</td>
+                            <td>number</td>
+                            <td>Optional, Min 0</td>
+                        </tr>
+                        <tr>
+                            <td>customer_type</td>
+                            <td>enum</td>
+                            <td>Optional: 'individual', 'business' (Default: 'individual')</td>
+                        </tr>
+                        <tr>
+                            <td>sales_route_id</td>
+                            <td>number</td>
+                            <td>Optional, Positive integer</td>
+                        </tr>
+                        <tr>
+                            <td>notes</td>
+                            <td>string</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Optional, Default: true</td>
+                        </tr>
+                        <tr>
+                            <td>thumb_url</td>
+                            <td>string</td>
+                            <td>Optional, Valid URL</td>
+                        </tr>
+                        <tr>
+                            <td>gallery_items</td>
+                            <td>array</td>
+                            <td>Optional, Array of URLs</td>
+                        </tr>
+                        <tr>
+                            <td>contacts</td>
+                            <td>array</td>
+                            <td>Optional, Array of contact objects</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="info-box">
+                    <strong>Email Uniqueness:</strong> The <code>email</code> field must be unique across all customers. Empty strings are converted to null.
+                </div>
+
+                <div class="info-box">
+                    <strong>Field Mapping:</strong> <code>thumb_url</code> is mapped to <code>image_url</code> and <code>gallery_items</code> (array of URLs) is mapped to <code>images</code> (array of objects) internally.
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:76
+async createCustomer(req, res) {
+    try {
+        const customer = await CustomerService.createCustomer(req.body, req.user.id);
+        return success(res, 'Customer created successfully', customer, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:66
+async createCustomer(data, userId) {
+    // Convert empty email string to null
+    if (data.email === '') {
+        data.email = null;
+    }
+
+    // Check if email already exists
+    if (data.email) {
+        const existing = await CustomerRepository.findByEmail(data.email);
+        if (existing) {
+            throw new Error('Customer with this email already exists');
+        }
+    }
+
+    const { thumb_url, gallery_items, contacts, ...customerData } = data;
+
+    // Map thumb_url to image_url
+    if (thumb_url && !customerData.image_url) {
+        customerData.image_url = thumb_url;
+    }
+
+    // Map gallery_items (strings) to images (objects) for repository
+    let images = [];
+    if (gallery_items && Array.isArray(gallery_items) && gallery_items.length > 0) {
+        images = gallery_items.map((url, index) => ({
+            image_url: url,
+            sort_order: index,
+            is_primary: false
+        }));
+    }
+
+    const customer = await CustomerRepository.create({ ...customerData, images, contacts, created_by: userId });
+    return this._transformCustomer(customer);
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:180
+async create(data) {
+    const transaction = await sequelize.transaction();
+    try {
+        const { images, contacts, ...customerData } = data;
+        const customer = await Customer.create(customerData, { transaction });
+
+        if (images && images.length > 0) {
+            const imageRecords = images.map((img, index) => ({
+                customer_id: customer.id,
+                image_url: img.image_url,
+                is_primary: img.is_primary || false,
+                sort_order: img.sort_order || index,
+                caption: img.caption
+            }));
+            await CustomerImage.bulkCreate(imageRecords, { transaction });
+        }
+
+        if (contacts && contacts.length > 0) {
+            const contactRecords = contacts.map(contact => ({
+                customer_id: customer.id,
+                name: contact.name,
+                phone: contact.phone,
+                role: contact.role,
+                email: contact.email,
+                is_primary: contact.is_primary || false
+            }));
+            await CustomerContact.bulkCreate(contactRecords, { transaction });
+        }
+
+        await transaction.commit();
+        return await this.findById(customer.id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
+SQL Equivalent:
+BEGIN TRANSACTION;
+
+INSERT INTO customers (name, company, email, phone, address, city, state, country,
+                       postal_code, latitude, longitude, tax_id, credit_limit,
+                       outstanding_balance, customer_type, sales_route_id,
+                       is_active, created_by)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO customer_images (customer_id, image_url, is_primary, sort_order)
+VALUES
+    (?, ?, ?, ?),
+    (?, ?, ?, ?);
+
+INSERT INTO customer_contacts (customer_id, name, phone, role, email, is_primary)
+VALUES
+    (?, ?, ?, ?, ?, ?);
+
+COMMIT;</code></pre>
+
+                <h4>Database Tables</h4>
+                <ul>
+                    <li><code>customers</code> - Main table for customer records</li>
+                    <li><code>customer_images</code> - Customer images/gallery</li>
+                    <li><code>customer_contacts</code> - Additional contact persons</li>
+                </ul>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "name": "Jane Smith",
+    "company": "Tech Solutions Inc",
+    "email": "jane.smith@example.com",
+    "phone": "+1987654321",
+    "address": "456 Business Ave",
+    "city": "San Francisco",
+    "state": "CA",
+    "country": "USA",
+    "postal_code": "94102",
+    "latitude": 37.7749,
+    "longitude": -122.4194,
+    "tax_id": "TAX789012",
+    "credit_limit": 15000.00,
+    "customer_type": "business",
+    "sales_route_id": 1,
+    "notes": "Premium customer",
+    "is_active": true,
+    "thumb_url": "https://example.com/profile.jpg",
+    "gallery_items": [
+        "https://example.com/gallery1.jpg",
+        "https://example.com/gallery2.jpg"
+    ],
+    "contacts": [
+        {
+            "name": "John Doe",
+            "phone": "+1234567890",
+            "role": "Manager",
+            "email": "john.doe@example.com",
+            "is_primary": true
+        }
+    ]
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>201 Created</strong>
+                    <code>{
+    "status": true,
+    "message": "Customer created successfully",
+    "data": {
+        "id": 2,
+        "name": "Jane Smith",
+        "company": "Tech Solutions Inc",
+        "email": "jane.smith@example.com",
+        "phone": "+1987654321",
+        "address": "456 Business Ave",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA",
+        "postal_code": "94102",
+        "latitude": 37.7749,
+        "longitude": -122.4194,
+        "tax_id": "TAX789012",
+        "credit_limit": 15000,
+        "outstanding_balance": 0,
+        "customer_type": "business",
+        "sales_route_id": 1,
+        "notes": "Premium customer",
+        "is_active": true,
+        "thumb_url": "https://example.com/profile.jpg",
+        "gallery_items": [
+            "https://example.com/gallery1.jpg",
+            "https://example.com/gallery2.jpg"
+        ],
+        "created_by": 1,
+        "created_at": "2026-03-11T10:30:00.000Z",
+        "updated_at": "2026-03-11T10:30:00.000Z"
+    }
+}</code>
+                </div>
+
+                <h4>Error Responses</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request - Duplicate Email</strong>
+                    <code>{
+    "status": false,
+    "message": "Customer with this email already exists"
+}</code>
+                </div>
+
+                <div class="error-box">
+                    <strong>400 Bad Request - Validation Error</strong>
+                    <code>{
+    "status": false,
+    "message": "Invalid email format"
+}</code>
+                </div>
+            </div>
+
+            <!-- PUT /:id - Update Customer -->
+            <div class="endpoint-section">
+                <h3><span class="badge-put">PUT</span> /:id <span class="file-badge">customers.routes.js:422</span></h3>
+                <p>Update an existing customer record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate(updateCustomer)
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: PUT /api/customers/:id
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'customers' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate(updateCustomer): Validate Request Body
+    validate(updateCustomer)->>Controller: Validation Passed
+    Controller->>Service: updateCustomer(id, data)
+    Service->>Service: Convert empty email to null
+    Service->>Service: Check email uniqueness
+    Service->>Service: Map fields
+    Service->>Repository: update(id, data)
+    Repository->>Database: BEGIN TRANSACTION
+    Repository->>Database: UPDATE customers SET ...
+    Repository->>Database: DELETE old customer_images
+    Repository->>Database: INSERT new customer_images
+    Repository->>Database: DELETE old customer_contacts
+    Repository->>Database: INSERT new customer_contacts
+    Repository->>Database: COMMIT
+    Repository->>Service: Updated customer
+    Service->>Service: Transform customer data
+    Service->>Controller: Transformed result
+    Controller->>Client: 200 Success Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Validation[Validation Middleware]
+    Validation -->|Validate Body| Controller[Customers Controller]
+    Controller -->|updateCustomer| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Update Customer"
+    UpdateCustomer[PUT /api/customers/:id] -->|Extract id and body| ProcessData[Service - Process Data]
+    ProcessData -->|Convert email to null| CheckEmail[Service - Check Email Uniqueness]
+    CheckEmail -->|Validate unique| MapFields[Service - Map Fields]
+    MapFields --> StartTrans[Repository - START TRANSACTION]
+    StartTrans --> UpdateRecord[Repository - Update Customer]
+    UpdateRecord -->|UPDATE customers| DB[(MySQL Database)]
+
+    DB --> DeleteOldImages[Repository - Delete Old Images]
+    DeleteOldImages -->|DELETE customer_images| DeleteOldContacts[Repository - Delete Old Contacts]
+    DeleteOldContacts -->|DELETE customer_contacts| CreateNewImages[Repository - Create New Images]
+    CreateNewImages -->|INSERT customer_images| DBImages[(MySQL - customer_images)]
+    DBImages --> CreateNewContacts[Repository - Create New Contacts]
+    CreateNewContacts -->|INSERT customer_contacts| DBContacts[(MySQL - customer_contacts)]
+
+    DBContacts --> CommitTrans[Repository - COMMIT]
+    CommitTrans --> TransformData[Service - Transform Data]
+    TransformData --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Validation Rules</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Field</th>
+                            <th>Type</th>
+                            <th>Rules</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>name</td>
+                            <td>string</td>
+                            <td>Optional, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>company</td>
+                            <td>string</td>
+                            <td>Optional, Min 1 char, Max 255 chars</td>
+                        </tr>
+                        <tr>
+                            <td>email</td>
+                            <td>string</td>
+                            <td>Optional, Valid email or empty string</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Optional</td>
+                        </tr>
+                        <tr>
+                            <td>All other fields...</td>
+                            <td>various</td>
+                            <td>Optional</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:85
+async updateCustomer(req, res) {
+    try {
+        const customer = await CustomerService.updateCustomer(req.params.id, req.body);
+        return success(res, 'Customer updated successfully', customer);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:101
+async updateCustomer(id, data) {
+    // Convert empty email string to null
+    if (data.email === '') {
+        data.email = null;
+    }
+
+    // If email is being updated, check for duplicates
+    if (data.email) {
+        const existing = await CustomerRepository.findByEmail(data.email);
+        if (existing && existing.id !== parseInt(id)) {
+            throw new Error('Customer with this email already exists');
+        }
+    }
+
+    const { thumb_url, gallery_items, contacts, ...customerData } = data;
+
+    // Map thumb_url to image_url
+    if (thumb_url && !customerData.image_url) {
+        customerData.image_url = thumb_url;
+    }
+
+    // Map gallery_items if provided
+    if (gallery_items && Array.isArray(gallery_items)) {
+        customerData.images = gallery_items.map((url, index) => ({
+            image_url: url,
+            sort_order: index,
+            is_primary: false
+        }));
+    }
+
+    const customer = await CustomerRepository.update(id, { ...customerData, contacts });
+    if (!customer) {
+        throw new Error('Customer not found');
+    }
+    return this._transformCustomer(customer);
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:217
+async update(id, data) {
+    const transaction = await sequelize.transaction();
+    try {
+        const customer = await Customer.findByPk(id);
+        if (!customer) {
+            await transaction.commit();
+            return null;
+        }
+
+        const { images, contacts, ...customerData } = data;
+        await customer.update(customerData, { transaction });
+
+        if (images !== undefined) {
+            // Delete existing images
+            await CustomerImage.destroy({
+                where: { customer_id: id },
+                transaction
+            });
+
+            // Create new images
+            if (images && images.length > 0) {
+                const imageRecords = images.map((img, index) => ({
+                    customer_id: id,
+                    image_url: img.image_url,
+                    is_primary: img.is_primary || false,
+                    sort_order: img.sort_order || index,
+                    caption: img.caption
+                }));
+                await CustomerImage.bulkCreate(imageRecords, { transaction });
+            }
+        }
+
+        if (contacts !== undefined) {
+            // Delete existing contacts
+            await CustomerContact.destroy({
+                where: { customer_id: id },
+                transaction
+            });
+
+            // Create new contacts
+            if (contacts && contacts.length > 0) {
+                const contactRecords = contacts.map(contact => ({
+                    customer_id: id,
+                    name: contact.name,
+                    phone: contact.phone,
+                    role: contact.role,
+                    email: contact.email,
+                    is_primary: contact.is_primary || false
+                }));
+                await CustomerContact.bulkCreate(contactRecords, { transaction });
+            }
+        }
+
+        await transaction.commit();
+        return await this.findById(id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
+SQL Equivalent:
+BEGIN TRANSACTION;
+
+UPDATE customers
+SET name = ?, company = ?, email = ?, phone = ?, address = ?, city = ?,
+    state = ?, country = ?, postal_code = ?, latitude = ?, longitude = ?,
+    tax_id = ?, credit_limit = ?, outstanding_balance = ?, customer_type = ?,
+    sales_route_id = ?, is_active = ?
+WHERE id = ?;
+
+DELETE FROM customer_images WHERE customer_id = ?;
+
+INSERT INTO customer_images (customer_id, image_url, is_primary, sort_order)
+VALUES
+    (?, ?, ?, ?),
+    (?, ?, ?, ?);
+
+DELETE FROM customer_contacts WHERE customer_id = ?;
+
+INSERT INTO customer_contacts (customer_id, name, phone, role, email, is_primary)
+VALUES
+    (?, ?, ?, ?, ?, ?);
+
+COMMIT;</code></pre>
+
+                <h4>Sample Payload</h4>
+                <pre class="code-block"><code>{
+    "name": "John Doe Jr.",
+    "phone": "+1234567899",
+    "credit_limit": 12000.00,
+    "notes": "Updated credit limit",
+    "gallery_items": [
+        "https://example.com/new-gallery1.jpg"
+    ]
+}</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>200 OK</strong>
+                    <code>{
+    "status": true,
+    "message": "Customer updated successfully",
+    "data": {
+        "id": 1,
+        "name": "John Doe Jr.",
+        "email": "john.doe@example.com",
+        "phone": "+1234567899",
+        "company": "Acme Corp",
+        "credit_limit": 12000,
+        "thumb_url": "https://example.com/profile.jpg",
+        "gallery_items": [
+            "https://example.com/new-gallery1.jpg"
+        ],
+        "updated_at": "2026-03-11T11:00:00.000Z"
+    }
+}</code>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>400 Bad Request - Customer Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Customer not found"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET / - List Customers -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> / <span class="file-badge">customers.routes.js:19</span></h3>
+                <p>Retrieve all customers with pagination and filtering</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/customers
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'customers' access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getAllCustomers(filters, page, limit)
+    Service->>Service: Parse pagination params
+    Service->>Service: Build filters object
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with subqueries for totals
+    Database->>Repository: { count, rows }
+    Repository->>Service: Result with calculated fields
+    Service->>Service: Transform each customer
+    Service->>Controller: Transformed data
+    Controller->>Client: Paginated Response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Controller[Customers Controller]
+    Controller -->|getAllCustomers| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Get All Customers"
+    GetCustomers[GET /api/customers] -->|Query Params| ParseQuery[Service - Parse Pagination]
+    ParseQuery -->|page, limit| BuildFilters[Service - Build Filters]
+    BuildFilters -->|customer_type, is_active, search| FindAll[Repository - FindAll]
+    FindAll -->|SELECT with subqueries| DB[(MySQL Database)]
+
+    DB -->|Customers Array| CalculateFields[Service - Calculate Fields]
+    CalculateFields -->|total_sales, last_order_date| TransformEach[Service - Transform Each]
+    TransformEach --> Pagination[Service - Build Pagination]
+    Pagination --> Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Request Headers</h4>
+                <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:5
+async getAllCustomers(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            customer_type: req.query.customer_type,
+            is_active: req.query.is_active,
+            search: req.query.search,
+            sort: req.query.sort
+        };
+
+        const result = await CustomerService.getAllCustomers(filters, page, limit);
+        return successWithPagination(res, 'Customers retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:41
+async getAllCustomers(filters = {}, page = 1, limit = 10) {
+    try {
+        const offset = (page - 1) * limit;
+        const result = await CustomerRepository.findAll(filters, limit, offset);
+
+        // Transform each customer
+        const transformedData = result.rows.map(customer => this._transformCustomer(customer));
+
+        return {
+            data: transformedData,
+            total: result.count
+        };
+    } catch (err) {
+        throw new Error(`Failed to get customers: ${err.message}`);
+    }
+}
+
+_transformCustomer(customer) {
+    const customerData = customer.toJSON ? customer.toJSON() : customer;
+
+    const transformed = {
+        ...customerData,
+        thumb_url: customerData.image_url || null,
+        // Ensure numeric fields are numbers
+        credit_limit: customerData.credit_limit ? parseFloat(customerData.credit_limit) : 0,
+        outstanding_balance: customerData.outstanding_balance ? parseFloat(customerData.outstanding_balance) : 0,
+        latitude: customerData.latitude ? parseFloat(customerData.latitude) : null,
+        longitude: customerData.longitude ? parseFloat(customerData.longitude) : null,
+        purchase_amount: customerData.purchase_amount ? parseFloat(customerData.purchase_amount) : 0,
+        paid_amount: customerData.paid_amount ? parseFloat(customerData.paid_amount) : 0,
+        due_amount: customerData.due_amount ? parseFloat(customerData.due_amount) : 0
+    };
+
+    // Remove image_url from response
+    delete transformed.image_url;
+
+    // Transform images array to gallery_items (array of URLs)
+    if (customerData.images && Array.isArray(customerData.images)) {
+        transformed.gallery_items = customerData.images.map(img => img.image_url);
+        delete transformed.images;
+    }
+
+    return transformed;
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:6
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    if (filters.customer_type) {
+        where.customer_type = filters.customer_type;
+    }
+
+    if (filters.is_active !== undefined) {
+        where.is_active = filters.is_active;
+    }
+
+    if (filters.search) {
+        where[Op.or] = [
+            { name: { [Op.like]: `%${filters.search}%` } },
+            { email: { [Op.like]: `%${filters.search}%` } },
+            { phone: { [Op.like]: `%${filters.search}%` } },
+            { company: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    let order = [['created_at', 'DESC']];
+
+    if (filters.sort === 'top_sold') {
+        order = [[sequelize.literal('total_sales'), 'DESC']];
+    } else if (filters.sort === 'low_sold') {
+        order = [[sequelize.literal('total_sales'), 'ASC']];
+    }
+
+    return await Customer.findAndCountAll({
+        where,
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled'
+                    )`),
+                    'total_sales'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled'
+                    )`),
+                    'purchase_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(p.amount), 0)
+                        FROM payments AS p
+                        INNER JOIN orders AS o ON p.order_id = o.id
+                        WHERE o.customer_id = Customer.id
+                        AND p.status = 'completed'
+                    )`),
+                    'paid_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        (SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled')
+                        -
+                        (SELECT COALESCE(SUM(p.amount), 0)
+                        FROM payments AS p
+                        INNER JOIN orders AS o ON p.order_id = o.id
+                        WHERE o.customer_id = Customer.id
+                        AND p.status = 'completed')
+                    )`),
+                    'due_amount'
+                ]
+            ]
+        },
+        include: [
+            {
+                model: CustomerImage,
+                as: 'images',
+                attributes: ['image_url']
+            },
+            {
+                model: CustomerContact,
+                as: 'contacts',
+                attributes: ['id', 'name', 'phone', 'role', 'email', 'is_primary']
+            },
+            {
+                model: require('../users/user.model').User,
+                as: 'creator',
+                attributes: ['id', 'name', 'email', 'thumb_url']
+            }
+        ],
+        limit,
+        offset,
+        distinct: true,
+        order
+    });
+}
+
+SQL Equivalent:
+SELECT
+    c.*,
+    (SELECT COALESCE(SUM(total_amount), 0)
+     FROM orders AS o
+     WHERE o.customer_id = c.id AND o.status != 'cancelled') AS total_sales,
+    (SELECT COALESCE(SUM(total_amount), 0)
+     FROM orders AS o
+     WHERE o.customer_id = c.id AND o.status != 'cancelled') AS purchase_amount,
+    (SELECT COALESCE(SUM(p.amount), 0)
+     FROM payments AS p
+     INNER JOIN orders AS o ON p.order_id = o.id
+     WHERE o.customer_id = c.id AND p.status = 'completed') AS paid_amount,
+    ((SELECT COALESCE(SUM(total_amount), 0)
+      FROM orders AS o
+      WHERE o.customer_id = c.id AND o.status != 'cancelled')
+     -
+     (SELECT COALESCE(SUM(p.amount), 0)
+      FROM payments AS p
+      INNER JOIN orders AS o ON p.order_id = o.id
+      WHERE o.customer_id = c.id AND p.status = 'completed')) AS due_amount
+FROM customers AS c
+LEFT JOIN customer_images AS ci ON ci.customer_id = c.id
+LEFT JOIN customer_contacts AS cc ON cc.customer_id = c.id
+LEFT JOIN users AS u ON u.id = c.created_by
+WHERE c.is_active = ?
+ORDER BY c.created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+                <h4>Query Parameters</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>page</td>
+                            <td>integer</td>
+                            <td>Page number (default: 1)</td>
+                        </tr>
+                        <tr>
+                            <td>limit</td>
+                            <td>integer</td>
+                            <td>Items per page (default: 10)</td>
+                        </tr>
+                        <tr>
+                            <td>customer_type</td>
+                            <td>enum</td>
+                            <td>Filter by type (individual/business)</td>
+                        </tr>
+                        <tr>
+                            <td>is_active</td>
+                            <td>boolean</td>
+                            <td>Filter by active status (true/false)</td>
+                        </tr>
+                        <tr>
+                            <td>search</td>
+                            <td>string</td>
+                            <td>Search by name, email, phone, or company</td>
+                        </tr>
+                        <tr>
+                            <td>sort</td>
+                            <td>string</td>
+                            <td>Sort by: top_sold, low_sold</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Multiple Requests & Responses</h4>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>1. List All Customers (Paginated)</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customers retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "email": "john.doe@example.com",
+            "phone": "+1234567890",
+            "address": "123 Main Street",
+            "city": "New York",
+            "state": "NY",
+            "country": "USA",
+            "postal_code": "10001",
+            "latitude": 40.7128,
+            "longitude": -74.0060,
+            "tax_id": "TAX123456",
+            "credit_limit": 10000,
+            "outstanding_balance": 2500,
+            "customer_type": "business",
+            "is_active": true,
+            "thumb_url": "https://example.com/profile.jpg",
+            "gallery_items": [],
+            "created_at": "2026-03-01T10:00:00.000Z",
+            "updated_at": "2026-03-01T10:00:00.000Z",
+            "total_sales": 5000,
+            "purchase_amount": 5000,
+            "paid_amount": 2500,
+            "due_amount": 2500
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>2. Filter by Customer Type</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers?customer_type=business</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customers retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "customer_type": "business",
+            "is_active": true,
+            "created_at": "2026-03-01T10:00:00.000Z"
+        },
+        {
+            "id": 2,
+            "name": "Jane Smith",
+            "company": "Tech Solutions Inc",
+            "customer_type": "business",
+            "is_active": true,
+            "created_at": "2026-03-05T10:00:00.000Z"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>3. Filter by Active Status</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers?is_active=true</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customers retrieved successfully",
+    "pagination": {
+        "total": 4,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "customer_type": "business",
+            "is_active": true,
+            "created_at": "2026-03-01T10:00:00.000Z"
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>4. Search Customers</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers?search=john</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customers retrieved successfully",
+    "pagination": {
+        "total": 2,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "email": "john.doe@example.com",
+            "is_active": true
+        },
+        {
+            "id": 5,
+            "name": "John Smith",
+            "company": "John's Company",
+            "phone": "+1987654321",
+            "is_active": true
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>5. Sort by Top Sales</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers?sort=top_sold</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customers retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 3,
+            "name": "Big Spender LLC",
+            "company": "Big Spender LLC",
+            "customer_type": "business",
+            "is_active": true,
+            "total_sales": 50000,
+            "purchase_amount": 50000,
+            "paid_amount": 35000,
+            "due_amount": 15000
+        },
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "customer_type": "business",
+            "is_active": true,
+            "total_sales": 5000,
+            "purchase_amount": 5000,
+            "paid_amount": 2500,
+            "due_amount": 2500
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>500 Internal Server Error</strong>
+                    <code>{
+    "status": false,
+    "message": "Failed to get customers: Database connection error"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /:id - Get Customer by ID -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /:id <span class="file-badge">customers.routes.js:371</span></h3>
+                <p>Retrieve detailed information about a specific customer</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/customers/:id
+    Router->>verifyToken: Verify JWT
+    verifyToken->>Router: Valid
+    Router->>moduleCheck: Check Access
+    moduleCheck->>Controller: Access OK
+    Controller->>Service: getCustomerById(id)
+    Service->>Repository: findById(id)
+    Repository->>Database: SELECT * FROM customers WHERE id = ?
+    Database->>Repository: Customer with relations
+    Repository->>Service: Customer object
+    Service->>Service: Transform customer data
+    Service->>Controller: Transformed customer
+    Controller->>Client: Customer details
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Controller[Customers Controller]
+    Controller -->|getCustomerById| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Get Customer By ID"
+    GetByID[GET /api/customers/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindCustomer[Repository - FindById]
+    FindCustomer -->|SELECT with subqueries| DB[(MySQL Database)]
+
+    DB -->|Customer with Relations| CheckExists[Service - Check Exists]
+    CheckExists -->|Customer found| TransformData[Service - Transform Data]
+    TransformData -->|Map fields| Response[Controller - Send Response]
+    CheckExists -->|Not found| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:67
+async getCustomerById(req, res) {
+    try {
+        const customer = await CustomerService.getCustomerById(req.params.id);
+        return success(res, 'Customer retrieved successfully', customer);
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:58
+async getCustomerById(id) {
+    const customer = await CustomerRepository.findById(id);
+    if (!customer) {
+        throw new Error('Customer not found');
+    }
+    return this._transformCustomer(customer);
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:107
+async findById(id) {
+    return await Customer.findByPk(id, {
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled'
+                    )`),
+                    'total_sales'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled'
+                    )`),
+                    'purchase_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(p.amount), 0)
+                        FROM payments AS p
+                        INNER JOIN orders AS o ON p.order_id = o.id
+                        WHERE o.customer_id = Customer.id
+                        AND p.status = 'completed'
+                    )`),
+                    'paid_amount'
+                ],
+                [
+                    sequelize.literal(`(
+                        (SELECT COALESCE(SUM(total_amount), 0)
+                        FROM orders AS o
+                        WHERE o.customer_id = Customer.id
+                        AND o.status != 'cancelled')
+                        -
+                        (SELECT COALESCE(SUM(p.amount), 0)
+                        FROM payments AS p
+                        INNER JOIN orders AS o ON p.order_id = o.id
+                        WHERE o.customer_id = Customer.id
+                        AND p.status = 'completed')
+                    )`),
+                    'due_amount'
+                ]
+            ]
+        },
+        include: [
+            {
+                model: CustomerImage,
+                as: 'images',
+                attributes: ['id', 'image_url', 'is_primary', 'sort_order', 'caption']
+            },
+            {
+                model: CustomerContact,
+                as: 'contacts',
+                attributes: ['id', 'name', 'phone', 'role', 'email', 'is_primary']
+            },
+            {
+                model: require('../users/user.model').User,
+                as: 'creator',
+                attributes: ['id', 'name', 'email', 'thumb_url']
+            }
+        ]
+    });
+}
+
+SQL Equivalent:
+SELECT
+    c.*,
+    (SELECT COALESCE(SUM(o.total_amount), 0) FROM orders AS o
+     WHERE o.customer_id = 1 AND o.status != 'cancelled') AS total_sales,
+    (SELECT COALESCE(SUM(p.amount), 0) FROM payments AS p
+     INNER JOIN orders AS o ON p.order_id = o.id
+     WHERE o.customer_id = 1 AND p.status = 'completed') AS paid_amount,
+    (SELECT COALESCE(SUM(o.total_amount), 0) FROM orders AS o
+     WHERE o.customer_id = 1 AND o.status != 'cancelled'
+    ) -
+    (SELECT COALESCE(SUM(p.amount), 0) FROM payments AS p
+     INNER JOIN orders AS o ON p.order_id = o.id
+     WHERE o.customer_id = 1 AND p.status = 'completed') AS due_amount
+FROM customers AS c
+LEFT JOIN customer_images AS ci ON ci.customer_id = c.id
+LEFT JOIN customer_contacts AS cc ON cc.customer_id = c.id
+LEFT JOIN users AS u ON u.id = c.created_by
+WHERE c.id = 1;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Customer by ID</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers/1</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customer retrieved successfully",
+    "data": {
+        "id": 1,
+        "name": "John Doe",
+        "company": "Acme Corp",
+        "email": "john.doe@example.com",
+        "phone": "+1234567890",
+        "address": "123 Main Street",
+        "city": "New York",
+        "state": "NY",
+        "country": "USA",
+        "postal_code": "10001",
+        "latitude": 40.7128,
+        "longitude": -74.0060,
+        "tax_id": "TAX123456",
+        "credit_limit": 10000,
+        "outstanding_balance": 2500,
+        "customer_type": "business",
+        "notes": "Long-term customer",
+        "is_active": true,
+        "thumb_url": "https://example.com/profile.jpg",
+        "gallery_items": [
+            "https://example.com/gallery1.jpg",
+            "https://example.com/gallery2.jpg"
+        ],
+        "total_sales": 5000,
+        "purchase_amount": 5000,
+        "paid_amount": 2500,
+        "due_amount": 2500,
+        "created_at": "2026-02-15T10:00:00.000Z",
+        "updated_at": "2026-03-01T14:30:00.000Z"
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>404 Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Customer not found"
+}</code>
+                </div>
+            </div>
+
+            <!-- GET /active - Get Active Customers -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /active <span class="file-badge">customers.routes.js:254</span></h3>
+                <p>Retrieve all active customers with pagination</p>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:27
+async getActiveCustomers(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            ...req.query,
+            is_active: true
+        };
+
+        const result = await CustomerService.getAllCustomers(filters, page, limit);
+        return successWithPagination(res, 'Active customers retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Active Customers</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers/active?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Active customers retrieved successfully",
+    "pagination": {
+        "total": 4,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "name": "John Doe",
+            "company": "Acme Corp",
+            "customer_type": "business",
+            "is_active": true,
+            "thumb_url": "https://example.com/profile.jpg",
+            "gallery_items": []
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /inactive - Get Inactive Customers -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /inactive <span class="file-badge">customers.routes.js:315</span></h3>
+                <p>Retrieve all inactive customers with pagination</p>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:47
+async getInactiveCustomers(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            ...req.query,
+            is_active: false
+        };
+
+        const result = await CustomerService.getAllCustomers(filters, page, limit);
+        return successWithPagination(res, 'Inactive customers retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Inactive Customers</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers/inactive?page=1&limit=10</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Inactive customers retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "name": "Inactive Company",
+            "company": "Inactive Corp",
+            "customer_type": "business",
+            "is_active": false
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /stats - Get Customer Statistics -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /stats <span class="file-badge">customers.routes.js:216</span></h3>
+                <p>Retrieve customer statistics summary with financial metrics</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /api/customers/stats
+    Controller->>Service: getCustomerStats()
+    Service->>Repository: getStats()
+    Repository->>Database: Multiple COUNT queries
+    Repository->>Database: Financial totals query
+    Database->>Repository: Aggregated results
+    Repository->>Service: Raw stats
+    Service->>Service: Format to UI structure
+    Service->>Controller: Formatted stats array
+    Controller->>Client: Stats response
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Controller[Customers Controller]
+    Controller -->|getCustomerStats| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Get Customer Statistics"
+    GetStats[GET /api/customers/stats] -->|No params| QueryStats[Repository - Get Stats]
+    QueryStats -->|Multiple COUNT queries| DB[(MySQL Database)]
+
+    DB -->|Aggregated Results| FormatStats[Service - Format Stats]
+    FormatStats -->|Build UI structure| Active[All Active Customers]
+    FormatStats -->|Build UI structure| Total[Total Customers]
+    FormatStats -->|Build UI structure| New[New Customers]
+    FormatStats -->|Build UI structure| Inactive[Inactive Customers]
+    FormatStats -->|Build UI structure| Sales[Total Sales Amount]
+    FormatStats -->|Build UI structure| Paid[Total Paid]
+    FormatStats -->|Build UI structure| Due[Total Due]
+
+    Active --> Response[Controller - Send Response]
+    Total --> Response
+    New --> Response
+    Inactive --> Response
+    Sales --> Response
+    Paid --> Response
+    Due --> Response
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:112
+async getCustomerStats(req, res) {
+    try {
+        const stats = await CustomerService.getCustomerStats();
+        return success(res, 'Customer stats retrieved successfully', stats);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:167
+async getCustomerStats() {
+    const stats = await CustomerRepository.getStats();
+
+    // Format to match user request
+    return [
+        {
+            label: "All Active Customers",
+            value: stats.activeCustomers,
+            color: "bg-emerald-600"
+        },
+        {
+            label: "Total Customers",
+            value: stats.totalCustomers,
+            color: "bg-blue-600"
+        },
+        {
+            label: "New Customers",
+            value: stats.newCustomers,
+            color: "bg-violet-600"
+        },
+        {
+            label: "Inactive Customers",
+            value: stats.inactiveCustomers,
+            color: "bg-rose-600"
+        },
+        {
+            label: "Total Sales Amount",
+            value: stats.totalSales,
+            color: "bg-indigo-600",
+            isCurrency: true
+        },
+        {
+            label: "Total Paid",
+            value: stats.totalPaid,
+            color: "bg-emerald-600",
+            isCurrency: true
+        },
+        {
+            label: "Total Due",
+            value: stats.totalDue,
+            color: "bg-rose-600",
+            isCurrency: true
+        }
+    ];
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:296
+async getStats() {
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const [activeCustomers, totalCustomers, newCustomers, inactiveCustomers, financialResult] = await Promise.all([
+        // Active Customers
+        Customer.count({ where: { is_active: true } }),
+
+        // Total Customers
+        Customer.count(),
+
+        // New Customers (This Month)
+        Customer.count({
+            where: {
+                created_at: {
+                    [Op.gte]: startOfMonth
+                }
+            }
+        }),
+
+        // Inactive Customers
+        Customer.count({ where: { is_active: false } }),
+
+        // Financial Totals
+        sequelize.query(
+            `SELECT
+                (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE status != 'cancelled') as totalSales,
+                (SELECT COALESCE(SUM(amount), 0) FROM payments WHERE status = 'completed') as totalPaid,
+                (SELECT COALESCE(SUM(outstanding_balance), 0) FROM customers) as totalDue`,
+            { type: sequelize.QueryTypes.SELECT }
+        )
+    ]);
+
+    const financial = financialResult[0] || { totalSales: 0, totalPaid: 0, totalDue: 0 };
+
+    return {
+        activeCustomers,
+        totalCustomers,
+        newCustomers,
+        inactiveCustomers,
+        totalSales: parseFloat(financial.totalSales),
+        totalPaid: parseFloat(financial.totalPaid),
+        totalDue: parseFloat(financial.totalDue)
+    };
+}
+
+SQL Equivalent:
+-- Active Customers
+SELECT COUNT(*) FROM customers WHERE is_active = true;
+
+-- Total Customers
+SELECT COUNT(*) FROM customers;
+
+-- New Customers (This Month)
+SELECT COUNT(*) FROM customers WHERE created_at >= '2026-03-01 00:00:00';
+
+-- Inactive Customers
+SELECT COUNT(*) FROM customers WHERE is_active = false;
+
+-- Financial Totals
+SELECT
+    (SELECT COALESCE(SUM(total_amount), 0) FROM orders WHERE status != 'cancelled') as totalSales,
+    (SELECT COALESCE(SUM(amount), 0) FROM payments WHERE status = 'completed') as totalPaid,
+    (SELECT COALESCE(SUM(outstanding_balance), 0) FROM customers) as totalDue;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Customer Statistics</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers/stats</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customer stats retrieved successfully",
+    "data": [
+        {
+            "label": "All Active Customers",
+            "value": 25,
+            "color": "bg-emerald-600"
+        },
+        {
+            "label": "Total Customers",
+            "value": 30,
+            "color": "bg-blue-600"
+        },
+        {
+            "label": "New Customers",
+            "value": 5,
+            "color": "bg-violet-600"
+        },
+        {
+            "label": "Inactive Customers",
+            "value": 5,
+            "color": "bg-rose-600"
+        },
+        {
+            "label": "Total Sales Amount",
+            "value": 125000.50,
+            "color": "bg-indigo-600",
+            "isCurrency": true
+        },
+        {
+            "label": "Total Paid",
+            "value": 98500.00,
+            "color": "bg-emerald-600",
+            "isCurrency": true
+        },
+        {
+            "label": "Total Due",
+            "value": 26500.50,
+            "color": "bg-rose-600",
+            "isCurrency": true
+        }
+    ]
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GET /maps - Get Customer Locations -->
+            <div class="endpoint-section">
+                <h3><span class="badge-get">GET</span> /maps <span class="file-badge">customers.routes.js:153</span></h3>
+                <p>Retrieve customer locations for map display</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: GET /api/customers/maps
+    Controller->>Service: getCustomerLocations()
+    Service->>Repository: findCustomersWithLocation()
+    Repository->>Database: SELECT customers with lat/lng
+    Database->>Repository: Customers with coordinates
+    Repository->>Service: Array of customers
+    Service->>Service: Format to location structure
+    Service->>Controller: { total, locations }
+    Controller->>Client: Location data
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Controller[Customers Controller]
+    Controller -->|getCustomerLocations| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Get Customer Locations for Maps"
+    GetMaps[GET /api/customers/maps] -->|No params| FindCustomers[Repository - Find Customers]
+    FindCustomers -->|WHERE latitude IS NOT NULL| DB[(MySQL Database)]
+
+    DB -->|Customers with coordinates| FormatLocations[Service - Format Locations]
+    FormatLocations -->|Map to location structure| BuildResponse[Service - Build Response]
+    BuildResponse -->|total and locations| Response[Controller - Send Response]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:103
+async getCustomerLocations(req, res) {
+    try {
+        const locations = await CustomerService.getCustomerLocations();
+        return success(res, 'Customer locations retrieved successfully', locations);
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:146
+async getCustomerLocations() {
+    const customers = await CustomerRepository.findCustomersWithLocation();
+
+    return {
+        total: customers.length,
+        locations: customers.map(customer => ({
+            id: customer.id,
+            name: customer.name,
+            company: customer.company,
+            address: customer.address,
+            city: customer.city,
+            phone: customer.phone,
+            email: customer.email,
+            coordinates: {
+                lat: parseFloat(customer.latitude),
+                lng: parseFloat(customer.longitude)
+            }
+        }))
+    };
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:285
+async findCustomersWithLocation() {
+    return await Customer.findAll({
+        where: {
+            latitude: { [Op.ne]: null },
+            longitude: { [Op.ne]: null },
+            is_active: true
+        },
+        attributes: ['id', 'name', 'company', 'address', 'city', 'latitude', 'longitude', 'phone', 'email']
+    });
+}
+
+SQL Equivalent:
+SELECT
+    id, name, company, address, city, latitude, longitude, phone, email
+FROM customers
+WHERE latitude IS NOT NULL
+  AND longitude IS NOT NULL
+  AND is_active = true;</code></pre>
+
+                <div class="expandable-header" onclick="toggleExpandable(this)">
+                    <span>Get Customer Locations</span>
+                    <span class="expandable-toggle">+</span>
+                </div>
+                <div class="expandable-content">
+                    <div class="request-item">
+                        <p><strong>Request:</strong></p>
+                        <span class="request-url">GET /api/customers/maps</span>
+
+                        <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                        <div class="response-box">
+                            <code>{
+    "status": true,
+    "message": "Customer locations retrieved successfully",
+    "data": {
+        "total": 25,
+        "locations": [
+            {
+                "id": 1,
+                "name": "John Doe",
+                "company": "Acme Corp",
+                "address": "123 Main Street",
+                "city": "New York",
+                "phone": "+1234567890",
+                "email": "john.doe@example.com",
+                "coordinates": {
+                    "lat": 40.7128,
+                    "lng": -74.0060
+                }
+            },
+            {
+                "id": 2,
+                "name": "Jane Smith",
+                "company": "Tech Solutions Inc",
+                "address": "456 Business Ave",
+                "city": "San Francisco",
+                "phone": "+1987654321",
+                "email": "jane.smith@example.com",
+                "coordinates": {
+                    "lat": 37.7749,
+                    "lng": -122.4194
+                }
+            }
+        ]
+    }
+}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DELETE /:id - Delete Customer -->
+            <div class="endpoint-section">
+                <h3><span class="badge-delete">DELETE</span> /:id <span class="file-badge">customers.routes.js:465</span></h3>
+                <p>Delete a customer record</p>
+
+                <h4>Request Flow</h4>
+                <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Controller: DELETE /api/customers/:id
+    Controller->>Service: deleteCustomer(id)
+    Service->>Repository: delete(id)
+    Repository->>Database: SELECT * FROM customers WHERE id = ?
+    Database->>Repository: Customer or null
+    Repository->>Database: DELETE FROM customers WHERE id = ?
+    Repository->>Database: Cascade delete related records
+    Repository->>Service: Deleted customer
+    Service->>Controller: Customer result
+    Controller->>Client: 200 Success
+                </div>
+
+                <h4>API Request Flow</h4>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+graph TD
+    Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+    subgraph "Module Layer - Customers"
+    Router -->|verifyToken| Verify[verifyToken Middleware]
+    Verify -->|Next| Check[moduleCheck Middleware]
+    Check -->|Check customers access| Controller[Customers Controller]
+    Controller -->|deleteCustomer| Service[Customer Service]
+    Service -->|Data Access| Repository[Customer Repository]
+    end
+
+    subgraph "Delete Customer"
+    DeleteCustomer[DELETE /api/customers/:id] -->|Extract id| ParamID[Controller - Extract ID]
+    ParamID --> FindCustomer[Repository - Find Customer]
+    FindCustomer -->|SELECT FROM customers| DB[(MySQL Database)]
+
+    DB -->|Customer or Null| CheckExists[Service - Check Exists]
+    CheckExists -->|Customer found| DeleteRecord[Repository - Delete]
+    DeleteRecord -->|DELETE FROM customers| Cascade[Database - CASCADE Delete]
+    Cascade -->|customer_images, customer_contacts| Response[Controller - Send Response]
+    CheckExists -->|Not found| NotFound[Controller - 404 Not Found]
+    end
+                    </pre>
+                </div>
+
+                <h4>Controller Logic</h4>
+                <pre class="code-block"><code>File: customers.controller.js:94
+async deleteCustomer(req, res) {
+    try {
+        await CustomerService.deleteCustomer(req.params.id);
+        return success(res, null, 'Customer deleted successfully');
+    } catch (err) {
+        return error(res, err.message, 404);
+    }
+}</code></pre>
+
+                <h4>Service Logic</h4>
+                <pre class="code-block"><code>File: customers.service.js:138
+async deleteCustomer(id) {
+    const customer = await CustomerRepository.delete(id);
+    if (!customer) {
+        throw new Error('Customer not found');
+    }
+    return customer;
+}</code></pre>
+
+                <h4>Repository Logic</h4>
+                <pre class="sql-block"><code>File: customers.repository.js:278
+async delete(id) {
+    const customer = await Customer.findByPk(id);
+    if (!customer) return null;
+    await customer.destroy();
+    return customer;
+}
+
+SQL Equivalent:
+DELETE FROM customers WHERE id = ?;</code></pre>
+
+                <h4>Success Response</h4>
+                <div class="response-box">
+                    <strong>200 OK</strong>
+                    <code>{
+    "status": true,
+    "message": "Customer deleted successfully"
+}</code>
+                </div>
+
+                <div class="warning-box">
+                    <strong>Warning:</strong> Deleting a customer may affect existing orders. Check foreign key constraints before deletion.
+                </div>
+
+                <h4>Error Response</h4>
+                <div class="error-box">
+                    <strong>404 Not Found</strong>
+                    <code>{
+    "status": false,
+    "message": "Customer not found"
+}</code>
+                </div>
+            </div>
+        </div>
+
+        <!-- References Section -->
+        <div class="card" id="references">
+            <h2>📖 References</h2>
+
+            <h3>Customer Type Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>individual</strong></td>
+                        <td>Individual customer - B2C transactions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>business</strong></td>
+                        <td>Business customer - B2B transactions</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Customer Status Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>is_active = true</strong></td>
+                        <td>Active customer - Can be selected for new orders</td>
+                    </tr>
+                    <tr>
+                        <td><strong>is_active = false</strong></td>
+                        <td>Inactive customer - Hidden from selection, preserved for history</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Sorting Options</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>top_sold</code></td>
+                        <td>Sort by highest total sales amount (descending)</td>
+                    </tr>
+                    <tr>
+                        <td><code>low_sold</code></td>
+                        <td>Sort by lowest total sales amount (ascending)</td>
+                    </tr>
+                    <tr>
+                        <td><code>(default)</code></td>
+                        <td>Sort by creation date (newest first)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#00695c',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#004d40',
+                lineColor: '#00695c',
+                secondaryColor: '#30cfd0',
+                tertiaryColor: '#e8f5f3',
+                background: '#e8f5f3',
+                mainBkg: '#00695c',
+                nodeBorder: '#004d40',
+                clusterBkg: '#f0f9f8',
+                clusterBorder: '#00695c',
+                titleColor: '#00695c',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#30cfd0',
+                actorBorder: '#00695c',
+                actorTextColor: '#fff',
+                actorLineColor: '#00695c',
+                signalColor: '#00695c',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#30cfd0',
+                labelBoxBorderColor: '#00695c',
+                labelTextColor: '#fff',
+                loopTextColor: '#00695c',
+                noteBorderColor: '#00695c',
+                noteBkgColor: '#fff3cd',
+                noteTextColor: '#333',
+                activationBorderColor: '#00695c',
+                activationBkgColor: '#e8f5f3',
+                sequenceNumberColor: '#00695c'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Module Management & System Settings</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.6fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    .toggle-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .toggle {
+      width: 32px;
+      height: 16px;
+      background: #e5e7eb;
+      border-radius: 999px;
+      position: relative;
+      cursor: pointer;
+    }
+    .toggle::after {
+      content: '';
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #fff;
+      position: absolute;
+      top: 1px;
+      left: 1px;
+    }
+    .toggle.on {
+      background: #22c55e;
+    }
+    .toggle.on::after {
+      left: 17px;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Customers</a>
+    <a href="#">Suppliers</a>
+    <a href="#">Products</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">HR & Payroll</a>
+    <a href="#">Users & Roles</a>
+    <a href="#" class="active">Modules & Settings</a>
+    <a href="#">Reports</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Module Management & System Settings</h1>
+    <div class="subtitle">
+      Enable or disable modules, configure company profile, numbering, taxes, email/SMS gateways, templates, language, backups and integrations.
+    </div>
+
+    <!-- MODULE LIST -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Module List</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">All</div>
+          <div class="pill-filter">Core</div>
+          <div class="pill-filter">Optional</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+        <tr>
+          <th style="width:150px;">Module</th>
+          <th>Description</th>
+          <th style="width:110px;">Key</th>
+          <th style="width:80px;">Type</th>
+          <th style="width:90px;">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>Customers</td>
+          <td>Customer master, groups, statements, CRM basics.</td>
+          <td>customers</td>
+          <td>Core</td>
+          <td>
+            <div class="toggle-wrapper">
+              <div class="toggle on"></div>
+              <span class="tag-success tag">Enabled</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Suppliers</td>
+          <td>Supplier master, statements, purchase history.</td>
+          <td>suppliers</td>
+          <td>Core</td>
+          <td>
+            <div class="toggle-wrapper">
+              <div class="toggle on"></div>
+              <span class="tag-success tag">Enabled</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>Inventory / Stock</td>
+          <td>Warehouses, stock movements, stock valuation.</td>
+          <td>inventory</td>
+          <td>Core</td>
+          <td>
+            <div class="toggle-wrapper">
+              <div class="toggle on"></div>
+              <span class="tag-success tag">Enabled</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>HR & Payroll</td>
+          <td>Employees, attendance, payroll processing.</td>
+          <td>hr_payroll</td>
+          <td>Optional</td>
+          <td>
+            <div class="toggle-wrapper">
+              <div class="toggle"></div>
+              <span class="tag-danger tag">Disabled</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="hint">
+        Modules stored in <code>modules</code>, per-company activation in <code>company_modules</code>.  
+        Disabling a module does <strong>NOT</strong> delete data – it only hides access.
+      </div>
+    </div>
+
+    <!-- COMPANY PROFILE & BRANCHES -->
+    <div class="two-column">
+      <!-- Company Profile -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Company Profile</h3>
+          <button class="btn btn-outline btn-sm">Upload Logo</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Company Name</label>
+            <input type="text" placeholder="Your Company Name Sdn Bhd" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Registration No.</label>
+            <input type="text" placeholder="e.g. 1234567-X" />
+          </div>
+          <div class="form-group">
+            <label>Tax / GST / VAT No.</label>
+            <input type="text" placeholder="e.g. GST-XXXX" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Address</label>
+            <textarea placeholder="Full company address"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" placeholder="+60..." />
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="info@company.com" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Stored in <code>companies</code> table (name, address, logo, contacts).
+        </div>
+      </div>
+
+      <!-- Branches / Locations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Branches / Locations</h3>
+          <button class="btn btn-outline btn-sm">+ Add Branch</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Branch Name</th>
+            <th style="width:120px;">Code</th>
+            <th style="width:90px;">Type</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Head Office – Shah Alam</td>
+            <td>HO-SHAH</td>
+            <td>Head Office</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>Warehouse – Port Klang</td>
+            <td>WH-PK</td>
+            <td>Warehouse</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>Branch – Penang</td>
+            <td>BR-PG</td>
+            <td>Branch</td>
+            <td><span class="tag-warning tag">Inactive</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Branches stored in <code>company_branches</code>, linked to <code>companies</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- NUMBERING SEQUENCES & TAX SETTINGS -->
+    <div class="two-column">
+      <!-- Numbering Sequences -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Numbering Sequences</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Document Type</th>
+            <th style="width:90px;">Prefix</th>
+            <th style="width:80px;">Current No.</th>
+            <th style="width:80px;">Padding</th>
+            <th style="width:90px;">Sample</th>
+            <th style="width:110px;">Reset</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Sales Order</td>
+            <td>SO-</td>
+            <td>1025</td>
+            <td>4</td>
+            <td>SO-1025</td>
+            <td>Yearly</td>
+          </tr>
+          <tr>
+            <td>Purchase Order</td>
+            <td>PO-</td>
+            <td>550</td>
+            <td>4</td>
+            <td>PO-0550</td>
+            <td>Yearly</td>
+          </tr>
+          <tr>
+            <td>Sales Invoice</td>
+            <td>INV-</td>
+            <td>1203</td>
+            <td>5</td>
+            <td>INV-01203</td>
+            <td>Monthly</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Stored in <code>numbering_sequences</code> by company / branch / document type.
+        </div>
+      </div>
+
+      <!-- Tax / GST / VAT Config -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Tax / GST / VAT Configuration</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Tax Code</th>
+            <th>Name</th>
+            <th style="width:80px;">Rate %</th>
+            <th style="width:90px;">Type</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>SR</td>
+            <td>Standard Rated Supply</td>
+            <td>6.00</td>
+            <td>Output</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>ZR</td>
+            <td>Zero Rated Supply</td>
+            <td>0.00</td>
+            <td>Output</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>TX-IMPORT</td>
+            <td>Import Tax</td>
+            <td>6.00</td>
+            <td>Input</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Taxes stored in <code>taxes</code>; mapping to accounts done in accounting config.
+        </div>
+      </div>
+    </div>
+
+    <!-- CURRENCY & EMAIL / SMS / WHATSAPP -->
+    <div class="two-column">
+      <!-- Currency & Exchange Rates -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Currency & Exchange Rates</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Base Currency</label>
+            <select>
+              <option>MYR – Malaysian Ringgit</option>
+              <option>AUD – Australian Dollar</option>
+              <option>USD – US Dollar</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Currency</th>
+            <th style="width:80px;">Code</th>
+            <th style="width:100px;">Rate vs Base</th>
+            <th style="width:110px;">Valid From</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Malaysian Ringgit</td>
+            <td>MYR</td>
+            <td>1.0000</td>
+            <td>2025-01-01</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>Australian Dollar</td>
+            <td>AUD</td>
+            <td>3.2500</td>
+            <td>2025-01-01</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>US Dollar</td>
+            <td>USD</td>
+            <td>4.7000</td>
+            <td>2025-01-01</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Currencies in <code>currencies</code>, daily/period rates in <code>exchange_rates</code>.
+        </div>
+      </div>
+
+      <!-- Email & SMS / WhatsApp Gateway -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Email Settings (SMTP) & SMS / WhatsApp</h3>
+        </div>
+
+        <h4 style="font-size:14px;margin-top:0;margin-bottom:6px;">Email (SMTP)</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>SMTP Host</label>
+            <input type="text" placeholder="smtp.mailgun.org" />
+          </div>
+          <div class="form-group">
+            <label>Port</label>
+            <input type="number" value="587" />
+          </div>
+          <div class="form-group">
+            <label>Encryption</label>
+            <select>
+              <option>TLS</option>
+              <option>SSL</option>
+              <option>None</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" placeholder="postmaster@domain.com" />
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" placeholder="********" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>From Name</label>
+            <input type="text" placeholder="Your Company Name" />
+          </div>
+          <div class="form-group">
+            <label>From Email</label>
+            <input type="email" placeholder="no-reply@domain.com" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Stored in <code>email_settings</code>, per company. Password stored securely (encrypted).
+        </div>
+
+        <h4 style="font-size:14px;margin-top:14px;margin-bottom:6px;">SMS / WhatsApp Gateway</h4>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Provider</label>
+            <select>
+              <option>None</option>
+              <option>Twilio</option>
+              <option>WhatsApp Cloud API</option>
+              <option>Local SMS Gateway</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>API Key / Token</label>
+            <input type="text" placeholder="API key or access token" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Sender ID / From Number</label>
+            <input type="text" placeholder="e.g. COMPANY / +60123456789" />
+          </div>
+        </div>
+
+        <div class="hint">
+          Stored in <code>communication_gateways</code> or specific <code>sms_gateway_settings</code> / <code>whatsapp_gateway_settings</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- DOCUMENT TEMPLATES & LANGUAGE / REGION -->
+    <div class="two-column">
+      <!-- Document Templates -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Document Templates</h3>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Document</th>
+            <th style="width:120px;">Template Name</th>
+            <th style="width:90px;">Engine</th>
+            <th style="width:80px;">Default</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Invoice</td>
+            <td>Standard Invoice v1</td>
+            <td>HTML</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Purchase Order</td>
+            <td>PO Format A</td>
+            <td>HTML</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Quotation</td>
+            <td>Quote Clean Layout</td>
+            <td>HTML</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          <tr>
+            <td>Payslip</td>
+            <td>Payslip Basic</td>
+            <td>HTML</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Templates stored in <code>document_templates</code> with HTML / variables.
+        </div>
+      </div>
+
+      <!-- Language / Region Settings -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Language & Region</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Language</label>
+            <select>
+              <option>en-MY – English (Malaysia)</option>
+              <option>en-AU – English (Australia)</option>
+              <option>ms-MY – Bahasa Melayu</option>
+              <option>bn-BD – Bangla</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Timezone</label>
+            <select>
+              <option>Asia/Kuala_Lumpur</option>
+              <option>Australia/Brisbane</option>
+              <option>Asia/Dhaka</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Date Format</label>
+            <select>
+              <option>dd/MM/yyyy</option>
+              <option>MM/dd/yyyy</option>
+              <option>yyyy-MM-dd</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Number Format</label>
+            <select>
+              <option>1,234.56</option>
+              <option>1.234,56</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Default Currency</label>
+            <select>
+              <option>MYR</option>
+              <option>AUD</option>
+              <option>USD</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="hint">
+          Stored in <code>company_locale_settings</code> (language, region, formats).
+        </div>
+      </div>
+    </div>
+
+    <!-- BACKUP & RESTORE + API KEYS / INTEGRATIONS -->
+    <div class="two-column">
+      <!-- Backup & Restore -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Backup & Restore</h3>
+          <button class="btn btn-primary btn-sm">Run Backup Now</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Backup ID</th>
+            <th style="width:100px;">Type</th>
+            <th style="width:140px;">Started</th>
+            <th style="width:140px;">Completed</th>
+            <th style="width:90px;">Size (MB)</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>BKP-20250115-01</td>
+            <td>Full</td>
+            <td>2025-01-15 03:00</td>
+            <td>2025-01-15 03:10</td>
+            <td>120.5</td>
+            <td><span class="tag-success tag">Success</span></td>
+          </tr>
+          <tr>
+            <td>BKP-20250114-01</td>
+            <td>Database</td>
+            <td>2025-01-14 03:00</td>
+            <td>2025-01-14 03:05</td>
+            <td>45.2</td>
+            <td><span class="tag-success tag">Success</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Manual backups logged in <code>backups</code>. Restore executed by admin tool (no auto-delete).
+        </div>
+      </div>
+
+      <!-- API Keys / Integrations -->
+      <div class="card">
+        <div class="card-header">
+          <h3>API Keys / Integrations</h3>
+          <button class="btn btn-outline btn-sm">+ Add Integration</button>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Provider</th>
+            <th style="width:120px;">Type</th>
+            <th style="width:180px;">API Key / Client ID</th>
+            <th style="width:80px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Stripe</td>
+            <td>Payment</td>
+            <td>pk_live_xxxxxxxxxxxxx</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>WhatsApp Cloud API</td>
+            <td>Messaging</td>
+            <td>waba_app_123456</td>
+            <td><span class="tag-success tag">Active</span></td>
+          </tr>
+          <tr>
+            <td>Xero</td>
+            <td>Accounting</td>
+            <td>client_abc123</td>
+            <td><span class="tag-warning tag">Disabled</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Integrations stored in <code>integrations</code> with encrypted secrets + config JSON.
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

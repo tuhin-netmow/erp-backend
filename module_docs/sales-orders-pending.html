@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Sales Orders Module Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            color: #1976d2;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: #1976d2;
+            text-decoration: none;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #e0e0e0;
+            transform: translateX(-5px);
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #1976d2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #1565c0;
+        }
+
+        .ui-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .ui-action-card {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .ui-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(25, 118, 210, 0.15);
+            border-color: #1976d2;
+        }
+
+        .ui-action-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .ui-action-title {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .ui-action-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-ui {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .badge-api {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .code-section {
+            margin-top: 15px;
+        }
+
+        .code-section-title {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .code-block { background: #1e1e1e; color: #d4d4d4; padding: 0; border-radius: 12px; overflow: hidden; margin: 12px 0; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; font-size: 0.9em; line-height: 1.6; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); }
+        .code-block-header { background: linear-gradient(135deg, #2d2d2d 0%, #383838 100%); padding: 12px 18px; border-bottom: 1px solid #454545; display: flex; align-items: center; gap: 10px; }
+        .code-block-header .dots { display: flex; gap: 6px; }
+        .code-block-header .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .code-block-header .dot.red { background: #ff5f56; }
+        .code-block-header .dot.yellow { background: #ffbd2e; }
+        .code-block-header .dot.green { background: #27c93f; }
+        .code-block-header .file-path { color: #9cdcfe; font-size: 0.85em; font-family: 'Consolas', 'Monaco', 'Courier New', monospace; margin-left: auto; }
+        .code-block-content { padding: 18px; overflow-x: auto; white-space: pre; }
+        .code-block-content .comment { color: #6a9955; }
+        .code-block-content .keyword { color: #569cd6; }
+        .code-block-content .string { color: #ce9178; }
+        .code-block-content .function { color: #dcdcaa; }
+        .code-block-content .number { color: #b5cea8; }
+        .code-block-content .operator { color: #d4d4d4; }
+        .code-block-content .variable { color: #9cdcfe; }
+        .code-block-content .property { color: #9cdcfe; }
+        .code-block-content .tag { color: #569cd6; }
+        .code-block-content .punctuation { color: #d4d4d4; }
+        .code-block-content .jsx-tag { color: #569cd6; }
+        .code-block-content .jsx-attr { color: #9cdcfe; }
+        .code-block-content .class-name { color: #4ec9b0; }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .success-box {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #1976d2;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.85em;
+            margin-right: 8px;
+        }
+
+        .method.get { background: #e3f2fd; color: #1976d2; }
+        .method.patch { background: #fff3e0; color: #f57c00; }
+        .method.delete { background: #ffebee; color: #c62828; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>⏳ Pending Sales Orders Module</h1>
+            <p>View and Manage Pending Sales Orders</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Overview</h2>
+            <p>View and manage all pending sales orders that await confirmation. Process pending orders and convert them to confirmed status. This module provides comprehensive tools for managing orders that haven't been confirmed yet.</p>
+
+            <div class="info-box">
+                <strong>📌 Base URL:</strong> <code>/api/sales/orders</code>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">UI Actions & API Integration</h2>
+
+            <div class="ui-actions-grid">
+                <!-- View Pending Orders List -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">📋 View Pending Orders List</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">PendingOrdersList.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span><span class="punctuation">,</span> <span class="variable">useEffect</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">Eye</span><span class="punctuation">,</span> <span class="variable">Edit</span><span class="punctuation">,</span> <span class="variable">Printer</span><span class="punctuation">,</span> <span class="variable">Clock</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">interface</span> <span class="class-name">PendingOrder</span> <span class="punctuation">{</span>
+  <span class="property">id</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">order_number</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">customer_name</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">order_date</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">total_amount</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">;</span>
+  <span class="property">status</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">export const</span> <span class="function">PendingOrdersList</span> <span class="operator">=</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">orders</span><span class="punctuation">,</span> <span class="variable">setOrders</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">PendingOrder</span><span class="operator">[]></span><span class="punctuation">([]);</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">page</span><span class="punctuation">,</span> <span class="variable">setPage</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"p-6 bg-white rounded-lg shadow"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex justify-between items-center mb-6"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">h2</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-2xl font-bold"</span><span class="operator">></span>Pending Orders<span class="operator">&lt;/</span><span class="jsx-tag">h2</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-2"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">Clock</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-amber-500"</span> <span class="operator">/</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">span</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-sm text-gray-600"</span><span class="operator">></span>Awaiting Confirmation<span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+      <span class="operator">&lt;</span><span class="jsx-tag">table</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"min-w-full divide-y"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">thead</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"bg-blue-50"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">tr</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Order #<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Customer<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Date<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Total<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Status<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">th</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-3 text-left text-xs font-medium text-blue-700 uppercase"</span><span class="operator">></span>Actions<span class="operator">&lt;/</span><span class="jsx-tag">th</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">tr</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">thead</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">tbody</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"divide-y"</span><span class="operator">></span>
+          <span class="punctuation">{</span><span class="variable">orders</span><span class="punctuation">.</span><span class="function">map</span><span class="punctuation">((</span><span class="variable">order</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">(</span>
+            <span class="operator">&lt;</span><span class="jsx-tag">tr</span> <span class="jsx-attr">key</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"hover:bg-gray-50"</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 font-medium"</span><span class="operator">></span>#<span class="punctuation">{</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">order_number</span><span class="punctuation">}</span><span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4"</span><span class="operator">></span><span class="punctuation">{</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">customer_name</span><span class="punctuation">}</span><span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4"</span><span class="operator">></span><span class="punctuation">{</span><span class="keyword">new</span> <span class="class-name">Date</span><span class="punctuation">(</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">order_date</span><span class="punctuation">).</span><span class="function">toLocaleDateString</span><span class="punctuation">()}</span><span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4"</span><span class="operator">></span>${<span class="variable">order</span><span class="punctuation">.</span><span class="variable">total_amount</span><span class="punctuation">.</span><span class="function">toFixed</span><span class="punctuation">(</span><span class="number">2</span><span class="punctuation">)}</span><span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4"</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">span</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-800"</span><span class="operator">></span>
+                  {order.status}
+                <span class="operator">&lt;/</span><span class="jsx-tag">span</span><span class="operator">></span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">td</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-6 py-4 flex gap-2"</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{()</span> <span class="operator">=></span> <span class="function">viewOrder</span><span class="punctuation">(</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">)}</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-blue-600 hover:text-blue-800"</span><span class="operator">></span>
+                  <span class="operator">&lt;</span><span class="jsx-tag">Eye</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+                <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{()</span> <span class="operator">=></span> <span class="function">editOrder</span><span class="punctuation">(</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">)}</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-amber-600 hover:text-amber-800"</span><span class="operator">></span>
+                  <span class="operator">&lt;</span><span class="jsx-tag">Edit</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+                <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{()</span> <span class="operator">=></span> <span class="function">printOrder</span><span class="punctuation">(</span><span class="variable">order</span><span class="punctuation">.</span><span class="variable">id</span><span class="punctuation">)}</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-gray-600 hover:text-gray-800"</span><span class="operator">></span>
+                  <span class="operator">&lt;</span><span class="jsx-tag">Printer</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+                <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">td</span><span class="operator">></span>
+            <span class="operator">&lt;/</span><span class="jsx-tag">tr</span><span class="operator">></span>
+          <span class="punctuation">))}</span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">tbody</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">table</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.get">GET</span> /api/sales/orders?status=pending&page=1
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">fetchPendingOrders.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">fetchPendingOrders</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">page</span><span class="operator">:</span> <span class="class-name">number</span> <span class="operator">=</span> <span class="number">1</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders?status=pending&page=</span><span class="sub">${</span><span class="variable">page</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to fetch pending orders'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">const</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span>
+
+<span class="comment">// Using React Query</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useQuery</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'@tanstack/react-query'</span><span class="punctuation">;</span>
+
+<span class="keyword">const</span> <span class="function">usePendingOrders</span> <span class="operator">=</span> <span class="punctuation">(</span><span class="variable">page</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">return</span> <span class="function">useQuery</span><span class="punctuation">({</span>
+    <span class="property">queryKey</span><span class="operator">:</span> <span class="punctuation">[</span><span class="string">'pendingOrders'</span><span class="punctuation">,</span> <span class="variable">page</span><span class="punctuation">],</span>
+    <span class="property">queryFn</span><span class="operator">:</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="function">fetchPendingOrders</span><span class="punctuation">(</span><span class="variable">page</span><span class="punctuation">),</span>
+  <span class="punctuation">});</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- View Order Details -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">👁️ View Order Details</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.get">GET</span> /api/sales/orders/:id
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">viewOrderDetails.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">viewOrderDetails</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderId</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders/</span><span class="sub">${</span><span class="variable">orderId</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to fetch order details'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">const</span> <span class="variable">order</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+  <span class="keyword">return</span> <span class="variable">order</span><span class="punctuation">.</span><span class="variable">data</span><span class="punctuation">;</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Confirm Order -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">✅ Confirm Pending Order</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">ConfirmOrderModal.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">CheckCircle</span><span class="punctuation">,</span> <span class="variable">X</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">interface</span> <span class="class-name">ConfirmOrderModalProps</span> <span class="punctuation">{</span>
+  <span class="property">isOpen</span><span class="operator">:</span> <span class="class-name">boolean</span><span class="punctuation">;</span>
+  <span class="property">onClose</span><span class="operator">:</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="class-name">void</span><span class="punctuation">;</span>
+  <span class="property">onConfirm</span><span class="operator">:</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="class-name">Promise</span><span class="operator">&lt;</span><span class="class-name">void</span><span class="operator">></span><span class="punctuation">;</span>
+  <span class="property">orderNumber</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">}</span>
+
+<span class="keyword">export const</span> <span class="function">ConfirmOrderModal</span> <span class="operator">=</span> <span class="punctuation">({</span> <span class="variable">isOpen</span><span class="punctuation">,</span> <span class="variable">onClose</span><span class="punctuation">,</span> <span class="variable">onConfirm</span><span class="punctuation">,</span> <span class="variable">orderNumber</span> <span class="punctuation">}</span><span class="operator">:</span> <span class="class-name">ConfirmOrderModalProps</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">isOpen</span><span class="punctuation">)</span> <span class="keyword">return</span> <span class="keyword">null</span><span class="punctuation">;</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"bg-white rounded-lg p-6 max-w-md w-full mx-4"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center justify-between mb-4"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">h3</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-lg font-semibold"</span><span class="operator">></span>Confirm Order<span class="operator">&lt;/</span><span class="jsx-tag">h3</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">onClose</span><span class="punctuation">}</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-gray-400 hover:text-gray-600"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">X</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{20}</span> <span class="operator">/</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"mb-6"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">p</span><span class="operator">></span>Are you sure you want to confirm order <span class="operator">&lt;</span><span class="jsx-tag">strong</span><span class="operator">></span>#{orderNumber}<span class="operator">&lt;/</span><span class="jsx-tag">strong</span><span class="operator">></span>?<span class="operator">&lt;/</span><span class="jsx-tag">p</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">p</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-sm text-gray-600 mt-2"</span><span class="operator">></span>
+            This will change the order status from pending to confirmed.
+          <span class="operator">&lt;/</span><span class="jsx-tag">p</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex justify-end gap-3"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+            <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">onClose</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 border rounded-lg hover:bg-gray-50"</span>
+          <span class="operator">></span>
+            Cancel
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+            <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">onConfirm</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"</span>
+          <span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">CheckCircle</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+            Confirm Order
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.patch">PATCH</span> /api/sales/orders/:id/status
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">confirmOrder.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">confirmOrder</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderId</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders/</span><span class="sub">${</span><span class="variable">orderId</span><span class="sub">}</span><span class="string">/status`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'PATCH'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">},</span>
+      <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">({</span> <span class="property">status</span><span class="operator">:</span> <span class="string">'confirmed'</span> <span class="punctuation">})</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to confirm order'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cancel Order -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">❌ Cancel Pending Order</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.patch">PATCH</span> /api/sales/orders/:id/status
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">cancelOrder.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">cancelOrder</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderId</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">,</span> <span class="variable">reason</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders/</span><span class="sub">${</span><span class="variable">orderId</span><span class="sub">}</span><span class="string">/status`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'PATCH'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">},</span>
+      <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">({</span>
+        <span class="property">status</span><span class="operator">:</span> <span class="string">'cancelled'</span><span class="punctuation">,</span>
+        <span class="property">cancellation_reason</span><span class="operator">:</span> <span class="variable">reason</span>
+      <span class="punctuation">})</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to cancel order'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Order -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">🗑️ Delete Pending Order</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">DeleteOrderModal.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">Trash2</span><span class="punctuation">,</span> <span class="variable">AlertTriangle</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">export const</span> <span class="function">DeleteOrderModal</span> <span class="operator">=</span> <span class="punctuation">({</span> <span class="variable">isOpen</span><span class="punctuation">,</span> <span class="variable">onClose</span><span class="punctuation">,</span> <span class="variable">onDelete</span><span class="punctuation">,</span> <span class="variable">orderNumber</span> <span class="punctuation">}</span><span class="operator">:</span> <span class="punctuation">{</span>
+  <span class="property">isOpen</span><span class="operator">:</span> <span class="class-name">boolean</span><span class="punctuation">;</span>
+  <span class="property">onClose</span><span class="operator">:</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="class-name">void</span><span class="punctuation">;</span>
+  <span class="property">onDelete</span><span class="operator">:</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="class-name">Promise</span><span class="operator">&lt;</span><span class="class-name">void</span><span class="operator">></span><span class="punctuation">;</span>
+  <span class="property">orderNumber</span><span class="operator">:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">}</span><span class="operator">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">isOpen</span><span class="punctuation">)</span> <span class="keyword">return</span> <span class="keyword">null</span><span class="punctuation">;</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"bg-white rounded-lg p-6 max-w-md w-full mx-4"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex items-center gap-3 mb-4"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"p-2 bg-red-100 rounded-full"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">AlertTriangle</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-red-600"</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{24}</span> <span class="operator">/</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">h3</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-lg font-semibold text-red-600"</span><span class="operator">></span>Delete Order<span class="operator">&lt;/</span><span class="jsx-tag">h3</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"mb-6"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">p</span><span class="operator">></span>Are you sure you want to delete order <span class="operator">&lt;</span><span class="jsx-tag">strong</span><span class="operator">></span>#<span class="punctuation">{</span><span class="variable">orderNumber</span><span class="punctuation">}</span><span class="operator">&lt;/</span><span class="jsx-tag">strong</span><span class="operator">></span>?<span class="operator">&lt;/</span><span class="jsx-tag">p</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"bg-red-50 border-l-4 border-red-500 p-4 mt-4"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">p</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"text-sm text-red-700"</span><span class="operator">></span>
+              <span class="operator">&lt;</span><span class="jsx-tag">strong</span><span class="operator">></span>Warning:<span class="operator">&lt;/</span><span class="jsx-tag">strong</span><span class="operator">></span> This action cannot be undone. All order data will be permanently removed.
+            <span class="operator">&lt;/</span><span class="jsx-tag">p</span><span class="operator">></span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex justify-end gap-3"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+            <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">onClose</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 border rounded-lg hover:bg-gray-50"</span>
+          <span class="operator">></span>
+            Cancel
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+            <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">onDelete</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 flex items-center gap-2"</span>
+          <span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">Trash2</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+            Delete Order
+          <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.delete">DELETE</span> /api/sales/orders/:id
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">deleteOrder.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">deleteOrder</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderId</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders/</span><span class="sub">${</span><span class="variable">orderId</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'DELETE'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to delete order'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">🔍 Search and Filter Orders</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🎨 UI Design Code</div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">OrderSearchFilter.tsx</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">useState</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'react'</span><span class="punctuation">;</span>
+<span class="keyword">import</span> <span class="punctuation">{</span> <span class="variable">Search</span><span class="punctuation">,</span> <span class="variable">Filter</span><span class="punctuation">,</span> <span class="variable">X</span> <span class="punctuation">}</span> <span class="keyword">from</span> <span class="string">'lucide-react'</span><span class="punctuation">;</span>
+
+<span class="keyword">export const</span> <span class="function">OrderSearchFilter</span> <span class="operator">=</span> <span class="punctuation">()</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">searchTerm</span><span class="punctuation">,</span> <span class="variable">setSearchTerm</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">string</span><span class="operator">></span><span class="punctuation">(</span><span class="string">''</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">dateFrom</span><span class="punctuation">,</span> <span class="variable">setDateFrom</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">string</span><span class="operator">></span><span class="punctuation">(</span><span class="string">''</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="punctuation">[</span><span class="variable">dateTo</span><span class="punctuation">,</span> <span class="variable">setDateTo</span><span class="punctuation">]</span> <span class="operator">=</span> <span class="function">useState</span><span class="operator">&lt;</span><span class="class-name">string</span><span class="operator">></span><span class="punctuation">(</span><span class="string">''</span><span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="punctuation">(</span>
+    <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"bg-white p-4 rounded-lg shadow mb-6"</span><span class="operator">></span>
+      <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex flex-wrap gap-4 items-end"</span><span class="operator">></span>
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"flex-1 min-w-[200px]"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">label</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"block text-sm font-medium mb-2"</span><span class="operator">></span>Search Orders<span class="operator">&lt;/</span><span class="jsx-tag">label</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">div</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"relative"</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">Search</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"absolute left-3 top-3 text-gray-400"</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{18}</span> <span class="operator">/</span><span class="operator">></span>
+            <span class="operator">&lt;</span><span class="jsx-tag">input</span>
+              <span class="jsx-attr">type</span><span class="operator">=</span><span class="string">"text"</span>
+              <span class="jsx-attr">placeholder</span><span class="operator">=</span><span class="string">"Order #, Customer..."</span>
+              <span class="jsx-attr">value</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">searchTerm</span><span class="punctuation">}</span>
+              <span class="jsx-attr">onChange</span><span class="operator">=</span><span class="punctuation">{(</span><span class="variable">e</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="function">setSearchTerm</span><span class="punctuation">(</span><span class="variable">e</span><span class="punctuation">.</span><span class="variable">target</span><span class="punctuation">.</span><span class="variable">value</span><span class="punctuation">)}</span><span class="punctuation">}</span>
+              <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"w-full pl-10 pr-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"</span>
+            <span class="operator">/</span><span class="operator">></span>
+            <span class="punctuation">{</span><span class="variable">searchTerm</span> <span class="operator">&&</span> <span class="punctuation">(</span>
+              <span class="operator">&lt;</span><span class="jsx-tag">button</span>
+                <span class="jsx-attr">onClick</span><span class="operator">=</span><span class="punctuation">{()</span> <span class="operator">=></span> <span class="function">setSearchTerm</span><span class="punctuation">(</span><span class="string">''</span><span class="punctuation">)}</span><span class="punctuation">}</span>
+                <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"absolute right-3 top-3 text-gray-400 hover:text-gray-600"</span>
+              <span class="operator">></span>
+                <span class="operator">&lt;</span><span class="jsx-tag">X</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{18}</span> <span class="operator">/</span><span class="operator">></span>
+              <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+            <span class="punctuation">)}</span>
+          <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">label</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"block text-sm font-medium mb-2"</span><span class="operator">></span>From Date<span class="operator">&lt;/</span><span class="jsx-tag">label</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">input</span>
+            <span class="jsx-attr">type</span><span class="operator">=</span><span class="string">"date"</span>
+            <span class="jsx-attr">value</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">dateFrom</span><span class="punctuation">}</span>
+            <span class="jsx-attr">onChange</span><span class="operator">=</span><span class="punctuation">{(</span><span class="variable">e</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="function">setDateFrom</span><span class="punctuation">(</span><span class="variable">e</span><span class="punctuation">.</span><span class="variable">target</span><span class="punctuation">.</span><span class="variable">value</span><span class="punctuation">)}</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"</span>
+          <span class="operator">/</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">div</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">label</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"block text-sm font-medium mb-2"</span><span class="operator">></span>To Date<span class="operator">&lt;/</span><span class="jsx-tag">label</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">input</span>
+            <span class="jsx-attr">type</span><span class="operator">=</span><span class="string">"date"</span>
+            <span class="jsx-attr">value</span><span class="operator">=</span><span class="punctuation">{</span><span class="variable">dateTo</span><span class="punctuation">}</span>
+            <span class="jsx-attr">onChange</span><span class="operator">=</span><span class="punctuation">{(</span><span class="variable">e</span><span class="punctuation">)</span> <span class="operator">=></span> <span class="function">setDateTo</span><span class="punctuation">(</span><span class="variable">e</span><span class="punctuation">.</span><span class="variable">target</span><span class="punctuation">.</span><span class="variable">value</span><span class="punctuation">)}</span><span class="punctuation">}</span>
+            <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"</span>
+          <span class="operator">/</span><span class="operator">></span>
+        <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+
+        <span class="operator">&lt;</span><span class="jsx-tag">button</span> <span class="jsx-attr">className</span><span class="operator">=</span><span class="string">"px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"</span><span class="operator">></span>
+          <span class="operator">&lt;</span><span class="jsx-tag">Filter</span> <span class="jsx-attr">size</span><span class="operator">=</span><span class="string">{16}</span> <span class="operator">/</span><span class="operator">></span>
+          Apply Filters
+        <span class="operator">&lt;/</span><span class="jsx-tag">button</span><span class="operator">></span>
+      <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+    <span class="operator">&lt;/</span><span class="jsx-tag">div</span><span class="operator">></span>
+  <span class="punctuation">);</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.get">GET</span> /api/sales/orders?status=pending&search={term}&date_from={from}&date_to={to}
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">searchOrders.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">searchPendingOrders</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">filters</span><span class="operator">:</span> <span class="punctuation">{</span>
+  <span class="property">search</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">date_from</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+  <span class="property">date_to</span><span class="operator">?:</span> <span class="class-name">string</span><span class="punctuation">;</span>
+<span class="punctuation">})</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">params</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="class-name">URLSearchParams</span><span class="punctuation">({</span>
+    <span class="property">status</span><span class="operator">:</span> <span class="string">'pending'</span><span class="punctuation">,</span>
+    <span class="punctuation">...</span><span class="variable">filters</span>
+  <span class="punctuation">});</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders?</span><span class="sub">${</span><span class="variable">params</span><span class="punctuation">.</span><span class="function">toString</span><span class="punctuation">()}</span><span class="string">`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span>
+      <span class="punctuation">}</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Actions -->
+                <div class="ui-action-card">
+                    <div class="ui-action-header">
+                        <div class="ui-action-title">✅ Bulk Confirm Orders</div>
+                        <div class="ui-action-badges">
+                            <span class="badge badge-ui">UI Design</span>
+                            <span class="badge badge-api">API Call</span>
+                        </div>
+                    </div>
+
+                    <div class="code-section">
+                        <div class="code-section-title">🔌 API Call Code</div>
+                        <div class="endpoint">
+                            <span class="method.patch">PATCH</span> /api/sales/orders/bulk/status
+                        </div>
+                        <div class="code-block">
+                            <div class="code-block-header">
+                                <div class="dots">
+                                    <div class="dot red"></div>
+                                    <div class="dot yellow"></div>
+                                    <div class="dot green"></div>
+                                </div>
+                                <div class="file-path">bulkConfirmOrders.ts</div>
+                            </div>
+                            <div class="code-block-content"><span class="keyword">const</span> <span class="function">bulkConfirmOrders</span> <span class="operator">=</span> <span class="keyword">async</span> <span class="punctuation">(</span><span class="variable">orderIds</span><span class="operator">:</span> <span class="class-name">number</span><span class="punctuation">[])</span> <span class="operator">=></span> <span class="punctuation">{</span>
+  <span class="keyword">const</span> <span class="variable">token</span> <span class="operator">=</span> <span class="variable">localStorage</span><span class="punctuation">.</span><span class="function">getItem</span><span class="punctuation">(</span><span class="string">'token'</span><span class="punctuation">);</span>
+  <span class="keyword">const</span> <span class="variable">API_URL</span> <span class="operator">=</span> <span class="variable">import</span><span class="punctuation">.</span><span class="variable">meta</span><span class="punctuation">.</span><span class="variable">env</span><span class="punctuation">.</span><span class="variable">VITE_API_URL</span><span class="punctuation">;</span>
+
+  <span class="keyword">const</span> <span class="variable">response</span> <span class="operator">=</span> <span class="keyword">await</span> <span class="function">fetch</span><span class="punctuation">(</span>
+    <span class="string">`</span><span class="sub">${</span><span class="variable">API_URL</span><span class="sub">}</span><span class="string">/api/sales/orders/bulk/status`</span><span class="punctuation">,</span>
+    <span class="punctuation">{</span>
+      <span class="property">method</span><span class="operator">:</span> <span class="string">'PATCH'</span><span class="punctuation">,</span>
+      <span class="property">headers</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">'Authorization'</span><span class="operator">:</span> <span class="string">`Bearer </span><span class="sub">${</span><span class="variable">token</span><span class="sub">}</span><span class="string">`</span><span class="punctuation">,</span>
+        <span class="property">'Content-Type'</span><span class="operator">:</span> <span class="string">'application/json'</span>
+      <span class="punctuation">},</span>
+      <span class="property">body</span><span class="operator">:</span> <span class="constant">JSON</span><span class="punctuation">.</span><span class="function">stringify</span><span class="punctuation">({</span>
+        <span class="property">order_ids</span><span class="operator">:</span> <span class="variable">orderIds</span><span class="punctuation">,</span>
+        <span class="property">status</span><span class="operator">:</span> <span class="string">'confirmed'</span>
+      <span class="punctuation">})</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">);</span>
+
+  <span class="keyword">if</span> <span class="punctuation">(</span><span class="operator">!</span><span class="variable">response</span><span class="punctuation">.</span><span class="variable">ok</span><span class="punctuation">)</span> <span class="punctuation">{</span>
+    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="class-name">Error</span><span class="punctuation">(</span><span class="string">'Failed to bulk confirm orders'</span><span class="punctuation">);</span>
+  <span class="punctuation">}</span>
+
+  <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable">response</span><span class="punctuation">.</span><span class="function">json</span><span class="punctuation">();</span>
+<span class="punctuation">};</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Status Flow</h2>
+            <div class="info-box">
+                <strong>📊 Pending Order Status Options:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><code>pending</code> - Initial state, awaiting confirmation</li>
+                    <li><code>confirmed</code> - Order confirmed by sales team</li>
+                    <li><code>cancelled</code> - Order cancelled (with reason)</li>
+                    <li><code>failed</code> - Order processing failed</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Response Formats</h2>
+
+            <h3 style="color: #1976d2; margin: 20px 0 10px; font-size: 1.1em;">Success Response</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="file-path">response.json</div>
+                </div>
+                <div class="code-block-content"><span class="punctuation">{</span>
+  <span class="property">"success"</span><span class="operator">:</span> <span class="keyword">true</span><span class="punctuation">,</span>
+  <span class="property">"data"</span><span class="operator">:</span> <span class="punctuation">[</span>
+    <span class="punctuation">{</span>
+      <span class="property">"id"</span><span class="operator">:</span> <span class="number">1</span><span class="punctuation">,</span>
+      <span class="property">"order_number"</span><span class="operator">:</span> <span class="string">"SO-2024-001"</span><span class="punctuation">,</span>
+      <span class="property">"customer"</span><span class="operator">:</span> <span class="punctuation">{</span>
+        <span class="property">"id"</span><span class="operator">:</span> <span class="number">5</span><span class="punctuation">,</span>
+        <span class="property">"name"</span><span class="operator">:</span> <span class="string">"John Doe"</span>
+      <span class="punctuation">},</span>
+      <span class="property">"order_date"</span><span class="operator">:</span> <span class="string">"2024-01-15T10:30:00Z"</span><span class="punctuation">,</span>
+      <span class="property">"status"</span><span class="operator">:</span> <span class="string">"pending"</span><span class="punctuation">,</span>
+      <span class="property">"total_amount"</span><span class="operator">:</span> <span class="number">1500.00</span><span class="punctuation">,</span>
+      <span class="property">"items"</span><span class="operator">:</span> <span class="punctuation">[</span>
+        <span class="punctuation">{</span>
+          <span class="property">"product_id"</span><span class="operator">:</span> <span class="number">10</span><span class="punctuation">,</span>
+          <span class="property">"name"</span><span class="operator">:</span> <span class="string">"Product A"</span><span class="punctuation">,</span>
+          <span class="property">"quantity"</span><span class="operator">:</span> <span class="number">5</span><span class="punctuation">,</span>
+          <span class="property">"price"</span><span class="operator">:</span> <span class="number">300.00</span>
+        <span class="punctuation">}</span>
+      <span class="punctuation">]</span>
+    <span class="punctuation">}</span>
+  <span class="punctuation">],</span>
+  <span class="property">"pagination"</span><span class="operator">:</span> <span class="punctuation">{</span>
+    <span class="property">"total"</span><span class="operator">:</span> <span class="number">45</span><span class="punctuation">,</span>
+    <span class="property">"page"</span><span class="operator">:</span> <span class="number">1</span><span class="punctuation">,</span>
+    <span class="property">"limit"</span><span class="operator">:</span> <span class="number">10</span>
+  <span class="punctuation">}</span>
+<span class="punctuation">}</span></div>
+            </div>
+
+            <h3 style="color: #1976d2; margin: 20px 0 10px; font-size: 1.1em;">Error Response</h3>
+            <div class="code-block">
+                <div class="code-block-header">
+                    <div class="dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="file-path">error.json</div>
+                </div>
+                <div class="code-block-content"><span class="punctuation">{</span>
+  <span class="property">"success"</span><span class="operator">:</span> <span class="keyword">false</span><span class="punctuation">,</span>
+  <span class="property">"message"</span><span class="operator">:</span> <span class="string">"Failed to fetch pending orders"</span><span class="punctuation">,</span>
+  <span class="property">"error"</span><span class="operator">:</span> <span class="string">"Unauthorized access"</span>
+<span class="punctuation">}</span></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Permissions</h2>
+            <div class="success-box">
+                <strong>✅ Required Permissions:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li><code>sales.orders.view</code> - View pending orders</li>
+                    <li><code>sales.orders.edit</code> - Edit and confirm orders</li>
+                    <li><code>sales.orders.delete</code> - Delete orders</li>
+                    <li><code>sales.delivery.update</code> - Update order status</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Best Practices</h2>
+            <div class="warning-box">
+                <strong>⚠️ Important Notes:</strong>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>Always confirm order details before changing status from pending</li>
+                    <li>Pending orders can only be edited when status is "pending"</li>
+                    <li>Once confirmed, orders cannot be deleted, only cancelled</li>
+                    <li>Provide cancellation reasons when cancelling pending orders</li>
+                    <li>Use bulk actions carefully - affects all selected orders</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

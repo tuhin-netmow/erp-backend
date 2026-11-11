@@ -1,0 +1,1996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .header h1 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+
+        .header p {
+            margin: 0;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+
+        .card h3 {
+            color: #555;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-left: 4px solid #667eea;
+            padding-left: 15px;
+        }
+
+        .card h4 {
+            color: #667eea;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .endpoint-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 8px;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+
+        .back-link:hover {
+            background: #5568d3;
+        }
+
+        pre.code-block, pre.sql-block {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .code-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #00ff9d;
+            line-height: 1.6;
+        }
+
+        pre.sql-block {
+            background: #1e3a5f;
+        }
+
+        .sql-block code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #61dafb;
+            line-height: 1.6;
+        }
+
+        .file-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 4px;
+            font-size: 11px;
+            font-family: monospace;
+            margin-left: 10px;
+        }
+
+        .response-box {
+            background: #f0fff4;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .error-box {
+            background: #fff5f5;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .response-box code, .error-box code {
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #333;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge-public {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-protected {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+            margin-left: 10px;
+        }
+
+        .badge-admin {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+            margin-left: 10px;
+        }
+
+        .badge-post {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-get {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #007bff;
+            color: white;
+        }
+
+        .badge-put {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #ffc107;
+            color: #333;
+        }
+
+        .badge-delete {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #dc3545;
+            color: white;
+        }
+
+        .badge-patch {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            background: #17a2b8;
+            color: white;
+        }
+
+        .expandable-header {
+            background: #e9ecef;
+            padding: 12px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .expandable-header:hover {
+            background: #dee2e6;
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .expandable-content.active {
+            max-height: 2000px;
+        }
+
+        .expandable-toggle {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .request-item {
+            background: #f0f9f8;
+            padding: 15px;
+            border-left: 3px solid #667eea;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .request-url {
+            font-family: 'Courier New', monospace;
+            background: #e8f5f3;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: #667eea;
+            font-size: 13px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .info-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .route-item {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            transition: transform 0.2s;
+        }
+
+        .route-item:hover {
+            transform: translateX(5px);
+        }
+
+        .route-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 18px;
+            border: none;
+            padding: 0;
+        }
+
+        .route-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 10px;
+        }
+
+        .method-get {
+            background: #28a745;
+            color: white;
+        }
+
+        .method-post {
+            background: #007bff;
+            color: white;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-patch {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .method-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .route-path {
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .route-desc {
+            margin: 10px 0 0 0;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .route-group {
+            margin-bottom: 30px;
+        }
+
+        .route-group-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        .endpoint-url {
+            background: #f8f9fa;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+            display: inline-block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Module Index</a>
+
+        <div class="header">
+            <h1>📦 Purchase Module</h1>
+            <p>Complete purchase order management system including procurement, invoices, payments, and goods receipt with automatic stock updates</p>
+        </div>
+
+        <!-- ==================== API ROUTES ==================== -->
+        <div class="card">
+            <h2>📋 API Routes</h2>
+
+            <div class="route-group">
+                <div class="route-group-title">📌 Purchase Orders</div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders</span></h3>
+                    <p class="route-desc">Get all purchase orders with pagination, filters by status, supplier, and search</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/approved</span></h3>
+                    <p class="route-desc">Get approved purchase orders ready for processing</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/:id</span></h3>
+                    <p class="route-desc">Get purchase order details with items, supplier, invoices, and payments</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-post">POST</span><span class="route-path">/api/purchase/orders</span></h3>
+                    <p class="route-desc">Create new purchase order with auto-generated PO number and tax calculations</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-put">PUT</span><span class="route-path">/api/purchase/orders/:id</span></h3>
+                    <p class="route-desc">Update purchase order status and details</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-delete">DELETE</span><span class="route-path">/api/purchase/orders/:id</span></h3>
+                    <p class="route-desc">Delete purchase order and associated items</p>
+                </div>
+            </div>
+
+            <div class="route-group">
+                <div class="route-group-title">📌 Purchase Invoices</div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/invoices</span></h3>
+                    <p class="route-desc">Get all purchase invoices with purchase order details</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/invoices/:id</span></h3>
+                    <p class="route-desc">Get purchase invoice details by ID</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-post">POST</span><span class="route-path">/api/purchase/orders/invoices</span></h3>
+                    <p class="route-desc">Create purchase invoice from purchase order with auto-numbering</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-patch">PATCH</span><span class="route-path">/api/purchase/orders/invoices/:id</span></h3>
+                    <p class="route-desc">Update purchase invoice status and due date</p>
+                </div>
+            </div>
+
+            <div class="route-group">
+                <div class="route-group-title">📌 Purchase Payments</div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/payments</span></h3>
+                    <p class="route-desc">Get all purchase payments with filters</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/orders/payments/:id</span></h3>
+                    <p class="route-desc">Get purchase payment details by ID</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-post">POST</span><span class="route-path">/api/purchase/orders/payments</span></h3>
+                    <p class="route-desc">Record payment for purchase order with accounting integration</p>
+                </div>
+            </div>
+
+            <div class="route-group">
+                <div class="route-group-title">📌 Goods Receipt & Map</div>
+                <div class="route-item">
+                    <h3><span class="route-method method-post">POST</span><span class="route-path">/api/purchase/orders/:id/receive</span></h3>
+                    <p class="route-desc">Record goods receipt and automatically update stock with weighted average cost</p>
+                </div>
+                <div class="route-item">
+                    <h3><span class="route-method method-get">GET</span><span class="route-path">/api/purchase/maps</span></h3>
+                    <p class="route-desc">Get purchase orders with supplier coordinates for map display</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== POST CREATE PURCHASE ORDER ==================== -->
+        <div class="section-header">📌 CREATE PURCHASE ORDER (POST)</div>
+
+        <div class="card">
+            <h2>POST /api/purchase/orders <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Create a new purchase order with items, auto-generated PO number, and automatic tax calculations</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant validate
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: POST /api/purchase/orders
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'purchase' access
+    moduleCheck->>Router: Access Granted
+    Router->>validate: validate(createPurchaseOrder)
+    validate->>Controller: Validation Passed
+    Controller->>Service: createPurchaseOrder(data, userId)
+    Service->>Service: Validate items array
+    Service->>Service: Generate PO number
+    Service->>Service: Fetch products
+    Service->>Service: Calculate totals & tax
+    Service->>Repository: create(orderData, items)
+    Repository->>Database: BEGIN TRANSACTION
+    Database->>Repository: INSERT purchase_orders
+    Repository->>Database: INSERT purchase_order_items
+    Repository->>Database: COMMIT
+    Repository->>Service: Purchase order object
+    Service->>Controller: Order result
+    Controller->>Client: 201 Success Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'purchase' access]
+                ModuleCheck -->|Access Granted| Validate[Validate Request Body]
+                Validate -->|Validation Passed| Controller[Purchase Controller]
+                Controller -->|Business Logic| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Create Purchase Order Flow
+                subgraph "Create Purchase Order Process"
+                CreatePO[POST /api/purchase/orders] --> Validate[Service - Validate Items]
+                Validate -->|Valid| GenPO[Service - Generate PO Number]
+                GenPO --> Fetch[Service - Fetch Products]
+                Fetch --> Calc[Service - Calculate Totals and Tax]
+                Calc --> Create[Repository - create]
+                Create -->|BEGIN TRANSACTION| Trans[Transaction Start]
+                Trans -->|INSERT orders| OrdersDB[(purchase_orders table)]
+                OrdersDB -->|INSERT items| ItemsDB[(purchase_order_items table)]
+                ItemsDB -->|COMMIT| Commit[Transaction Complete]
+                Commit --> POObj[Repository - Purchase Order Object]
+                POObj --> Response[Controller - Send Response - 201]
+                end
+            </div>
+
+            <h3>Validation Rules</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Constraints</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>supplier_id</td>
+                        <td>integer</td>
+                        <td>Yes</td>
+                        <td>Integer, positive, must exist in suppliers</td>
+                    </tr>
+                    <tr>
+                        <td>items</td>
+                        <td>array</td>
+                        <td>Yes</td>
+                        <td>Minimum 1 item</td>
+                    </tr>
+                    <tr>
+                        <td>items[].product_id</td>
+                        <td>integer</td>
+                        <td>Yes</td>
+                        <td>Integer, positive, must exist in products</td>
+                    </tr>
+                    <tr>
+                        <td>items[].quantity</td>
+                        <td>integer</td>
+                        <td>Yes</td>
+                        <td>Integer, positive (min: 1)</td>
+                    </tr>
+                    <tr>
+                        <td>items[].unit_cost</td>
+                        <td>decimal</td>
+                        <td>Yes</td>
+                        <td>Positive (min: 0)</td>
+                    </tr>
+                    <tr>
+                        <td>items[].discount</td>
+                        <td>decimal</td>
+                        <td>No</td>
+                        <td>Minimum 0</td>
+                    </tr>
+                    <tr>
+                        <td>order_date</td>
+                        <td>string</td>
+                        <td>No</td>
+                        <td>Date string (default: today)</td>
+                    </tr>
+                    <tr>
+                        <td>expected_delivery_date</td>
+                        <td>string</td>
+                        <td>No</td>
+                        <td>Date string</td>
+                    </tr>
+                    <tr>
+                        <td>notes</td>
+                        <td>text</td>
+                        <td>No</td>
+                        <td>Text</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="info-box">
+                <strong>Automatic Calculations:</strong> The system automatically calculates <code>total_amount</code>, <code>tax_amount</code> (based on product purchase_tax), <code>discount_amount</code>, and <code>grand_total</code> from the items provided.
+            </div>
+
+            <div class="warning-box">
+                <strong>PO Number Generation:</strong> If <code>po_number</code> is not provided, the system automatically generates one using the numbering settings (e.g., PO-1234567890-ABC).
+            </div>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: purchase.controller.js:56
+async createPurchaseOrder(req, res) {
+    try {
+        const po = await PurchaseService.createPurchaseOrder(req.body, req.user.id);
+        return success(res, 'Purchase order created successfully', po, 201);
+    } catch (err) {
+        return error(res, err.message, 400);
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: purchase.service.js:174
+async createPurchaseOrder(data, userId) {
+    let { items, ...orderInfo } = data;
+
+    // Validate items
+    if (!Array.isArray(items) || items.length === 0) {
+        throw new Error('Purchase order must contain at least one item');
+    }
+
+    // Generate PO number using prefix settings
+    let po_number = data.po_number;
+    if (!po_number) {
+        try {
+            const { generateNumber } = require('../settings/numbering.helper');
+            po_number = await generateNumber('purchase_order');
+        } catch (err) {
+            console.error('Error generating PO number:', err);
+            po_number = `PO-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+        }
+    }
+
+    let total_amount = 0;
+    let discount_amount = 0;
+    let tax_amount = 0;
+
+    // Fetch all products in one query
+    const productIds = items.map(i => i.product_id);
+    const products = await ProductRepository.findByIds(productIds);
+    const productMap = new Map(products.map(p => [String(p.id), p]));
+
+    // Process items
+    const processedItems = items.map(item => {
+        const quantity = Number(item.quantity) || 0;
+        const unit_cost = Number(item.unit_cost) || 0;
+        const discount = Number(item.discount) || 0;
+
+        if (quantity <= 0 || unit_cost < 0) {
+            throw new Error('Invalid quantity or unit cost');
+        }
+
+        const product = productMap.get(String(item.product_id));
+        if (!product) {
+            throw new Error(`Product not found: ${item.product_id}`);
+        }
+
+        const purchase_tax_percent = Number(product.purchase_tax) || 0;
+        const subtotal = quantity * unit_cost;
+        const line_total = Math.max(subtotal - discount, 0);
+        const item_tax_amount = (line_total * purchase_tax_percent) / 100;
+
+        discount_amount += discount;
+        total_amount += line_total;
+        tax_amount += item_tax_amount;
+
+        return {
+            ...item,
+            quantity,
+            unit_cost,
+            discount,
+            tax_amount: item_tax_amount,
+            purchase_tax_percent
+        };
+    });
+
+    // Prepare order data
+    const orderData = {
+        ...orderInfo,
+        po_number,
+        total_amount,
+        discount_amount,
+        tax_amount,
+        grand_total: total_amount + tax_amount,
+        created_by: userId
+    };
+
+    return await PurchaseOrderRepository.create(orderData, processedItems);
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: purchase.repository.js
+async create(orderData, itemsData) {
+    const transaction = await sequelize.transaction();
+
+    try {
+        const order = await PurchaseOrder.create(orderData, { transaction });
+
+        const items = itemsData.map(item => {
+            const discount = item.discount || 0;
+            const subtotal = item.quantity * item.unit_cost;
+            const line_total = subtotal - discount;
+
+            return {
+                ...item,
+                purchase_order_id: order.id,
+                discount: discount,
+                line_total: line_total,
+                tax_amount: item.tax_amount || 0,
+                purchase_tax_percent: item.purchase_tax_percent || 0
+            };
+        });
+
+        if (items.length > 0) {
+            await PurchaseOrderItem.bulkCreate(items, { transaction });
+        }
+
+        await transaction.commit();
+        return await this.findById(order.id);
+    } catch (error) {
+        await transaction.rollback();
+        throw error;
+    }
+}
+
+SQL Equivalent:
+BEGIN TRANSACTION;
+
+INSERT INTO purchase_orders (
+    po_number, supplier_id, order_date, expected_delivery_date,
+    total_amount, discount_amount, tax_amount, grand_total,
+    status, notes, created_by
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+INSERT INTO purchase_order_items (
+    purchase_order_id, product_id, quantity, unit_cost,
+    discount, line_total, tax_amount, purchase_tax_percent
+)
+VALUES
+    (?, ?, ?, ?, ?, ?, ?, ?),
+    (?, ?, ?, ?, ?, ?, ?, ?);
+
+COMMIT;</code></pre>
+
+            <h3>Database Tables</h3>
+            <ul>
+                <li><code>purchase_orders</code> - Main purchase order table</li>
+                <li><code>purchase_order_items</code> - Line items for each purchase order</li>
+                <li><code>suppliers</code> - Supplier information (FK reference)</li>
+                <li><code>products</code> - Product information for tax calculation</li>
+            </ul>
+
+            <h3>Sample Payload</h3>
+            <pre class="code-block"><code>{
+    "supplier_id": 1,
+    "order_date": "2025-12-02",
+    "expected_delivery_date": "2025-12-15",
+    "notes": "Regular monthly stock",
+    "items": [
+        {
+            "product_id": 5,
+            "quantity": 100,
+            "unit_cost": 45.00,
+            "discount": 50.00
+        },
+        {
+            "product_id": 10,
+            "quantity": 50,
+            "unit_cost": 20.00
+        }
+    ]
+}</code></pre>
+
+            <h3>Success Response</h3>
+            <div class="response-box">
+                <strong>201 Created</strong>
+                <code>{
+    "status": true,
+    "message": "Purchase order created successfully",
+    "data": {
+        "id": 1,
+        "po_number": "PO-1733131375000-ABC123",
+        "supplier_id": 1,
+        "order_date": "2025-12-02T00:00:00.000Z",
+        "expected_delivery_date": "2025-12-15T00:00:00.000Z",
+        "total_amount": 5400.00,
+        "discount_amount": 50.00,
+        "tax_amount": 535.00,
+        "grand_total": 5935.00,
+        "status": "pending",
+        "notes": "Regular monthly stock",
+        "created_by": 1,
+        "created_at": "2025-12-02T10:00:00.000Z",
+        "updated_at": "2025-12-02T10:00:00.000Z"
+    }
+}</code>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>400 Bad Request - No Items</strong>
+                <code>{
+    "status": false,
+    "message": "Purchase order must contain at least one item"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Product Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Product not found: 999"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>400 Bad Request - Invalid Quantity</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid quantity or unit cost"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET ALL PURCHASE ORDERS ==================== -->
+        <div class="section-header">📌 GET ALL PURCHASE ORDERS (GET)</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/orders <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all purchase orders with pagination, filtering, and calculated financial totals</p>
+
+            <h3>Request Flow</h3>
+            <div class="mermaid">
+sequenceDiagram
+    participant Client
+    participant Router
+    participant verifyToken
+    participant moduleCheck
+    participant Controller
+    participant Service
+    participant Repository
+    participant Database
+
+    Client->>Router: GET /api/purchase/orders?filters
+    Router->>verifyToken: Verify JWT Token
+    verifyToken->>Router: Token Valid
+    Router->>moduleCheck: Check 'purchase' access
+    moduleCheck->>Controller: Access OK
+    Controller->>Controller: Parse query params
+    Controller->>Service: getAllPurchaseOrders(filters, page, limit)
+    Service->>Service: Calculate offset
+    Service->>Repository: findAll(filters, limit, offset)
+    Repository->>Database: SELECT with JOINs & subqueries
+    Database->>Repository: { count, rows }
+    Repository->>Service: Raw orders data
+    Service->>Service: Calculate totals for each order
+    Service->>Service: Calculate payments & dues
+    Service->>Controller: { data, total }
+    Controller->>Client: Paginated Response
+            </div>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET + JWT| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken Middleware| Verify[Verify JWT Token]
+                Verify -->|Token Valid| ModuleCheck[Check 'purchase' access]
+                ModuleCheck -->|Access OK| Controller[Purchase Controller]
+                Controller -->|Parse Params| Parse[Parse Query Params]
+                Parse -->|page, limit, filters| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                Repository -->|Sequelize Query| DB[(MySQL Database)]
+
+                %% Get All Purchase Orders Flow
+                subgraph "Get All Purchase Orders Process"
+                GetAll[GET /api/purchase/orders] --> FindAll[Repository - findAll]
+                FindAll -->|SELECT + JOINs + subqueries| OrdersDB[(purchase_orders + suppliers + items)]
+                OrdersDB --> Result[Repository - Count + Rows]
+                Result --> CalcTotals[Service - Calculate Totals]
+                CalcTotals -->|For each order| CalcPrices[Service - Calculate Item Totals]
+                CalcPrices --> CalcPaid[Service - Calculate Payments and Dues]
+                CalcPaid --> Response[Controller - Send Paginated Response]
+                end
+            </div>
+
+            <h3>Request Headers</h3>
+            <pre class="code-block"><code>{
+    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</code></pre>
+
+            <h3>Controller Logic</h3>
+            <pre class="code-block"><code>File: purchase.controller.js:6
+async getPurchaseOrders(req, res) {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const filters = {
+            status: req.query.status,
+            supplier_id: req.query.supplier_id,
+            search: req.query.search
+        };
+
+        const result = await PurchaseService.getAllPurchaseOrders(filters, page, limit);
+        return successWithPagination(res, 'Purchase orders retrieved successfully', result.data, {
+            total: result.total,
+            page,
+            limit
+        });
+    } catch (err) {
+        return error(res, err.message, 500);
+    }
+}</code></pre>
+
+            <h3>Service Logic</h3>
+            <pre class="code-block"><code>File: purchase.service.js:6
+async getAllPurchaseOrders(filters = {}, page = 1, limit = 10) {
+    const offset = (page - 1) * limit;
+    const result = await PurchaseOrderRepository.findAll(filters, limit, offset);
+
+    const data = result.rows.map(row => {
+        const order = row.get({ plain: true });
+
+        // Calculate total_price for each item
+        if (order.items && order.items.length > 0) {
+            order.items = order.items.map(item => ({
+                ...item,
+                total_price: parseFloat(item.unit_cost || 0) * parseInt(item.quantity || 0)
+            }));
+
+            // Recalculate total_amount
+            order.total_amount = order.items.reduce((sum, item) => sum + item.total_price, 0);
+        }
+
+        const totalAmount = parseFloat(order.total_amount || 0);
+        const discountAmount = parseFloat(order.discount_amount || 0);
+        const taxAmount = parseFloat(order.tax_amount || 0);
+        const paid = parseFloat(order.total_paid_amount || 0);
+
+        // Calculate net_amount, total_payable_amount, total_due_amount
+        const netAmount = totalAmount - discountAmount;
+        const totalPayableAmount = totalAmount - discountAmount + taxAmount;
+        const totalDueAmount = totalPayableAmount - paid;
+
+        return {
+            ...order,
+            total_amount: totalAmount,
+            net_amount: netAmount,
+            total_payable_amount: totalPayableAmount,
+            total_paid_amount: paid,
+            total_due_amount: totalDueAmount > 0 ? totalDueAmount : 0
+        };
+    });
+
+    return { data, total: result.count };
+}</code></pre>
+
+            <h3>Repository Logic</h3>
+            <pre class="sql-block"><code>File: purchase.repository.js
+async findAll(filters = {}, limit = 10, offset = 0) {
+    const where = {};
+
+    if (filters.status) where.status = filters.status;
+    if (filters.supplier_id) where.supplier_id = filters.supplier_id;
+
+    if (filters.search) {
+        where[Op.or] = [
+            { po_number: { [Op.like]: `%${filters.search}%` } }
+        ];
+    }
+
+    return await PurchaseOrder.findAndCountAll({
+        attributes: {
+            include: [
+                [
+                    sequelize.literal(`(
+                        SELECT COALESCE(SUM(pp.amount), 0)
+                        FROM purchase_payments AS pp
+                        WHERE pp.purchase_order_id = PurchaseOrder.id
+                    )`),
+                    'total_paid_amount'
+                ]
+            ]
+        },
+        where,
+        limit,
+        offset,
+        include: [
+            {
+                model: PurchaseOrderItem,
+                as: 'items'
+            },
+            {
+                model: Supplier,
+                as: 'supplier',
+                attributes: ['id', 'name']
+            },
+            {
+                model: PurchaseInvoice,
+                as: 'invoice',
+                attributes: ['id', 'invoice_number']
+            }
+        ],
+        order: [['created_at', 'DESC']],
+        distinct: true
+    });
+}
+
+SQL Equivalent:
+SELECT
+    po.*,
+    (
+        SELECT COALESCE(SUM(pp.amount), 0)
+        FROM purchase_payments AS pp
+        WHERE pp.purchase_order_id = po.id
+    ) AS total_paid_amount,
+    s.id AS supplier.id, s.name AS supplier.name
+FROM purchase_orders AS po
+LEFT JOIN suppliers AS s ON s.id = po.supplier_id
+LEFT JOIN purchase_order_items AS poi ON poi.purchase_order_id = po.id
+LEFT JOIN purchase_invoices AS pi ON pi.purchase_order_id = po.id
+WHERE po.status = ?
+ORDER BY po.created_at DESC
+LIMIT ? OFFSET ?;</code></pre>
+
+            <h3>Query Parameters</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>page</td>
+                        <td>integer</td>
+                        <td>1</td>
+                        <td>Page number</td>
+                    </tr>
+                    <tr>
+                        <td>limit</td>
+                        <td>integer</td>
+                        <td>10</td>
+                        <td>Items per page</td>
+                    </tr>
+                    <tr>
+                        <td>status</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Filter by status (pending, approved, ordered, partial, received, cancelled)</td>
+                    </tr>
+                    <tr>
+                        <td>supplier_id</td>
+                        <td>integer</td>
+                        <td>-</td>
+                        <td>Filter by supplier ID</td>
+                    </tr>
+                    <tr>
+                        <td>search</td>
+                        <td>string</td>
+                        <td>-</td>
+                        <td>Search by PO number</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Multiple Requests & Responses</h3>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>1. List All Purchase Orders (Paginated)</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/orders?page=1&limit=10</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase orders retrieved successfully",
+    "pagination": {
+        "total": 10,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "po_number": "PO-1733130000000-123",
+            "supplier_id": 1,
+            "total_amount": 4500.00,
+            "discount_amount": 50.00,
+            "tax_amount": 445.00,
+            "net_amount": 4450.00,
+            "total_payable_amount": 4895.00,
+            "total_paid_amount": 2000.00,
+            "total_due_amount": 2895.00,
+            "status": "pending",
+            "items": [
+                {
+                    "id": 1,
+                    "product_id": 5,
+                    "quantity": 100,
+                    "unit_cost": 45.00,
+                    "discount": 50.00,
+                    "line_total": 4450.00,
+                    "total_price": 4450.00
+                }
+            ],
+            "supplier": { "id": 1, "name": "ABC Supplies" },
+            "created_at": "2025-12-02T10:00:00.000Z"
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>2. Filter by Status</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/orders?status=approved</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase orders retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "po_number": "PO-1733130000100-456",
+            "supplier_id": 1,
+            "status": "approved",
+            "total_amount": 2500.00,
+            "net_amount": 2500.00,
+            "total_payable_amount": 2750.00,
+            "total_paid_amount": 0,
+            "total_due_amount": 2750.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>3. Filter by Supplier</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/orders?supplier_id=1</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase orders retrieved successfully",
+    "pagination": {
+        "total": 5,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "po_number": "PO-1733130000000-123",
+            "supplier_id": 1,
+            "status": "pending",
+            "total_payable_amount": 4895.00,
+            "total_due_amount": 2895.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        },
+        {
+            "id": 2,
+            "po_number": "PO-1733130000100-456",
+            "supplier_id": 1,
+            "status": "approved",
+            "total_payable_amount": 2750.00,
+            "total_due_amount": 2750.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>4. Search by PO Number</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/orders?search=PO-1733130000000</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase orders retrieved successfully",
+    "pagination": {
+        "total": 1,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "po_number": "PO-1733130000000-123",
+            "supplier_id": 1,
+            "status": "pending",
+            "total_payable_amount": 4895.00,
+            "total_due_amount": 2895.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expandable-header" onclick="toggleExpandable(this)">
+                <span>5. Combined Filters</span>
+                <span class="expandable-toggle">+</span>
+            </div>
+            <div class="expandable-content">
+                <div class="request-item">
+                    <p><strong>Request:</strong></p>
+                    <span class="request-url">GET /api/purchase/orders?status=pending&supplier_id=1&page=1&limit=5</span>
+
+                    <p style="margin-top: 15px;"><strong>Response:</strong></p>
+                    <div class="response-box">
+                        <code>{
+    "success": true,
+    "message": "Purchase orders retrieved successfully",
+    "pagination": {
+        "total": 2,
+        "page": 1,
+        "limit": 5,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 1,
+            "po_number": "PO-1733130000000-123",
+            "supplier_id": 1,
+            "status": "pending",
+            "total_payable_amount": 4895.00,
+            "total_due_amount": 2895.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        }
+    ]
+}</code>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Error Responses</h3>
+            <div class="error-box">
+                <strong>401 Unauthorized</strong>
+                <code>{
+    "status": false,
+    "message": "Invalid token"
+}</code>
+            </div>
+
+            <div class="error-box">
+                <strong>500 Internal Server Error</strong>
+                <code>{
+    "status": false,
+    "message": "Database connection failed"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET APPROVED PURCHASE ORDERS ==================== -->
+        <div class="section-header">📌 GET APPROVED PURCHASE ORDERS</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/orders/approved <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Retrieve all purchase orders with status "approved"</p>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Controller]
+                Controller -->|getApprovedOrders| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                subgraph "Fetch Approved Orders"
+                GetApproved[GET /api/purchase/orders/approved] -->|Parse Query| Parse[Controller - Parse Query]
+                Parse -->|page, limit, search| FindApproved[Service - Find Approved Orders]
+                FindApproved -->|WHERE status = approved| RepoQuery[Repository - FindAll]
+                RepoQuery -->|SELECT with JOIN| DB[(MySQL Database)]
+
+                DB -->|Orders Array| ProcessData[Service - Process Data]
+                ProcessData -->|For Each Order| CalcItemTotal[Service - Calculate Item Totals]
+                ProcessData -->|For Each Order| CalcPayment[Service - Calculate Payments]
+                ProcessData -->|For Each Order| CalcDue[Service - Calculate Due]
+
+                CalcItemTotal --> Response[Controller - Send Response]
+                CalcPayment --> Response
+                CalcDue --> Response
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/purchase/orders/approved</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "success": true,
+    "message": "Approved purchase orders retrieved successfully",
+    "pagination": {
+        "total": 3,
+        "page": 1,
+        "limit": 10,
+        "totalPage": 1
+    },
+    "data": [
+        {
+            "id": 2,
+            "po_number": "PO-1733130000100-456",
+            "supplier_id": 1,
+            "status": "approved",
+            "total_payable_amount": 2750.00,
+            "total_due_amount": 2750.00,
+            "supplier": { "id": 1, "name": "ABC Supplies" }
+        }
+    ]
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GET PURCHASE ORDER BY ID ==================== -->
+        <div class="section-header">📌 GET PURCHASE ORDER BY ID</div>
+
+        <div class="card">
+            <h2>GET /api/purchase/orders/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h4>URL Parameters</h4>
+            <table>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Purchase order ID</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP GET| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Controller]
+                Controller -->|getOrderById| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                subgraph "Fetch Order By ID"
+                GetByID[GET /api/purchase/orders/:id] -->|Extract id| ParamID[Controller - Extract ID]
+                ParamID --> ValidateID[Service - Validate ID]
+                ValidateID -->|id = req.params| FindOrder[Service - Find Order]
+                FindOrder -->|findByPk with INCLUDE| RepoQuery[Repository - FindByPk]
+                RepoQuery -->|LEFT JOINs| DB[(MySQL Database)]
+
+                DB -->|Order or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| Process[Service - Process Data]
+
+                Process -->|Include Items| Items[Service - Include Items]
+                Process -->|Include Supplier| Supplier[Service - Include Supplier]
+                Process -->|Calculate Totals| Totals[Service - Calculate Totals]
+                Process -->|Include Payments| Payments[Service - Include Payments]
+                Process -->|Calculate Due| Due[Service - Calculate Due]
+
+                Items --> Response[Controller - Send Response]
+                Supplier --> Response
+                Totals --> Response
+                Payments --> Response
+                Due --> Response
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>GET /api/purchase/orders/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase order retrieved successfully",
+    "data": {
+        "id": 1,
+        "po_number": "PO-1733130000000-123",
+        "supplier_id": 1,
+        "order_date": "2025-12-02T00:00:00.000Z",
+        "expected_delivery_date": "2025-12-15T00:00:00.000Z",
+        "total_amount": 4500.00,
+        "discount_amount": 50.00,
+        "tax_amount": 445.00,
+        "net_amount": 4450.00,
+        "total_payable_amount": 4895.00,
+        "total_paid_amount": 2000.00,
+        "total_due_amount": 2895.00,
+        "status": "pending",
+        "notes": "Regular monthly stock",
+        "created_at": "2025-12-02T10:00:00.000Z",
+        "updated_at": "2025-12-02T10:00:00.000Z",
+        "supplier": {
+            "id": 1,
+            "name": "ABC Supplies",
+            "email": "contact@abcsupplies.com",
+            "phone": "+1234567890"
+        },
+        "items": [
+            {
+                "id": 1,
+                "product_id": 5,
+                "quantity": 100,
+                "unit_cost": 45.00,
+                "discount": 50.00,
+                "line_total": 4450.00,
+                "tax_amount": 445.00,
+                "total_price": 4450.00,
+                "product": {
+                    "id": 5,
+                    "name": "Product A",
+                    "sku": "PRD-A-001"
+                }
+            }
+        ],
+        "invoice": {
+            "id": 1,
+            "invoice_number": "PINV-1733130000000-123",
+            "total_amount": 4895.00,
+            "status": "pending"
+        },
+        "payments": [
+            {
+                "id": 1,
+                "amount": 2000.00,
+                "payment_method": "BANK_TRANSFER",
+                "payment_date": "2025-12-05T00:00:00.000Z",
+                "status": "completed"
+            }
+        ]
+    }
+}</code>
+            </div>
+
+            <h4>Error Response</h4>
+            <div class="error-box">
+                <strong>404 Not Found</strong>
+                <code>{
+    "status": false,
+    "message": "Purchase order not found"
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== UPDATE PURCHASE ORDER ==================== -->
+        <div class="section-header">📌 UPDATE PURCHASE ORDER</div>
+
+        <div class="card">
+            <h2>PUT /api/purchase/orders/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>status</td>
+                    <td>string</td>
+                    <td>No</td>
+                    <td>New status (pending, approved, ordered, partial, received, cancelled)</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>text</td>
+                    <td>No</td>
+                    <td>Additional notes</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP PUT| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Controller]
+                Controller -->|updateOrder| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                subgraph "Update Order"
+                UpdateOrder[PUT /api/purchase/orders/:id] -->|Extract id| ExtractID[Controller - Extract ID]
+                ExtractID -->|Extract body| BodyData[Controller - Request Body]
+
+                BodyData --> Validate[Service - Validate Request]
+                Validate --> FindOrder[Service - Find Order]
+                FindOrder -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Order or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| PrepareUpdate[Service - Prepare Update Data]
+
+                PrepareUpdate -->|Build updates object| UpdateRepo[Repository - Update]
+                UpdateRepo -->|UPDATE orders| DBUpdate[(MySQL Database)]
+
+                DBUpdate -->|Updated Order| FetchUpdated[Repository - FindByPk]
+                FetchUpdated -->|Get Updated Order| Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>PUT /api/purchase/orders/1
+
+{
+    "status": "approved",
+    "notes": "Order approved by management"
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase order updated successfully",
+    "data": {
+        "id": 1,
+        "po_number": "PO-1733130000000-123",
+        "status": "approved",
+        "notes": "Order approved by management",
+        "updated_at": "2025-12-02T11:00:00.000Z"
+    }
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== DELETE PURCHASE ORDER ==================== -->
+        <div class="section-header">📌 DELETE PURCHASE ORDER</div>
+
+        <div class="card">
+            <h2>DELETE /api/purchase/orders/:id <span class="badge-protected">🔒 Protected</span></h2>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP DELETE| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Controller]
+                Controller -->|deleteOrder| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                subgraph "Delete Order"
+                DeleteOrder[DELETE /api/purchase/orders/:id] -->|Extract id| ExtractID[Controller - Extract ID]
+                ExtractID --> Validate[Service - Validate ID]
+                Validate --> FindOrder[Service - Find Order]
+                FindOrder -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Order or Null| CheckExist[Service - Check Exists]
+                CheckExist -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckExist -->|Found| DeleteRepo[Repository - Delete]
+                DeleteRepo -->|DELETE FROM orders| DBDelete[(MySQL Database)]
+
+                DBDelete -->|Delete Result| Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>DELETE /api/purchase/orders/1</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Purchase order deleted successfully",
+    "data": null
+}</code>
+            </div>
+        </div>
+
+        <!-- ==================== GOODS RECEIPT ==================== -->
+        <div class="section-header">📌 GOODS RECEIPT</div>
+
+        <div class="card">
+            <h2>POST /api/purchase/orders/:id/receive <span class="badge-protected">🔒 Protected</span></h2>
+            <p>Record goods receipt and automatically update stock with weighted average cost calculation</p>
+
+            <h4>Request Body</h4>
+            <table>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Required</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>items</td>
+                    <td>array</td>
+                    <td>Yes</td>
+                    <td>Array of received items</td>
+                </tr>
+                <tr>
+                    <td>items[].product_id</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Product ID</td>
+                </tr>
+                <tr>
+                    <td>items[].quantity_received</td>
+                    <td>integer</td>
+                    <td>Yes</td>
+                    <td>Quantity received</td>
+                </tr>
+                <tr>
+                    <td>items[].unit_cost</td>
+                    <td>decimal</td>
+                    <td>Yes</td>
+                    <td>Actual unit cost</td>
+                </tr>
+                <tr>
+                    <td>receipt_date</td>
+                    <td>date</td>
+                    <td>No</td>
+                    <td>Receipt date (default: today)</td>
+                </tr>
+                <tr>
+                    <td>notes</td>
+                    <td>text</td>
+                    <td>No</td>
+                    <td>Receipt notes</td>
+                </tr>
+            </table>
+
+            <h3>API Request Flow</h3>
+            <div class="mermaid">
+                graph TD
+                Client[Client / Frontend] -->|HTTP POST| Router[Express Router]
+
+                subgraph "Module Layer - Purchase"
+                Router -->|verifyToken| Verify[verifyToken Middleware]
+                Verify -->|Next| Check[ModuleCheck Middleware]
+                Check -->|Check Module| Controller[Purchase Controller]
+                Controller -->|receiveGoods| Service[Purchase Service]
+                Service -->|Data Access| Repository[Purchase Repository]
+                end
+
+                subgraph "Goods Receipt Process"
+                Receive[POST /api/purchase/orders/:id/receive] -->|Extract id| ExtractID[Controller - Extract ID]
+                ExtractID --> ValidateReq[Service - Validate Request]
+                ValidateReq --> FindOrder[Service - Find Purchase Order]
+                FindOrder -->|findByPk| RepoFind[Repository - FindByPk]
+                RepoFind --> DB[(MySQL Database)]
+
+                DB -->|Order or Null| CheckOrder[Service - Check Order Exists]
+                CheckOrder -->|Not Found| NotFound[Controller - 404 Not Found]
+                CheckOrder -->|Found| ValidateItems[Service - Validate Items]
+
+                ValidateItems -->|Check products| FetchProducts[Service - Fetch Products]
+                FetchProducts -->|SELECT products| RepoProducts[Repository - FindAll]
+                RepoProducts --> DBProducts[(products table)]
+
+                DBProducts --> ProductsData[Service - Products Data]
+                ProductsData --> StartTrans[Service - START TRANSACTION]
+
+                StartTrans --> CreateReceipt[Service - Create Goods Receipt]
+                CreateReceipt -->|INSERT| RepoCreate[Repository - Create]
+                RepoCreate --> DBReceipt[(goods_receipts table)]
+
+                DBReceipt -->|Receipt ID| CreateItems[Service - Create Receipt Items]
+                CreateItems -->|INSERT items| RepoItems[Repository - BulkCreate]
+                RepoItems --> DBItems[(goods_receipt_items table)]
+
+                DBItems --> UpdateStock[Service - Update Stock]
+                UpdateStock -->|For Each Item| GetStock[Service - Get Current Stock]
+                GetStock -->|SELECT stock| RepoStock[Repository - FindOne]
+                RepoStock --> DBStock[(stock table)]
+
+                DBStock --> CalcWeighted[Service - Calculate Weighted Average]
+                CalcWeighted -->|New Average Cost| UpdateStockDB[Repository - Update Stock]
+                UpdateStockDB -->|UPDATE stock| DBStockUpdate[(stock table)]
+
+                DBStockUpdate --> CommitTrans[Service - COMMIT]
+                CommitTrans --> Response[Controller - Send Response]
+                end
+            </div>
+
+            <h4>Sample Request</h4>
+            <pre class="code-block"><code>POST /api/purchase/orders/1/receive
+
+{
+    "receipt_date": "2025-12-10",
+    "items": [
+        {
+            "product_id": 5,
+            "quantity_received": 100,
+            "unit_cost": 45.00
+        }
+    ],
+    "notes": "Goods received in good condition"
+}</code></pre>
+
+            <h4>Sample Response</h4>
+            <div class="response-box">
+                <code>{
+    "status": true,
+    "message": "Goods receipt recorded successfully",
+    "data": {
+        "id": 1,
+        "purchase_order_id": 1,
+        "receipt_date": "2025-12-10T00:00:00.000Z",
+        "notes": "Goods received in good condition",
+        "items": [
+            {
+                "product_id": 5,
+                "quantity_received": 100,
+                "unit_cost": 45.00
+            }
+        ]
+    }
+}</code>
+            </div>
+
+            <div class="info-box">
+                <strong>⚠️ Side Effects:</strong>
+                <ul style="margin: 5px 0 0 20px;">
+                    <li>Increases <code>products.stock_quantity</code> for received items</li>
+                    <li>Updates <code>products.weighted_average_cost</code> using weighted average formula</li>
+                    <li>Creates <code>stock_movements</code> records for inventory tracking</li>
+                    <li>Updates purchase order status to 'partial' or 'received'</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ==================== DATABASE REFERENCE ==================== -->
+        <div class="section-header">📌 DATABASE REFERENCE</div>
+
+        <div class="card">
+            <h2>Purchase Order Status Reference</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>pending</strong></td>
+                        <td>Draft order, awaiting approval</td>
+                    </tr>
+                    <tr>
+                        <td><strong>approved</strong></td>
+                        <td>Approved, ready to send to supplier</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ordered</strong></td>
+                        <td>Order sent to supplier</td>
+                    </tr>
+                    <tr>
+                        <td><strong>partial</strong></td>
+                        <td>Partially received</td>
+                    </tr>
+                    <tr>
+                        <td><strong>received</strong></td>
+                        <td>Fully received and completed</td>
+                    </tr>
+                    <tr>
+                        <td><strong>cancelled</strong></td>
+                        <td>Order cancelled</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 30px;">Payment Methods Reference</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>CASH</strong></td>
+                        <td>Cash payment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BANK_TRANSFER</strong></td>
+                        <td>Bank transfer</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CHECK</strong></td>
+                        <td>Check payment</td>
+                    </tr>
+                    <tr>
+                        <td><strong>CREDIT_CARD</strong></td>
+                        <td>Credit card payment</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            themeVariables: {
+                primaryColor: '#667eea',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#5568d3',
+                lineColor: '#667eea',
+                secondaryColor: '#764ba2',
+                tertiaryColor: '#f8f9fa',
+                background: '#f8f9fa',
+                mainBkg: '#667eea',
+                nodeBorder: '#5568d3',
+                clusterBkg: '#e8eaf6',
+                clusterBorder: '#667eea',
+                titleColor: '#667eea',
+                edgeLabelBackground: '#fff',
+                actorBkg: '#764ba2',
+                actorBorder: '#667eea',
+                actorTextColor: '#fff',
+                actorLineColor: '#667eea',
+                signalColor: '#667eea',
+                signalTextColor: '#333',
+                labelBoxBkgColor: '#764ba2',
+                labelBoxBorderColor: '#667eea',
+                labelTextColor: '#fff',
+                loopTextColor: '#333'
+            }
+        });
+
+        function toggleExpandable(header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.expandable-toggle');
+
+            content.classList.toggle('active');
+            toggle.textContent = content.classList.contains('active') ? '-' : '+';
+        }
+    </script>
+</body>
+</html>

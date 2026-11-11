@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Projects / Jobs</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f7;
+      color: #111827;
+    }
+    .layout { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 220px;
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+    }
+    .sidebar h2 { font-size: 18px; margin-bottom: 20px; }
+    .sidebar a {
+      display: block;
+      padding: 8px 10px;
+      margin-bottom: 6px;
+      text-decoration: none;
+      color: #e5e7eb;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .sidebar a.active,
+    .sidebar a:hover { background: #1f2937; }
+
+    .content { flex: 1; padding: 24px; }
+    h1 { font-size: 24px; margin-bottom: 6px; }
+    .subtitle { font-size: 13px; color: #6b7280; margin-bottom: 18px; }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .card-header h3 { font-size: 15px; margin: 0; }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .btn-primary { background: #2563eb; color: #fff; }
+    .btn-outline { background: #fff; color: #374151; border: 1px solid #d1d5db; }
+    .btn-sm { padding: 4px 8px; font-size: 12px; }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .form-group { flex: 1; min-width: 180px; }
+    label {
+      display: block;
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #4b5563;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="date"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      font-size: 13px;
+      box-sizing: border-box;
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #f3f4f6;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    tr:nth-child(even) { background: #fafafa; }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .tag-success { background: #dcfce7; color: #166534; }
+    .tag-danger  { background: #fee2e2; color: #b91c1c; }
+    .tag-warning { background: #fef9c3; color: #854d0e; }
+    .tag-info    { background: #dbeafe; color: #1d4ed8; }
+
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.4fr);
+      gap: 18px;
+    }
+    .three-column {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .pill-filter-group {
+      display: inline-flex;
+      border-radius: 999px;
+      border: 1px solid #d1d5db;
+      overflow: hidden;
+    }
+    .pill-filter {
+      padding: 4px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: #fff;
+      color: #4b5563;
+      border-right: 1px solid #e5e7eb;
+    }
+    .pill-filter:last-child { border-right: none; }
+    .pill-filter.active {
+      background: #111827;
+      color: #f9fafb;
+    }
+
+    @media (max-width: 1100px) {
+      .two-column { grid-template-columns: minmax(0, 1fr); }
+      .three-column { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .layout { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="layout">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h2>ERP System</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">CRM</a>
+    <a href="#" class="active">Projects / Jobs</a>
+    <a href="#">Sales</a>
+    <a href="#">Purchases</a>
+    <a href="#">Inventory</a>
+    <a href="#">Accounting</a>
+    <a href="#">HR & Payroll</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="content">
+    <h1>Projects / Jobs</h1>
+    <div class="subtitle">
+      Track projects, phases, tasks, timesheets, costs and profitability per job.
+    </div>
+
+    <!-- SNAPSHOT -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Projects Snapshot</h3>
+        <div class="pill-filter-group">
+          <div class="pill-filter active">This Month</div>
+          <div class="pill-filter">This Quarter</div>
+          <div class="pill-filter">This Year</div>
+        </div>
+      </div>
+      <div class="three-column">
+        <div>
+          <label>Active Projects</label>
+          <div style="font-size:20px;font-weight:600;">14</div>
+          <div class="hint">Status IN_PROGRESS / ON_HOLD in <code>projects</code></div>
+        </div>
+        <div>
+          <label>Hours Logged (This Month)</label>
+          <div style="font-size:20px;font-weight:600;">482.5</div>
+          <div class="hint">Sum of hours in <code>project_timesheets</code></div>
+        </div>
+        <div>
+          <label>Overall Profit (This Month)</label>
+          <div style="font-size:20px;font-weight:600;">28,450.00</div>
+          <div class="hint">Revenue − costs from sales, purchases & expenses</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT LIST + PHASES/MILESTONES -->
+    <div class="two-column">
+      <!-- Projects List -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Projects / Jobs List</h3>
+          <button class="btn btn-primary btn-sm">+ New Project</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Search</label>
+            <input type="text" placeholder="Code / name / customer" />
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>PLANNED</option>
+              <option>IN_PROGRESS</option>
+              <option>ON_HOLD</option>
+              <option>COMPLETED</option>
+              <option>CANCELLED</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Project Manager</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Team A</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Project</th>
+            <th>Name</th>
+            <th style="width:130px;">Customer</th>
+            <th style="width:110px;">Manager</th>
+            <th style="width:90px;">Start</th>
+            <th style="width:90px;">End</th>
+            <th style="width:80px;">Progress</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PRJ-001</td>
+            <td>TimeWhip SaaS Implementation</td>
+            <td>Yazhi Manufacturing</td>
+            <td>Abdullah</td>
+            <td>2025-01-01</td>
+            <td>2025-04-30</td>
+            <td>40%</td>
+            <td><span class="tag-info tag">IN_PROGRESS</span></td>
+          </tr>
+          <tr>
+            <td>PRJ-002</td>
+            <td>Speedex ERP Rollout</td>
+            <td>Speedex Express</td>
+            <td>Team A</td>
+            <td>2025-02-01</td>
+            <td>2025-06-30</td>
+            <td>15%</td>
+            <td><span class="tag-warning tag">PLANNED</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Projects stored in <code>projects</code> with links to customers, managers and status.
+        </div>
+      </div>
+
+      <!-- Phases / Milestones -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Project Phases & Milestones</h3>
+          <button class="btn btn-outline btn-sm">+ New Phase</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project</label>
+            <select>
+              <option>PRJ-001 – TimeWhip SaaS Implementation</option>
+              <option>PRJ-002 – Speedex ERP Rollout</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Phase</th>
+            <th style="width:80px;">Order</th>
+            <th style="width:90px;">Start</th>
+            <th style="width:90px;">End</th>
+            <th style="width:80px;">Progress</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Discovery & Requirements</td>
+            <td>1</td>
+            <td>2025-01-01</td>
+            <td>2025-01-31</td>
+            <td>100%</td>
+            <td><span class="tag-success tag">COMPLETED</span></td>
+          </tr>
+          <tr>
+            <td>Design & Architecture</td>
+            <td>2</td>
+            <td>2025-02-01</td>
+            <td>2025-02-28</td>
+            <td>25%</td>
+            <td><span class="tag-info tag">IN_PROGRESS</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <h4 style="font-size:14px;margin-top:12px;margin-bottom:6px;">Key Milestones</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Milestone</th>
+            <th style="width:110px;">Phase</th>
+            <th style="width:90px;">Due Date</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Sign-off Requirements Document</td>
+            <td>Discovery</td>
+            <td>2025-01-15</td>
+            <td><span class="tag-success tag">DONE</span></td>
+          </tr>
+          <tr>
+            <td>Finalize Database Schema</td>
+            <td>Design</td>
+            <td>2025-02-10</td>
+            <td><span class="tag-info tag">OPEN</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Phases in <code>project_phases</code>, milestones in <code>project_milestones</code>.
+        </div>
+      </div>
+    </div>
+
+    <!-- TASK MANAGEMENT + TIMESHEETS -->
+    <div class="two-column">
+      <!-- Task Management -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Task Management</h3>
+          <button class="btn btn-outline btn-sm">+ New Task</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project</label>
+            <select>
+              <option>All</option>
+              <option>PRJ-001</option>
+              <option>PRJ-002</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Assignee</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Developer A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select>
+              <option>All</option>
+              <option>TODO</option>
+              <option>IN_PROGRESS</option>
+              <option>BLOCKED</option>
+              <option>DONE</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Task</th>
+            <th>Title</th>
+            <th style="width:110px;">Project</th>
+            <th style="width:90px;">Assignee</th>
+            <th style="width:90px;">Due</th>
+            <th style="width:80px;">Est Hrs</th>
+            <th style="width:90px;">Status</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>T-001</td>
+            <td>Setup Node.js project structure</td>
+            <td>PRJ-001</td>
+            <td>Dev A</td>
+            <td>2025-01-20</td>
+            <td>10</td>
+            <td><span class="tag-info tag">IN_PROGRESS</span></td>
+          </tr>
+          <tr>
+            <td>T-002</td>
+            <td>Design DB for ERP modules</td>
+            <td>PRJ-001</td>
+            <td>Dev B</td>
+            <td>2025-01-22</td>
+            <td>12</td>
+            <td><span class="tag-warning tag">TODO</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Tasks in <code>project_tasks</code>, assignees in <code>project_task_assignments</code>.
+        </div>
+      </div>
+
+      <!-- Timesheets -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Timesheets (Hours per Employee / Project)</h3>
+          <button class="btn btn-outline btn-sm">+ Log Time</button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project</label>
+            <select>
+              <option>All</option>
+              <option>PRJ-001</option>
+              <option>PRJ-002</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Employee</label>
+            <select>
+              <option>All</option>
+              <option>Abdullah</option>
+              <option>Dev A</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th style="width:90px;">Date</th>
+            <th>Employee</th>
+            <th style="width:110px;">Project</th>
+            <th style="width:120px;">Task</th>
+            <th style="width:70px;">Hours</th>
+            <th style="width:90px;">Rate</th>
+            <th style="width:100px;">Cost</th>
+            <th style="width:90px;">Billable</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>2025-01-14</td>
+            <td>Dev A</td>
+            <td>PRJ-001</td>
+            <td>T-001</td>
+            <td>4.0</td>
+            <td>80.00</td>
+            <td>320.00</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          <tr>
+            <td>2025-01-15</td>
+            <td>Dev B</td>
+            <td>PRJ-001</td>
+            <td>T-002</td>
+            <td>3.5</td>
+            <td>70.00</td>
+            <td>245.00</td>
+            <td><span class="tag-success tag">Yes</span></td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Timesheets in <code>project_timesheets</code> (employee, project, task, hours, cost, billable).
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT COSTING & PROFITABILITY -->
+    <div class="two-column">
+      <!-- Project Costing -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Project Costing (Labour, Purchases & Expenses)</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Project</label>
+            <select>
+              <option>PRJ-001 – TimeWhip SaaS Implementation</option>
+              <option>PRJ-002 – Speedex ERP Rollout</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Cost Type</th>
+            <th style="width:120px;">Description</th>
+            <th style="width:100px;">Source Ref</th>
+            <th style="width:100px;">Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>Labour (Timesheets)</td>
+            <td>Total hours × rate</td>
+            <td>TS-PRJ-001</td>
+            <td>8,450.00</td>
+          </tr>
+          <tr>
+            <td>Purchases</td>
+            <td>Software licenses & tools</td>
+            <td>PO-2025-015</td>
+            <td>4,200.00</td>
+          </tr>
+          <tr>
+            <td>Expenses</td>
+            <td>Travel & meetings</td>
+            <td>EXP-2025-021</td>
+            <td>1,100.00</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Cost allocations in <code>project_cost_allocations</code> linked to purchases & expenses.
+        </div>
+      </div>
+
+      <!-- Project Profitability -->
+      <div class="card">
+        <div class="card-header">
+          <h3>Project Profitability Reports</h3>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Period</label>
+            <input type="text" placeholder="From - To" />
+          </div>
+          <div class="form-group">
+            <label>View By</label>
+            <select>
+              <option>Project</option>
+              <option>Customer</option>
+              <option>Project Manager</option>
+            </select>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+          <tr>
+            <th>Project</th>
+            <th style="width:110px;">Customer</th>
+            <th style="width:100px;">Revenue</th>
+            <th style="width:100px;">Labour Cost</th>
+            <th style="width:100px;">Other Costs</th>
+            <th style="width:100px;">Profit</th>
+            <th style="width:80px;">Margin %</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>PRJ-001 – TimeWhip SaaS Implementation</td>
+            <td>Yazhi Manufacturing</td>
+            <td>35,000.00</td>
+            <td>8,450.00</td>
+            <td>5,300.00</td>
+            <td>21,250.00</td>
+            <td>60.7%</td>
+          </tr>
+          <tr>
+            <td>PRJ-002 – Speedex ERP Rollout</td>
+            <td>Speedex Express</td>
+            <td>12,000.00</td>
+            <td>2,200.00</td>
+            <td>600.00</td>
+            <td>9,200.00</td>
+            <td>76.7%</td>
+          </tr>
+          </tbody>
+        </table>
+
+        <div class="hint">
+          Profitability reports aggregate: sales invoices, <code>project_timesheets</code> & <code>project_cost_allocations</code>.
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

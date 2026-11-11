@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Module Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin: 0;
+        }
+
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .route-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .route-card.get { border-left: 4px solid #10b981; }
+        .route-card.put { border-left: 4px solid #f59e0b; }
+        .route-card.post { border-left: 4px solid #3b82f6; }
+        .route-card.delete { border-left: 4px solid #ef4444; }
+
+        .route-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: #333;
+            word-break: break-all;
+        }
+
+        .method-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .method-badge.get { background: #d1fae5; color: #065f46; }
+        .method-badge.put { background: #fef3c7; color: #92400e; }
+        .method-badge.post { background: #dbeafe; color: #1e40af; }
+        .method-badge.delete { background: #fee2e2; color: #991b1b; }
+
+        .route-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .section-title {
+            background: white;
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin: 30px 0 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #667eea;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .card h2 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .endpoint-section {
+            background: #f8fafc;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .endpoint-section h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .endpoint-section h4 {
+            color: #333;
+            margin: 20px 0 10px 0;
+            font-size: 1rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-block .keyword { color: #c792ea; }
+        .code-block .string { color: #c3e88d; }
+        .code-block .number { color: #f78c6c; }
+        .code-block .comment { color: #546e7a; }
+        .code-block .property { color: #82b1ff; }
+
+        .param-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .param-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .param-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .param-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .required {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .optional {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .warning-box strong {
+            color: #92400e;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-box {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .info-box strong {
+            color: #1e40af;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+
+        .success-box strong {
+            color: #065f46;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .flow-diagram {
+            background: #f8fafc;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+
+        .flow-diagram pre {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .badge.protected { background: #fef3c7; color: #92400e; }
+        .badge.public { background: #d1fae5; color: #065f46; }
+        .badge.admin { background: #fee2e2; color: #991b1b; }
+
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .table-item {
+            background: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .table-item strong {
+            color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .table-item span {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        .action-steps {
+            list-style: none;
+            padding: 0;
+        }
+
+        .action-steps li {
+            padding: 12px 15px;
+            background: #f8fafc;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .action-steps li:before {
+            content: "→";
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <a href="/modules-functionality" class="back-link">← Back to Modules</a>
+
+        <div class="header">
+            <h1>🗄️ Database Module</h1>
+            <p>System data management utilities, backup, restore, and database administration tools</p>
+        </div>
+
+        <div class="routes-grid">
+            <div class="route-card get" onclick="scrollToSection('get-tables')">
+                <span class="method-badge get">GET</span>
+                <h3>/api/database/tables</h3>
+                <p class="route-description">List all database tables</p>
+            </div>
+
+            <div class="route-card get" onclick="scrollToSection('get-table-data')">
+                <span class="method-badge get">GET</span>
+                <h3>/api/database/tables/:tableName</h3>
+                <p class="route-description">Get data from a specific table with pagination</p>
+            </div>
+
+            <div class="route-card put" onclick="scrollToSection('update-table-row')">
+                <span class="method-badge put">PUT</span>
+                <h3>/api/database/tables/:tableName</h3>
+                <p class="route-description">Update a record in a specific table</p>
+            </div>
+
+            <div class="route-card get" onclick="scrollToSection('delete-all-data')">
+                <span class="method-badge get">GET</span>
+                <h3>/api/database/delete-all-data</h3>
+                <p class="route-description">Delete all data and seed essentials</p>
+            </div>
+
+            <div class="route-card get" onclick="scrollToSection('reset-system')">
+                <span class="method-badge get">GET</span>
+                <h3>/api/database/reset-system</h3>
+                <p class="route-description">Reset system keeping foundational data</p>
+            </div>
+
+            <div class="route-card get" onclick="scrollToSection('reset-keep-accounts')">
+                <span class="method-badge get">GET</span>
+                <h3>/api/database/reset-keep-accounts</h3>
+                <p class="route-description">Reset keeping chart of accounts only</p>
+            </div>
+        </div>
+
+        <div class="section-title">📌 GET ALL TABLES</div>
+        <div class="card" id="get-tables">
+            <h2>GET /api/database/tables</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge get">GET</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/tables</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge protected">Protected (verifyToken)</span></p>
+                    <p><strong>Description:</strong> Retrieves a list of all tables in the database</p>
+
+                    <h4>Database Query</h4>
+                    <div class="code-block">
+                        <span class="comment">Uses Sequelize query interface</span><br>
+                        <span class="property">sequelize</span>.getQueryInterface().showAllTables()
+                    </div>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"Tables retrieved successfully"</span>,
+    <span class="property">"data"</span>: [
+        <span class="string">"users"</span>,
+        <span class="string">"roles"</span>,
+        <span class="string">"products"</span>,
+        <span class="string">"customers"</span>,
+        <span class="string">"sales"</span>,
+        <span class="string">"purchases"</span>,
+        <span class="string">"accounts"</span>,
+        <span class="string">"attendance"</span>,
+        <span class="string">"checkins"</span>,
+        <span class="string">"settings"</span>
+    ]
+}
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ℹ️ Note</strong>
+                        Returns all table names in the current database schema. Useful for database exploration and administration.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">📌 GET TABLE DATA</div>
+        <div class="card" id="get-table-data">
+            <h2>GET /api/database/tables/:tableName</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge get">GET</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/tables/:tableName</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge protected">Protected (verifyToken)</span></p>
+                    <p><strong>Description:</strong> Retrieves paginated data from a specific table</p>
+
+                    <h4>URL Parameters</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>tableName</code></td>
+                            <td>string</td>
+                            <td><span class="required">Yes</span></td>
+                            <td>Name of the table to query</td>
+                        </tr>
+                    </table>
+
+                    <h4>Query Parameters</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Default</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>page</code></td>
+                            <td>number</td>
+                            <td><span class="optional">No</span></td>
+                            <td>1</td>
+                            <td>Page number for pagination</td>
+                        </tr>
+                        <tr>
+                            <td><code>limit</code></td>
+                            <td>number</td>
+                            <td><span class="optional">No</span></td>
+                            <td>10</td>
+                            <td>Number of records per page</td>
+                        </tr>
+                    </table>
+
+                    <h4>Request Example</h4>
+                    <div class="code-block">
+GET /api/database/tables/products?page=1&limit=20
+                    </div>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"Table data retrieved successfully"</span>,
+    <span class="property">"data"</span>: {
+        <span class="property">"data"</span>: [
+            {
+                <span class="property">"id"</span>: <span class="number">1</span>,
+                <span class="property">"name"</span>: <span class="string">"Product A"</span>,
+                <span class="property">"price"</span>: <span class="number">100.00</span>,
+                <span class="property">"status"</span>: <span class="string">"active"</span>,
+                <span class="property">"created_at"</span>: <span class="string">"2026-01-01T10:00:00.000Z"</span>
+            }
+        ],
+        <span class="property">"pagination"</span>: {
+            <span class="property">"total"</span>: <span class="number">150</span>,
+            <span class="property">"page"</span>: <span class="number">1</span>,
+            <span class="property">"limit"</span>: <span class="number">20</span>,
+            <span class="property">"totalPage"</span>: <span class="number">8</span>
+        }
+    }
+}
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>⚠️ Warning</strong>
+                        This endpoint executes raw SQL queries. Ensure proper access controls are in place to prevent unauthorized data access.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">📌 UPDATE TABLE ROW</div>
+        <div class="card" id="update-table-row">
+            <h2>PUT /api/database/tables/:tableName</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge put">PUT</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/tables/:tableName</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge protected">Protected (verifyToken)</span></p>
+                    <p><strong>Description:</strong> Updates a specific record in a table by ID</p>
+
+                    <h4>URL Parameters</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>tableName</code></td>
+                            <td>string</td>
+                            <td><span class="required">Yes</span></td>
+                            <td>Name of the table</td>
+                        </tr>
+                    </table>
+
+                    <h4>Body Parameters</h4>
+                    <table class="param-table">
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Type</th>
+                            <th>Required</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><code>id</code></td>
+                            <td>number</td>
+                            <td><span class="required">Yes</span></td>
+                            <td>Record ID to update</td>
+                        </tr>
+                        <tr>
+                            <td><code>...fields</code></td>
+                            <td>any</td>
+                            <td><span class="required">Yes</span></td>
+                            <td>Fields to update (dynamic based on table)</td>
+                        </tr>
+                    </table>
+
+                    <h4>Request Example</h4>
+                    <div class="code-block">
+PUT /api/database/tables/products
+
+{
+    <span class="property">"id"</span>: <span class="number">1</span>,
+    <span class="property">"name"</span>: <span class="string">"Updated Product Name"</span>,
+    <span class="property">"price"</span>: <span class="number">150.00</span>,
+    <span class="property">"status"</span>: <span class="string">"active"</span>
+}
+                    </div>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"Record updated successfully"</span>,
+    <span class="property">"data"</span>: [
+        {
+            <span class="property">"id"</span>: <span class="number">1</span>,
+            <span class="property">"name"</span>: <span class="string">"Updated Product Name"</span>,
+            <span class="property">"price"</span>: <span class="number">150.00</span>,
+            <span class="property">"status"</span>: <span class="string">"active"</span>,
+            <span class="property">"updated_at"</span>: <span class="string">"2026-03-11T10:30:00.000Z"</span>
+        }
+    ]
+}
+                    </div>
+
+                    <h4>Side Effects</h4>
+                    <ul class="action-steps">
+                        <li>Updates the specified record in the database table</li>
+                        <li>Automatically updates <code>updated_at</code> timestamp if the column exists</li>
+                        <li>Returns the complete updated record</li>
+                    </ul>
+
+                    <div class="warning-box">
+                        <strong>⚠️ Critical Warning</strong>
+                        This endpoint performs dynamic table updates. Should be restricted to admin users only. Ensure proper validation before use in production.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">📌 DELETE ALL DATA</div>
+        <div class="card" id="delete-all-data">
+            <h2>GET /api/database/delete-all-data</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge get">GET</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/delete-all-data</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge protected">Protected (verifyToken)</span></p>
+                    <p><strong>Description:</strong> Truncates all tables and reseeds essential data</p>
+
+                    <h4>Process Flow</h4>
+                    <div class="flow-diagram">
+                        <pre class="mermaid">
+flowchart TD
+    A[Start Delete All Data] --> B[Disable Foreign Key Checks]
+    B --> C[Get All Tables]
+    C --> D{Table in Skip List?}
+    D -->|Yes| E[Skip Table]
+    D -->|No| F[TRUNCATE Table]
+    F --> G{More Tables?}
+    E --> G
+    G -->|Yes| D
+    G -->|No| H[Enable Foreign Key Checks]
+    H --> I[Seed Chart of Accounts]
+    I --> J[Create Admin Role]
+    J --> K[Create Superadmin Role]
+    K --> L[Create Admin User]
+    L --> M[Return Success Response]
+                        </pre>
+                    </div>
+
+                    <h4>Tables Skipped (Not Truncated)</h4>
+                    <div class="tables-grid">
+                        <div class="table-item">
+                            <strong>SequelizeMeta</strong>
+                            <span>Sequelize migration tracking</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>migrations</strong>
+                            <span>Migration history</span>
+                        </div>
+                    </div>
+
+                    <h4>Data Seeded After Truncate</h4>
+                    <ul class="action-steps">
+                        <li><strong>Chart of Accounts:</strong> Default accounting accounts</li>
+                        <li><strong>Admin Role:</strong> Full system access role</li>
+                        <li><strong>Superadmin Role:</strong> Full system access role</li>
+                        <li><strong>Admin User:</strong> Email: admin@erp.com, Password: password</li>
+                    </ul>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"All data deleted and accounting essentials seeded successfully"</span>
+}
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>⚠️ DANGER: Irreversible Operation</strong>
+                        This will delete ALL data in the database except Sequelize system tables. This action cannot be undone. Use with extreme caution.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">📌 RESET SYSTEM (PRESERVE FOUNDATION)</div>
+        <div class="card" id="reset-system">
+            <h2>GET /api/database/reset-system</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge get">GET</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/reset-system</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge public">Public</span></p>
+                    <p><strong>Description:</strong> Resets transactional data while preserving foundational accounts, users, and settings</p>
+
+                    <h4>Process Flow</h4>
+                    <div class="flow-diagram">
+                        <pre class="mermaid">
+flowchart TD
+    A[Start System Reset] --> B[Disable Foreign Key Checks]
+    B --> C[Get All Tables]
+    C --> D{Table in Keep List?}
+    D -->|Yes| E[Preserve Table]
+    D -->|No| F[TRUNCATE Table]
+    F --> G{More Tables?}
+    E --> G
+    G -->|Yes| D
+    G -->|No| H[Enable Foreign Key Checks]
+    H --> I[Seed Chart of Accounts]
+    I --> J[Ensure Superadmin Role]
+    J --> K[Ensure Role Settings]
+    K --> L[Ensure Admin User]
+    L --> M[Return Response with Stats]
+                        </pre>
+                    </div>
+
+                    <h4>Tables Preserved (Not Truncated)</h4>
+                    <div class="tables-grid">
+                        <div class="table-item">
+                            <strong>SequelizeMeta</strong>
+                            <span>Migration tracking</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>migrations</strong>
+                            <span>Migration history</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>accounts</strong>
+                            <span>Chart of Accounts</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>users</strong>
+                            <span>System users</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>roles</strong>
+                            <span>System roles</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_settings</strong>
+                            <span>Role configurations</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_menus</strong>
+                            <span>Menu permissions</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_dashboards</strong>
+                            <span>Dashboard access</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>settingss</strong>
+                            <span>System settings</span>
+                        </div>
+                    </div>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"Database reset successfully. Foundational data preserved, transactional data cleared."</span>,
+    <span class="property">"data"</span>: {
+        <span class="property">"total_tables"</span>: <span class="number">45</span>,
+        <span class="property">"truncated_count"</span>: <span class="number">36</span>,
+        <span class="property">"truncated_tables"</span>: [
+            <span class="string">"sales"</span>,
+            <span class="string">"products"</span>,
+            <span class="string">"customers"</span>,
+            <span class="string">"purchases"</span>,
+            ...
+        ]
+    }
+}
+                    </div>
+
+                    <div class="success-box">
+                        <strong>✓ Ideal For</strong>
+                        Development environment reset, clearing transactional data while keeping users, roles, accounts, and settings intact.
+                    </div>
+
+                    <div class="info-box">
+                        <strong>ℹ️ Note</strong>
+                        Default admin credentials: admin@gmail.com / password123
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">📌 RESET KEEPING ACCOUNTS ONLY</div>
+        <div class="card" id="reset-keep-accounts">
+            <h2>GET /api/database/reset-keep-accounts</h2>
+            <div class="card-content">
+                <div class="endpoint-section">
+                    <h3>Endpoint Details</h3>
+                    <p><strong>Method:</strong> <span class="badge get">GET</span></p>
+                    <p><strong>URL:</strong> <code>/api/database/reset-keep-accounts</code></p>
+                    <p><strong>Authentication:</strong> <span class="badge public">Public</span></p>
+                    <p><strong>Description:</strong> Resets everything except the chart of accounts and system tables</p>
+
+                    <h4>Process Flow</h4>
+                    <div class="flow-diagram">
+                        <pre class="mermaid">
+flowchart TD
+    A[Start Reset Keep Accounts] --> B[Disable Foreign Key Checks]
+    B --> C[Get All Tables]
+    C --> D{Table in Keep List?}
+    D -->|Yes| E[Preserve Table]
+    D -->|No| F[TRUNCATE Table]
+    F --> G{More Tables?}
+    E --> G
+    G -->|Yes| D
+    G -->|No| H[Enable Foreign Key Checks]
+    H --> I[Seed Superadmin Role]
+    I --> J[Seed Admin Role]
+    J --> K[Seed Role Settings]
+    K --> L[Seed Admin User]
+    L --> M[Count Accounts]
+    M --> N[Return Response]
+                        </pre>
+                    </div>
+
+                    <h4>Tables Preserved</h4>
+                    <div class="tables-grid">
+                        <div class="table-item">
+                            <strong>SequelizeMeta</strong>
+                            <span>Migration tracking</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>migrations</strong>
+                            <span>Migration history</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>accounts</strong>
+                            <span>Chart of Accounts</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>users</strong>
+                            <span>System users</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>roles</strong>
+                            <span>System roles</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_settings</strong>
+                            <span>Role configurations</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_menus</strong>
+                            <span>Menu permissions</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>role_dashboards</strong>
+                            <span>Dashboard access</span>
+                        </div>
+                        <div class="table-item">
+                            <strong>settingss</strong>
+                            <span>System settings</span>
+                        </div>
+                    </div>
+
+                    <h4>Data Reseeded</h4>
+                    <ul class="action-steps">
+                        <li><strong>Superadmin Role:</strong> Full system access with wildcard permissions</li>
+                        <li><strong>Admin Role:</strong> Full system access with wildcard permissions</li>
+                        <li><strong>Role Settings:</strong> Default configuration for both roles</li>
+                        <li><strong>Admin User:</strong> Email: admin@gmail.com, Password: password123</li>
+                    </ul>
+
+                    <h4>Response Example</h4>
+                    <div class="code-block">
+{
+    <span class="property">"status"</span>: <span class="keyword">true</span>,
+    <span class="property">"message"</span>: <span class="string">"Database reset successfully. Chart of Accounts preserved, all other data cleared."</span>,
+    <span class="property">"data"</span>: {
+        <span class="property">"total_tables"</span>: <span class="number">45</span>,
+        <span class="property">"truncated_count"</span>: <span class="number">36</span>,
+        <span class="property">"truncated_tables"</span>: [
+            <span class="string">"sales"</span>,
+            <span class="string">"products"</span>,
+            <span class="string">"customers"</span>
+        ],
+        <span class="property">"accounts_preserved"</span>: <span class="number">50</span>
+    }
+}
+                    </div>
+
+                    <div class="success-box">
+                        <strong>✓ Use Case</strong>
+                        Perfect for resetting the system while preserving the Chart of Accounts structure. All transactional data, users, and roles are reseeded to defaults.
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>⚠️ Important</strong>
+                        Even though 'users' and 'roles' tables are preserved, new admin user and roles are seeded using findOrCreate. Existing data in these tables remains intact.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">🗄️ DATABASE SCHEMA (ER Diagram)</div>
+        <div class="card">
+            <h2>Database Structure</h2>
+            <div class="card-content">
+                <h3>Core System Tables (Preserved in Reset)</h3>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+erDiagram
+    USERS ||--o{ ROLES : "assigned_to"
+    USERS ||--o{ ATTENDANCE : "records"
+    USERS ||--o{ STAFF_CHECKINS : "checks_in"
+    ROLES ||--o{ ROLE_SETTINGS : "configured_by"
+    ROLES ||--o{ ROLE_MENUS : "has_access"
+    ROLES ||--o{ ROLE_DASHBOARDS : "views"
+
+    USERS {
+        int id PK
+        string name
+        string email
+        string password
+        int role_id FK
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+
+    ROLES {
+        int id PK
+        string name
+        string display_name
+        string description
+        json permissions
+        string status
+        datetime created_at
+        datetime updated_at
+    }
+
+    ROLE_SETTINGS {
+        int id PK
+        int role_id FK
+        json menu
+        json dashboard
+        json custom
+    }
+
+    ROLE_MENUS {
+        int id PK
+        int role_id FK
+        json menu_data
+    }
+
+    ROLE_DASHBOARDS {
+        int id PK
+        int role_id FK
+        json dashboard_data
+    }
+
+    ACCOUNTS {
+        int id PK
+        string account_code
+        string account_name
+        string account_type
+        int parent_id FK
+        decimal balance
+        string status
+    }
+
+    SETTINGS {
+        int id PK
+        string name
+        string description
+        string status
+    }
+
+    ACCOUNTS ||--o{ ACCOUNTS : "parent_child"
+                    </pre>
+                </div>
+
+                <h3>Transactional Tables (Cleared in Reset)</h3>
+                <div class="flow-diagram">
+                    <pre class="mermaid">
+erDiagram
+    CUSTOMERS ||--o{ SALES : "places"
+    CUSTOMERS ||--o{ SALES_INVOICES : "billed_by"
+    PRODUCTS ||--o{ SALES_ITEMS : "sold_in"
+    PRODUCTS ||--o{ STOCK_MOVEMENTS : "tracked_by"
+    SALES ||--o{ SALES_ITEMS : "contains"
+    SALES ||--o{ SALES_INVOICES : "invoiced_as"
+    SALES ||--o{ DELIVERIES : "delivered_as"
+
+    SUPPLIERS ||--o{ PURCHASE_ORDERS : "supplies"
+    PURCHASE_ORDERS ||--o{ PURCHASE_ITEMS : "contains"
+    PURCHASE_ORDERS ||--o{ PURCHASE_INVOICES : "billed_as"
+
+    STAFFS ||--o{ ATTENDANCE : "recorded_in"
+    STAFFS ||--o{ PAYROLL_ITEMS : "paid_in"
+
+    DEPARTMENTS ||--o{ STAFFS : "employs"
+    DEPARTMENTS ||--o{ PAYROLL_STRUCTURES : "configures"
+
+    CUSTOMERS {
+        int id PK
+        string name
+        string email
+        string phone
+        string address
+        string city
+        string tax_id
+        decimal opening_balance
+        string status
+    }
+
+    PRODUCTS {
+        int id PK
+        string name
+        string sku
+        decimal cost_price
+        decimal selling_price
+        int stock_quantity
+        string unit
+        int category_id FK
+        string status
+    }
+
+    SALES {
+        int id PK
+        int customer_id FK
+        datetime sale_date
+        decimal subtotal
+        decimal tax_amount
+        decimal discount_amount
+        decimal total_amount
+        string payment_status
+        string status
+    }
+
+    SALES_ITEMS {
+        int id PK
+        int sale_id FK
+        int product_id FK
+        decimal quantity
+        decimal unit_price
+        decimal subtotal
+    }
+
+    STOCK_MOVEMENTS {
+        int id PK
+        int product_id FK
+        string movement_type
+        decimal quantity
+        string reference_type
+        int reference_id
+        datetime movement_date
+    }
+
+    SUPPLIERS {
+        int id PK
+        string name
+        string email
+        string phone
+        string address
+        string tax_id
+        string status
+    }
+
+    PURCHASE_ORDERS {
+        int id PK
+        int supplier_id FK
+        datetime order_date
+        decimal subtotal
+        decimal tax_amount
+        decimal total_amount
+        string status
+    }
+
+    ATTENDANCE {
+        int id PK
+        int staff_id FK
+        datetime check_in
+        datetime check_out
+        string status
+    }
+
+    PAYROLL_ITEMS {
+        int id PK
+        int staff_id FK
+        string month
+        int year
+        decimal basic_salary
+        decimal allowances
+        decimal deductions
+        decimal net_salary
+        string payment_status
+    }
+                    </pre>
+                </div>
+
+                <h3>Database Information</h3>
+                <table class="param-table">
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Host</strong></td>
+                        <td>127.0.0.1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Port</strong></td>
+                        <td>8889</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Database Name</strong></td>
+                        <td>erp_kaoser</td>
+                    </tr>
+                    <tr>
+                        <td><strong>ORM</strong></td>
+                        <td>Sequelize</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Default Admin</strong></td>
+                        <td>admin@gmail.com / password123</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="section-title">⚠️ SAFETY & SECURITY CONSIDERATIONS</div>
+        <div class="card">
+            <h2>Important Warnings</h2>
+            <div class="card-content">
+                <div class="warning-box">
+                    <strong>🔒 Production Access Control</strong>
+                    These endpoints should be restricted to administrator users only in production environments. Consider implementing additional role-based access control (RBAC) checks.
+                </div>
+
+                <div class="warning-box">
+                    <strong>💾 Backup Before Reset</strong>
+                    Always create a database backup before running any reset operations. Use the reset endpoints in development/testing environments only.
+                </div>
+
+                <div class="warning-box">
+                    <strong>🚫 Public Endpoint Risk</strong>
+                    The reset-system and reset-keep-accounts endpoints are currently public. For production, these should be protected with verifyToken middleware and admin role verification.
+                </div>
+
+                <div class="info-box">
+                    <strong>🔍 SQL Injection Protection</strong>
+                    While dynamic queries use parameterized values, consider whitelisting allowed tables for additional security.
+                </div>
+
+                <div class="success-box">
+                    <strong>✓ Best Practice</strong>
+                    Implement audit logging for all database management operations to track who performed reset actions and when.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+
+        // Scroll to section function
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    </script>
+</body>
+
+</html>
